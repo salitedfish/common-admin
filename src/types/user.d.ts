@@ -1,4 +1,4 @@
-declare module User {
+declare namespace User {
   type info = {
     password: number;
   };
