@@ -25,7 +25,7 @@ import { useLoadingBar } from "naive-ui";
 import mainLayout from "./mainLayout.vue";
 import mainMenu from "./mainMenu.vue";
 import mainHead from "./mainHead.vue";
-import pageLayout from "@/component/common/pageLayout.vue";
+import pageLayout from "@/component/page/pageLayout.vue";
 
 import { useRouteStore } from "@/store";
 
