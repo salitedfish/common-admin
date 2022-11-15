@@ -1,7 +1,9 @@
 <template>
   <n-config-provider :theme="themeList[activeTheme].lib" :theme-overrides="themeList[activeTheme].libThemeOverrides">
     <n-global-style />
-    <RouterView />
+    <n-loading-bar-provider>
+      <RouterView />
+    </n-loading-bar-provider>
   </n-config-provider>
 </template>
 

@@ -19,6 +19,8 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import type { RouteRecordNormalized } from "vue-router";
+import { useLoadingBar } from "naive-ui";
 
 import mainLayout from "./mainLayout.vue";
 import mainMenu from "./mainMenu.vue";
@@ -29,14 +31,24 @@ import { useRouteStore } from "@/store";
 
 const routeStore = useRouteStore();
 const route = useRoute();
+const loadingBar = useLoadingBar();
 
 // 初始化和路由改变时，设置当前路由路径(用于面包屑展示)
+// 里面的loadingbar只是一个视觉效果
+const updateRoutePath = (matched: RouteRecordNormalized[]) => {
+  loadingBar.start();
+  setTimeout(() => {
+    loadingBar.finish();
+  }, 500);
+  routeStore.updateCurrentRoutePath(matched);
+};
+
 onMounted(() => {
-  routeStore.updateCurrentRoutePath(route.matched);
+  updateRoutePath(route.matched);
 });
 
 onBeforeRouteUpdate((to) => {
-  routeStore.updateCurrentRoutePath(to.matched);
+  updateRoutePath(to.matched);
 });
 </script>
 

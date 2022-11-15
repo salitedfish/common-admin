@@ -1,5 +1,20 @@
-import { create, NButton, NConfigProvider, NMenu, NSwitch, NLayout, NLayoutSider, NSpace, NGlobalStyle, NScrollbar, NCard, NBreadcrumb, NBreadcrumbItem } from "naive-ui";
+import {
+  create,
+  NButton,
+  NConfigProvider,
+  NMenu,
+  NSwitch,
+  NLayout,
+  NLayoutSider,
+  NSpace,
+  NGlobalStyle,
+  NScrollbar,
+  NCard,
+  NBreadcrumb,
+  NBreadcrumbItem,
+  NLoadingBarProvider,
+} from "naive-ui";
 
 export const naiveUIComponent = create({
-  components: [NButton, NConfigProvider, NMenu, NSwitch, NLayout, NLayoutSider, NSpace, NGlobalStyle, NScrollbar, NCard, NBreadcrumb, NBreadcrumbItem],
+  components: [NButton, NConfigProvider, NMenu, NSwitch, NLayout, NLayoutSider, NSpace, NGlobalStyle, NScrollbar, NCard, NBreadcrumb, NBreadcrumbItem, NLoadingBarProvider],
 });
