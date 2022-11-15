@@ -5,7 +5,7 @@ import App from "./App.vue";
 import router from "./router";
 import { uiComponent } from "@/component/uiComponent";
 
-import "@/assets/css/init.css";
+import "@/assets/css/index.less";
 
 // import {} from "@ultra-man/noa";
 

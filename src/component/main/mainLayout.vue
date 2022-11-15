@@ -27,6 +27,9 @@
   height: 100vh;
   display: flex;
   overflow: hidden;
+  .menu-layout {
+    overflow-y: auto;
+  }
   .work-layout {
     flex: 1;
     display: flex;

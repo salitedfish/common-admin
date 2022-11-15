@@ -1,7 +1,7 @@
 <template>
   <main-layout>
     <template v-slot:menu>
-      <section class="menu">menu</section>
+      <main-menu></main-menu>
     </template>
 
     <template v-slot:head>
@@ -9,7 +9,6 @@
     </template>
 
     <template v-slot:page>
-      page
       <RouterView></RouterView>
     </template>
   </main-layout>
@@ -17,11 +16,13 @@
 
 <script lang="ts" setup>
 import mainLayout from "./mainLayout.vue";
+import mainMenu from "./mainMenu.vue";
 </script>
 
 <style scoped lang="less">
 .menu {
 }
 .head {
+  color: var(--color);
 }
 </style>
