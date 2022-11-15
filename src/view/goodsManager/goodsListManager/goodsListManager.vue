@@ -1,5 +1,5 @@
 <template>
-  <div>goodsListManager</div>
+  <div style="height: 2000px">goodsListManager</div>
 </template>
 
 <script lang="ts" setup></script>

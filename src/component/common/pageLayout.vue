@@ -1,6 +1,8 @@
 <template>
   <section class="page-layout">
-    <slot></slot>
+    <n-card>
+      <slot></slot>
+    </n-card>
   </section>
 </template>
 
@@ -8,6 +10,15 @@
 
 <style scoped lang="less">
 .page-layout {
-  padding: 15px 18px;
+  height: 100%;
+  padding: 15px 18px 20px;
+  .n-card {
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 </style>

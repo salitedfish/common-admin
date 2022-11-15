@@ -5,5 +5,18 @@ export default <RouteRecordRaw[]>[
     path: "goodsListManager",
     name: "goodsListManager",
     component: () => import("@/view/goodsManager/goodsListManager/goodsListManager.vue"),
+    meta: {
+      label: "商品列表",
+      icon: "wenjianguanli",
+    },
+  },
+  {
+    path: "goodsCategoryManager",
+    name: "goodsCategoryManager",
+    component: () => import("@/view/goodsManager/goodsCategoryManager/goodsCategoryManager.vue"),
+    meta: {
+      label: "商品类目",
+      icon: "wenjianguanli",
+    },
   },
 ];

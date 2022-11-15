@@ -3,44 +3,65 @@ import { createRouter, createWebHistory } from "vue-router";
 import goodsManager from "./goodsManager";
 import userManager from "./userManager";
 
+// 具体的页面路由
 export const routes = [
   {
-    path: "/",
-    redirect: "/login",
+    path: "goodsManager",
+    name: "goodsManager",
+    component: () => import("@/view/goodsManager/goodsManager.vue"),
+    children: goodsManager,
+    meta: {
+      label: "商品管理",
+      icon: "zhengshu",
+    },
   },
   {
-    path: "/login",
-    name: "login",
-    component: () => import("@/component/login/loginPage.vue"),
-  },
-  {
-    path: "/manager",
-    name: "manager",
-    component: () => import("@/component/main/mainPage.vue"),
-    children: [
-      {
-        path: "goodsManager",
-        name: "goodsManager",
-        component: () => import("@/view/goodsManager/goodsManager.vue"),
-        children: goodsManager,
-      },
-      {
-        path: "userManager",
-        name: "userManager",
-        component: () => import("@/view/userManager/userManager.vue"),
-        children: userManager,
-      },
-    ],
-  },
-  {
-    path: "/:catchAll(.*)",
-    redirect: "/login",
+    path: "userManager",
+    name: "userManager",
+    component: () => import("@/view/userManager/userManager.vue"),
+    children: userManager,
+    meta: {
+      label: "用户管理",
+      icon: "wenjianguanli",
+    },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: [
+    {
+      path: "/",
+      redirect: "/login",
+      meta: {
+        label: "登录",
+        icon: "zhengshu",
+      },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: () => import("@/component/login/loginPage.vue"),
+      meta: {
+        label: "登录",
+        icon: "zhengshu",
+      },
+    },
+    {
+      path: "/manager",
+      name: "manager",
+      component: () => import("@/component/main/mainPage.vue"),
+      children: routes,
+      meta: {
+        label: "管理后台",
+        icon: "zhengshu",
+      },
+    },
+    {
+      path: "/:catchAll(.*)",
+      redirect: "/login",
+    },
+  ],
 });
 
 export default router;
