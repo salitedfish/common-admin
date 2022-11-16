@@ -14,8 +14,25 @@ import {
   NBreadcrumbItem,
   NLoadingBarProvider,
   NInput,
+  NNotificationProvider,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
-  components: [NButton, NConfigProvider, NMenu, NSwitch, NLayout, NLayoutSider, NSpace, NGlobalStyle, NScrollbar, NCard, NBreadcrumb, NBreadcrumbItem, NLoadingBarProvider, NInput],
+  components: [
+    NButton,
+    NConfigProvider,
+    NMenu,
+    NSwitch,
+    NLayout,
+    NLayoutSider,
+    NSpace,
+    NGlobalStyle,
+    NScrollbar,
+    NCard,
+    NBreadcrumb,
+    NBreadcrumbItem,
+    NLoadingBarProvider,
+    NInput,
+    NNotificationProvider,
+  ],
 });

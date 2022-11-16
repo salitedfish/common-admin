@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const useLogin = () => {};
+  //   const useLogin = () => {};
 
-  const useLogout = () => {};
+  //   const useLogout = () => {};
 
-  const useRegister = () => {};
+  //   const useRegister = () => {};
   return {};
 });

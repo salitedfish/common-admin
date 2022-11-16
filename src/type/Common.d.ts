@@ -8,4 +8,6 @@ export type Return<T> = {
   code: number;
   data: T;
   message: string;
+  errorMessage: string;
+  traceId: string;
 };

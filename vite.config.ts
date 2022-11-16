@@ -27,8 +27,8 @@ export default defineConfig({
   server: {
     proxy: {
       "^/api": {
-        target: "http://183.134.99.140:46790/",
-        // autoRewrite: true,
+        target: "https://malltest.8n.cn/",
+        rewrite: (path) => path.replace(/^\/api/, ""),
         changeOrigin: true,
       },
     },

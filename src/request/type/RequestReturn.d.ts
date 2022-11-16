@@ -2,3 +2,9 @@
 import type { Return } from "@/type/Common";
 
 export type GetGoodsList = Promise<Return<[]>>;
+export type GetCaptcha = Promise<Return<>>;
+export type Login = Promise<
+  Return<{
+    authentication: string;
+  }>
+>;

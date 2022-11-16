@@ -2,3 +2,8 @@
 import type { Paging } from "@/type/Common";
 
 export type GetGoodsList = Paging & { name: string };
+export type Login = {
+  captcha?: string;
+  password?: string;
+  phone: string;
+};
