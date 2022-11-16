@@ -24,5 +24,13 @@ export default defineConfig({
     },
   },
 
-  server: {},
+  server: {
+    proxy: {
+      "^/api": {
+        target: "http://183.134.99.140:46790/",
+        // autoRewrite: true,
+        changeOrigin: true,
+      },
+    },
+  },
 });

@@ -7,7 +7,7 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/goodsManager/goodsListManager/goodsListManager.vue"),
     meta: {
       label: "用户列表",
-      icon: "wenjianguanli",
+      icon: "chazhaoyonghu",
     },
   },
 ];

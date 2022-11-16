@@ -12,7 +12,7 @@ export const routes = [
     children: goodsManager,
     meta: {
       label: "商品管理",
-      icon: "zhengshu",
+      icon: "goods-copy",
     },
   },
   {
@@ -22,7 +22,7 @@ export const routes = [
     children: userManager,
     meta: {
       label: "用户管理",
-      icon: "wenjianguanli",
+      icon: "yonghuguanli-yonghuguanli",
     },
   },
 ];
@@ -35,7 +35,7 @@ const router = createRouter({
       redirect: "/login",
       meta: {
         label: "登录",
-        icon: "zhengshu",
+        icon: "zhuye",
       },
     },
     {
@@ -54,7 +54,7 @@ const router = createRouter({
       children: routes,
       meta: {
         label: "管理后台",
-        icon: "zhengshu",
+        icon: "zhuye",
       },
     },
     {

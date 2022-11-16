@@ -62,7 +62,7 @@ const menuOptions = reactive<MenuOption[]>([
   {
     label: "首页",
     key: "login",
-    icon: renderIcon("zhengshu"),
+    icon: renderIcon("zhuye"),
   },
   {
     key: "divider-1",
