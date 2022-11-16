@@ -16,3 +16,5 @@ app.use(router);
 app.use(uiComponent);
 
 app.mount("#app");
+
+console.log("当前模式：", import.meta.env.VITE_ENV);
