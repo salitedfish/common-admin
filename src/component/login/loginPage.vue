@@ -20,12 +20,14 @@
               v-model:value="formData.password"
               v-show="loginType === LoginType.PASSWORD"
             ></n-input>
-            <div class="captcha-box" v-show="loginType === LoginType.CAPTCHA">
+            <div class="captcha-box" v-show="loginType === LoginType.CAPTCHA && phoneLegal">
               <n-input class="form-input" placeholder="验证码" :maxlength="8" v-model:value="formData.captcha"></n-input>
-              <n-button type="primary" @click="getCaptchaHandler" :loading="captchaGetState" :disabled="captchaDisabled">获取验证码</n-button>
+              <n-button type="primary" @click="getCaptchaHandler" :loading="captchaGetState" :disabled="captchaDisabled"
+                >获取验证码<span v-show="captchaDisabled"> {{ captchaCountdown }} s</span></n-button
+              >
             </div>
           </section>
-          <n-button class="login-btn" @click="switchLoginTypeHandler" block>切换登录方式</n-button>
+          <n-button class="login-btn" @click="switchLoginTypeHandler" block>{{ loginTypeMap[loginType].switchText }}</n-button>
           <n-button class="login-btn" type="primary" block @click="loginHandler" :loading="loginState" :disabled="loginDisabled">登录</n-button>
           <div class="settle">申请入驻</div>
         </section>
@@ -35,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 // 组件
 import loginLayout from "./loginLayout.vue";
@@ -49,26 +51,41 @@ import { passwordLegal, commonNotify } from "@/util";
 // 初始化路由
 const router = useRouter();
 
-// 密码登录还是验证码登录
-enum LoginType {
-  PASSWORD = 0,
-  CAPTCHA,
-}
-const loginType = ref(LoginType.PASSWORD);
-const switchLoginTypeHandler = () => {
-  loginType.value = loginType.value === LoginType.CAPTCHA ? LoginType.PASSWORD : LoginType.CAPTCHA;
-};
-
 // 登录表单数据
 const formData = reactive({
   phone: "",
   password: "",
   captcha: "",
 });
+const phoneLegal = computed(() => {
+  const phoneNum = Number(formData.phone);
+  return usePhoneLegal(phoneNum)();
+});
+
+// 密码登录还是验证码登录
+enum LoginType {
+  PASSWORD = 0,
+  CAPTCHA,
+}
+const loginTypeMap = {
+  [LoginType.PASSWORD]: {
+    text: "密码",
+    switchText: "切换验证码登录",
+  },
+  [LoginType.CAPTCHA]: {
+    text: "验证码",
+    switchText: "切换密码登录",
+  },
+};
+const loginType = ref(LoginType.PASSWORD);
+const switchLoginTypeHandler = () => {
+  loginType.value = loginType.value === LoginType.CAPTCHA ? LoginType.PASSWORD : LoginType.CAPTCHA;
+};
 
 // 验证码发送状态
 const captchaGetState = ref(false);
 const captchaDisabled = ref(false);
+const captchaCountdown = ref(60);
 // 获取验证码
 const getCaptchaHandler = async () => {
   const phoneNum = Number(formData.phone);
@@ -78,12 +95,19 @@ const getCaptchaHandler = async () => {
   }
   captchaGetState.value = true;
   captchaDisabled.value = true;
+  const captchaInterval = setInterval(() => {
+    captchaCountdown.value--;
+    if (captchaCountdown.value <= 0) {
+      clearInterval(captchaInterval);
+      captchaDisabled.value = false;
+      captchaCountdown.value = 60;
+    }
+  }, 1000);
   const res = await getCaptchaRequest(phoneNum);
   if (res && res.code === 0) {
     commonNotify("success", "验证码发送成功！");
   }
   captchaGetState.value = false;
-  captchaDisabled.value = false;
 };
 
 // 登录状态
@@ -94,23 +118,27 @@ const loginHandler = async () => {
   const params: RequestParam.Login = {
     phone: formData.phone,
   };
-  const phoneNum = Number(formData.phone);
-  if (!usePhoneLegal(phoneNum)()) {
-    commonNotify("warning", "手机号格式不正确！");
-    return;
-  }
+
   if (loginType.value === LoginType.PASSWORD) {
+    if (!formData.phone) {
+      commonNotify("warning", "账号不能为空!");
+      return;
+    }
     if (!formData.password) {
       commonNotify("warning", "密码不能为空!");
       return;
     }
     if (!passwordLegal(formData.password)) {
-      commonNotify("warning", "密码格式不正确！");
+      commonNotify("warning", "密码为6~16位数字、字母大小写！");
       return;
     }
     params.password = formData.password;
   }
   if (loginType.value === LoginType.CAPTCHA) {
+    if (!phoneLegal.value) {
+      commonNotify("warning", "手机号格式不正确！");
+      return;
+    }
     if (!formData.captcha) {
       commonNotify("warning", "验证码不能为空!");
       return;

@@ -1,6 +1,7 @@
 import { UltraFetch } from "@ultra-man/noa";
 import { useGetLStorage } from "@ultra-man/noa";
 
+// 这里请求的提示只处理异常和错误的提示，成功的提示在具体的业务里处理
 import { commonNotify } from "@/util";
 
 export const ultraFetch = new UltraFetch(

@@ -12,7 +12,7 @@ export const getCaptcha = (phone: number): RequestReturn.GetCaptcha => {
   });
 };
 
-// 登录、注册
+// 登录
 export const login = (data: RequestParam.Login): RequestReturn.Login => {
   return ultraFetch.post({
     URL: "/manager/access/login",
