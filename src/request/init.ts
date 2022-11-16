@@ -1,8 +1,7 @@
 import { UltraFetch } from "@ultra-man/noa";
 import { useGetLStorage } from "@ultra-man/noa";
-import { createDiscreteApi } from "naive-ui";
 
-const { notification } = createDiscreteApi(["notification"]);
+import { commonNotify } from "@/util";
 
 export const ultraFetch = new UltraFetch(
   {
@@ -23,22 +22,13 @@ export const ultraFetch = new UltraFetch(
         console.log("请求成功结果", response);
       } else {
         console.log("请求失败结果", response);
-        notification.warning({
-          content: response.message,
-          duration: 2000,
-          keepAliveOnHover: true,
-        });
+        commonNotify("warning", response.message);
       }
-
       return response;
     },
     errHandler: (err) => {
       console.log("请求错误", err);
-      notification.error({
-        content: err,
-        duration: 2000,
-        keepAliveOnHover: true,
-      });
+      commonNotify("error", err);
     },
   }
 );
