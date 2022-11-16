@@ -11,3 +11,8 @@ export type Return<T> = {
   errorMessage: string;
   traceId: string;
 };
+
+export type Step = {
+  title: string;
+  description: string;
+};

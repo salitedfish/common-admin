@@ -44,7 +44,16 @@ const router = createRouter({
       component: () => import("@/component/login/loginPage.vue"),
       meta: {
         label: "登录",
-        icon: "zhengshu",
+        icon: "zhuye",
+      },
+    },
+    {
+      path: "/settle",
+      name: "settle",
+      component: () => import("@/component/settle/settlePage.vue"),
+      meta: {
+        label: "企业入驻",
+        icon: "zhuye",
       },
     },
     {

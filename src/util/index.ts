@@ -1,2 +1,3 @@
 export * from "./legal";
 export * from "./common";
+export * from "./captcha";

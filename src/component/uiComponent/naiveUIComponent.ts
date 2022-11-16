@@ -15,6 +15,10 @@ import {
   NLoadingBarProvider,
   NInput,
   NNotificationProvider,
+  NForm,
+  NFormItem,
+  NSteps,
+  NStep,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -34,5 +38,9 @@ export const naiveUIComponent = create({
     NLoadingBarProvider,
     NInput,
     NNotificationProvider,
+    NForm,
+    NFormItem,
+    NSteps,
+    NStep,
   ],
 });

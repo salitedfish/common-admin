@@ -22,14 +22,12 @@
             ></n-input>
             <div class="captcha-box" v-show="loginType === LoginType.CAPTCHA && phoneLegal">
               <n-input class="form-input" placeholder="验证码" :maxlength="8" v-model:value="formData.captcha"></n-input>
-              <n-button type="primary" @click="getCaptchaHandler" :loading="captchaGetState" :disabled="captchaDisabled"
-                >获取验证码<span v-show="captchaDisabled"> {{ captchaCountdown }} s</span></n-button
-              >
+              <captcha-btn :phone="formData.phone" :countDown="60"></captcha-btn>
             </div>
           </section>
           <n-button class="login-btn" @click="switchLoginTypeHandler" block>{{ loginTypeMap[loginType].switchText }}</n-button>
           <n-button class="login-btn" type="primary" block @click="loginHandler" :loading="loginState" :disabled="loginDisabled">登录</n-button>
-          <div class="settle">申请入驻</div>
+          <div class="settle" @click="settleHandler">申请入驻</div>
         </section>
       </n-card>
     </section>
@@ -40,9 +38,10 @@
 import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 // 组件
-import loginLayout from "./loginLayout.vue";
+import loginLayout from "../common/centerLayout.vue";
+import captchaBtn from "@/component/common/captchaBtn.vue";
 // 请求
-import { getCaptcha as getCaptchaRequest, login as loginRequest } from "@/request";
+import { login as loginRequest } from "@/request";
 import type * as RequestParam from "@/request/type/RequestParam";
 // 工具
 import { usePhoneLegal } from "@ultra-man/noa";
@@ -58,8 +57,7 @@ const formData = reactive({
   captcha: "",
 });
 const phoneLegal = computed(() => {
-  const phoneNum = Number(formData.phone);
-  return usePhoneLegal(phoneNum)();
+  return usePhoneLegal(formData.phone)();
 });
 
 // 密码登录还是验证码登录
@@ -80,34 +78,6 @@ const loginTypeMap = {
 const loginType = ref(LoginType.PASSWORD);
 const switchLoginTypeHandler = () => {
   loginType.value = loginType.value === LoginType.CAPTCHA ? LoginType.PASSWORD : LoginType.CAPTCHA;
-};
-
-// 验证码发送状态
-const captchaGetState = ref(false);
-const captchaDisabled = ref(false);
-const captchaCountdown = ref(60);
-// 获取验证码
-const getCaptchaHandler = async () => {
-  const phoneNum = Number(formData.phone);
-  if (!usePhoneLegal(phoneNum)()) {
-    commonNotify("warning", "手机号格式不正确！");
-    return;
-  }
-  captchaGetState.value = true;
-  captchaDisabled.value = true;
-  const captchaInterval = setInterval(() => {
-    captchaCountdown.value--;
-    if (captchaCountdown.value <= 0) {
-      clearInterval(captchaInterval);
-      captchaDisabled.value = false;
-      captchaCountdown.value = 60;
-    }
-  }, 1000);
-  const res = await getCaptchaRequest(phoneNum);
-  if (res && res.code === 0) {
-    commonNotify("success", "验证码发送成功！");
-  }
-  captchaGetState.value = false;
 };
 
 // 登录状态
@@ -156,6 +126,13 @@ const loginHandler = async () => {
   }
   loginState.value = false;
   loginDisabled.value = false;
+};
+
+// 入驻
+const settleHandler = () => {
+  router.push({
+    name: "settle",
+  });
 };
 </script>
 

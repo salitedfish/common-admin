@@ -19,13 +19,13 @@ export const ultraFetch = new UltraFetch(
       return config;
     },
     resHandler: (response, shallowResponse) => {
-      if (response.code === 0) {
-        console.log("请求成功结果", response);
+      if (!response) {
+        commonNotify("error", "网络异常！");
+      } else if (response.code === 0) {
+        return response;
       } else {
-        console.log("请求失败结果", response);
-        commonNotify("warning", response.message);
+        commonNotify("warning", response.message || "网络异常！");
       }
-      return response;
     },
     errHandler: (err) => {
       console.log("请求错误", err);

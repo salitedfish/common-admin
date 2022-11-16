@@ -12,8 +12,4 @@ defineProps<{
 }>();
 </script>
 
-<style scoped lang="less">
-// .al-icon {
-//   color: v-bind("$props.color");
-// }
-</style>
+<style scoped lang="less"></style>

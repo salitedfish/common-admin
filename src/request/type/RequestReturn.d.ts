@@ -8,3 +8,8 @@ export type Login = Promise<
     authentication: string;
   }>
 >;
+export type Register = Promise<
+  Return<{
+    authentication: string;
+  }>
+>;
