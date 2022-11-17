@@ -1,24 +1,18 @@
 <template>
   <section class="page-layout">
-    <n-card>
+    <layout-scroll-card>
       <slot></slot>
-    </n-card>
+    </layout-scroll-card>
   </section>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import layoutScrollCard from "@/component/common/layoutScrollCard.vue";
+</script>
 
 <style scoped lang="less">
 .page-layout {
   height: 100%;
   padding: 15px 18px 20px;
-  .n-card {
-    height: 100%;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
 }
 </style>

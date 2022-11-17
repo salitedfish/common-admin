@@ -41,11 +41,10 @@ import { useRouter } from "vue-router";
 import loginLayout from "../common/centerLayout.vue";
 import captchaBtn from "@/component/common/captchaBtn.vue";
 // 请求
-import { login as loginRequest } from "@/request";
 import type * as RequestParam from "@/request/type/RequestParam";
 // 工具
 import { usePhoneLegal } from "@ultra-man/noa";
-import { passwordLegal, commonNotify } from "@/util";
+import { passwordLegal, commonNotify, useLogin } from "@/util";
 
 // 初始化路由
 const router = useRouter();
@@ -80,9 +79,8 @@ const switchLoginTypeHandler = () => {
   loginType.value = loginType.value === LoginType.CAPTCHA ? LoginType.PASSWORD : LoginType.CAPTCHA;
 };
 
-// 登录状态
-const loginState = ref(false);
-const loginDisabled = ref(false);
+// 使用登录hook
+const { loginState, loginDisabled, login } = useLogin();
 // 登录
 const loginHandler = async () => {
   const params: RequestParam.Login = {
@@ -115,17 +113,13 @@ const loginHandler = async () => {
     }
     params.captcha = formData.captcha;
   }
-  loginState.value = true;
-  loginDisabled.value = true;
-  const res = await loginRequest(params);
+  const res = await login(params);
   if (res && res.code === 0) {
     commonNotify("success", "登录成功！");
     router.push({
-      name: "goodsListManager",
+      name: "homeManager",
     });
   }
-  loginState.value = false;
-  loginDisabled.value = false;
 };
 
 // 入驻

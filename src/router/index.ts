@@ -6,6 +6,17 @@ import userManager from "./userManager";
 // 具体的页面路由
 export const routes = [
   {
+    path: "homeManager",
+    name: "homeManager",
+    component: () => import("@/view/homeManager/homeManager.vue"),
+    meta: {
+      label: "主页",
+      icon: "zhuye",
+      divider: "divider_1",
+      show: true,
+    },
+  },
+  {
     path: "goodsManager",
     name: "goodsManager",
     component: () => import("@/view/goodsManager/goodsManager.vue"),
@@ -13,6 +24,7 @@ export const routes = [
     meta: {
       label: "商品管理",
       icon: "goods-copy",
+      show: true,
     },
   },
   {
@@ -59,6 +71,7 @@ const router = createRouter({
     {
       path: "/manager",
       name: "manager",
+      redirect: "/manager/homeManager",
       component: () => import("@/component/main/mainPage.vue"),
       children: routes,
       meta: {

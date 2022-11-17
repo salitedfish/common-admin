@@ -8,6 +8,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品列表",
       icon: "shangpinliebiao",
+      show: true,
     },
   },
   {

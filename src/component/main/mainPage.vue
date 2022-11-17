@@ -28,6 +28,7 @@ import mainHead from "./mainHead.vue";
 import pageLayout from "@/component/page/pageLayout.vue";
 
 import { useRouteStore } from "@/store";
+import { useNeedLogin } from "@/util";
 
 const routeStore = useRouteStore();
 const route = useRoute();
@@ -43,11 +44,14 @@ const updateRoutePath = (matched: RouteRecordNormalized[]) => {
   routeStore.updateCurrentRoutePath(matched);
 };
 
+// 初始化和每次路由更新时都检查一次，是否有token，没有则需要重新登录
 onMounted(() => {
+  useNeedLogin();
   updateRoutePath(route.matched);
 });
 
 onBeforeRouteUpdate((to) => {
+  useNeedLogin();
   updateRoutePath(to.matched);
 });
 </script>

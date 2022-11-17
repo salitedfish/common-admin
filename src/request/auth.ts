@@ -25,3 +25,10 @@ export const register = (data: RequestParam.Register): RequestReturn.Register =>
     body: JSON.stringify(data),
   });
 };
+
+// 获取有权限的路由
+export const getAuthRoutes = (): RequestReturn.GetAuthRoutes => {
+  return ultraFetch.get({
+    URL: "/manager/role-menu/detail",
+  });
+};

@@ -19,6 +19,8 @@ import {
   NFormItem,
   NSteps,
   NStep,
+  NRadioGroup,
+  NRadio,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -42,5 +44,7 @@ export const naiveUIComponent = create({
     NFormItem,
     NSteps,
     NStep,
+    NRadioGroup,
+    NRadio,
   ],
 });

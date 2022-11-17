@@ -14,5 +14,6 @@
   justify-content: center;
   background-image: url("@/assets/img/login/login_bg.png");
   background-size: cover;
+  overflow: hidden;
 }
 </style>

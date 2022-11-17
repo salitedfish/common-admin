@@ -17,14 +17,13 @@
 </template>
 
 <script lang="ts" setup>
-import { h, ref, reactive } from "vue";
+import { h, ref, reactive, onBeforeMount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { NIcon } from "naive-ui";
 import type { MenuOption } from "naive-ui";
-
 import customIcon from "@/component/common/customIcon.vue";
-
+import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
 
 // 获取当前路由的信息来初始化menu的选择值
@@ -48,33 +47,35 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
       label: item.meta?.label,
       key: item.name as string,
       icon: renderIcon(item.meta?.icon as string),
+      // 默认都创建菜单，但是默认先不显示，后面根据接口返回的路由判断是否显示
+      show: !!item.meta?.show,
     };
     if (item.children) {
       menuItem.children = mapMenuHandler(item.children);
     }
     rootRoutes.push(menuItem);
+    if (item.meta?.divider && !!item.meta?.show) {
+      rootRoutes.push({
+        key: item.meta?.divider as string,
+        type: "divider",
+        props: {
+          style: {
+            marginLeft: "32px",
+          },
+        },
+      });
+    }
   }
   return rootRoutes;
 };
 
 // 完整菜单项（一般还需要根据权限设置哪些需要影藏）
-const menuOptions = reactive<MenuOption[]>([
-  {
-    label: "首页",
-    key: "login",
-    icon: renderIcon("zhuye"),
-  },
-  {
-    key: "divider-1",
-    type: "divider",
-    props: {
-      style: {
-        marginLeft: "32px",
-      },
-    },
-  },
-  ...mapMenuHandler(routes),
-]);
+const menuOptions = reactive<MenuOption[]>([...mapMenuHandler(routes)]);
+
+// 生成菜单后再判断显示哪些
+onBeforeMount(async () => {
+  const res = await getAuthRoutesRequest();
+});
 
 // 路由跳转
 const router = useRouter();

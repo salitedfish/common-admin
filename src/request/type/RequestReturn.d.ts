@@ -13,3 +13,4 @@ export type Register = Promise<
     authentication: string;
   }>
 >;
+export type GetAuthRoutes = Promise<Return<{ menu: { name: string; route: string }[]; name: string; route: string }[]>>;
