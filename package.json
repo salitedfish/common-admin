@@ -5,10 +5,11 @@
     "prepare": "husky install",
     "dev": "vite",
     "build": "run-p type-check build-only",
+    "build_only": "vite build",
     "preview": "vite preview --port 4173",
-    "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "deploy_test": "pnpm run build_only && bash deploy_test.sh"
   },
   "dependencies": {
     "@ultra-man/noa": "^0.0.11",
@@ -37,6 +38,7 @@
     "prettier": "^2.5.1",
     "typescript": "~4.7.4",
     "vite": "^3.0.1",
+    "vite-plugin-compression": "^0.5.1",
     "vue": "^3.2.37",
     "vue-tsc": "^0.38.8"
   }

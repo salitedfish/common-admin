@@ -3,15 +3,23 @@
     <div>
       <n-form ref="formDom" :model="formData" :rules="formDataRules">
         <n-form-item label="手机号" path="phone">
-          <n-input class="form-input" placeholder="请输入手机号" v-model:value="formData.phone"></n-input>
+          <n-input class="form-input" placeholder="请输入手机号" v-model:value="formData.phone" :disabled="registerState"></n-input>
         </n-form-item>
         <n-form-item label="密码" path="password">
-          <n-input class="form-input" type="password" show-password-on="mousedown" placeholder="请输入密码" :maxlength="8" v-model:value="formData.password"></n-input>
+          <n-input
+            class="form-input"
+            type="password"
+            show-password-on="mousedown"
+            placeholder="请输入密码"
+            :maxlength="8"
+            v-model:value="formData.password"
+            :disabled="registerState"
+          ></n-input>
         </n-form-item>
         <n-form-item label="验证码" path="captcha">
           <div class="captcha-box">
-            <n-input class="form-input" placeholder="请输入验证码" :maxlength="8" v-model:value="formData.captcha"></n-input>
-            <captcha-btn :phone="formData.phone" :countDown="60"></captcha-btn>
+            <n-input class="form-input" placeholder="请输入验证码" :maxlength="8" v-model:value="formData.captcha" :disabled="registerState"></n-input>
+            <captcha-btn :phone="formData.phone" :countDown="60" :getCaptchaRequest="getRegisterCaptcha"></captcha-btn>
           </div>
         </n-form-item>
       </n-form>
@@ -26,13 +34,14 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { usePhoneLegal } from "@ultra-man/noa";
+import { usePhoneLegal, useSetLStorage } from "@ultra-man/noa";
 import { useLoadingBar } from "naive-ui";
 import type { FormRules, FormItemRule, FormInst } from "naive-ui";
 import captchaBtn from "@/component/common/captchaBtn.vue";
 // 自定义工具
-import { passwordLegal, commonNotify } from "@/util";
+import { passwordLegal, commonNotify, getUserInfo } from "@/util";
 // 网络请求
+import { getRegisterCaptcha } from "@/request/auth";
 import { register as registerRequest } from "@/request";
 
 const emit = defineEmits<{
@@ -107,7 +116,7 @@ const submitRegisterHandler = (e: MouseEvent) => {
     if (!errors) {
       registerHandler();
     } else {
-      commonNotify("warning", "请将表填填写正确！");
+      commonNotify("warning", "请将表单填写正确！");
     }
   });
 };
@@ -117,7 +126,9 @@ const registerHandler = async () => {
   loadingBar.start();
   const res = await registerRequest(formData);
   if (res && res.code === 0) {
+    await getUserInfo();
     commonNotify("success", "注册成功！");
+    useSetLStorage("token")(res.data.authentication);
     emit("updateStep");
   }
   registerState.value = false;

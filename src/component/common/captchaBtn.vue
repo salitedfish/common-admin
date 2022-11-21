@@ -14,7 +14,8 @@ import { usePhoneLegal } from "@ultra-man/noa";
 // 自定义工具
 import { commonNotify, useTencentCaptcha } from "@/util";
 // 网络请求
-import { getCaptcha as getCaptchaRequest } from "@/request";
+import type * as RequestReturn from "@/request/type/RequestReturn";
+import type * as RequestParam from "@/request/type/RequestParam";
 
 type TencentCaptchaCallbackParam = {
   ret: number;
@@ -30,6 +31,7 @@ const props = withDefaults(
     countDown: number;
     phone: number | string;
     text?: string;
+    getCaptchaRequest: (params: RequestParam.GetCaptcha) => RequestReturn.GetCaptcha;
   }>(),
   {
     text: "获取验证码",
@@ -49,7 +51,7 @@ const tencentCaptcha = useTencentCaptcha(async (res: TencentCaptchaCallbackParam
         captchaCountdown.value = props.countDown;
       }
     }, 1000);
-    const getRes = await getCaptchaRequest({
+    const getRes = await props.getCaptchaRequest({
       phone: String(props.phone),
       randstr: res.randstr,
       ticket: res.ticket,

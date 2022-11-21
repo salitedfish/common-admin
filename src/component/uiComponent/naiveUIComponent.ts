@@ -21,6 +21,12 @@ import {
   NStep,
   NRadioGroup,
   NRadio,
+  NUpload,
+  NDivider,
+  NDatePicker,
+  NCascader,
+  NDropdown,
+  NDialogProvider,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -46,5 +52,11 @@ export const naiveUIComponent = create({
     NStep,
     NRadioGroup,
     NRadio,
+    NUpload,
+    NDivider,
+    NDatePicker,
+    NCascader,
+    NDropdown,
+    NDialogProvider,
   ],
 });

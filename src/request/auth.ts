@@ -2,10 +2,18 @@ import { ultraFetch } from "./init";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type * as RequestParam from "@/request/type/RequestParam";
 
-// 获取验证码
-export const getCaptcha = (params: RequestParam.GetCaptcha): RequestReturn.GetCaptcha => {
+// 获取注册验证码
+export const getRegisterCaptcha = (params: RequestParam.GetCaptcha): RequestReturn.GetCaptcha => {
   return ultraFetch.get({
     URL: "/manager/captcha/register",
+    params,
+  });
+};
+
+// 获取登录验证码
+export const getLoginCaptcha = (params: RequestParam.GetCaptcha): RequestReturn.GetCaptcha => {
+  return ultraFetch.get({
+    URL: "/manager/captcha/login",
     params,
   });
 };
@@ -15,6 +23,20 @@ export const login = (data: RequestParam.Login): RequestReturn.Login => {
   return ultraFetch.post({
     URL: "/manager/access/login",
     body: JSON.stringify(data),
+  });
+};
+
+// 获取用户信息
+export const getUserInfo = (): RequestReturn.GetUserInfo => {
+  return ultraFetch.get({
+    URL: "/manager/user-admin/info",
+  });
+};
+
+// 退出
+export const logout = (): RequestReturn.Logout => {
+  return ultraFetch.get({
+    URL: "/manager/access/logout",
   });
 };
 
@@ -30,5 +52,20 @@ export const register = (data: RequestParam.Register): RequestReturn.Register =>
 export const getAuthRoutes = (): RequestReturn.GetAuthRoutes => {
   return ultraFetch.get({
     URL: "/manager/role-menu/detail",
+  });
+};
+
+// 提交企业入驻信息
+export const submitMerchantInfo = (data: RequestParam.SubmitMerchantInfo): RequestReturn.SubmitMerchantInfo => {
+  return ultraFetch.post({
+    URL: "/manager/merchant-wechat/apply/submit",
+    body: JSON.stringify(data),
+  });
+};
+
+// 获取企业申请结果信息
+export const getMerchantApplyResult = (): RequestReturn.GetMerchantApplyResult => {
+  return ultraFetch.get({
+    URL: "/manager/merchant-wechat/apply/query",
   });
 };

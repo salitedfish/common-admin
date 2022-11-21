@@ -22,6 +22,7 @@ specifiers:
   prettier: ^2.5.1
   typescript: ~4.7.4
   vite: ^3.0.1
+  vite-plugin-compression: ^0.5.1
   vue: ^3.2.37
   vue-router: ^4.1.2
   vue-tsc: ^0.38.8
@@ -52,6 +53,7 @@ devDependencies:
   prettier: 2.7.1
   typescript: 4.7.4
   vite: 3.2.2_less@4.1.3
+  vite-plugin-compression: 0.5.1_vite@3.2.2
   vue-tsc: 0.38.9_typescript@4.7.4
 
 packages:
@@ -3575,6 +3577,19 @@ packages:
       evtd: 0.2.4
       vue: 3.2.41
     dev: false
+
+  /vite-plugin-compression/0.5.1_vite@3.2.2:
+    resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
+    peerDependencies:
+      vite: '>=2.0.0'
+    dependencies:
+      chalk: 4.1.2
+      debug: 4.3.4
+      fs-extra: 10.1.0
+      vite: 3.2.2_less@4.1.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /vite/3.2.2_less@4.1.3:
     resolution: {integrity: sha512-pLrhatFFOWO9kS19bQ658CnRYzv0WLbsPih6R+iFeEEhDOuYgYCX2rztUViMz/uy/V8cLCJvLFeiOK7RJEzHcw==}

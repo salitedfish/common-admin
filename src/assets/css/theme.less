@@ -1,6 +1,12 @@
+
+// 通用
+@font-color-success: #18A058;
+@font-color-fail: #D03050;
+
 // 暗主题色
 @background-color-dark: rgb(24,24,24);
 @font-color-drak: #fff;
+
 
 // 亮主题色
 @background-color-light: rgb(255,255,255);
@@ -10,9 +16,13 @@
 .custom-dark {
     background-color: @background-color-dark;
     --color: @font-color-drak;
+    --font-color-success: @font-color-success;
+    --font-color-fail: @font-color-fail;
 }
 .custom-light {
     background-color: @background-color-light;
     --color: @font-color-light;
+    --font-color-success: @font-color-success;
+    --font-color-fail: @font-color-fail;
 
 }

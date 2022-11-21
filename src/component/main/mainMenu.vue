@@ -35,7 +35,7 @@ const collapsed = ref(false);
 
 // 渲染menu图标
 const renderIcon = (name: string) => {
-  const size = 20;
+  const size = 18;
   return () => h(NIcon, { size }, { default: () => h(customIcon, { name, size }) });
 };
 
@@ -54,7 +54,7 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
       menuItem.children = mapMenuHandler(item.children);
     }
     rootRoutes.push(menuItem);
-    if (item.meta?.divider && !!item.meta?.show) {
+    if (item.meta?.divider) {
       rootRoutes.push({
         key: item.meta?.divider as string,
         type: "divider",
@@ -72,9 +72,27 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
 // 完整菜单项（一般还需要根据权限设置哪些需要影藏）
 const menuOptions = reactive<MenuOption[]>([...mapMenuHandler(routes)]);
 
+// 根据远程的的路由来判断显示或不显示
+const authRouteHandler = (originRoute: MenuOption[], remoteRoute: { menu?: { name: string; route: string }[]; name: string; route: string }[]) => {
+  for (const item of originRoute) {
+    for (const i of remoteRoute) {
+      if (item.label === i.name) {
+        item.show = true;
+        if (item.children && i.menu) {
+          authRouteHandler(item.children, i.menu);
+        }
+        break;
+      }
+    }
+  }
+};
+
 // 生成菜单后再判断显示哪些
 onBeforeMount(async () => {
   const res = await getAuthRoutesRequest();
+  if (res && res.code === 0) {
+    authRouteHandler(menuOptions, res.data);
+  }
 });
 
 // 路由跳转

@@ -32,6 +32,7 @@ export const useThemeStore = defineStore("themeStore", () => {
   const switchTheme = (index?: number) => {
     if (index !== undefined && index >= 0) {
       activeTheme.value = index;
+      document.body.className = themeList[activeTheme.value].custom;
       return;
     }
     activeTheme.value++;

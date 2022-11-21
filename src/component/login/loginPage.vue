@@ -10,7 +10,7 @@
 
         <section class="action-form">
           <section class="form">
-            <n-input class="form-input" placeholder="账号" v-model:value="formData.phone"></n-input>
+            <n-input class="form-input" placeholder="账号" v-model:value="formData.phone" :disabled="loginDisabled"></n-input>
             <n-input
               class="form-input"
               type="password"
@@ -19,13 +19,14 @@
               :maxlength="8"
               v-model:value="formData.password"
               v-show="loginType === LoginType.PASSWORD"
+              :disabled="loginDisabled"
             ></n-input>
             <div class="captcha-box" v-show="loginType === LoginType.CAPTCHA && phoneLegal">
-              <n-input class="form-input" placeholder="验证码" :maxlength="8" v-model:value="formData.captcha"></n-input>
-              <captcha-btn :phone="formData.phone" :countDown="60"></captcha-btn>
+              <n-input class="form-input" placeholder="验证码" :maxlength="8" v-model:value="formData.captcha" :disabled="loginDisabled"></n-input>
+              <captcha-btn :phone="formData.phone" :countDown="60" :getCaptchaRequest="getLoginCaptcha"></captcha-btn>
             </div>
           </section>
-          <n-button class="login-btn" @click="switchLoginTypeHandler" block>{{ loginTypeMap[loginType].switchText }}</n-button>
+          <n-button class="login-btn" @click="switchLoginTypeHandler" block :disabled="loginDisabled">{{ loginTypeMap[loginType].switchText }}</n-button>
           <n-button class="login-btn" type="primary" block @click="loginHandler" :loading="loginState" :disabled="loginDisabled">登录</n-button>
           <div class="settle" @click="settleHandler">申请入驻</div>
         </section>
@@ -42,6 +43,7 @@ import loginLayout from "../common/centerLayout.vue";
 import captchaBtn from "@/component/common/captchaBtn.vue";
 // 请求
 import type * as RequestParam from "@/request/type/RequestParam";
+import { getLoginCaptcha } from "@/request/auth";
 // 工具
 import { usePhoneLegal } from "@ultra-man/noa";
 import { passwordLegal, commonNotify, useLogin } from "@/util";
