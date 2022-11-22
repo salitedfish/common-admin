@@ -2,6 +2,7 @@ import { useGetLStorage } from "@ultra-man/noa";
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore("authStore", () => {
+  const devCompletedRoutes: string[] = ["homeManager", "goodsListManager"];
   const getUserInfo = () => {
     return <
       {
@@ -20,6 +21,7 @@ export const useAuthStore = defineStore("authStore", () => {
     >useGetLStorage("userInfo")(null);
   };
   return {
+    devCompletedRoutes,
     getUserInfo,
   };
 });

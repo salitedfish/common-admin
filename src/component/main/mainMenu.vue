@@ -11,24 +11,23 @@
       @expand="collapsed = false"
       :native-scrollbar="false"
     >
-      <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" v-model:value="selectedKey"></n-menu>
+      <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"></n-menu>
     </n-layout-sider>
   </n-layout>
 </template>
 
 <script lang="ts" setup>
 import { h, ref, reactive, onBeforeMount } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { NIcon } from "naive-ui";
 import type { MenuOption } from "naive-ui";
 import customIcon from "@/component/common/customIcon.vue";
 import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
+import { useRouteStore } from "@/store/routeStore";
 
-// 获取当前路由的信息来初始化menu的选择值
-const route = useRoute();
-const selectedKey = ref(route.name as string);
+const routeStore = useRouteStore();
 
 // 展开状态
 const collapsed = ref(false);

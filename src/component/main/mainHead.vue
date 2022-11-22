@@ -11,35 +11,50 @@
 
     <section class="head-right">
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
-        <custom-icon name="yonghu1" :size="28"></custom-icon>
+        <div class="user-box">
+          <img :src="authStore.getUserInfo()?.headUrl" alt="" />
+          <!-- <custom-icon name="yonghu1" :size="28"></custom-icon> -->
+        </div>
       </n-dropdown>
     </section>
+
+    <n-modal v-model:show="showModal">
+      <n-card style="width: 600px" title="用户中心" :bordered="false" size="huge" role="dialog" aria-modal="true"> </n-card>
+    </n-modal>
   </section>
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useDialog } from "naive-ui";
 import customIcon from "@/component/common/customIcon.vue";
-import { useThemeStore, useRouteStore } from "@/store";
+import { useThemeStore, useRouteStore, useAuthStore } from "@/store";
 import { useLogout } from "@/util/auth";
 import { commonNotify } from "@/util/common";
 
 const dialog = useDialog();
 const router = useRouter();
 const routeStore = useRouteStore();
+const authStore = useAuthStore();
 const { logout } = useLogout();
 
 enum Options {
   LOGOUT = 0,
+  USER_CENTER,
   THEME,
 }
 
+// 弹出的选项
 const options = [
   {
     label: "退出",
     key: Options.LOGOUT,
   },
+  // {
+  //   label: "用户中心",
+  //   key: Options.USER_CENTER,
+  // },
   {
     label: "主题切换",
     key: Options.THEME,
@@ -75,6 +90,9 @@ const themeStore = useThemeStore();
 const handleClick = () => {
   themeStore.switchTheme();
 };
+
+// 显示模态框
+const showModal = ref(false);
 </script>
 
 <style scoped lang="less">
@@ -82,13 +100,24 @@ const handleClick = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 18px;
+  padding: 14px 18px;
   .head-right {
     cursor: pointer;
-    // width: 120px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .user-box {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      border-radius: 20px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>

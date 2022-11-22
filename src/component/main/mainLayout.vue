@@ -10,7 +10,7 @@
       </section>
 
       <section class="banner-layout">
-        <slot name="banner"></slot>
+        <slot name="tabs"></slot>
       </section>
 
       <section class="page-layout">
@@ -31,6 +31,7 @@
     overflow-y: auto;
   }
   .work-layout {
+    width: 0;
     flex: 1;
     display: flex;
     flex-direction: column;

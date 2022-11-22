@@ -1,5 +1,5 @@
 <template>
-  <n-card content-style="height: 100%">
+  <n-card content-style="height: 100%;">
     <n-scrollbar>
       <slot></slot>
     </n-scrollbar>
@@ -17,6 +17,7 @@
 
 <style scoped lang="less">
 .n-card {
+  // width: 100%;
   height: 100%;
 }
 </style>

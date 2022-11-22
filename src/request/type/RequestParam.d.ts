@@ -1,7 +1,8 @@
 // 定义接口参数类型
 import type { Paging } from "@/type/Common";
+import type { SearchParams as GoodsListSearchParams } from "@/type/GoodsManager";
 
-export type GetGoodsList = Paging & { name: string };
+export type GetGoodsList = Paging & GoodsListSearchParams;
 export type GetCaptcha = {
   phone: string;
   randstr: string;

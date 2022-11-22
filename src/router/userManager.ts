@@ -34,7 +34,7 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/userManager/merchantManager/merchantManager.vue"),
     meta: {
       label: "商户管理",
-      icon: "sahnghuguanli",
+      icon: "shanghuguanli",
     },
   },
 ];

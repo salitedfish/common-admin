@@ -47,9 +47,12 @@ import { getLoginCaptcha } from "@/request/auth";
 // 工具
 import { usePhoneLegal } from "@ultra-man/noa";
 import { passwordLegal, commonNotify, useLogin } from "@/util";
+import { useRouteStore } from "@/store/routeStore";
 
 // 初始化路由
 const router = useRouter();
+
+const routeStore = useRouteStore();
 
 // 登录表单数据
 const formData = reactive({
@@ -117,6 +120,7 @@ const loginHandler = async () => {
   }
   const res = await login(params);
   if (res && res.code === 0) {
+    routeStore.resetHistoryRoutes();
     commonNotify("success", "登录成功！");
     router.push({
       name: "homeManager",

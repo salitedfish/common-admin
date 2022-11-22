@@ -14,6 +14,7 @@ import {
   NBreadcrumbItem,
   NLoadingBarProvider,
   NInput,
+  NInputNumber,
   NNotificationProvider,
   NForm,
   NFormItem,
@@ -27,6 +28,13 @@ import {
   NCascader,
   NDropdown,
   NDialogProvider,
+  NTabPane,
+  NTabs,
+  NModal,
+  NPagination,
+  NDataTable,
+  NImage,
+  NSelect,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -45,6 +53,7 @@ export const naiveUIComponent = create({
     NBreadcrumbItem,
     NLoadingBarProvider,
     NInput,
+    NInputNumber,
     NNotificationProvider,
     NForm,
     NFormItem,
@@ -58,5 +67,12 @@ export const naiveUIComponent = create({
     NCascader,
     NDropdown,
     NDialogProvider,
+    NTabPane,
+    NTabs,
+    NModal,
+    NPagination,
+    NDataTable,
+    NImage,
+    NSelect,
   ],
 });

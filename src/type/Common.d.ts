@@ -12,8 +12,20 @@ export type Return<T> = {
   traceId: string;
 };
 
+export type ReturnList<T> = {
+  data: T[];
+  dataSize: number;
+  end: number;
+  hasNextPage: boolean;
+  hasPrePage: boolean;
+  pageNumber: number;
+  pageSize: number;
+  start: number;
+  totalPage: number;
+  totalSize: number;
+};
+
 export type Step = {
   title: string;
   description: string;
 };
-

@@ -1,7 +1,8 @@
 // 定义接口返回类型
-import type { Return } from "@/type/Common";
+import type { Return, ReturnList } from "@/type/Common";
+import type { GoodsListItem } from "@/type/GoodsManager";
 
-export type GetGoodsList = Promise<Return<[]>>;
+export type GetGoodsList = Promise<Return<ReturnList<GoodsListItem>>>;
 export type GetCaptcha = Promise<Return<>>;
 export type Login = Promise<
   Return<{
