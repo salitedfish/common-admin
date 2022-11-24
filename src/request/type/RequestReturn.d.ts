@@ -1,5 +1,5 @@
 // 定义接口返回类型
-import type { Return, ReturnList } from "@/type/Common";
+import type { Return, ReturnList, CategoryTreeItem } from "@/type/Common";
 import type { GoodsListItem } from "@/type/GoodsManager";
 
 export type GetGoodsList = Promise<Return<ReturnList<GoodsListItem>>>;
@@ -54,3 +54,5 @@ export type GetUserInfo = Promise<
     uid: number;
   }>
 >;
+
+export type GetCategoryTree = Promise<Return<CategoryTreeItem[]>>;

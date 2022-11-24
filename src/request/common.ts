@@ -34,5 +34,19 @@ export const uploadWCImg = (file: File) => {
   );
 };
 
-// 微信图片上传
+// 微信图片上传(上面的接口和这个都行，这个是给组件调用)
 export const uploadWCImgUrl = `${baseURL}/manager/merchant-wechat/apply/upload/image`;
+
+// 图片上传
+export const uploadImgUrl = `${baseURL}/manager/file/image`;
+
+// 视频上传
+export const uploadVideoUrl = `${baseURL}/manager/file/video`;
+
+// 获取类目树
+export const getCategoryTree = (type: number): RequestReturn.GetCategoryTree => {
+  return ultraFetch.get({
+    URL: "/manager/classify/tree",
+    params: { type },
+  });
+};

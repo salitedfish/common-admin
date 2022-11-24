@@ -1,5 +1,6 @@
 // 定义接口参数类型
 import type { Paging } from "@/type/Common";
+import type { GoodsDetail } from "@/type/GoodsManager";
 import type { SearchParams as GoodsListSearchParams } from "@/type/GoodsManager";
 
 export type GetGoodsList = Paging & GoodsListSearchParams;
@@ -56,3 +57,4 @@ export type SubmitMerchantInfo = {
   storeName: string;
   shortName: string;
 };
+export type GoodsSubmit = GoodsDetail;

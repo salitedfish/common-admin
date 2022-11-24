@@ -1,8 +1,9 @@
 import { useGetLStorage } from "@ultra-man/noa";
 import { defineStore } from "pinia";
+import { UserRole } from "@/type/Common";
 
 export const useAuthStore = defineStore("authStore", () => {
-  const devCompletedRoutes: string[] = ["homeManager", "goodsListManager"];
+  // const devCompletedRoutes: string[] = ["homeManager", "goodsListManager"];
   const getUserInfo = () => {
     return <
       {
@@ -20,8 +21,13 @@ export const useAuthStore = defineStore("authStore", () => {
       } | null
     >useGetLStorage("userInfo")(null);
   };
+
+  // 判断是不是管理员
+  const isAdmin = () => {
+    return getUserInfo()?.role === UserRole.ADMIN;
+  };
   return {
-    devCompletedRoutes,
     getUserInfo,
+    isAdmin,
   };
 });

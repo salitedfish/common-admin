@@ -98,3 +98,27 @@ export enum GoodsType {
   AIR_DROP,
   POINT,
 }
+export const saleTypeList = [
+  {
+    value: 0,
+    label: "正常销售",
+  },
+  {
+    value: 1,
+    label: "白名单销售",
+  },
+  {
+    value: 2,
+    label: "抽签销售",
+  },
+  {
+    value: 3,
+    label: "规则销售",
+  },
+];
+export enum SaleType {
+  NOAMAL = 0,
+  WHITE_LIST,
+  DRAW,
+  RULES,
+}

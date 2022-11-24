@@ -13,6 +13,14 @@
     </template>
 
     <template v-slot:page>
+      <!-- <page-layout>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" v-if="$route.meta.keepAlive"></component>
+          </keep-alive>
+          <component :is="Component" v-if="!$route.meta.keepAlive"></component>
+        </router-view>
+      </page-layout> -->
       <page-layout>
         <RouterView></RouterView>
       </page-layout>

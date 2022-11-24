@@ -4,7 +4,13 @@
     <n-loading-bar-provider>
       <n-dialog-provider>
         <n-notification-provider>
-          <RouterView />
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :key="$route.name" :is="Component"></component>
+            </keep-alive>
+            <!-- <component :is="Component" v-if="!$route.meta.keepAlive"></component> -->
+          </router-view>
+          <!-- <RouterView /> -->
         </n-notification-provider>
       </n-dialog-provider>
     </n-loading-bar-provider>

@@ -29,3 +29,17 @@ export type Step = {
   title: string;
   description: string;
 };
+
+export enum UserRole {
+  ADMIN = 1,
+  MERCHANT,
+}
+export type CategoryTreeItem = {
+  child: CategoryTreeItem[];
+  id: number;
+  level: number;
+  name: string;
+  order: number;
+  parentId: number;
+  type: number;
+};

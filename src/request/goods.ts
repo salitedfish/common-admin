@@ -8,3 +8,10 @@ export const getGoodsList = (params: RequestParam.GetGoodsList): RequestReturn.G
     body: JSON.stringify(params),
   });
 };
+
+export const goodsSubmit = (params: RequestParam.GoodsSubmit) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/submit",
+    body: JSON.stringify(params),
+  });
+};

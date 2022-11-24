@@ -10,6 +10,7 @@
     </section>
 
     <section class="head-right">
+      <n-button @click="handleClick" secondary type="primary" style="margin-right: 15px">主题切换</n-button>
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
         <div class="user-box">
           <img :src="authStore.getUserInfo()?.headUrl" alt="" />
@@ -55,10 +56,10 @@ const options = [
   //   label: "用户中心",
   //   key: Options.USER_CENTER,
   // },
-  {
-    label: "主题切换",
-    key: Options.THEME,
-  },
+  // {
+  //   label: "主题切换",
+  //   key: Options.THEME,
+  // },
 ];
 
 const handleSelect = async (key: string | number) => {

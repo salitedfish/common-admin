@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { createDiscreteApi } from "naive-ui";
-import type { NotificationType, CascaderOption } from "naive-ui";
+import type { NotificationType, CascaderOption, UploadFileInfo } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
 export const { notification } = createDiscreteApi(["notification"]);
@@ -57,4 +57,23 @@ export const useNowTimeStamp = () => {
 // 返回无限的时间戳
 export const useInfinityTimeStamp = () => {
   return 4133865600000;
+};
+
+// 通用处理图片上传结果
+export const onUploadFinish = (options: { file: UploadFileInfo; event?: ProgressEvent }, imageList: UploadFileInfo[]) => {
+  const res = JSON.parse((options.event?.target as XMLHttpRequest).response);
+  if (res.code === 0) {
+    commonNotify("success", "文件上传成功！");
+    options.file.thumbnailUrl = res.data;
+  } else {
+    commonNotify("warning", res.message || "文件上传失败");
+    setTimeout(() => {
+      for (let index = 0; index < imageList.length; index++) {
+        const item = imageList[index];
+        if (item.thumbnailUrl === options.file.thumbnailUrl) {
+          imageList.splice(index, 1);
+        }
+      }
+    }, 0);
+  }
 };
