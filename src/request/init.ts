@@ -51,8 +51,7 @@ export const ultraFetch = new UltraFetch(
       }
     },
     errHandler: (err) => {
-      console.log("请求错误", err);
-      commonNotify("error", err);
+      commonNotify("error", "网络异常！");
     },
   }
 );

@@ -1,7 +1,7 @@
 <template>
   <div class="tabs">
-    <n-tabs :value="routeStore.currentRoute.label" @update:value="handleClick" type="card" :closable="closableRef" tab-style="min-width: 80px;" @close="handleClose">
-      <n-tab-pane v-for="(item, index) in routeStore.historyRoutes" :key="index" :name="item.label"> </n-tab-pane>
+    <n-tabs :value="routeStore.currentRoute.key" @update:value="handleClick" type="card" :closable="closableRef" tab-style="min-width: 80px;" @close="handleClose">
+      <n-tab-pane v-for="(item, index) in routeStore.historyRoutes" :key="index" :name="item.key" :tab="item.label"> </n-tab-pane>
     </n-tabs>
   </div>
 </template>
@@ -18,16 +18,19 @@ import { useRouteStore } from "@/store/routeStore";
 const routeStore = useRouteStore();
 const closableRef = true;
 
-const handleClose = (label: string) => {
-  routeStore.deleteHistoryRoutes(label);
+const handleClose = (key: string) => {
+  routeStore.deleteHistoryRoutes(key);
 };
-const handleClick = (label: string) => {
-  routeStore.selectHistoryRoutes(label);
+const handleClick = (key: string) => {
+  routeStore.selectHistoryRoutes(key);
 };
 </script>
 
 <style scoped lang="less">
 .tabs {
   padding: 0 18px;
+}
+.n-tab-pane {
+  display: none;
 }
 </style>

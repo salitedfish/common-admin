@@ -1,4 +1,5 @@
 import { ultraFetch } from "./init";
+import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 const baseURL = "/api";
 
@@ -38,7 +39,37 @@ export const uploadWCImg = (file: File) => {
 export const uploadWCImgUrl = `${baseURL}/manager/merchant-wechat/apply/upload/image`;
 
 // 图片上传
+export const uploadImg = (file: File): RequestReturn.Upload => {
+  const data = new FormData();
+  data.append("file", file);
+  return ultraFetch.post(
+    {
+      URL: "/manager/file/image",
+      body: data,
+    },
+    {
+      pureHeaders: true,
+    }
+  );
+};
+
+// 图片上传
 export const uploadImgUrl = `${baseURL}/manager/file/image`;
+
+// 图片上传
+export const uploadVideo = (file: File): RequestReturn.Upload => {
+  const data = new FormData();
+  data.append("file", file);
+  return ultraFetch.post(
+    {
+      URL: "/manager/file/video",
+      body: data,
+    },
+    {
+      pureHeaders: true,
+    }
+  );
+};
 
 // 视频上传
 export const uploadVideoUrl = `${baseURL}/manager/file/video`;
@@ -48,5 +79,26 @@ export const getCategoryTree = (type: number): RequestReturn.GetCategoryTree => 
   return ultraFetch.get({
     URL: "/manager/classify/tree",
     params: { type },
+  });
+};
+// 删除类目
+export const deleteCategory = (params: { id: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/classify/delete",
+    body: JSON.stringify(params),
+  });
+};
+// 编辑类目
+export const editCategory = (params: RequestParam.EditCategory) => {
+  return ultraFetch.post({
+    URL: "/manager/classify/submit",
+    body: JSON.stringify(params),
+  });
+};
+// 显示影藏类目
+export const updateCategoryState = (params: { id: number; state: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/classify/state",
+    body: JSON.stringify(params),
   });
 };

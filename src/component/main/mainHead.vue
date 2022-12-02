@@ -10,7 +10,7 @@
     </section>
 
     <section class="head-right">
-      <n-button @click="handleClick" secondary type="primary" style="margin-right: 15px">主题切换</n-button>
+      <n-button @click="handleClick" type="primary" style="margin-right: 15px" round tertiary size="small">主题切换</n-button>
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
         <div class="user-box">
           <img :src="authStore.getUserInfo()?.headUrl" alt="" />
@@ -72,16 +72,18 @@ const handleSelect = async (key: string | number) => {
 
 // 退出
 const handleLogout = async () => {
-  dialog.warning({
+  const dialogInfo = dialog.warning({
     title: "确认",
     content: "是否确认退出？",
     positiveText: "确认",
     onPositiveClick: async () => {
+      dialogInfo.loading = true;
       const res = await logout();
-      if (res && res.code === 0) {
+      if (res) {
         router.push({ name: "login" });
         commonNotify("success", "退出成功");
       }
+      dialogInfo.loading = false;
     },
   });
 };

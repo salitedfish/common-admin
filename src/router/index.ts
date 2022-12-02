@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useRouteStore } from "@/store/routeStore";
 
 import goodsManager from "./goodsManager";
 import orderManager from "./orderManager";
@@ -24,7 +25,7 @@ export const routes = [
   {
     path: "goodsManager",
     name: "goodsManager",
-    component: () => import("@/view/goodsManager/goodsManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: goodsManager,
     meta: {
       label: "商品中心",
@@ -34,7 +35,7 @@ export const routes = [
   {
     path: "pointsManager",
     name: "pointsManager",
-    component: () => import("@/view/pointsManager/pointsManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: pointsManager,
     meta: {
       label: "积分中心",
@@ -44,7 +45,7 @@ export const routes = [
   {
     path: "userManager",
     name: "userManager",
-    component: () => import("@/view/userManager/userManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: userManager,
     meta: {
       label: "用户中心",
@@ -54,7 +55,7 @@ export const routes = [
   {
     path: "orderManager",
     name: "orderManager",
-    component: () => import("@/view/orderManager/orderManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: orderManager,
     meta: {
       label: "订单中心",
@@ -64,7 +65,7 @@ export const routes = [
   {
     path: "financeManager",
     name: "financeManager",
-    component: () => import("@/view/financeManager/financeManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: financeManager,
     meta: {
       label: "财务中心",
@@ -74,7 +75,7 @@ export const routes = [
   {
     path: "operactionManager",
     name: "operactionManager",
-    component: () => import("@/view/operactionManager/operactionManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: operactionManager,
     meta: {
       label: "运营中心",
@@ -84,7 +85,7 @@ export const routes = [
   {
     path: "systemManager",
     name: "systemManager",
-    component: () => import("@/view/systemManager/systemManager.vue"),
+    component: () => import("@/component/page/pageView.vue"),
     children: systemManager,
     meta: {
       label: "平台中心",

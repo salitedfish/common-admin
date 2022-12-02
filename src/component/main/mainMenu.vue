@@ -11,7 +11,7 @@
       @expand="collapsed = false"
       :native-scrollbar="false"
     >
-      <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"></n-menu>
+      <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"> </n-menu>
     </n-layout-sider>
   </n-layout>
 </template>

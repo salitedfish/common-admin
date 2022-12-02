@@ -5,24 +5,40 @@
 
 // 暗主题色
 @background-color-dark: rgb(24,24,24);
-@font-color-drak: #fff;
+@font-color-dark: #fff;
+@primary-color-dark: #63e2b7;
+@active-hover-color-dark: rgb(35,54,51) ;
+@font-color-hidden-dark: #555;
 
 
 // 亮主题色
 @background-color-light: rgb(255,255,255);
 @font-color-light: #333;
+@primary-color-light: #13a058;
+@active-hover-color-light: rgb(231,245,238);
+@font-color-hidden-light: #ccc;
+
+
 
 
 .custom-dark {
     background-color: @background-color-dark;
-    --color: @font-color-drak;
+    --background-color: @background-color-dark;
+    --color: @font-color-dark;
+    --primary-color: @primary-color-dark;
+    --active-hover-color: @active-hover-color-dark;
     --font-color-success: @font-color-success;
     --font-color-fail: @font-color-fail;
+    --font-color-hidden: @font-color-hidden-dark;
 }
 .custom-light {
     background-color: @background-color-light;
+    --background-color: @background-color-light;
     --color: @font-color-light;
+    --primary-color: @primary-color-light;
+    --active-hover-color: @active-hover-color-light;
     --font-color-success: @font-color-success;
     --font-color-fail: @font-color-fail;
+    --font-color-hidden: @font-color-hidden-light;
 
 }

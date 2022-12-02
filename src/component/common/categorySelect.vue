@@ -8,14 +8,14 @@
     children-field="child"
     value-field="id"
     label-field="name"
-    :disabled="disabled"
+    :disabled="disabled || searching"
     :clearable="true"
   />
 </template>
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 // 组件库
 // 自定义组件
 // 工具库
@@ -48,11 +48,22 @@ const selectTree = ref<CategoryTreeItem[]>([]);
 
 // 保存选中的值，默认值由外部传入
 const value = ref(props.defaultValue);
+watch(
+  () => props.defaultValue,
+  (newValue) => {
+    value.value = newValue;
+  }
+);
+
+//
+const searching = ref(false);
 
 // 获取类目(0: 商品， 1: 公告)
 const getCategoryTree = async () => {
+  searching.value = true;
   const res = await getCategoryTreeRequest(props.type);
   selectTree.value = res.data;
+  searching.value = false;
 };
 
 // 选择的值更新后反射出去

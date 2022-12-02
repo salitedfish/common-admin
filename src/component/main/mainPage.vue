@@ -13,14 +13,6 @@
     </template>
 
     <template v-slot:page>
-      <!-- <page-layout>
-        <router-view v-slot="{ Component }">
-          <keep-alive>
-            <component :is="Component" v-if="$route.meta.keepAlive"></component>
-          </keep-alive>
-          <component :is="Component" v-if="!$route.meta.keepAlive"></component>
-        </router-view>
-      </page-layout> -->
       <page-layout>
         <RouterView></RouterView>
       </page-layout>
@@ -41,10 +33,14 @@ import mainTabs from "./mainTabs.vue";
 import pageLayout from "@/component/page/pageLayout.vue";
 
 import { useRouteStore } from "@/store";
+
+import { useCommonStore } from "@/store/commonStore";
 import { useNeedLogin } from "@/util";
+
 const routeStore = useRouteStore();
 const route = useRoute();
 const loadingBar = useLoadingBar();
+const commonStore = useCommonStore();
 
 // 初始化和路由改变时，设置当前路由路径(用于面包屑展示)
 // 里面的loadingbar只是一个视觉效果
@@ -62,7 +58,9 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
     name: to.name as string,
     label: to.meta.label as string,
     query: to.query as Record<string, string>,
+    key: to.fullPath,
   };
+
   routeStore.addHistoryRoutes(route);
 };
 
@@ -70,14 +68,14 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
 // 初始化和每次路由更新时都监听，更新路由路径和历史路由
 onMounted(() => {
   useNeedLogin();
-  updateRoutePath(route.matched);
   updateHistoryRoutes(route);
+  updateRoutePath(route.matched);
 });
 
 onBeforeRouteUpdate((to) => {
   useNeedLogin();
-  updateRoutePath(to.matched);
   updateHistoryRoutes(to);
+  updateRoutePath(to.matched);
 });
 </script>
 

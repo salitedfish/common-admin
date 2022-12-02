@@ -29,6 +29,7 @@ export type GoodsListItem = {
   merchantName: string;
   merchantUid: number;
   saleType: number;
+  classifies: number[];
 };
 
 export type GoodsDetail = {

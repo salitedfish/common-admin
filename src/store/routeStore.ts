@@ -8,6 +8,7 @@ type CurrentRoute = {
   name: string;
   label: string;
   query: Record<string, string>;
+  key: string;
 };
 
 export const useRouteStore = defineStore("routeStore", () => {
@@ -24,13 +25,14 @@ export const useRouteStore = defineStore("routeStore", () => {
     name: "",
     label: "",
     query: {},
+    key: "",
   });
   // 历史路由列表
   const historyRoutes = reactive<CurrentRoute[]>([]);
   // 监听到路由改变时会添加路由
   const addHistoryRoutes = (route: CurrentRoute) => {
     const index = useDeepInclude(historyRoutes, {
-      condition: (item) => item.label === route.label,
+      condition: (item) => item.key === route.key,
     });
 
     if (index === false) {
@@ -38,18 +40,17 @@ export const useRouteStore = defineStore("routeStore", () => {
       historyRoutes.push(route);
       currentRoute.value = route;
     } else {
-      // 如果存在先替换（如果两个路由名称相同，query不同，那只保存最新的）
-      historyRoutes.splice(Number(index), 1, route);
+      // historyRoutes.splice(Number(index), 1, route);
       currentRoute.value = historyRoutes[Number(index)];
     }
   };
   // tab删除路由
-  const deleteHistoryRoutes = (label: string) => {
+  const deleteHistoryRoutes = (key: string) => {
     const index = useDeepInclude(historyRoutes, {
-      condition: (item) => item.label === label,
+      condition: (item) => item.key === key,
     });
     // 当删除的是当前路由时，要判断情况比较多
-    if (label === currentRoute.value.label) {
+    if (key === currentRoute.value.key) {
       if (historyRoutes.length === 1) {
         return;
       } else if (index === "0") {
@@ -59,7 +60,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       } else {
         currentRoute.value = historyRoutes[Number(index) - 1];
       }
-      router.push({
+      router.replace({
         name: currentRoute.value.name,
         query: currentRoute.value.query,
       });
@@ -67,9 +68,9 @@ export const useRouteStore = defineStore("routeStore", () => {
     historyRoutes.splice(Number(index), 1);
   };
   // tab选择路由
-  const selectHistoryRoutes = (label: string) => {
+  const selectHistoryRoutes = (key: string) => {
     const index = useDeepInclude(historyRoutes, {
-      condition: (item) => item.label === label,
+      condition: (item) => item.key === key,
     });
     currentRoute.value = historyRoutes[Number(index)];
     router.push({
@@ -84,7 +85,17 @@ export const useRouteStore = defineStore("routeStore", () => {
       name: "",
       label: "",
       query: {},
+      key: "",
     };
+  };
+  // 删除当前的路由
+  const deleteCurrentRoute = () => {
+    for (const i in historyRoutes) {
+      if (historyRoutes[i].key === currentRoute.value.key) {
+        historyRoutes.splice(Number(i), 1);
+        return;
+      }
+    }
   };
 
   return {
@@ -97,5 +108,6 @@ export const useRouteStore = defineStore("routeStore", () => {
     selectHistoryRoutes,
     deleteHistoryRoutes,
     resetHistoryRoutes,
+    deleteCurrentRoute,
   };
 });

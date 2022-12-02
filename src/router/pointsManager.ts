@@ -10,4 +10,22 @@ export default <RouteRecordRaw[]>[
       icon: "jifen",
     },
   },
+  {
+    path: "addPoints",
+    name: "addPoints",
+    component: () => import("@/view/pointsManager/pointsDetailManager/pointsDetailManager.vue"),
+    meta: {
+      label: "新增积分",
+      icon: "jifen",
+    },
+  },
+  {
+    path: "editPoints",
+    name: "editPoints",
+    component: () => import("@/view/pointsManager/pointsDetailManager/pointsDetailManager.vue"),
+    meta: {
+      label: "编辑积分",
+      icon: "jifen",
+    },
+  },
 ];

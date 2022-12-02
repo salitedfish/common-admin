@@ -35,6 +35,9 @@ import {
   NDataTable,
   NImage,
   NSelect,
+  NSpin,
+  NPopconfirm,
+  NTooltip,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -74,5 +77,8 @@ export const naiveUIComponent = create({
     NDataTable,
     NImage,
     NSelect,
+    NSpin,
+    NPopconfirm,
+    NTooltip,
   ],
 });

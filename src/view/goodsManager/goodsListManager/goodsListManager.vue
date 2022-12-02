@@ -2,35 +2,124 @@
   <n-card>
     <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
   </n-card>
-  <n-data-table :columns="createColumns()" :data="goodsList" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table :single-line="false" :columns="createColumns()" :data="goodsList" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getGoodsList" />
   </n-card>
+
+  <!-- 改变商品状态的modal，包括提交审核、审核失败等 -->
+  <n-modal :show="showAuditModal" @update:show="(state: boolean) => (showAuditModal = state)">
+    <n-card style="width: 600px" :title="auditInfo.auditTitle" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <template #header-extra>
+        <custom-icon name="guanbi" :size="16" @click="showAuditModal = false"></custom-icon>
+      </template>
+      <div v-if="auditInfo.auditTip">{{ auditInfo.auditTip }}</div>
+
+      <n-form
+        label-placement="left"
+        label-width="80px"
+        label-align="left"
+        v-if="[AuditAction.AUDIT_FAIL, AuditAction.AUDIT_SUCCESS, AuditAction.RE_AUDIT_FAIL, AuditAction.RE_AUDIT_SUCCESS].includes(auditInfo.goodsState)"
+      >
+        <n-form-item label="审核备注:">
+          <n-input v-model:value="auditInfo.auditNote"></n-input>
+        </n-form-item>
+        <n-form-item label="审核结果:" v-if="[AuditAction.AUDIT_FAIL, AuditAction.AUDIT_SUCCESS].includes(auditInfo.goodsState)">
+          <n-select v-model:value="auditInfo.goodsState" :options="auditResList" placeholder="请选择审核结果" />
+        </n-form-item>
+        <n-form-item label="审核结果:" v-if="[AuditAction.RE_AUDIT_FAIL, AuditAction.RE_AUDIT_SUCCESS].includes(auditInfo.goodsState)">
+          <n-select v-model:value="auditInfo.goodsState" :options="reAuditResList" placeholder="请选择审核结果" />
+        </n-form-item>
+      </n-form>
+
+      <template #footer>
+        <div style="display: flex; justify-content: end">
+          <n-button type="primary" inline-block @click="comfirmAudit" :disabled="auditLoading" :loading="auditLoading">确认</n-button>
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
+
+  <!-- 改变商品类目的modal -->
+  <n-modal :show="showUpdateCategoryModal" @update:show="(state: boolean) => (showUpdateCategoryModal = state)">
+    <n-card style="width: 600px" :title="updateCategoryInfo.categoryUpdateTitle" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <template #header-extra>
+        <custom-icon name="guanbi" :size="16" @click="showUpdateCategoryModal = false"></custom-icon>
+      </template>
+
+      <n-form label-placement="left" label-width="80px" label-align="left">
+        <n-form-item label="商品类目:">
+          <category-select v-model="updateCategoryInfo.categorys" :disabled="updateCategoryLoading" :default-value="updateCategoryInfo.defaultCategory"></category-select>
+        </n-form-item>
+      </n-form>
+
+      <template #footer>
+        <div style="display: flex; justify-content: end">
+          <n-button
+            type="primary"
+            inline-block
+            @click="comfirmUpdateCategory"
+            :disabled="updateCategoryLoading || updateCategoryInfo.categorys.length < 4"
+            :loading="updateCategoryLoading"
+            >确认</n-button
+          >
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
 </template>
 
-<script lang="ts" setup>
-import { onBeforeMount, ref, h, computed } from "vue";
-import type { VNode } from "vue";
-import { NImage, NButton, NSpace } from "naive-ui";
-import screenSection from "./component/screenSection.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "goodsListManager",
+});
+</script>
 
-import { getGoodsList as getGoodsListRequest } from "@/request/goods";
+<script lang="ts" setup>
+import { onBeforeMount, ref, h, computed, reactive } from "vue";
+import { useRouter } from "vue-router";
+import type { VNode } from "vue";
+import { NImage, NButton, NSpace, useDialog } from "naive-ui";
+import screenSection from "./component/screenSection.vue";
+import categorySelect from "@/component/common/categorySelect.vue";
+import customIcon from "@/component/common/customIcon.vue";
+
+import {
+  getGoodsList as getGoodsListRequest,
+  goodsDelete as goodsDeleteRequest,
+  updateGoodsState as updateGoodsStateRequest,
+  updateGoodsAudit as updateGoodsAuditRequest,
+  updateGoodsCategory as updateGoodsCategoryRequest,
+} from "@/request/goods";
 import type * as RequestParam from "@/request/type/RequestParam";
 
 import type { SearchParams, GoodsListItem } from "@/type/GoodsManager";
 import type { DataTableColumns } from "naive-ui";
-import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType } from "./goodsListManagerStore";
+import type { CategoryTreeItem } from "@/type/Common";
+import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList } from "./goodsListManagerStore";
 import { useAuthStore } from "@/store/authStore";
+import { commonNotify } from "@/util/common";
+import { useCommonStore } from "@/store/commonStore";
 
+const commonStore = useCommonStore();
 const authStore = useAuthStore();
 const isAdmin = authStore.isAdmin();
+const router = useRouter();
+const dialog = useDialog();
 
 // 列表宽度和高度
 const listXWidth = computed(() => {
-  const base = 1860;
-  return isAdmin ? base + 240 : base;
+  let width = 0;
+  const list = createColumns();
+  for (const item of list) {
+    width = (item.width as number) + width;
+  }
+  return width;
 });
-const listYHeight = ref(540);
+const listYHeight = computed(() => {
+  return commonStore.pageContentHeight - 185;
+});
 
 // 筛选的参数
 const searchParam = ref<RequestParam.GetGoodsList>({
@@ -97,27 +186,27 @@ const createColumns = () => {
     {
       title: "商品价格",
       key: "goodsPrice",
-      width: 80,
+      width: 100,
     },
     {
       title: "商品总量",
       key: "goodsTotal",
-      width: 80,
+      width: 100,
     },
     {
       title: "商品库存",
       key: "goodsStock",
-      width: 80,
+      width: 100,
     },
     {
       title: "商品收藏",
       key: "goodsCollections",
-      width: 80,
+      width: 100,
     },
     {
       title: "上架时间",
       key: "activeTime",
-      width: 120,
+      width: 180,
       render(row) {
         return row.activeTime ? row.activeTime : "/";
       },
@@ -125,7 +214,7 @@ const createColumns = () => {
     {
       title: "销售开始时间",
       key: "goodsSaleTime",
-      width: 120,
+      width: 180,
       render(row) {
         return row.goodsSaleTime ? row.goodsSaleTime : "/";
       },
@@ -133,7 +222,7 @@ const createColumns = () => {
     {
       title: "审核时间",
       key: "auditorTime",
-      width: 120,
+      width: 180,
       render(row) {
         return row.auditorTime ? row.auditorTime : "/";
       },
@@ -158,17 +247,59 @@ const createColumns = () => {
     {
       title: "操作",
       key: "operaction",
-      width: 240,
+      width: 320,
       fixed: "right",
       render(goods) {
         const { goodsState, saleType, goodsType } = goods;
         const list: VNode[] = [];
+        const size = "small";
+        // 详情
+        list.push(
+          h(
+            NButton,
+            {
+              type: "primary",
+              size,
+              secondary: true,
+
+              onClick: () =>
+                router.push({
+                  name: "goodsCheckManager",
+                  query: {
+                    goodsId: goods.goodsId,
+                  },
+                }),
+            },
+            {
+              default: () => "详情",
+            }
+          )
+        );
+        // 删除
         if ([GoodsState.DRAFT, GoodsState.APPROVIAL_FAILED].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "warning",
+                size,
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "删除商品",
+                    content: `确认删除${goods.goodsName}吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await goodsDeleteRequest({ goodsId: goods.goodsId });
+                      if (res) {
+                        getGoodsList();
+                        commonNotify("success", "商品删除成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
               },
               {
                 default: () => "删除",
@@ -176,6 +307,7 @@ const createColumns = () => {
             )
           );
         }
+        // 编辑
         if (
           !isAdmin &&
           [GoodsState.DRAFT, GoodsState.APPROVIAL_FAILED, GoodsState.TO_BE_SHELVES, GoodsState.NEED_APPROVIAL, GoodsState.APPROVIAL_FAILED_NEW].includes(goodsState)
@@ -185,6 +317,16 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () =>
+                  router.push({
+                    name: "goodsEditManager",
+                    query: {
+                      goodsId: goods.goodsId,
+                    },
+                  }),
               },
               {
                 default: () => "编辑",
@@ -192,12 +334,23 @@ const createColumns = () => {
             )
           );
         }
+        // 提交审核
         if (!isAdmin && [GoodsState.DRAFT, GoodsState.NEED_APPROVIAL].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "提交审核";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认将${goods.goodsName}提交审核吗？`;
+                  auditInfo.goodsState = goods.goodsState === GoodsState.NEED_APPROVIAL ? AuditAction.RE_SUBMIT_AUDIT : AuditAction.SUBMIT_AUDIT;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "提交审核",
@@ -205,12 +358,15 @@ const createColumns = () => {
             )
           );
         }
+
         if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "上传白名单",
@@ -224,6 +380,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "warning",
+                size,
+                secondary: true,
               },
               {
                 default: () => "删除白名单",
@@ -241,6 +399,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "查看白名单",
@@ -254,6 +414,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "修改合成规则",
@@ -271,6 +433,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "查看合成规则",
@@ -284,6 +448,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "修改积分",
@@ -297,6 +463,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "修改拓展参数",
@@ -304,12 +472,22 @@ const createColumns = () => {
             )
           );
         }
+        // 审核
         if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "审核";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_AUDIT_FAIL : AuditAction.AUDIT_FAIL;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "审核",
@@ -317,12 +495,23 @@ const createColumns = () => {
             )
           );
         }
+        // 撤销审核
         if (!isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "撤销审核";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认撤销审核${goods.goodsName}吗？`;
+                  auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_CANCEL_AUDIT : AuditAction.CANCEL_AUDIT;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "撤销审核",
@@ -336,6 +525,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "修改二级参数与分账比例",
@@ -343,12 +534,23 @@ const createColumns = () => {
             )
           );
         }
+        // 上架
         if (!isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "上架";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认上架${goods.goodsName}吗？`;
+                  auditInfo.goodsState = AuditAction.UPPER_SHELF;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "上架",
@@ -356,12 +558,23 @@ const createColumns = () => {
             )
           );
         }
+        // 下架
         if ([GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "warning",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "下架";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认下架${goods.goodsName}吗？`;
+                  auditInfo.goodsState = AuditAction.LOWER_SHELF;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "下架",
@@ -369,12 +582,23 @@ const createColumns = () => {
             )
           );
         }
+        // 重新发行
         if (isAdmin && [GoodsState.PUBLISH_FAILED].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "重新发行";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认重新发行${goods.goodsName}吗？`;
+                  auditInfo.goodsState = AuditAction.PUBLISH_FAILED_RE_PUBLISH;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "重新发行",
@@ -388,6 +612,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "区块链发行记录",
@@ -395,12 +621,22 @@ const createColumns = () => {
             )
           );
         }
+        // 修改类目
         if ([GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  updateCategoryInfo.categoryUpdateTitle = `修改${goods.goodsName}类目`;
+                  updateCategoryInfo.goodsId = goods.goodsId;
+                  updateCategoryInfo.defaultCategory = goods.classifies[goods.classifies.length - 1];
+                  showUpdateCategoryModal.value = true;
+                },
               },
               {
                 default: () => "修改类目",
@@ -414,6 +650,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "查看盲盒",
@@ -427,6 +665,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                secondary: true,
+                size,
               },
               {
                 default: () => "编辑盲盒",
@@ -440,6 +680,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "warning",
+                size,
+                secondary: true,
               },
               {
                 default: () => "清空盲盒",
@@ -453,6 +695,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "查看开盒记录",
@@ -466,6 +710,8 @@ const createColumns = () => {
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
               },
               {
                 default: () => "修改提货类型",
@@ -473,12 +719,23 @@ const createColumns = () => {
             )
           );
         }
+        // 重新增发
         if (isAdmin && [GoodsState.ADD_PUBLISH_FAILED].includes(goodsState)) {
           list.push(
             h(
               NButton,
               {
                 type: "primary",
+                size,
+                secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "重新增发";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认重新增发${goods.goodsName}吗？`;
+                  auditInfo.goodsState = AuditAction.ADD_FAIL_RE_ADD;
+                  showAuditModal.value = true;
+                },
               },
               {
                 default: () => "重新增发",
@@ -497,15 +754,68 @@ const createColumns = () => {
     list.splice(5, 0, {
       title: "商户编号",
       key: "merchantUid",
-      width: 160,
+      width: 100,
     });
     list.splice(5, 0, {
       title: "商户名称",
       key: "merchantName",
-      width: 80,
+      width: 100,
     });
   }
   return list;
+};
+
+// 更改商品状态modal框的状态和数据
+const showAuditModal = ref(false);
+const auditLoading = ref(false);
+const auditInfo = reactive({
+  auditTitle: "",
+  auditTip: "",
+  goodsId: "",
+  auditNote: "",
+  goodsState: 0,
+});
+
+// 提交商品状态信息
+const comfirmAudit = async () => {
+  auditLoading.value = true;
+  const { auditNote, goodsId, goodsState } = auditInfo;
+  const params = { auditNote, goodsId, goodsState };
+  // 管理员和商户用的审核接口不一样
+  const res = isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
+  if (res && res.code === 0) {
+    commonNotify("success", `${auditInfo.auditTitle}成功`);
+    getGoodsList();
+  }
+  auditInfo.auditNote = "";
+  auditInfo.auditTip = "";
+  auditLoading.value = false;
+  showAuditModal.value = false;
+};
+
+// 修改类目modal框的状态和信息
+const showUpdateCategoryModal = ref(false);
+const updateCategoryLoading = ref(false);
+const updateCategoryInfo = reactive({
+  defaultCategory: undefined as undefined | number,
+  categorys: [] as CategoryTreeItem[],
+  categoryUpdateTitle: "",
+  goodsId: "",
+});
+// 提交商品类目更新
+const comfirmUpdateCategory = async () => {
+  updateCategoryLoading.value = true;
+  const classifies: string[] = [];
+  for (const item of updateCategoryInfo.categorys) {
+    classifies.push(String(item.id));
+  }
+  const res = await updateGoodsCategoryRequest({ classifies, goodsId: updateCategoryInfo.goodsId });
+  if (res && res.code === 0) {
+    commonNotify("success", "类目更改成功");
+    getGoodsList();
+  }
+  updateCategoryLoading.value = false;
+  showUpdateCategoryModal.value = false;
 };
 
 // 初始获取一次列表

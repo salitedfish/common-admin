@@ -31,64 +31,16 @@
         </n-card>
       </n-form-item>
       <n-form-item label="商品封面:">
-        <n-upload
-          list-type="image-card"
-          accept="image/png, image/jpeg"
-          :max="1"
-          :action="uploadImgUrl"
-          v-model:file-list="goodsCover"
-          :onFinish="
-            (options) => {
-              onUploadFinish(options, goodsCover);
-            }
-          "
-        >
-        </n-upload>
+        <common-upload type="img" v-model="goodsCoverList" :max="1" :disabled="formDisabled"></common-upload>
       </n-form-item>
       <n-form-item label="商品图片:">
-        <n-upload
-          list-type="image-card"
-          accept="image/png, image/jpeg"
-          :max="6"
-          :action="uploadImgUrl"
-          v-model:file-list="goodsImages"
-          :onFinish="
-            (options) => {
-              onUploadFinish(options, goodsImages);
-            }
-          "
-        >
-        </n-upload>
+        <common-upload type="img" v-model="goodsImagesList" :max="6" :disabled="formDisabled"></common-upload>
       </n-form-item>
       <n-form-item label="商品视频:">
-        <n-upload
-          list-type="image-card"
-          accept="video/mp4"
-          :max="1"
-          :action="uploadVideoUrl"
-          v-model:file-list="goodsVideo"
-          :onFinish="
-            (options) => {
-              onUploadFinish(options, goodsVideo);
-            }
-          "
-        >
-        </n-upload>
+        <common-upload type="video" v-model="goodsVideoList" :max="1" :disabled="formDisabled"></common-upload>
       </n-form-item>
       <n-form-item label="视频封面:">
-        <n-upload
-          list-type="image-card"
-          accept="image/png, image/jpeg"
-          :max="1"
-          :action="uploadImgUrl"
-          v-model:file-list="goodsVideoCover"
-          :onFinish="
-            (options) => {
-              onUploadFinish(options, goodsVideoCover);
-            }
-          "
-        >
-        </n-upload>
+        <common-upload type="img" v-model="goodsVideoCoverList" :max="1" :disabled="formDisabled"></common-upload>
       </n-form-item>
       <n-form-item label="商品价格:">
         <n-input-number placeholder="请输入商品价格" v-model:value="goodsInfo.spu.goodsPrice" :min="minPrice" :style="{ width: inputWidth }">
@@ -104,7 +56,7 @@
           v-model:value="goodsInfo.spu.goodsTotal"
           :style="{ width: inputWidth }"
           :min="1"
-          :disabled="goodsInfo.spu.ercStandard === 'ERC_721'"
+          :disabled="goodsInfo.spu.ercStandard === 'ERC_721' || formDisabled"
         >
           <template #suffix> 份 </template></n-input-number
         >
@@ -259,53 +211,144 @@
             clearable
           />
         </n-form-item>
-        <template #footer> <n-button block @click="deleteRuleHandler(key)" secondary type="warning" :disabled="formDisabled">-删除规则</n-button> </template>
+        <template #footer> <n-button block @click="deleteRuleHandler(key)" secondary type="warning" :disabled="formDisabled" v-if="!isCheck">-删除规则</n-button> </template>
       </n-card>
-      <n-button block @click="addRuleHandler" secondary type="primary" :disabled="formDisabled">+添加规则</n-button>
+      <n-button block @click="addRuleHandler" secondary type="primary" :disabled="formDisabled" :loading="submiting" v-if="!isCheck">+添加规则</n-button>
     </n-card>
   </n-form>
 
-  <n-button type="primary" @click="submitHandler" block style="margin-top: 15px">确认发布</n-button>
+  <n-button type="primary" @click="submitHandler" block style="margin-top: 15px" v-if="!isCheck" :loading="submiting" :disabled="formDisabled">确认提交</n-button>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "goodsAddManager",
+});
+</script>
 
 <script lang="ts" setup>
 // 框架
-import { reactive, ref, computed, watch } from "vue";
+import { reactive, ref, computed, watch, onBeforeMount } from "vue";
+import { useRoute, useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 import categorySelect from "@/component/common/categorySelect.vue";
+import commonUpload from "@/component/common/commonUpload.vue";
 // 工具库
+import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
-import { commonNotify, onUploadFinish } from "@/util/common";
+import { commonNotify } from "@/util/common";
 // 网络请求
-import { uploadImgUrl, uploadVideoUrl } from "@/request/common";
-import { goodsSubmit as goodsSubmitRequest } from "@/request/goods";
+import { goodsSubmit as goodsSubmitRequest, goodsEdit as goodsEditRequest, getGoodsDetail as getGoodsDetailRequest } from "@/request/goods";
 // store
 import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpresType, RuleType } from "./goodsDetailManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList } from "../goodsListManager/goodsListManagerStore";
+import { useCommonStore } from "@/store/commonStore";
+import { useRouteStore } from "@/store/routeStore";
+// 网络请求
 // 类型
-import type { UploadFileInfo } from "naive-ui";
 import type { GoodsDetail } from "@/type/GoodsManager";
-import type { CategoryTreeItem } from "@/type/Common";
+import type { CategoryTreeItem, FileUpload } from "@/type/Common";
+
+const route = useRoute();
+const router = useRouter();
+const commonStore = useCommonStore();
+const routeStore = useRouteStore();
 
 const inputWidth = ref("100%");
 const minPrice = 0.01;
-const submit = ref(false);
-const isCheck = ref(false);
-const isEdit = ref(false);
+const submiting = ref(false);
+const isCheck = ref(route.name === "goodsCheckManager");
+const isEdit = ref(route.name === "goodsEditManager");
+const goodsId = route.query.goodsId ? String(route.query.goodsId) : null;
 const formDisabled = computed(() => {
-  if (submit.value || isCheck.value) {
+  if (submiting.value || isCheck.value) {
     return true;
   } else {
     return false;
   }
 });
 
+onBeforeMount(() => {
+  if (isCheck.value || isEdit.value) {
+    getGoodsDetail();
+  }
+});
+
+const getGoodsDetail = async () => {
+  commonStore.pageLoading = true;
+  const res = await getGoodsDetailRequest(goodsId as string);
+  if (res && res.code === 0) {
+    initForm(res.data);
+  }
+  commonStore.pageLoading = false;
+};
+
+const initForm = (goodsDetail: GoodsDetail) => {
+  const { spu, extend, rules, points } = goodsDetail;
+  // 处理spu
+  spu.goodsPrice = Number(spu.goodsPrice);
+  spu.goodsPropsList = [];
+  for (const key in spu.goodsProps) {
+    spu.goodsPropsList.push({
+      key,
+      value: spu.goodsProps[key] as string,
+    });
+  }
+  // 处理 rules
+  for (const item of rules) {
+    item.categoryList = [];
+  }
+  // 处理商品封面
+  if (spu.goodsCover) {
+    goodsCoverList.value = [
+      {
+        fileUrl: spu.goodsCover,
+        hashName: useFileNameFromURL(spu.goodsCover)(true),
+      },
+    ];
+  }
+
+  // 处理商品图片
+  for (const item of spu.goodsImages) {
+    goodsImagesList.value.push({
+      fileUrl: item,
+      hashName: useFileNameFromURL(item)(true),
+    });
+  }
+  // 处理视频
+
+  if (spu.goodsVideo) {
+    goodsVideoList.value = [
+      {
+        fileUrl: spu.goodsVideo,
+        hashName: useFileNameFromURL(spu.goodsVideo)(true),
+      },
+    ];
+  }
+  // 处理视频封面
+  if (spu.goodsVideoCover) {
+    goodsVideoCoverList.value = [
+      {
+        fileUrl: spu.goodsVideoCover,
+        hashName: useFileNameFromURL(spu.goodsVideoCover)(true),
+      },
+    ];
+  }
+
+  goodsInfo.spu = spu;
+  goodsInfo.extend = extend;
+  goodsInfo.rules = rules;
+  goodsInfo.points = points;
+};
+
 const goodsCategoryInfoList = ref<CategoryTreeItem[]>([]);
-const goodsCover = ref<UploadFileInfo[]>([]);
-const goodsImages = ref<UploadFileInfo[]>([]);
-const goodsVideo = ref<UploadFileInfo[]>([]);
-const goodsVideoCover = ref<UploadFileInfo[]>([]);
+const goodsCoverList = ref<FileUpload[]>([]);
+const goodsImagesList = ref<FileUpload[]>([]);
+const goodsVideoList = ref<FileUpload[]>([]);
+const goodsVideoCoverList = ref<FileUpload[]>([]);
+
 const goodsInfo = reactive<GoodsDetail>({
   spu: {
     classifies: [],
@@ -313,7 +356,7 @@ const goodsInfo = reactive<GoodsDetail>({
     goodsCover: "",
     goodsDes: "",
     goodsDetail: "",
-    goodsId: "",
+    goodsId,
     goodsImages: [],
     goodsName: "",
     goodsPrice: null,
@@ -340,7 +383,7 @@ const goodsInfo = reactive<GoodsDetail>({
     traceHash: "",
   },
   points: {
-    goodsId: null,
+    goodsId,
     needNum: null,
     pointsId: null,
   },
@@ -399,45 +442,64 @@ const deleteRuleHandler = (index: number) => {
   goodsInfo.rules.splice(index, 1);
 };
 
-// 处理提交前的数据
+// 处理提交前的数据（时间关系这里就不做参数校验了，后端都有校验）
 const submitHandler = async () => {
   // 处理商品类目
-  goodsInfo.spu.classifies = [];
-  for (const item of goodsCategoryInfoList.value) {
-    goodsInfo.spu.classifies.push(item.id);
-  }
-  // 处理商品封面
-  if (goodsCover.value[0]) {
-    goodsInfo.spu.goodsCover = (goodsCover.value[0].thumbnailUrl as any).hashName;
-  }
-
-  // 处理商品图片
-  goodsInfo.spu.goodsImages = [];
-  for (const item of goodsImages.value) {
-    goodsInfo.spu.goodsImages.push((item.thumbnailUrl as any).hashName);
-  }
-  // 处理商品视频
-  if (goodsVideo.value[0]) {
-    goodsInfo.spu.goodsVideo = (goodsVideo.value[0].thumbnailUrl as any).hashName;
-  }
-
-  // 处理视频封面
-  if (goodsVideoCover.value[0]) {
-    goodsInfo.spu.goodsVideoCover = (goodsVideoCover.value[0].thumbnailUrl as any).hashName;
+  if (goodsCategoryInfoList.value.length === 4) {
+    goodsInfo.spu.classifies = [];
+    for (const item of goodsCategoryInfoList.value) {
+      goodsInfo.spu.classifies.push(item.id);
+    }
   }
 
   // 处理商品属性
   for (const item of goodsInfo.spu.goodsPropsList) {
     goodsInfo.spu.goodsProps[item.key] = item.value;
   }
-  const res = await goodsSubmitRequest(goodsInfo);
-  console.log(res);
-  // console.log("类目列表", goodsCategoryInfoList.value);
-  // console.log("封面", goodsCover.value);
-  // console.log("图片", goodsImages.value);
-  // console.log("商品视频", goodsVideo.value);
-  // console.log("商品视频封面", goodsVideoCover.value);
-  // console.log("整体数据", goodsInfo);
+
+  // 处理商品封面
+  if (goodsCoverList.value.length >= 1) {
+    goodsInfo.spu.goodsCover = goodsCoverList.value[0].hashName;
+  }
+  // 处理商品图片
+  goodsInfo.spu.goodsImages = [];
+  for (const item of goodsImagesList.value) {
+    goodsInfo.spu.goodsImages.push(item.hashName);
+  }
+  // 处理商品视频
+  if (goodsVideoList.value.length >= 1) {
+    goodsInfo.spu.goodsVideo = goodsVideoList.value[0].hashName;
+  }
+  // 处理商品视频封面
+  if (goodsVideoCoverList.value.length >= 1) {
+    goodsInfo.spu.goodsVideoCover = goodsVideoCoverList.value[0].hashName;
+  }
+
+  // 确认提交
+  comfirmSubmit();
+};
+
+const comfirmSubmit = async () => {
+  submiting.value = true;
+  let message = "";
+  let res = {
+    code: 0,
+  };
+  if (isEdit.value) {
+    message = "商品编辑成功!";
+    res = await goodsEditRequest(goodsInfo);
+  } else {
+    message = "商品发布成功!";
+    res = await goodsSubmitRequest(goodsInfo);
+  }
+  submiting.value = false;
+  if (res && res.code === 0) {
+    commonNotify("success", message);
+    routeStore.deleteCurrentRoute();
+    router.push({
+      name: "goodsListManager",
+    });
+  }
 };
 </script>
 

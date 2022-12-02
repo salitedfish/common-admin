@@ -1,6 +1,9 @@
 // 定义接口返回类型
 import type { Return, ReturnList, CategoryTreeItem } from "@/type/Common";
-import type { GoodsListItem } from "@/type/GoodsManager";
+import type { GoodsListItem, GoodsDetail } from "@/type/GoodsManager";
+import type { UserListItem } from "@/type/User";
+import type { OrderListItem, ExpressOrderListItem, LogisticsInfo, ExpressCompany } from "@/type/Order";
+import type { PointsItem } from "@/type/Points";
 
 export type GetGoodsList = Promise<Return<ReturnList<GoodsListItem>>>;
 export type GetCaptcha = Promise<Return<>>;
@@ -56,3 +59,21 @@ export type GetUserInfo = Promise<
 >;
 
 export type GetCategoryTree = Promise<Return<CategoryTreeItem[]>>;
+export type GetGoodsDetail = Promise<Return<GoodsDetail>>;
+export type Upload = Promise<Return<{ fileUrl: string; hashName: string }>>;
+export type GetUserList = Promise<Return<ReturnList<UserListItem>>>;
+export type GetOrderList = Promise<Return<ReturnList<OrderListItem>>>;
+export type GetExpressOrderList = Promise<Return<ReturnList<ExpressOrderListItem>>>;
+export type GetExpressLogistics = Promise<Return<LogisticsInfo>>;
+export type GetExpressCompanyList = Promise<
+  Return<{
+    allNum: number;
+    expressList: ExpressCompany[];
+    flag: boolean;
+    maxSize: number;
+    msg: string;
+    page: number;
+    ret_code: number;
+  }>
+>;
+export type GetPointsList = Rromise<Return<ReturnList<PointsItem[]>>>;

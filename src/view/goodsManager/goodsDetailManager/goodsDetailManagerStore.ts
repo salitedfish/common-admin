@@ -12,22 +12,32 @@ export const ercStandardList = [
     label: "ERC_721",
   },
 ];
-
+export enum GoodsLevel {
+  NONE = 0,
+  N,
+  R,
+  SR,
+  SSR,
+}
 export const goodsLevelList = [
   {
-    value: 0,
+    value: GoodsLevel.NONE,
+    label: "无等级",
+  },
+  {
+    value: GoodsLevel.N,
     label: "N",
   },
   {
-    value: 1,
+    value: GoodsLevel.R,
     label: "R",
   },
   {
-    value: 2,
+    value: GoodsLevel.SR,
     label: "SR",
   },
   {
-    value: 3,
+    value: GoodsLevel.SSR,
     label: "SSR",
   },
 ];
@@ -38,26 +48,31 @@ export enum ExpresType {
 }
 export const expresList = [
   {
-    value: 0,
+    value: ExpresType.NO,
     label: "不可提货",
   },
   {
-    value: 1,
+    value: ExpresType.YES,
     label: "可以提货",
   },
 ];
 
+export enum GoodsTabs {
+  NORMAL = 0,
+  TEST,
+  AUDIT,
+}
 export const goodsTabList = [
   {
-    value: 0,
+    value: GoodsTabs.NORMAL,
     label: "正常商品",
   },
   {
-    value: 1,
+    value: GoodsTabs.TEST,
     label: "测试用商品",
   },
   {
-    value: 2,
+    value: GoodsTabs.AUDIT,
     label: "审核用商品",
   },
 ];
@@ -71,27 +86,27 @@ export enum RuleType {
 }
 export const ruleTypeList = [
   {
-    value: 1,
+    value: RuleType.HOLD_CATEGORY,
     label: "持有类目商品",
   },
   {
-    value: 2,
+    value: RuleType.HOLD_GOODS,
     label: "持有指定商品",
   },
   {
-    value: 3,
+    value: RuleType.EXTENSION_REAL_NAME,
     label: "推广新用户并且新用户实名",
   },
   {
-    value: 4,
+    value: RuleType.NEW_REAL_NAME,
     label: "新用户注册并实名",
   },
   {
-    value: 5,
+    value: RuleType.EXTENSION_CATEGORY,
     label: "推广类目商品",
   },
   {
-    value: 6,
+    value: RuleType.EXTENSION_GOODS,
     label: "推广指定商品",
   },
 ];

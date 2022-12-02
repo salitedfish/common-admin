@@ -42,4 +42,15 @@ export type CategoryTreeItem = {
   order: number;
   parentId: number;
   type: number;
+  state: number;
 };
+
+export type FileUpload = {
+  fileUrl: string;
+  hashName: string;
+};
+
+export enum CategoryType {
+  GOODS = 0,
+  NOTICE,
+}

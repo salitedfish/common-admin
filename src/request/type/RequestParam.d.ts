@@ -2,6 +2,9 @@
 import type { Paging } from "@/type/Common";
 import type { GoodsDetail } from "@/type/GoodsManager";
 import type { SearchParams as GoodsListSearchParams } from "@/type/GoodsManager";
+import type { UserListParam as UserListSearchParams } from "@/type/User";
+import type { OrderListParam as OrderListSearchParams, ExpressOrderListParam as ExpressOrderListSearchParams } from "@/type/Order";
+import type { GetPointsListParams } from "@/type/Points";
 
 export type GetGoodsList = Paging & GoodsListSearchParams;
 export type GetCaptcha = {
@@ -58,3 +61,8 @@ export type SubmitMerchantInfo = {
   shortName: string;
 };
 export type GoodsSubmit = GoodsDetail;
+export type EditCategory = { id: number | null; name: string; order: number | null; parentId: number | null; type: number | null };
+export type GetUserList = Paging & UserListSearchParams;
+export type GetOrderList = Paging & OrderListSearchParams;
+export type GetExpressOrderList = Paging & ExpressOrderListSearchParams;
+export type GetPointsList = Paging & GetPointsListParams;

@@ -8,17 +8,33 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品管理",
       icon: "dingdan",
-      keepAlive: true,
     },
   },
   {
-    path: "goodsDetailManager",
-    name: "goodsDetailManager",
+    path: "goodsAddManager",
+    name: "goodsAddManager",
+    component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
+    meta: {
+      label: "新增商品",
+      icon: "dingdan",
+    },
+  },
+  {
+    path: "goodsCheckManager",
+    name: "goodsCheckManager",
     component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
     meta: {
       label: "商品详情",
       icon: "dingdan",
-      keepAlive: true,
+    },
+  },
+  {
+    path: "goodsEditManager",
+    name: "goodsEditManager",
+    component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
+    meta: {
+      label: "编辑商品",
+      icon: "dingdan",
     },
   },
   {
