@@ -17,6 +17,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "新增积分",
       icon: "jifen",
+      keepAlive: true,
     },
   },
   {
@@ -26,6 +27,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "编辑积分",
       icon: "jifen",
+      keepAlive: true,
     },
   },
 ];

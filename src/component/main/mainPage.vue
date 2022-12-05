@@ -59,6 +59,7 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
     label: to.meta.label as string,
     query: to.query as Record<string, string>,
     key: to.fullPath,
+    meta: to.meta as Record<string, string | boolean>,
   };
 
   routeStore.addHistoryRoutes(route);

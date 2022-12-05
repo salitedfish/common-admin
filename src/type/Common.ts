@@ -54,3 +54,29 @@ export enum CategoryType {
   GOODS = 0,
   NOTICE,
 }
+
+export enum WhiteListType {
+  GOODS = 0,
+  AIR_DROP,
+  DRAW_UPLOAD,
+  DRAW_ALL,
+}
+
+export type WhiteListSearchParams = {
+  phone?: string;
+  uid?: string;
+  // 空投和抽签
+  id?: string;
+  // 商品专用
+  goodsId?: string;
+  // 空投专用
+  state?: number;
+  // 抽签全部名单专用
+  type?: number;
+};
+
+export type WhiteListItem = {
+  phone: string;
+  uid: string;
+  unitNum: number;
+};

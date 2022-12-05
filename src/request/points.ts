@@ -29,3 +29,24 @@ export const updatePointsState = (params: { auditNote?: string; pointsState: num
     body: JSON.stringify(params),
   });
 };
+
+export const addPoints = (params: RequestParam.AddPoints) => {
+  return ultraFetch.post({
+    URL: "/manager/points/submit",
+    body: JSON.stringify(params),
+  });
+};
+
+export const editPoints = (params: RequestParam.AddPoints) => {
+  return ultraFetch.post({
+    URL: "/manager/points/update",
+    body: JSON.stringify(params),
+  });
+};
+
+export const getPointsInfo = (params: { pointsId: string }): RequestReturn.GetPointsInfo => {
+  return ultraFetch.get({
+    URL: "/manager/points/detail",
+    params: params,
+  });
+};

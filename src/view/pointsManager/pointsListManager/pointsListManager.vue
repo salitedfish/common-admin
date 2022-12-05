@@ -144,33 +144,16 @@ const createColumns = () => {
       },
     },
     {
-      title: "积分库存",
-      key: "pointsStock",
-      width: 80,
-    },
-    {
       title: "积分总量",
       key: "pointsTotal",
-      width: 80,
+      width: 100,
     },
     {
-      title: "积分状态",
-      key: "pointsState",
-      width: 120,
-      render(row) {
-        return pointsStateList[row.pointsState].label;
-      },
+      title: "积分库存",
+      key: "pointsStock",
+      width: 100,
     },
-    {
-      title: "商铺名称",
-      key: "merchantName",
-      width: 120,
-    },
-    {
-      title: "商户编号",
-      key: "merchantUid",
-      width: 80,
-    },
+
     {
       title: "代币标准",
       key: "ercStandard",
@@ -186,6 +169,30 @@ const createColumns = () => {
       key: "createTime",
       width: 140,
     },
+    {
+      title: "审核时间",
+      key: "auditorTime",
+      width: 180,
+      render(row) {
+        return row.auditorTime ? row.auditorTime : "/";
+      },
+    },
+    {
+      title: "审核备注",
+      key: "auditorNote",
+      width: 120,
+      render(row) {
+        return row.auditorNote ? row.auditorNote : "/";
+      },
+    },
+    {
+      title: "积分状态",
+      key: "pointsState",
+      width: 120,
+      render(row) {
+        return pointsStateList[row.pointsState].label;
+      },
+    },
 
     {
       title: "操作",
@@ -197,7 +204,7 @@ const createColumns = () => {
         const size = "small";
         const isAdmin = authStore.isAdmin();
         if ([PointsState.DRAFT, PointsState.APPROVIAL_FAILED, PointsState.PUBLISH_SUCCESS, PointsState.DRAFT_NEW, PointsState.TO_BE_APPROVIAL_NEW].includes(points.pointsState)) {
-          if ((isAdmin && points.merchantUid === 0) || !isAdmin) {
+          if ((isAdmin && points.merchantUid === "0") || !isAdmin) {
             btnList.push(
               h(
                 NButton,
@@ -242,7 +249,7 @@ const createColumns = () => {
         }
 
         if ([PointsState.TO_BE_APPROVIAL, PointsState.TO_BE_APPROVIAL_NEW].includes(points.pointsState)) {
-          if ((isAdmin && points.merchantUid === 0) || !isAdmin) {
+          if ((isAdmin && points.merchantUid === "0") || !isAdmin) {
             btnList.push(
               h(
                 NButton,
@@ -263,7 +270,7 @@ const createColumns = () => {
           }
         }
         if ([PointsState.DRAFT, PointsState.DRAFT_NEW].includes(points.pointsState)) {
-          if ((isAdmin && points.merchantUid === 0) || !isAdmin) {
+          if ((isAdmin && points.merchantUid === "0") || !isAdmin) {
             btnList.push(
               h(
                 NButton,
@@ -346,6 +353,18 @@ const createColumns = () => {
       },
     },
   ];
+  if (authStore.isAdmin()) {
+    list.splice(0, 0, {
+      title: "商铺名称",
+      key: "merchantName",
+      width: 120,
+    });
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
+      width: 100,
+    });
+  }
   return list;
 };
 

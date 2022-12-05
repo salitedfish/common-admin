@@ -1,5 +1,5 @@
 // 定义接口返回类型
-import type { Return, ReturnList, CategoryTreeItem } from "@/type/Common";
+import type { Return, ReturnList, CategoryTreeItem, WhiteListItem } from "@/type/Common";
 import type { GoodsListItem, GoodsDetail } from "@/type/GoodsManager";
 import type { UserListItem } from "@/type/User";
 import type { OrderListItem, ExpressOrderListItem, LogisticsInfo, ExpressCompany } from "@/type/Order";
@@ -77,3 +77,16 @@ export type GetExpressCompanyList = Promise<
   }>
 >;
 export type GetPointsList = Rromise<Return<ReturnList<PointsItem[]>>>;
+export type GetPointsInfo = Promise<Return<PointsItem>>;
+export type UploadWhiteList = Promise<
+  Return<
+    {
+      errorMsg: string;
+      phone: string;
+      rowNum: number;
+      uid: number;
+      unitNum: number;
+    }[]
+  >
+>;
+export type GetWhiteList = Promise<Return<ReturnList<WhiteListItem>>>;

@@ -1,4 +1,6 @@
 import { ultraFetch } from "./init";
+import { whiteListUrls } from "./urls/whiteListUrls";
+import { WhiteListType } from "@/type/Common";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 const baseURL = "/api";
@@ -81,6 +83,7 @@ export const getCategoryTree = (type: number): RequestReturn.GetCategoryTree => 
     params: { type },
   });
 };
+
 // 删除类目
 export const deleteCategory = (params: { id: number }) => {
   return ultraFetch.post({
@@ -88,6 +91,7 @@ export const deleteCategory = (params: { id: number }) => {
     body: JSON.stringify(params),
   });
 };
+
 // 编辑类目
 export const editCategory = (params: RequestParam.EditCategory) => {
   return ultraFetch.post({
@@ -95,10 +99,62 @@ export const editCategory = (params: RequestParam.EditCategory) => {
     body: JSON.stringify(params),
   });
 };
+
 // 显示影藏类目
 export const updateCategoryState = (params: { id: number; state: number }) => {
   return ultraFetch.post({
     URL: "/manager/classify/state",
+    body: JSON.stringify(params),
+  });
+};
+
+// 白名单模板下载
+export const downLoadWhiteListTemplate = (): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/file/excel/allow/template",
+  });
+};
+
+// 白名单上传
+export const uploadWhiteList = (params: { goodsId: string; file: File }, whiteListType: number) => {
+  const data = new FormData();
+  data.append("file", params.file);
+  return ultraFetch.post(
+    {
+      URL: `${whiteListUrls[whiteListType].uploadWhiteListUrl}${params.goodsId}`,
+      body: data,
+    },
+    {
+      pureHeaders: true,
+    }
+  );
+};
+
+// 白名单下载
+export const downLoadWhiteList = (params: { id: string }, whiteListType: number): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: whiteListUrls[whiteListType].downLoadWhiteListUrl,
+    params: {
+      goodsId: params.id,
+    },
+  });
+};
+
+// 删除白名单
+export const deleteWhiteList = (params: { goodsId: string }, whiteListType: number) => {
+  return ultraFetch.post({
+    URL: whiteListUrls[whiteListType].deleteWhiteListUrl,
+    body: JSON.stringify(params),
+  });
+};
+
+// 获取商品白名单列表
+export const getGoodsWhiteList = (params: RequestParam.GetWhiteList, whiteListType: number): RequestReturn.GetWhiteList => {
+  if (whiteListType === WhiteListType.GOODS) {
+    params.goodsId = params.id;
+  }
+  return ultraFetch.post({
+    URL: whiteListUrls[whiteListType].getGoodsWhiteListUrl,
     body: JSON.stringify(params),
   });
 };

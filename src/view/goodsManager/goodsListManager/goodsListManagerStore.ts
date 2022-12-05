@@ -157,3 +157,8 @@ export const reAuditResList = [
     value: AuditAction.RE_AUDIT_FAIL,
   },
 ];
+
+export enum EditType {
+  POINTS = "POINTS",
+  EXTEND = "EXTEND",
+}

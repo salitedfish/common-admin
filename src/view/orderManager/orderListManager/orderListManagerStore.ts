@@ -55,7 +55,7 @@ export const orderStateList = [
 
 export enum OrderType {
   ALL = -1,
-  FIRST,
+  FIRST = 1,
   SECOND,
 }
 export const orderTypeList = [

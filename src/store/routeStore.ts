@@ -9,6 +9,7 @@ type CurrentRoute = {
   label: string;
   query: Record<string, string>;
   key: string;
+  meta: Record<string, string | boolean>;
 };
 
 export const useRouteStore = defineStore("routeStore", () => {
@@ -26,6 +27,7 @@ export const useRouteStore = defineStore("routeStore", () => {
     label: "",
     query: {},
     key: "",
+    meta: {},
   });
   // 历史路由列表
   const historyRoutes = reactive<CurrentRoute[]>([]);
@@ -86,6 +88,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       label: "",
       query: {},
       key: "",
+      meta: {},
     };
   };
   // 删除当前的路由

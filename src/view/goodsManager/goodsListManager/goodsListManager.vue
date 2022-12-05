@@ -2,9 +2,9 @@
   <n-card>
     <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="goodsList" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
   <n-card>
-    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getGoodsList" />
+    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
 
   <!-- 改变商品状态的modal，包括提交审核、审核失败等 -->
@@ -77,78 +77,36 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-import { onBeforeMount, ref, h, computed, reactive } from "vue";
+import { onBeforeMount, ref, h, reactive } from "vue";
 import { useRouter } from "vue-router";
 import type { VNode } from "vue";
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
 import screenSection from "./component/screenSection.vue";
 import categorySelect from "@/component/common/categorySelect.vue";
 import customIcon from "@/component/common/customIcon.vue";
+import whiteListUploadBtn from "@/component/whiteList/whiteListUploadBtn.vue";
 
 import {
-  getGoodsList as getGoodsListRequest,
+  getGoodsList as getListRequest,
   goodsDelete as goodsDeleteRequest,
   updateGoodsState as updateGoodsStateRequest,
   updateGoodsAudit as updateGoodsAuditRequest,
   updateGoodsCategory as updateGoodsCategoryRequest,
 } from "@/request/goods";
-import type * as RequestParam from "@/request/type/RequestParam";
+import { deleteWhiteList as deleteWhiteListRequest } from "@/request/common";
 
 import type { SearchParams, GoodsListItem } from "@/type/GoodsManager";
 import type { DataTableColumns } from "naive-ui";
 import type { CategoryTreeItem } from "@/type/Common";
-import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList } from "./goodsListManagerStore";
+import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList, EditType } from "./goodsListManagerStore";
 import { useAuthStore } from "@/store/authStore";
-import { commonNotify } from "@/util/common";
-import { useCommonStore } from "@/store/commonStore";
+import { commonNotify, useListPage } from "@/util/common";
+import { WhiteListType } from "@/type/Common";
 
-const commonStore = useCommonStore();
 const authStore = useAuthStore();
 const isAdmin = authStore.isAdmin();
 const router = useRouter();
 const dialog = useDialog();
-
-// 列表宽度和高度
-const listXWidth = computed(() => {
-  let width = 0;
-  const list = createColumns();
-  for (const item of list) {
-    width = (item.width as number) + width;
-  }
-  return width;
-});
-const listYHeight = computed(() => {
-  return commonStore.pageContentHeight - 185;
-});
-
-// 筛选的参数
-const searchParam = ref<RequestParam.GetGoodsList>({
-  page: 1,
-  size: 10,
-});
-// 数据总数
-const totalPage = ref(0);
-// 查询状态
-const searching = ref(false);
-// 展示的列表
-const goodsList = ref<GoodsListItem[]>([]);
-
-// 整合筛选参数
-const submitSearch = (params: SearchParams) => {
-  searchParam.value = { ...searchParam.value, ...params };
-  getGoodsList();
-};
-
-// 请求列表
-const getGoodsList = async () => {
-  searching.value = true;
-  const res = await getGoodsListRequest(searchParam.value);
-  if (res && res.code === 0) {
-    goodsList.value = res.data.data;
-    totalPage.value = res.data.totalPage;
-  }
-  searching.value = false;
-};
 
 // 列表规则项
 const createColumns = () => {
@@ -158,6 +116,11 @@ const createColumns = () => {
       key: "goodsName",
       width: 120,
       fixed: "left",
+    },
+    {
+      title: "商品编号",
+      key: "goodsId",
+      width: 160,
     },
     {
       title: "商品封面",
@@ -170,17 +133,21 @@ const createColumns = () => {
         });
       },
     },
-    {
-      title: "商品编号",
-      key: "goodsId",
-      width: 160,
-    },
+
     {
       title: "商品类型",
       key: "goodsType",
       width: 100,
       render(row) {
         return goodsTypeList[row.goodsType].label;
+      },
+    },
+    {
+      title: "销售类型",
+      key: "saleType",
+      width: 100,
+      render(row) {
+        return saleTypeList[row.saleType].label;
       },
     },
     {
@@ -228,19 +195,19 @@ const createColumns = () => {
       },
     },
     {
+      title: "审核备注",
+      key: "auditorNote",
+      width: 180,
+      render(row) {
+        return row.auditorNote ? row.auditorNote : "/";
+      },
+    },
+    {
       title: "商品状态",
       key: "goodsState",
       width: 100,
       render(row) {
         return goodsStateList[row.goodsState].label;
-      },
-    },
-    {
-      title: "销售类型",
-      key: "saleType",
-      width: 100,
-      render(row) {
-        return saleTypeList[row.saleType].label;
       },
     },
 
@@ -293,7 +260,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await goodsDeleteRequest({ goodsId: goods.goodsId });
                       if (res) {
-                        getGoodsList();
+                        getList();
                         commonNotify("success", "商品删除成功");
                       }
                       dialogInfo.loading = false;
@@ -319,7 +286,6 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-
                 onClick: () =>
                   router.push({
                     name: "goodsEditManager",
@@ -343,7 +309,6 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-
                 onClick: () => {
                   auditInfo.auditTitle = "提交审核";
                   auditInfo.goodsId = goods.goodsId;
@@ -358,8 +323,8 @@ const createColumns = () => {
             )
           );
         }
-
-        if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
+        // 撤销审核
+        if (!isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -367,13 +332,31 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+
+                onClick: () => {
+                  auditInfo.auditTitle = "撤销审核";
+                  auditInfo.goodsId = goods.goodsId;
+                  auditInfo.auditTip = `确认撤销审核${goods.goodsName}吗？`;
+                  auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_CANCEL_AUDIT : AuditAction.CANCEL_AUDIT;
+                  showAuditModal.value = true;
+                },
               },
               {
-                default: () => "上传白名单",
+                default: () => "撤销审核",
               }
             )
           );
         }
+        // 上传白名单
+        if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
+          list.push(
+            h(whiteListUploadBtn, {
+              goodsId: goods.goodsId,
+              whiteListType: WhiteListType.GOODS,
+            })
+          );
+        }
+        // 删除白名单
         if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
           list.push(
             h(
@@ -382,6 +365,21 @@ const createColumns = () => {
                 type: "warning",
                 size,
                 secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "删除白名单",
+                    content: `确认删除${goods.goodsName}的白名单吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await deleteWhiteListRequest({ goodsId: goods.goodsId }, WhiteListType.GOODS);
+                      if (res) {
+                        commonNotify("success", "白名单删除成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
               },
               {
                 default: () => "删除白名单",
@@ -389,6 +387,7 @@ const createColumns = () => {
             )
           );
         }
+        // 查看白名单
         if (
           saleType === SaleType.WHITE_LIST &&
           ((isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) ||
@@ -401,6 +400,12 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "goodsWhiteListManager",
+                    query: { goodsId: goods.goodsId, goodsName: goods.goodsName },
+                  });
+                },
               },
               {
                 default: () => "查看白名单",
@@ -442,7 +447,32 @@ const createColumns = () => {
             )
           );
         }
-        if (goodsType === GoodsType.POINT && !isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        // 修改积分
+        // if (goodsType === GoodsType.POINT && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        //   list.push(
+        //     h(
+        //       NButton,
+        //       {
+        //         type: "primary",
+        //         size,
+        //         secondary: true,
+        //         onClick: () =>
+        //           router.push({
+        //             name: "goodsEditManager",
+        //             query: {
+        //               goodsId: goods.goodsId,
+        //               editType: EditType.POINTS,
+        //             },
+        //           }),
+        //       },
+        //       {
+        //         default: () => "修改积分",
+        //       }
+        //     )
+        //   );
+        // }
+        // 修改拓展参数
+        if (!isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -450,21 +480,14 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-              },
-              {
-                default: () => "修改积分",
-              }
-            )
-          );
-        }
-        if (goodsType === GoodsType.SYNTHETIC && !isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
-          list.push(
-            h(
-              NButton,
-              {
-                type: "primary",
-                size,
-                secondary: true,
+                onClick: () =>
+                  router.push({
+                    name: "goodsEditManager",
+                    query: {
+                      goodsId: goods.goodsId,
+                      editType: EditType.EXTEND,
+                    },
+                  }),
               },
               {
                 default: () => "修改拓展参数",
@@ -495,30 +518,21 @@ const createColumns = () => {
             )
           );
         }
-        // 撤销审核
-        if (!isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
-          list.push(
-            h(
-              NButton,
-              {
-                type: "primary",
-                size,
-                secondary: true,
-
-                onClick: () => {
-                  auditInfo.auditTitle = "撤销审核";
-                  auditInfo.goodsId = goods.goodsId;
-                  auditInfo.auditTip = `确认撤销审核${goods.goodsName}吗？`;
-                  auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_CANCEL_AUDIT : AuditAction.CANCEL_AUDIT;
-                  showAuditModal.value = true;
-                },
-              },
-              {
-                default: () => "撤销审核",
-              }
-            )
-          );
-        }
+        // if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
+        //   list.push(
+        //     h(
+        //       NButton,
+        //       {
+        //         type: "primary",
+        //         size,
+        //         secondary: true,
+        //       },
+        //       {
+        //         default: () => "修改二级参数与分账比例",
+        //       }
+        //     )
+        //   );
+        // }
         if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
@@ -529,7 +543,7 @@ const createColumns = () => {
                 secondary: true,
               },
               {
-                default: () => "修改二级参数与分账比例",
+                default: () => "修改转赠类型与分账比例",
               }
             )
           );
@@ -616,7 +630,7 @@ const createColumns = () => {
                 secondary: true,
               },
               {
-                default: () => "区块链发行记录",
+                default: () => "发行记录",
               }
             )
           );
@@ -704,21 +718,21 @@ const createColumns = () => {
             )
           );
         }
-        if (!isAdmin && [GoodsState.ON_THE_SHELF].includes(goodsState)) {
-          list.push(
-            h(
-              NButton,
-              {
-                type: "primary",
-                size,
-                secondary: true,
-              },
-              {
-                default: () => "修改提货类型",
-              }
-            )
-          );
-        }
+        // if (!isAdmin && [GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        //   list.push(
+        //     h(
+        //       NButton,
+        //       {
+        //         type: "primary",
+        //         size,
+        //         secondary: true,
+        //       },
+        //       {
+        //         default: () => "修改提货类型",
+        //       }
+        //     )
+        //   );
+        // }
         // 重新增发
         if (isAdmin && [GoodsState.ADD_PUBLISH_FAILED].includes(goodsState)) {
           list.push(
@@ -751,19 +765,20 @@ const createColumns = () => {
     },
   ];
   if (isAdmin) {
-    list.splice(5, 0, {
-      title: "商户编号",
-      key: "merchantUid",
-      width: 100,
-    });
-    list.splice(5, 0, {
+    list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      width: 100,
+    });
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
       width: 100,
     });
   }
   return list;
 };
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<SearchParams, GoodsListItem>(getListRequest, createColumns);
 
 // 更改商品状态modal框的状态和数据
 const showAuditModal = ref(false);
@@ -785,7 +800,7 @@ const comfirmAudit = async () => {
   const res = isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
   if (res && res.code === 0) {
     commonNotify("success", `${auditInfo.auditTitle}成功`);
-    getGoodsList();
+    getList();
   }
   auditInfo.auditNote = "";
   auditInfo.auditTip = "";
@@ -812,7 +827,7 @@ const comfirmUpdateCategory = async () => {
   const res = await updateGoodsCategoryRequest({ classifies, goodsId: updateCategoryInfo.goodsId });
   if (res && res.code === 0) {
     commonNotify("success", "类目更改成功");
-    getGoodsList();
+    getList();
   }
   updateCategoryLoading.value = false;
   showUpdateCategoryModal.value = false;
@@ -820,7 +835,7 @@ const comfirmUpdateCategory = async () => {
 
 // 初始获取一次列表
 onBeforeMount(() => {
-  getGoodsList();
+  getList();
 });
 </script>
 

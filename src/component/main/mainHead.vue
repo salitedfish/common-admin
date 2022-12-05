@@ -10,11 +10,10 @@
     </section>
 
     <section class="head-right">
-      <n-button @click="handleClick" type="primary" style="margin-right: 15px" round tertiary size="small">主题切换</n-button>
+      <div style="margin-right: 10px">{{ authStore.getUserInfo()?.nickName }}</div>
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
         <div class="user-box">
           <img :src="authStore.getUserInfo()?.headUrl" alt="" />
-          <!-- <custom-icon name="yonghu1" :size="28"></custom-icon> -->
         </div>
       </n-dropdown>
     </section>
@@ -49,16 +48,16 @@ enum Options {
 // 弹出的选项
 const options = [
   {
+    label: "主题切换",
+    key: Options.THEME,
+  },
+  {
     label: "退出",
     key: Options.LOGOUT,
   },
   // {
   //   label: "用户中心",
   //   key: Options.USER_CENTER,
-  // },
-  // {
-  //   label: "主题切换",
-  //   key: Options.THEME,
   // },
 ];
 

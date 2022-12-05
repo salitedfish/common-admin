@@ -1,6 +1,9 @@
-import { reactive } from "vue";
+import { reactive, ref, computed, onBeforeMount } from "vue";
+import type { Ref } from "vue";
 import { createDiscreteApi } from "naive-ui";
-import type { NotificationType, CascaderOption } from "naive-ui";
+import { useCommonStore } from "@/store/commonStore";
+import type { Return, ReturnList } from "@/type/Common";
+import type { NotificationType, CascaderOption, DataTableColumns } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
 export const { notification } = createDiscreteApi(["notification"]);
@@ -57,4 +60,69 @@ export const useNowTimeStamp = () => {
 // 返回无限的时间戳
 export const useInfinityTimeStamp = () => {
   return 4133865600000;
+};
+
+// 创建通用列表所需的数据Hook
+export const useListPage = <P, R>(
+  getListRequest: (searchParams: P & { page: number; size: number }) => Promise<Return<ReturnList<R>>>,
+  createColumns: () => DataTableColumns<R>,
+  heightCorrect = 185
+) => {
+  const commonStore = useCommonStore();
+
+  // 列表宽度和高度
+  const listXWidth = computed(() => {
+    let width = 0;
+    const list = createColumns();
+    for (const item of list) {
+      width = <number>item.width + width;
+    }
+    return width;
+  });
+  const listYHeight = computed(() => {
+    return commonStore.pageContentHeight - heightCorrect;
+  });
+
+  // 筛选的参数
+  const searchParam = <Ref<P & { page: number; size: number }>>ref({
+    page: 1,
+    size: 10,
+  });
+  // 数据总数
+  const totalPage = ref(0);
+  // 查询状态
+  const searching = ref(false);
+  // 展示的列表
+  const list: Ref<R[]> = ref([]);
+
+  // 整合筛选参数
+  const submitSearch = (params: P) => {
+    searchParam.value = { ...searchParam.value, ...params };
+    getList();
+  };
+
+  // 请求数据
+  const getList = async () => {
+    searching.value = true;
+    const res = await getListRequest(searchParam.value);
+    if (res && res.code === 0) {
+      list.value = res.data.data;
+      totalPage.value = res.data.totalPage;
+    }
+    searching.value = false;
+  };
+
+  onBeforeMount(() => {
+    getList();
+  });
+  return {
+    listXWidth,
+    listYHeight,
+    searchParam,
+    totalPage,
+    searching,
+    list,
+    submitSearch,
+    getList,
+  };
 };

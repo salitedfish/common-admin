@@ -7,6 +7,7 @@
     <n-select v-model:value="params.goodsType" :options="goodsTypeList" placeholder="请选择商品类型" style="width: 200px" :disabled="searching" clearable />
     <category-select v-model="categoryList" checkType="all" style="width: 200px"></category-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
+    <n-button type="primary" @click="downLoadWhiteListTemplate" :loading="downloading">白名单模板下载</n-button>
     <n-button type="primary" @click="gotoAddGoods">添加商品</n-button>
   </n-space>
 </template>
@@ -19,8 +20,11 @@ import { useRouter } from "vue-router";
 // 自定义组件
 import categorySelect from "@/component/common/categorySelect.vue";
 // 工具库
+import { useBinaryToURL, useDownloadByURL } from "@ultra-man/noa";
 // 自定义工具
+import { commonNotify } from "@/util/common";
 // 网络请求
+import { downLoadWhiteListTemplate as downLoadWhiteListTemplateRequest } from "@/request/common";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { goodsStateList, goodsTypeList } from "../goodsListManagerStore";
@@ -58,6 +62,20 @@ const gotoAddGoods = () => {
   router.push({
     name: "goodsAddManager",
   });
+};
+
+const downloading = ref(false);
+const downLoadWhiteListTemplate = async () => {
+  downloading.value = true;
+  const res = await downLoadWhiteListTemplateRequest();
+  if (res) {
+    const url = useBinaryToURL(res);
+    if (url) {
+      useDownloadByURL(url)("白名单模板");
+      commonNotify("success", "白名单模板获取成功");
+    }
+  }
+  downloading.value = false;
 };
 </script>
 

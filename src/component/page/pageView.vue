@@ -21,10 +21,16 @@ import { useRouteStore } from "@/store/routeStore";
 const routeStore = useRouteStore();
 
 // 1、缓存出现在tab栏里的路由组件
-// 2、要求组件名和列表的路由名称一致
+// 2、要求组件名和列表的路由名称一致, 且路由meta设置了keepAlive
 // 3、如果多个路由使用了同一个组件，则只有当路由名和组件名一致的组件缓存时，其他路由组件才能缓存！！！
 const cacheList = computed(() => {
-  return routeStore.historyRoutes.map((item) => item.name);
+  return routeStore.historyRoutes
+    .filter((item) => {
+      return item.meta.keepAlive;
+    })
+    .map((item) => {
+      return item.name;
+    });
 });
 </script>
 

@@ -2,9 +2,9 @@
   <n-card>
     <screen-header @submitSearch="submitSearch" :searching="searching"></screen-header>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="userList" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
   <n-card>
-    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getUserList" />
+    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
 
   <!-- 改变用户类型 -->
@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { computed, ref, onBeforeMount, h, reactive } from "vue";
+import { ref, onBeforeMount, h, reactive } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
 // 自定义组件
@@ -39,67 +39,22 @@ import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
-import { commonNotify } from "@/util/common";
+import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
 import { getUserList as getUserListRequest, updateUserState as updateUserStateRequest, updateUserTab as updateUserTabRequest } from "@/request/user";
 // store
-import { useCommonStore } from "@/store/commonStore";
-import { UserState, AccountTab, userStateList, accountTabList } from "./userListManagerStore";
+import { UserState, userStateList, accountTabList } from "./userListManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
 import type { UserListItem, UserListParam } from "@/type/User";
-import type * as RequestParam from "@/request/type/RequestParam";
-
-const commonStore = useCommonStore();
 const dialog = useDialog();
-
-// 列表宽度和高度
-const listXWidth = computed(() => {
-  let width = 0;
-  const list = createColumns();
-  for (const item of list) {
-    width = (item.width as number) + width;
-  }
-  return width;
-});
-const listYHeight = computed(() => {
-  return commonStore.pageContentHeight - 185;
-});
-
-// 筛选的参数
-const searchParam = ref<RequestParam.GetUserList>({
-  page: 1,
-  size: 10,
-});
-// 数据总数
-const totalPage = ref(0);
-// 查询状态
-const searching = ref(false);
-// 展示的列表
-const userList = ref<UserListItem[]>([]);
-// 请求列表
-const getUserList = async () => {
-  searching.value = true;
-  const res = await getUserListRequest(searchParam.value);
-  if (res && res.code === 0) {
-    userList.value = res.data.data;
-    totalPage.value = res.data.totalPage;
-  }
-  searching.value = false;
-};
-
-// 组合请求参数
-const submitSearch = (params: UserListParam) => {
-  searchParam.value = { ...searchParam.value, ...params };
-  getUserList();
-};
 
 // 列表渲染函数
 const createColumns = () => {
   const list: DataTableColumns<UserListItem> = [
     {
-      title: "用户昵称",
-      key: "nickName",
+      title: "用户编号",
+      key: "uid",
       width: 120,
       fixed: "left",
     },
@@ -108,6 +63,12 @@ const createColumns = () => {
       key: "phone",
       width: 140,
     },
+    {
+      title: "用户昵称",
+      key: "nickName",
+      width: 120,
+    },
+
     {
       title: "用户头像",
       key: "headUrl",
@@ -118,6 +79,11 @@ const createColumns = () => {
           src: user.headUrl,
         });
       },
+    },
+    {
+      title: "区块链地址",
+      key: "chainAddress",
+      width: 140,
     },
     {
       title: "状态",
@@ -138,21 +104,6 @@ const createColumns = () => {
       },
     },
     {
-      title: "最近登录时间",
-      key: "lastLoginTime",
-      width: 140,
-    },
-    {
-      title: "注册时间",
-      key: "registerTime",
-      width: 140,
-    },
-    {
-      title: "注册码",
-      key: "registerCode",
-      width: 100,
-    },
-    {
       title: "邀请码",
       key: "inviteCode",
       width: 100,
@@ -162,6 +113,22 @@ const createColumns = () => {
       key: "inviteNum",
       width: 100,
     },
+    {
+      title: "注册码",
+      key: "registerCode",
+      width: 100,
+    },
+    {
+      title: "注册时间",
+      key: "registerTime",
+      width: 140,
+    },
+    {
+      title: "最近登录时间",
+      key: "lastLoginTime",
+      width: 140,
+    },
+
     {
       title: "操作",
       key: "operaction",
@@ -195,6 +162,12 @@ const createColumns = () => {
   return list;
 };
 
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<UserListParam, UserListItem>(
+  getUserListRequest,
+  createColumns,
+  185
+);
+
 // 冻结或解冻
 const handleFrozen = (user: UserListItem) => {
   const action = user.state === UserState.FROZEN ? "解冻" : "冻结";
@@ -207,7 +180,7 @@ const handleFrozen = (user: UserListItem) => {
       dialogInfo.loading = true;
       const res = await updateUserStateRequest({ state: actionState, uid: user.uid });
       if (res) {
-        getUserList();
+        getList();
         commonNotify("success", `${action}${user.nickName}成功`);
       }
       dialogInfo.loading = false;
@@ -227,7 +200,7 @@ const comfirmUpdateUserTab = async () => {
   updateTabLoading.value = true;
   const res = await updateUserTabRequest({ uid: userInfo.uid, tab: userInfo.tab });
   if (res) {
-    getUserList();
+    getList();
     commonNotify("success", `${userInfo.title}标签设置成功`);
     showUserTabModal.value = false;
   }
@@ -236,7 +209,7 @@ const comfirmUpdateUserTab = async () => {
 
 // 初始获取一次列表
 onBeforeMount(() => {
-  getUserList();
+  getList();
 });
 </script>
 

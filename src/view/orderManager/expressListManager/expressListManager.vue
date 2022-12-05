@@ -4,7 +4,7 @@
   </n-card>
   <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
   <n-card>
-    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getOrderList" />
+    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
   <!-- 查看物流 -->
   <n-modal style="height: 600px; width: 1000px" :show="showLogisticsModal" @update:show="(state: boolean) => {showLogisticsModal = state }">
@@ -49,9 +49,9 @@
 
 <script lang="ts" setup>
 // 框架
-import { computed, ref, onBeforeMount, h, reactive } from "vue";
+import { ref, onBeforeMount, h, reactive } from "vue";
 // 组件库
-import { NImage, NButton, NSpace, useDialog } from "naive-ui";
+import { NImage, NButton, NSpace } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
@@ -59,97 +59,41 @@ import layoutScrollCard from "@/component/common/layoutScrollCard.vue";
 import expressCompanySelect from "@/component/common/expressCompanySelect.vue";
 // 工具库
 // 自定义工具
-import { commonNotify } from "@/util/common";
+import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
 import { getExpressOrderList as getExpressOrderListRequest, getExpressLogistics as getExpressLogisticsRequest, expressDelivery as expressDeliveryRequest } from "@/request/order";
 // store
-import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 import { ExpressOrderState } from "./expressListManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { ExpressOrderListItem, ExpressOrderListParam, LogisticsInfo } from "@/type/Order";
-import type * as RequestParam from "@/request/type/RequestParam";
 import { expressOrderStateList } from "./expressListManagerStore";
 
-const commonStore = useCommonStore();
 const authStore = useAuthStore();
-const dialog = useDialog();
-
-// 列表宽度和高度
-const listXWidth = computed(() => {
-  let width = 0;
-  const list = createColumns();
-  for (const item of list) {
-    width = (item.width as number) + width;
-  }
-  return width;
-});
-const listYHeight = computed(() => {
-  return commonStore.pageContentHeight - 185;
-});
-
-// 筛选的参数
-const searchParam = ref<RequestParam.GetExpressOrderList>({
-  page: 1,
-  size: 10,
-});
-// 数据总数
-const totalPage = ref(0);
-// 查询状态
-const searching = ref(false);
-// 展示的列表
-const list = ref<ExpressOrderListItem[]>([]);
-// 请求列表
-const getOrderList = async () => {
-  searching.value = true;
-  const res = await getExpressOrderListRequest(searchParam.value);
-  if (res) {
-    list.value = res.data.data;
-    totalPage.value = res.data.totalPage;
-  }
-  searching.value = false;
-};
-
-// 组合请求参数
-const submitSearch = (params: ExpressOrderListParam) => {
-  searchParam.value = { ...searchParam.value, ...params };
-  getOrderList();
-};
+const isAdmin = authStore.isAdmin();
 
 // 列表渲染函数
 const createColumns = () => {
   const list: DataTableColumns<ExpressOrderListItem> = [
-    {
-      title: "订单名称",
-      key: "orderName",
-      width: 180,
-      fixed: "left",
-    },
     {
       title: "订单编号",
       key: "orderId",
       width: 180,
     },
     {
-      title: "订单状态",
-      key: "orderState",
-      width: 100,
-      render(order) {
-        return expressOrderStateList[order.orderState].label;
-      },
-    },
-    {
       title: "商品名称",
       key: "goodsName",
       width: 180,
+      fixed: "left",
     },
-    {
-      title: "商品编号",
-      key: "goodsId",
-      width: 180,
-    },
+    // {
+    //   title: "订单名称",
+    //   key: "orderName",
+    //   width: 180,
+    //   fixed: "left",
+    // },
     {
       title: "商品封面",
       key: "goodsCover",
@@ -161,6 +105,13 @@ const createColumns = () => {
         });
       },
     },
+
+    {
+      title: "商品编号",
+      key: "goodsId",
+      width: 180,
+    },
+
     {
       title: "用户编号",
       key: "uid",
@@ -221,17 +172,15 @@ const createColumns = () => {
       key: "cancelTime",
       width: 180,
     },
+    {
+      title: "订单状态",
+      key: "orderState",
+      width: 100,
+      render(order) {
+        return expressOrderStateList[order.orderState].label;
+      },
+    },
 
-    {
-      title: "商铺名称",
-      key: "merchantName",
-      width: 100,
-    },
-    {
-      title: "商铺Uid",
-      key: "merchantUid",
-      width: 100,
-    },
     {
       title: "操作",
       key: "operaction",
@@ -281,8 +230,27 @@ const createColumns = () => {
       },
     },
   ];
+
+  if (isAdmin) {
+    list.splice(0, 0, {
+      title: "商户名称",
+      key: "merchantName",
+      width: 100,
+    });
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
+      width: 100,
+    });
+  }
   return list;
 };
+
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<ExpressOrderListParam, ExpressOrderListItem>(
+  getExpressOrderListRequest,
+  createColumns,
+  185
+);
 
 const currentOrder = ref<ExpressOrderListItem | null>(null);
 
@@ -304,7 +272,7 @@ const comfirmExpress = async () => {
   const res = await expressDeliveryRequest(expressInfo);
   if (res) {
     commonNotify("success", "确认发货成功");
-    await getOrderList();
+    await getList();
     showExpressModal.value = false;
   }
   expressLoading.value = false;
@@ -321,13 +289,14 @@ const checkLogistics = async (order: ExpressOrderListItem) => {
   const res = await getExpressLogisticsRequest({ orderId: order.orderId });
   if (res) {
     logisticsInfo.value = res.data;
+    logisticsInfo.value.data.reverse();
   }
   logisticsLoading.value = false;
 };
 
 // 初始获取一次列表
 onBeforeMount(() => {
-  getOrderList();
+  getList();
 });
 </script>
 

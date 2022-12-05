@@ -46,11 +46,15 @@ export const ultraFetch = new UltraFetch(
         // 302：未登录，303：账号冻结
         router.push({ name: "login" });
         commonNotify("warning", response.message || "网络异常！");
+      } else if (response instanceof Blob) {
+        console.log(1111, response, shallowResponse);
+        return response;
       } else {
         commonNotify("warning", response.message || "网络异常！");
       }
     },
     errHandler: (err) => {
+      console.log(1111, err);
       commonNotify("error", "网络异常！");
     },
   }

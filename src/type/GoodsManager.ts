@@ -48,6 +48,7 @@ export type GoodsDetail = {
     goodsTotal: number | null;
     goodsVideo: string;
     goodsVideoCover: string;
+    goodsState?: number;
   };
   extend: {
     expressEndTime: string | null;
@@ -69,6 +70,8 @@ export type GoodsDetail = {
     goodsId: string | null;
     needNum: number | null;
     pointsId: string | null;
+    pointsCover?: string;
+    pointsName?: string;
   };
   rules: {
     endTime: string | null;

@@ -8,6 +8,16 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品管理",
       icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "goodsWhiteListManager",
+    name: "goodsWhiteListManager",
+    component: () => import("@/view/goodsManager/goodsWhiteListManager/goodsWhiteListManager.vue"),
+    meta: {
+      label: "商品白名单",
+      icon: "dingdan",
     },
   },
   {
@@ -17,6 +27,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "新增商品",
       icon: "dingdan",
+      keepAlive: true,
     },
   },
   {
@@ -26,6 +37,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品详情",
       icon: "dingdan",
+      keepAlive: true,
     },
   },
   {
@@ -35,6 +47,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "编辑商品",
       icon: "dingdan",
+      keepAlive: true,
     },
   },
   {

@@ -60,3 +60,17 @@ export const updateGoodsCategory = (params: { goodsId: string; classifies: strin
     body: JSON.stringify(params),
   });
 };
+
+export const updateGoodsPoints = (params: { goodsId: string | null; needNum: number | null; pointsId: string | null }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/points",
+    body: JSON.stringify(params),
+  });
+};
+
+export const updateGoodsExtend = (params: RequestParam.GoodsSubmit) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/extend",
+    body: JSON.stringify(params),
+  });
+};
