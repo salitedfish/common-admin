@@ -95,7 +95,7 @@ import {
 } from "@/request/goods";
 import { deleteWhiteList as deleteWhiteListRequest } from "@/request/common";
 
-import type { SearchParams, GoodsListItem } from "@/type/GoodsManager";
+import type { GoodsListItem } from "@/type/GoodsManager";
 import type { DataTableColumns } from "naive-ui";
 import type { CategoryTreeItem } from "@/type/Common";
 import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList, EditType } from "./goodsListManagerStore";
@@ -351,7 +351,7 @@ const createColumns = () => {
         if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
           list.push(
             h(whiteListUploadBtn, {
-              goodsId: goods.goodsId,
+              id: goods.goodsId,
               whiteListType: WhiteListType.GOODS,
             })
           );
@@ -372,7 +372,7 @@ const createColumns = () => {
                     positiveText: "确认",
                     onPositiveClick: async () => {
                       dialogInfo.loading = true;
-                      const res = await deleteWhiteListRequest({ goodsId: goods.goodsId }, WhiteListType.GOODS);
+                      const res = await deleteWhiteListRequest({ id: goods.goodsId }, WhiteListType.GOODS);
                       if (res) {
                         commonNotify("success", "白名单删除成功");
                       }
@@ -778,7 +778,7 @@ const createColumns = () => {
   }
   return list;
 };
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<SearchParams, GoodsListItem>(getListRequest, createColumns);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, 1);
 
 // 更改商品状态modal框的状态和数据
 const showAuditModal = ref(false);

@@ -58,7 +58,7 @@ export const uploadImg = (file: File): RequestReturn.Upload => {
 // 图片上传
 export const uploadImgUrl = `${baseURL}/manager/file/image`;
 
-// 图片上传
+// 视频上传
 export const uploadVideo = (file: File): RequestReturn.Upload => {
   const data = new FormData();
   data.append("file", file);
@@ -116,12 +116,12 @@ export const downLoadWhiteListTemplate = (): Promise<Blob> => {
 };
 
 // 白名单上传
-export const uploadWhiteList = (params: { goodsId: string; file: File }, whiteListType: number) => {
+export const uploadWhiteList = (params: { id: string; file: File }, whiteListType: number) => {
   const data = new FormData();
   data.append("file", params.file);
   return ultraFetch.post(
     {
-      URL: `${whiteListUrls[whiteListType].uploadWhiteListUrl}${params.goodsId}`,
+      URL: `${whiteListUrls[whiteListType].uploadWhiteListUrl}${params.id}`,
       body: data,
     },
     {
@@ -131,30 +131,34 @@ export const uploadWhiteList = (params: { goodsId: string; file: File }, whiteLi
 };
 
 // 白名单下载
-export const downLoadWhiteList = (params: { id: string }, whiteListType: number): Promise<Blob> => {
+export const downLoadWhiteList = (params: { id: string; goodsId?: string }, whiteListType: number): Promise<Blob> => {
+  if (whiteListType === WhiteListType.GOODS) {
+    params.goodsId = params.id;
+  }
   return ultraFetch.get({
     URL: whiteListUrls[whiteListType].downLoadWhiteListUrl,
-    params: {
-      goodsId: params.id,
-    },
+    params: params,
   });
 };
 
 // 删除白名单
-export const deleteWhiteList = (params: { goodsId: string }, whiteListType: number) => {
+export const deleteWhiteList = (params: { id: string; goodsId?: string }, whiteListType: number) => {
+  if (whiteListType === WhiteListType.GOODS) {
+    params.goodsId = params.id;
+  }
   return ultraFetch.post({
     URL: whiteListUrls[whiteListType].deleteWhiteListUrl,
     body: JSON.stringify(params),
   });
 };
 
-// 获取商品白名单列表
+// 获取白名单列表
 export const getGoodsWhiteList = (params: RequestParam.GetWhiteList, whiteListType: number): RequestReturn.GetWhiteList => {
   if (whiteListType === WhiteListType.GOODS) {
     params.goodsId = params.id;
   }
   return ultraFetch.post({
-    URL: whiteListUrls[whiteListType].getGoodsWhiteListUrl,
+    URL: whiteListUrls[whiteListType].getWhiteListUrl,
     body: JSON.stringify(params),
   });
 };

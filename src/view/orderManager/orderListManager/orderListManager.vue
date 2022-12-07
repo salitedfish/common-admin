@@ -27,7 +27,7 @@ import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListMan
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
-import type { OrderListItem, OrderListParam } from "@/type/Order";
+import type { OrderListItem } from "@/type/Order";
 const dialog = useDialog();
 const isAdmin = useAuthStore().isAdmin();
 
@@ -202,7 +202,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<OrderListParam, OrderListItem>(getListRequest, createColumns, 228);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, 1);
 
 // 线下支付确认
 const orderOffLineComfirm = (orderId: string) => {

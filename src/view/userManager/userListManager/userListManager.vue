@@ -46,7 +46,7 @@ import { getUserList as getUserListRequest, updateUserState as updateUserStateRe
 import { UserState, userStateList, accountTabList } from "./userListManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
-import type { UserListItem, UserListParam } from "@/type/User";
+import type { UserListItem } from "@/type/User";
 const dialog = useDialog();
 
 // 列表渲染函数
@@ -162,11 +162,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<UserListParam, UserListItem>(
-  getUserListRequest,
-  createColumns,
-  185
-);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getUserListRequest, createColumns);
 
 // 冻结或解冻
 const handleFrozen = (user: UserListItem) => {

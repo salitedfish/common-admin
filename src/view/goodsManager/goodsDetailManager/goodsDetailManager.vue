@@ -16,7 +16,8 @@
         <n-input placeholder="请输入商品描述" v-model:value="goodsInfo.spu.goodsDes" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
       <n-form-item label="商品详情:">
-        <n-input placeholder="请输入商品详情" v-model:value="goodsInfo.spu.goodsDetail" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
+        <!-- <n-input placeholder="请输入商品详情" v-model:value="goodsInfo.spu.goodsDetail" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input> -->
+        <rich-text-editor v-model="goodsInfo.spu.goodsDetail" :disabled="formDisabled || editTypeLimit"></rich-text-editor>
       </n-form-item>
       <n-form-item label="商品属性:">
         <n-card>
@@ -218,7 +219,7 @@
         </n-form-item>
         <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))">
           <category-select
-            @update:model-value="(categoryList:CategoryTreeItem[]) => (item.itemId = String( categoryList[categoryList.length - 1].id))"
+            @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
             placeholder="请选择商品类目"
             v-model="item.categoryList"
             check-type="all"
@@ -293,9 +294,11 @@ export default defineComponent({
 import { reactive, ref, computed, watch, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
+
 // 自定义组件
 import categorySelect from "@/component/common/categorySelect.vue";
 import commonUpload from "@/component/common/commonUpload.vue";
+import richTextEditor from "@/component/common/richTextEditor.vue";
 // 工具库
 import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
@@ -416,7 +419,7 @@ const initForm = (goodsDetail: GoodsDetail) => {
   goodsInfo.extend = extend;
   goodsInfo.rules = rules;
   goodsInfo.points = points;
-  goodsInfo.points.needNum = Number(goodsInfo.points.needNum);
+  if (goodsInfo.points) goodsInfo.points.needNum = Number(goodsInfo.points?.needNum);
 };
 
 const goodsCategoryInfoList = ref<CategoryTreeItem[]>([]);
@@ -550,7 +553,6 @@ const submitHandler = async () => {
   if (goodsVideoCoverList.value.length >= 1) {
     goodsInfo.spu.goodsVideoCover = goodsVideoCoverList.value[0].hashName;
   }
-
   // 确认提交
   comfirmSubmit();
 };

@@ -19,7 +19,7 @@ import { uploadWhiteList } from "@/request/common";
 const inputDom = ref<HTMLInputElement | null>(null);
 
 const props = defineProps<{
-  goodsId: string;
+  id: string;
   whiteListType: number;
 }>();
 
@@ -31,7 +31,7 @@ const triggerInputDom = () => {
 
 const handleUploadWhiteList = async (event: any) => {
   uploading.value = true;
-  const res = await uploadWhiteList({ goodsId: props.goodsId, file: event.target.files[0] }, props.whiteListType);
+  const res = await uploadWhiteList({ id: props.id, file: event.target.files[0] }, props.whiteListType);
   if (res) {
     commonNotify("success", "白名单上传成功");
   }

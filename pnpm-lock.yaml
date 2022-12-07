@@ -4,6 +4,7 @@ specifiers:
   '@commitlint/cli': ^17.2.0
   '@commitlint/config-conventional': ^17.2.0
   '@rushstack/eslint-patch': ^1.1.0
+  '@tinymce/tinymce-vue': 4.0.5
   '@types/node': ^16.18.3
   '@vitejs/plugin-vue': ^3.0.1
   '@vitejs/plugin-vue-jsx': ^2.0.0
@@ -20,6 +21,7 @@ specifiers:
   pinia: ^2.0.16
   postcss: ^8.4.18
   prettier: ^2.5.1
+  tinymce: 5.10.2
   typescript: ~4.7.4
   vite: ^3.0.1
   vite-plugin-compression: ^0.5.1
@@ -28,9 +30,11 @@ specifiers:
   vue-tsc: ^0.38.8
 
 dependencies:
+  '@tinymce/tinymce-vue': 4.0.5_vue@3.2.41
   less: 4.1.3
   naive-ui: 2.33.5_vue@3.2.41
   pinia: 2.0.23_lrjaoqkmph6q2hmgd3qeuy6rom
+  tinymce: 5.10.2
   vue: 3.2.41
   vue-router: 4.1.6_vue@3.2.41
 
@@ -663,6 +667,15 @@ packages:
   /@rushstack/eslint-patch/1.2.0:
     resolution: {integrity: sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==}
     dev: true
+
+  /@tinymce/tinymce-vue/4.0.5_vue@3.2.41:
+    resolution: {integrity: sha512-PutMhPVgR+NPeu20pvTmFBY+3zKwTJqK0JPDb6QuK8u1g6Av4RaiUVS58Rft6mhoxVE99tIofdr69wOH/X0swA==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      tinymce: 5.10.6
+      vue: 3.2.41
+    dev: false
 
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -3422,6 +3435,14 @@ packages:
     dependencies:
       readable-stream: 3.6.0
     dev: true
+
+  /tinymce/5.10.2:
+    resolution: {integrity: sha512-5QhnZ6c8F28fYucLLc00MM37fZoAZ4g7QCYzwIl38i5TwJR5xGqzOv6YMideyLM4tytCzLCRwJoQen2LI66p5A==}
+    dev: false
+
+  /tinymce/5.10.6:
+    resolution: {integrity: sha512-bnF2LUoycDsoZZLQBNHbOijrmoJuEeR1rQdqgo4s77BedufpOVnDh00OZKbseHeTMCxhVH05wvOqxLsi6vpeZw==}
+    dev: false
 
   /to-fast-properties/2.0.0:
     resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}

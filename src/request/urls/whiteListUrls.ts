@@ -3,8 +3,13 @@ export const whiteListUrls = [
   {
     uploadWhiteListUrl: "/manager/goods/allow/submit/",
     downLoadWhiteListUrl: "/manager/goods/allow/excel",
-    downLoadWhiteListTemplateUrl: "/manager/file/excel/allow/template",
     deleteWhiteListUrl: "/manager/goods/allow/delete",
-    getGoodsWhiteListUrl: "/manager/goods/allow/page",
+    getWhiteListUrl: "/manager/goods/allow/page",
+  },
+  {
+    uploadWhiteListUrl: "/manager/airdrop/allow/submit/",
+    downLoadWhiteListUrl: "/manager/airdrop/allow/excel",
+    deleteWhiteListUrl: "/manager/airdrop/allow/delete",
+    getWhiteListUrl: "/manager/airdrop/allow/page",
   },
 ];

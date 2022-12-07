@@ -10,21 +10,21 @@
         :class="{ activeCategory: i === activeCategoryIndexList[index], hiddenCategory: item.state === 0 }"
         @click="selectCategory(index, i)"
       >
-        {{ item.name }}
+        <n-tooltip placement="top" trigger="hover">
+          <template #trigger>
+            <custom-icon name="yanjing_yincang" :size="18" @click="handleHidden(index, i, 1)" v-if="item.state === 0"></custom-icon>
+            <custom-icon name="yanjing_xianshi" :size="18" @click="handleHidden(index, i, 0)" v-else></custom-icon>
+          </template>
+          <span v-if="item.state === 0"> 显示 </span>
+          <span v-else> 隐藏 </span>
+        </n-tooltip>
+        <span class="category-name">{{ item.name }}</span>
         <div class="options-icon" @click.stop>
           <n-tooltip placement="top" trigger="hover">
             <template #trigger>
               <custom-icon name="xiugaimingcheng" :size="18" @click="handleUpdate(index, i)"></custom-icon>
             </template>
             <span> 编辑 </span>
-          </n-tooltip>
-          <n-tooltip placement="top" trigger="hover">
-            <template #trigger>
-              <custom-icon name="yanjing_yincang" :size="18" @click="handleHidden(index, i, 1)" v-if="item.state === 0"></custom-icon>
-              <custom-icon name="yanjing_xianshi" :size="18" @click="handleHidden(index, i, 0)" v-else></custom-icon>
-            </template>
-            <span v-if="item.state === 0"> 显示 </span>
-            <span v-else> 影藏 </span>
           </n-tooltip>
 
           <n-tooltip placement="top" trigger="hover">
@@ -141,6 +141,7 @@ const getCategoryTree = async () => {
 
 // 选中类目index第几列，i第几个
 const selectCategory = (index: number, i: number) => {
+  console.log(activeCategoryList);
   if (activeCategoryIndexList[index] === i) return;
   // 选中一个其他类目时,除了将其设为活跃类目，还要将其子类目的第一个类目设为活跃类目
   activeCategoryIndexList[index] = i;
@@ -211,10 +212,10 @@ const handleDelete = (index: number, i: number) => {
     },
   });
 };
-// 显示和影藏
+// 显示和隐藏
 const handleHidden = (index: number, i: number, state: number) => {
   const category = activeCategoryList[index][i];
-  const actionText = state === 1 ? "显示" : "影藏";
+  const actionText = state === 1 ? "显示" : "隐藏";
   const dialogInfo = dialog.warning({
     title: `${actionText}类目`,
     content: `确认${actionText + category.name}吗？`,
@@ -249,10 +250,17 @@ onBeforeMount(async () => {
       height: 35px;
       line-height: 35px;
       cursor: pointer;
-      padding: 0 80px 0 10px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      padding: 0 50px 0 10px;
+      display: flex;
+      align-items: center;
+      .category-name {
+        margin-left: 2px;
+        flex: 1;
+        width: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
       .options-icon {
         position: absolute;
         top: 50%;

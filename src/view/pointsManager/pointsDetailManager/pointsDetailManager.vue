@@ -37,6 +37,7 @@ import { useFileNameFromURL } from "@ultra-man/noa";
 import { addPoints as addPointsRequest, editPoints as editPointsRequest, getPointsInfo as getPointsInfoRequest } from "@/request/points";
 // store
 import { useCommonStore } from "@/store/commonStore";
+import { useRouteStore } from "@/store/routeStore";
 // 类型
 import type { FileUpload } from "@/type/Common";
 import type { AddPointsParams } from "@/type/Points";
@@ -44,6 +45,7 @@ import type { AddPointsParams } from "@/type/Points";
 const router = useRouter();
 const route = useRoute();
 const commonStore = useCommonStore();
+const routeStore = useRouteStore();
 
 const isEdit = computed(() => {
   return route.query.id && route.query.id.length > 0;
@@ -103,6 +105,7 @@ const doEdit = async () => {
   const res = await editPointsRequest(params);
   if (res) {
     commonNotify("success", "积分编辑成功");
+    routeStore.deleteCurrentRoute();
     router.push({
       name: "pointsListManager",
     });
@@ -115,6 +118,7 @@ const doSubmit = async () => {
   const res = await addPointsRequest(params);
   if (res) {
     commonNotify("success", "积分新增成功");
+    routeStore.deleteCurrentRoute();
     router.push({
       name: "pointsListManager",
     });

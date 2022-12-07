@@ -20,11 +20,77 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "airdropManager",
-    name: "airdropManager",
-    component: () => import("@/view/operactionManager/airdropManager/airdropManager.vue"),
+    path: "manualAirdropManager",
+    name: "manualAirdropManager",
+    component: () => import("@/view/operactionManager/manualAirdropManager/manualAirdropManager.vue"),
     meta: {
       label: "空投管理",
+      icon: "kongtou",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "addManualAirdrop",
+    name: "addManualAirdrop",
+    component: () => import("@/view/operactionManager/manualAirdropDetail/manualAirdropDetail.vue"),
+    meta: {
+      label: "新增空投",
+      icon: "kongtou",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "editManualAirdrop",
+    name: "editManualAirdrop",
+    component: () => import("@/view/operactionManager/manualAirdropDetail/manualAirdropDetail.vue"),
+    meta: {
+      label: "编辑空投",
+      icon: "kongtou",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "manaualAirdropWhiteListManager",
+    name: "manaualAirdropWhiteListManager",
+    component: () => import("@/view/operactionManager/manaualAirdropWhiteListManager/manaualAirdropWhiteListManager.vue"),
+    meta: {
+      label: "空投白名单",
+      icon: "dingdan",
+    },
+  },
+  {
+    path: "timingAirdropManager",
+    name: "timingAirdropManager",
+    component: () => import("@/view/operactionManager/timingAirdropManager/timingAirdropManager.vue"),
+    meta: {
+      label: "定时空投任务",
+      icon: "kongtou",
+    },
+  },
+  {
+    path: "addTimingAirdrop",
+    name: "addTimingAirdrop",
+    component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
+    meta: {
+      label: "新增空投任务",
+      icon: "kongtou",
+    },
+  },
+  {
+    path: "checkTimingAirdrop",
+    name: "checkTimingAirdrop",
+    component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
+    meta: {
+      label: "查看空投任务",
+      icon: "kongtou",
+    },
+  },
+  {
+    path: "editTimingAirdrop",
+    name: "editTimingAirdrop",
+    component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
+    meta: {
+      label: "编辑空投任务",
       icon: "kongtou",
     },
   },

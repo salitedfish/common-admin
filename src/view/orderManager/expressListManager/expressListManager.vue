@@ -68,7 +68,7 @@ import { ExpressOrderState } from "./expressListManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
-import type { ExpressOrderListItem, ExpressOrderListParam, LogisticsInfo } from "@/type/Order";
+import type { ExpressOrderListItem, LogisticsInfo } from "@/type/Order";
 import { expressOrderStateList } from "./expressListManagerStore";
 
 const authStore = useAuthStore();
@@ -246,11 +246,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage<ExpressOrderListParam, ExpressOrderListItem>(
-  getExpressOrderListRequest,
-  createColumns,
-  185
-);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getExpressOrderListRequest, createColumns);
 
 const currentOrder = ref<ExpressOrderListItem | null>(null);
 

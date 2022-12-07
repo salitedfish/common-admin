@@ -358,7 +358,11 @@ const createColumns = () => {
       title: "商铺名称",
       key: "merchantName",
       width: 120,
+      render: (points) => {
+        return points.merchantUid === "0" ? "平台" : points.merchantName;
+      },
     });
+
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",

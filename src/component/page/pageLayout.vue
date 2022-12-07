@@ -37,6 +37,7 @@ onMounted(() => {
     top: 0;
     bottom: 0;
     background-color: var(--background-color);
+    z-index: 99;
     opacity: 0.6;
     display: flex;
     justify-content: center;

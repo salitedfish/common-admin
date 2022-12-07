@@ -1,0 +1,239 @@
+<template>
+  <n-card>
+    <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
+  </n-card>
+  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-card>
+    <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
+  </n-card>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "manualAirdropManager",
+});
+</script>
+<script lang="ts" setup>
+// 框架
+import { h } from "vue";
+import { useRouter } from "vue-router";
+// 组件库
+import { NSpace, NButton, useDialog } from "naive-ui";
+// 自定义组件
+import screenSection from "./screenSection.vue";
+// 工具库
+// 自定义工具
+import { useListPage, commonNotify } from "@/util/common";
+// 网络请求
+import { getListTimingAirDrop, deleteTimingAirDrop, updateTimingAirDropState } from "@/request/operator";
+// store
+import { useAuthStore } from "@/store/authStore";
+import { airDropTimeTypeList } from "./timingAirdropManagerStore";
+import { airDropItemTypeList, airDropStateList, airDropTaskStateList, AirDropStateType } from "../manualAirdropManager/manualAirdropManagerStore";
+// 类型
+import type { VNode } from "vue";
+import type { DataTableColumns } from "naive-ui";
+import type { TimingAirDropListItem } from "@/type/Operator";
+
+const isAdmin = useAuthStore().isAdmin();
+const authStore = useAuthStore();
+const dialog = useDialog();
+const router = useRouter();
+
+// 列表项
+const createColumns = () => {
+  const list: DataTableColumns<TimingAirDropListItem> = [
+    {
+      title: "空投名称",
+      key: "name",
+      width: 120,
+      fixed: "left",
+    },
+    {
+      title: "空投编号",
+      key: "id",
+      width: 100,
+    },
+    {
+      title: "空投物品类型",
+      key: "itemType",
+      width: 120,
+      render(row) {
+        return airDropItemTypeList[row.itemType].label;
+      },
+    },
+    {
+      title: "空投状态",
+      width: 100,
+      key: "state",
+      render(row) {
+        return airDropStateList[row.state].label;
+      },
+    },
+    {
+      title: "空投进度",
+      width: 100,
+      key: "taskState",
+      render(row) {
+        return airDropTaskStateList[row.state].label;
+      },
+    },
+    {
+      title: "商品/积分编号",
+      key: "itemId",
+      width: 160,
+    },
+    {
+      title: "已执行次数",
+      key: "runNum",
+      width: 120,
+    },
+    {
+      title: "总执行次数",
+      key: "totalNum",
+      width: 120,
+      render: (row) => {
+        return row.totalNum === 0 ? "不限次数" : row.totalNum;
+      },
+    },
+    {
+      title: "执行时间类型",
+      key: "timeType",
+      width: 120,
+      render: (row) => {
+        return airDropTimeTypeList[row.timeType].label;
+      },
+    },
+    {
+      title: "结果备注",
+      key: "note",
+      width: 120,
+    },
+    {
+      title: "操作",
+      key: "operaction",
+      width: 200,
+      fixed: "right",
+      render(row) {
+        const list: VNode[] = [];
+        const size = "small";
+        const isMy = Number(authStore.getUserInfo()?.subMchid) === Number(row.merchantUid);
+
+        if (row.state === AirDropStateType.OFFLINE && isMy) {
+          // 删除空投
+          list.push(
+            h(
+              NButton,
+              {
+                size,
+                type: "warning",
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "删除",
+                    content: `确认删除${row.name}吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await deleteTimingAirDrop({ id: row.id });
+                      if (res) {
+                        getList();
+                        commonNotify("success", "空投删除成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "删除",
+              }
+            )
+          );
+          // 编辑空投
+          list.push(
+            h(
+              NButton,
+              {
+                size,
+                type: "primary",
+                secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "editTimingAirdrop",
+                    query: {
+                      id: row.id,
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "编辑",
+              }
+            )
+          );
+        }
+        // 空投上下线
+        const lineActionLabel = airDropStateList[row.state].action.label;
+        const lineActionValue = airDropStateList[row.state].action.value;
+        if (isMy) {
+          list.push(
+            h(
+              NButton,
+              {
+                size,
+                type: "primary",
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.success({
+                    title: lineActionLabel,
+                    content: `确认${lineActionLabel}${row.name}吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await updateTimingAirDropState({ id: row.id, state: lineActionValue });
+                      if (res) {
+                        getList();
+                        commonNotify("success", `空投${lineActionLabel}成功`);
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => airDropStateList[row.state].action.label,
+              }
+            )
+          );
+        }
+
+        // 用来放按钮的容器
+        const btnBox = h(NSpace, {}, { default: () => list });
+        return btnBox;
+      },
+    },
+  ];
+  if (isAdmin) {
+    list.splice(0, 0, {
+      title: "商户名称",
+      key: "merchantName",
+      width: 100,
+      render: (row) => {
+        return row.merchantUid === "0" ? "平台" : row.merchantName;
+      },
+    });
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
+      width: 100,
+    });
+  }
+  return list;
+};
+
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListTimingAirDrop, createColumns);
+</script>
+
+<style scoped lang="less"></style>

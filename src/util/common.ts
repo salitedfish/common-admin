@@ -2,7 +2,7 @@ import { reactive, ref, computed, onBeforeMount } from "vue";
 import type { Ref } from "vue";
 import { createDiscreteApi } from "naive-ui";
 import { useCommonStore } from "@/store/commonStore";
-import type { Return, ReturnList } from "@/type/Common";
+import type { Return, ReturnList, Paging } from "@/type/Common";
 import type { NotificationType, CascaderOption, DataTableColumns } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
@@ -63,11 +63,13 @@ export const useInfinityTimeStamp = () => {
 };
 
 // 创建通用列表所需的数据Hook
-export const useListPage = <P, R>(
-  getListRequest: (searchParams: P & { page: number; size: number }) => Promise<Return<ReturnList<R>>>,
+export const useListPage = <P extends Paging, R>(
+  getListRequest: (searchParams: P) => Promise<Return<ReturnList<R>>>,
   createColumns: () => DataTableColumns<R>,
-  heightCorrect = 185
+  heightLevel = 0,
+  size = 10
 ) => {
+  type SearchParams = Omit<P, "page" | "size">;
   const commonStore = useCommonStore();
 
   // 列表宽度和高度
@@ -80,13 +82,13 @@ export const useListPage = <P, R>(
     return width;
   });
   const listYHeight = computed(() => {
-    return commonStore.pageContentHeight - heightCorrect;
+    return commonStore.pageContentHeight - [185, 228][heightLevel];
   });
 
   // 筛选的参数
-  const searchParam = <Ref<P & { page: number; size: number }>>ref({
+  const searchParam = <Ref<P>>ref({
     page: 1,
-    size: 10,
+    size,
   });
   // 数据总数
   const totalPage = ref(0);
@@ -96,7 +98,7 @@ export const useListPage = <P, R>(
   const list: Ref<R[]> = ref([]);
 
   // 整合筛选参数
-  const submitSearch = (params: P) => {
+  const submitSearch = (params: SearchParams) => {
     searchParam.value = { ...searchParam.value, ...params };
     getList();
   };
