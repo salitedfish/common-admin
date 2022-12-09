@@ -212,7 +212,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return expressOrderStateList.getItem(order.orderState).label;
+        return expressOrderStateList.getItem(order.orderState)?.label;
       },
     },
 

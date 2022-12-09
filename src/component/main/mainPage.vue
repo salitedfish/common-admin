@@ -33,14 +33,11 @@ import mainTabs from "./mainTabs.vue";
 import pageLayout from "@/component/page/pageLayout.vue";
 
 import { useRouteStore } from "@/store";
-
-import { useCommonStore } from "@/store/commonStore";
 import { useNeedLogin } from "@/util";
 
 const routeStore = useRouteStore();
 const route = useRoute();
 const loadingBar = useLoadingBar();
-const commonStore = useCommonStore();
 
 // 初始化和路由改变时，设置当前路由路径(用于面包屑展示)
 // 里面的loadingbar只是一个视觉效果

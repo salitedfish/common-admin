@@ -12,7 +12,6 @@
 <script lang="ts" setup>
 // 框架
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 // 工具库

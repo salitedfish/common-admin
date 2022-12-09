@@ -65,7 +65,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return airDropTypeList.getItem(row.type).label;
+        return airDropTypeList.getItem(row.type)?.label;
       },
     },
     {
@@ -74,7 +74,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return airDropItemTypeList.getItem(row.itemType).label;
+        return airDropItemTypeList.getItem(row.itemType)?.label;
       },
     },
     {
@@ -83,7 +83,7 @@ const createColumns = () => {
       align: "center",
       key: "state",
       render(row) {
-        return airDropStateList.getItem(row.state).label;
+        return airDropStateList.getItem(row.state)?.label;
       },
     },
     {
@@ -92,7 +92,7 @@ const createColumns = () => {
       align: "center",
       key: "taskState",
       render(row) {
-        return airDropTaskStateList.getItem(row.state).label;
+        return airDropTaskStateList.getItem(row.state)?.label;
       },
     },
     {
@@ -226,9 +226,9 @@ const createColumns = () => {
           );
         }
         // 空投上下线
-        const lineActionLabel = airDropStateList.getItem(row.state).action.label;
-        const lineActionValue = airDropStateList.getItem(row.state).action.value;
-        if (row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP && isMy) {
+        const lineActionLabel = airDropStateList.getItem(row.state)?.action.label;
+        const lineActionValue = airDropStateList.getItem(row.state)?.action.value;
+        if (row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP && isMy && lineActionValue !== undefined) {
           list.push(
             h(
               NButton,
@@ -254,7 +254,7 @@ const createColumns = () => {
                 },
               },
               {
-                default: () => airDropStateList.getItem(row.state).action.label,
+                default: () => airDropStateList.getItem(row.state)?.action.label,
               }
             )
           );

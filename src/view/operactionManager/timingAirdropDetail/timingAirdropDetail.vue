@@ -105,7 +105,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useCommonStore } from "@/store/commonStore";
 import { airDropTimeTypeList, AirDropTimeType } from "../timingAirdropManager/timingAirdropManagerStore";
 import { airDropItemTypeList, AirDropItemType } from "../manualAirdropManager/manualAirdropManagerStore";
-import { ruleTypeList, RuleType, holdTimeTypeList, HoldTimeType } from "./timingAirdropDetailStore";
+import { ruleTypeList, RuleType, holdTimeTypeList } from "./timingAirdropDetailStore";
 // 类型
 import type { TimingAirDropAddParams } from "@/type/Operator";
 // import type { CategoryTreeItem } from "@/type/Common";

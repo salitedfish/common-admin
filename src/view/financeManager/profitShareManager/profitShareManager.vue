@@ -107,7 +107,7 @@ const createColumns = () => {
       align: "center",
 
       render: (row) => {
-        return shareStateList.getItem(row.state).label;
+        return shareStateList.getItem(row.state)?.label;
       },
     },
     {
@@ -129,7 +129,7 @@ const createColumns = () => {
       align: "center",
 
       render: (row) => {
-        return orderTypeList.getItem(row.orderType).label;
+        return orderTypeList.getItem(row.orderType)?.label;
       },
     },
     {
@@ -145,7 +145,7 @@ const createColumns = () => {
       align: "center",
 
       render: (row) => {
-        return payChannelList.getItem(row.channelType).label;
+        return payChannelList.getItem(row.channelType)?.label;
       },
     },
     {

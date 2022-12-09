@@ -29,13 +29,15 @@ const triggerInputDom = () => {
   inputDom.value?.click();
 };
 
-const handleUploadWhiteList = async (event: any) => {
-  uploading.value = true;
-  const res = await uploadWhiteList({ id: props.id, file: event.target.files[0] }, props.whiteListType);
-  if (res) {
-    commonNotify("success", "白名单上传成功");
+const handleUploadWhiteList = async (event: Event) => {
+  if (event.target) {
+    uploading.value = true;
+    const res = await uploadWhiteList({ id: props.id, file: (event.target as any).files[0] }, props.whiteListType);
+    if (res) {
+      commonNotify("success", "白名单上传成功");
+    }
+    uploading.value = false;
   }
-  uploading.value = false;
 };
 </script>
 

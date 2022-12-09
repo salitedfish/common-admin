@@ -1,6 +1,6 @@
 declare global {
   interface Array<T> {
-    getItem: <P>(value: P) => T;
+    getItem: <P>(value: P) => T | undefined;
   }
 }
 

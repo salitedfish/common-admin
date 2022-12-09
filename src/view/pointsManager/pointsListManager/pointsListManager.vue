@@ -209,7 +209,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return pointsStateList.getItem(row.pointsState).label;
+        return pointsStateList.getItem(row.pointsState)?.label;
       },
     },
 

@@ -63,7 +63,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return airDropItemTypeList.getItem(row.itemType).label;
+        return airDropItemTypeList.getItem(row.itemType)?.label;
       },
     },
     {
@@ -72,7 +72,7 @@ const createColumns = () => {
       align: "center",
       key: "state",
       render(row) {
-        return airDropStateList.getItem(row.state).label;
+        return airDropStateList.getItem(row.state)?.label;
       },
     },
     {
@@ -102,7 +102,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render: (row) => {
-        return airDropTimeTypeList.getItem(row.timeType).label;
+        return airDropTimeTypeList.getItem(row.timeType)?.label;
       },
     },
     {
@@ -199,9 +199,9 @@ const createColumns = () => {
           );
         }
         // 空投上下线
-        const lineActionLabel = airDropStateList.getItem(row.state).action.label;
-        const lineActionValue = airDropStateList.getItem(row.state).action.value;
-        if (isMy) {
+        const lineActionLabel = airDropStateList.getItem(row.state)?.action.label;
+        const lineActionValue = airDropStateList.getItem(row.state)?.action.value;
+        if (isMy && lineActionValue !== undefined) {
           list.push(
             h(
               NButton,
@@ -227,7 +227,7 @@ const createColumns = () => {
                 },
               },
               {
-                default: () => airDropStateList.getItem(row.state).action.label,
+                default: () => airDropStateList.getItem(row.state)?.action.label,
               }
             )
           );

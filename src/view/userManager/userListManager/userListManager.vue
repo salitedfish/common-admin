@@ -96,7 +96,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(user) {
-        return userStateList.getItem(user.state).label;
+        return userStateList.getItem(user.state)?.label;
       },
     },
     {
@@ -105,7 +105,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(user) {
-        return accountTabList.getItem(user.tab).label;
+        return accountTabList.getItem(user.tab)?.label;
       },
     },
     {

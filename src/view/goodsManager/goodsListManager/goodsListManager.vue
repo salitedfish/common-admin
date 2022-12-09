@@ -143,7 +143,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(row) {
-        return goodsTypeList.getItem(row.goodsType).label;
+        return goodsTypeList.getItem(row.goodsType)?.label;
       },
     },
     {
@@ -152,7 +152,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(row) {
-        return saleTypeList.getItem(row.saleType).label;
+        return saleTypeList.getItem(row.saleType)?.label;
       },
     },
     {
@@ -221,7 +221,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(row) {
-        return goodsStateList.getItem(row.goodsState).label;
+        return goodsStateList.getItem(row.goodsState)?.label;
       },
     },
 

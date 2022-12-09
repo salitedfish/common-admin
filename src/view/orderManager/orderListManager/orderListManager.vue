@@ -82,7 +82,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return goodsTypeList.getItem(order.goodsType).label;
+        return goodsTypeList.getItem(order.goodsType)?.label;
       },
     },
     {
@@ -91,7 +91,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return orderTypeList.getItem(order.orderType).label;
+        return orderTypeList.getItem(order.orderType)?.label;
       },
     },
     {
@@ -119,7 +119,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return payChannelList.getItem(order.payChannel).label;
+        return payChannelList.getItem(order.payChannel)?.label;
       },
     },
     {
@@ -146,7 +146,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return orderStateList.getItem(order.orderState).label;
+        return orderStateList.getItem(order.orderState)?.label;
       },
     },
     {
@@ -155,7 +155,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return invoiceState.getItem(order.invoiceState).label;
+        return invoiceState.getItem(order.invoiceState)?.label;
       },
     },
 
