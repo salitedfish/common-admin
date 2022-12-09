@@ -1,5 +1,4 @@
 export enum InvoiceState {
-  ALL = -1,
   BEFORE_INVOICE,
   IN_INVOICE,
   AFTER_INVOICE,
@@ -17,14 +16,9 @@ export const invoiceState = [
     label: "已开发票",
     value: InvoiceState.AFTER_INVOICE,
   },
-  {
-    label: "全部",
-    value: InvoiceState.ALL,
-  },
 ];
 
 export enum OrderState {
-  ALL = -1,
   BEFORE_PAY,
   IN_PAY,
   PAY_SUCCESS,
@@ -47,22 +41,13 @@ export const orderStateList = [
     label: "付款取消",
     value: OrderState.PAY_CANCEL,
   },
-  {
-    label: "全部",
-    value: OrderState.ALL,
-  },
 ];
 
 export enum OrderType {
-  ALL = -1,
   FIRST = 1,
   SECOND,
 }
 export const orderTypeList = [
-  {
-    label: "全部",
-    value: OrderType.ALL,
-  },
   {
     label: "一级交易",
     value: OrderType.FIRST,
@@ -74,7 +59,6 @@ export const orderTypeList = [
 ];
 
 export enum PayChannel {
-  ALL = -1,
   NONE,
   WX,
   SD,
@@ -102,14 +86,9 @@ export const payChannelList = [
     label: "线下",
     value: PayChannel.OFF_LINE,
   },
-  {
-    label: "全部",
-    value: PayChannel.ALL,
-  },
 ];
 
 export enum OrderExchangeType {
-  ALL = -1,
   BUY,
   SALE,
 }
@@ -121,9 +100,5 @@ export const orderExchangeTypeList = [
   {
     label: "卖",
     value: OrderExchangeType.SALE,
-  },
-  {
-    label: "全部",
-    value: OrderExchangeType.ALL,
   },
 ];

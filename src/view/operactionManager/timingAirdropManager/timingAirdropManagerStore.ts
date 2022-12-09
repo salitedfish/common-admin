@@ -5,15 +5,15 @@ export enum AirDropTimeType {
 }
 export const airDropTimeTypeList = [
   {
-    label: "按日",
-    value: 0,
+    label: "每日",
+    value: AirDropTimeType.DAY,
   },
   {
-    label: "按周",
-    value: 1,
+    label: "每周",
+    value: AirDropTimeType.WEEK,
   },
   {
-    label: "按月",
-    value: 2,
+    label: "每月",
+    value: AirDropTimeType.MONTH,
   },
 ];

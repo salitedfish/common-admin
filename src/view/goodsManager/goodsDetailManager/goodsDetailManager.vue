@@ -516,9 +516,9 @@ const addRuleHandler = () => {
 const deleteRuleHandler = (index: number) => {
   if (goodsInfo.rules.length <= 1) {
     commonNotify("warning", "不能少于一条规则！");
-    return;
+  } else {
+    goodsInfo.rules.splice(index, 1);
   }
-  goodsInfo.rules.splice(index, 1);
 };
 
 // 处理提交前的数据（时间关系这里就不做参数校验了，后端都有校验）

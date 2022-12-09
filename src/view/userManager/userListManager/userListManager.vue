@@ -56,22 +56,26 @@ const createColumns = () => {
       title: "用户编号",
       key: "uid",
       width: 120,
+      align: "center",
       fixed: "left",
     },
     {
       title: "手机号",
       key: "phone",
+      align: "center",
       width: 140,
     },
     {
       title: "用户昵称",
       key: "nickName",
+      align: "center",
       width: 120,
     },
 
     {
       title: "用户头像",
       key: "headUrl",
+      align: "center",
       width: 100,
       render(user) {
         return h(NImage, {
@@ -83,60 +87,80 @@ const createColumns = () => {
     {
       title: "区块链地址",
       key: "chainAddress",
+      align: "center",
       width: 140,
     },
     {
       title: "状态",
       key: "state",
+      align: "center",
       width: 100,
       render(user) {
-        const text = userStateList[user.state + 1].label;
-        return text;
+        return userStateList.getItem(user.state).label;
       },
     },
     {
       title: "类型",
       key: "tab",
+      align: "center",
       width: 120,
       render(user) {
-        const text = accountTabList[user.tab + 1].label;
-        return text;
+        return accountTabList.getItem(user.tab).label;
       },
     },
     {
       title: "邀请码",
       key: "inviteCode",
+      align: "center",
       width: 100,
     },
     {
       title: "已邀请人数",
       key: "inviteNum",
+      align: "center",
       width: 100,
     },
     {
       title: "注册码",
       key: "registerCode",
+      align: "center",
       width: 100,
+      render(user) {
+        return user.registerCode || "/";
+      },
     },
     {
       title: "注册时间",
       key: "registerTime",
+      align: "center",
       width: 140,
+      render(goods) {
+        return goods.registerTime || "/";
+      },
     },
     {
       title: "最近登录时间",
       key: "lastLoginTime",
+      align: "center",
       width: 140,
+      render(goods) {
+        return goods.lastLoginTime || "/";
+      },
     },
 
     {
       title: "操作",
       key: "operaction",
+      align: "center",
       width: 120,
       fixed: "right",
       render(goods) {
         const btnList = [
-          h(NButton, { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(goods) }, { default: goods.state === UserState.FROZEN ? "解冻" : "冻结" }),
+          h(
+            NButton,
+            { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(goods) },
+            { default: () => (goods.state === UserState.FROZEN ? "解冻" : "冻结") }
+          ),
           h(
             NButton,
             {
@@ -150,7 +174,7 @@ const createColumns = () => {
                 showUserTabModal.value = true;
               },
             },
-            { default: "标签设置" }
+            { default: () => "标签设置" }
           ),
         ];
         // 用来放按钮的容器

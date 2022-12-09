@@ -47,6 +47,12 @@
   </n-modal>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "expressListManager",
+});
+</script>
 <script lang="ts" setup>
 // 框架
 import { ref, onBeforeMount, h, reactive } from "vue";
@@ -80,12 +86,14 @@ const createColumns = () => {
     {
       title: "订单编号",
       key: "orderId",
+      align: "center",
       width: 180,
     },
     {
       title: "商品名称",
       key: "goodsName",
       width: 180,
+      align: "center",
       fixed: "left",
     },
     // {
@@ -97,6 +105,7 @@ const createColumns = () => {
     {
       title: "商品封面",
       key: "goodsCover",
+      align: "center",
       width: 100,
       render(row) {
         return h(NImage, {
@@ -109,75 +118,101 @@ const createColumns = () => {
     {
       title: "商品编号",
       key: "goodsId",
+      align: "center",
       width: 180,
     },
 
     {
       title: "用户编号",
       key: "uid",
+      align: "center",
       width: 100,
     },
     {
       title: "收货人",
       key: "userName",
+      align: "center",
       width: 80,
     },
     {
       title: "收货号码",
       key: "userPhone",
+      align: "center",
       width: 120,
     },
     {
       title: "详细地址",
       key: "userLocation",
+      align: "center",
       width: 180,
     },
     {
       title: "所在地区",
       key: "userRegion",
+      align: "center",
       width: 180,
     },
     {
       title: "提货备注",
       key: "userNote",
+      align: "center",
       width: 180,
     },
     {
       title: "快递单号",
       key: "expressCode",
+      align: "center",
       width: 180,
     },
     {
       title: "快递名称",
       key: "expressName",
+      align: "center",
       width: 100,
     },
     {
       title: "提货时间",
       key: "orderTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.orderTime || "/";
+      },
     },
     {
       title: "发货时间",
       key: "deliveryTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.deliveryTime || "/";
+      },
     },
     {
       title: "完成时间",
       key: "finishTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.finishTime || "/";
+      },
     },
     {
       title: "取消时间",
       key: "cancelTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.cancelTime || "/";
+      },
     },
     {
       title: "订单状态",
       key: "orderState",
+      align: "center",
       width: 100,
       render(order) {
-        return expressOrderStateList[order.orderState].label;
+        return expressOrderStateList.getItem(order.orderState).label;
       },
     },
 
@@ -185,6 +220,7 @@ const createColumns = () => {
       title: "操作",
       key: "operaction",
       width: 100,
+      align: "center",
       fixed: "right",
       render(order) {
         const btnList: VNode[] = [];
@@ -235,11 +271,13 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      align: "center",
       width: 100,
     });
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

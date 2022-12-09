@@ -8,6 +8,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "资产流水",
       icon: "dingdan",
+      keepAlive: true,
     },
   },
   {
@@ -17,6 +18,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "分账管理",
       icon: "fenzhangguanli",
+      keepAlive: true,
     },
   },
   {
@@ -26,6 +28,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "区块链记录",
       icon: "qukuailian",
+      keepAlive: true,
     },
   },
 ];

@@ -1,5 +1,4 @@
 export enum ExpressOrderState {
-  ALL = -1,
   BEFORE_EXPRESS,
   AFTER_EXPRESS,
   RECEICED,
@@ -21,9 +20,5 @@ export const expressOrderStateList = [
   {
     label: "已收货",
     value: ExpressOrderState.CANCEL_EXPRESS,
-  },
-  {
-    label: "全部",
-    value: ExpressOrderState.ALL,
   },
 ];

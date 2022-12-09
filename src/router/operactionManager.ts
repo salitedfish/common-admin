@@ -17,6 +17,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "抽签管理",
       icon: "choujiang",
+      keepAlive: true,
     },
   },
   {
@@ -65,6 +66,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "定时空投任务",
       icon: "kongtou",
+      keepAlive: true,
     },
   },
   {
@@ -74,6 +76,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "新增空投任务",
       icon: "kongtou",
+      keepAlive: true,
     },
   },
   {
@@ -83,6 +86,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "查看空投任务",
       icon: "kongtou",
+      keepAlive: true,
     },
   },
   {
@@ -92,6 +96,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "编辑空投任务",
       icon: "kongtou",
+      keepAlive: true,
     },
   },
   {
@@ -101,6 +106,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "搜索管理",
       icon: "sousuo",
+      keepAlive: true,
     },
   },
   {
@@ -110,6 +116,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "公告管理",
       icon: "gonggao",
+      keepAlive: true,
     },
   },
   {
@@ -128,6 +135,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "Banner管理",
       icon: "shuffling-banner",
+      keepAlive: true,
     },
   },
 ];

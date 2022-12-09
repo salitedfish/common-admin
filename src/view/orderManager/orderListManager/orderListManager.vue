@@ -8,6 +8,12 @@
   </n-card>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "orderListManager",
+});
+</script>
 <script lang="ts" setup>
 // 框架
 import { onBeforeMount, h } from "vue";
@@ -37,12 +43,14 @@ const createColumns = () => {
     {
       title: "订单编号",
       key: "orderId",
+      align: "center",
       width: 180,
     },
     {
       title: "商品名称",
       key: "goodsName",
       width: 100,
+      align: "center",
       fixed: "left",
     },
     // {
@@ -53,6 +61,7 @@ const createColumns = () => {
     {
       title: "商品封面",
       key: "goodsCover",
+      align: "center",
       width: 100,
       render(order) {
         return h(NImage, {
@@ -64,72 +73,89 @@ const createColumns = () => {
     {
       title: "商品编号",
       key: "goodsId",
+      align: "center",
       width: 180,
     },
     {
       title: "商品类型",
       key: "goodsType",
+      align: "center",
       width: 100,
       render(order) {
-        return goodsTypeList[order.goodsType].label;
+        return goodsTypeList.getItem(order.goodsType).label;
       },
     },
     {
       title: "订单类型",
       key: "orderType",
+      align: "center",
       width: 100,
       render(order) {
-        return orderTypeList[order.orderType].label;
+        return orderTypeList.getItem(order.orderType).label;
       },
     },
     {
       title: "购买数量",
       key: "orderNum",
+      align: "center",
       width: 100,
     },
     {
       title: "订单单价",
       key: "orderPrice",
+      align: "center",
       width: 100,
     },
     {
       title: "订单总价",
       key: "orderTotalAmount",
+      align: "center",
       width: 100,
     },
 
     {
       title: "付款渠道",
       key: "payChannel",
+      align: "center",
       width: 100,
       render(order) {
-        return payChannelList[order.payChannel].label;
+        return payChannelList.getItem(order.payChannel).label;
       },
     },
     {
       title: "订单创建时间",
       key: "orderTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.orderTime || "/";
+      },
     },
     {
       title: "订单支付时间",
       key: "payTime",
+      align: "center",
       width: 180,
+      render(order) {
+        return order.payTime || "/";
+      },
     },
     {
       title: "订单状态",
       key: "orderState",
+      align: "center",
       width: 100,
       render(order) {
-        return orderStateList[order.orderState].label;
+        return orderStateList.getItem(order.orderState).label;
       },
     },
     {
       title: "开票状态",
       key: "invoiceState",
+      align: "center",
       width: 100,
       render(order) {
-        return invoiceState[order.invoiceState].label;
+        return invoiceState.getItem(order.invoiceState).label;
       },
     },
 
@@ -141,6 +167,7 @@ const createColumns = () => {
     {
       title: "操作",
       key: "operaction",
+      align: "center",
       width: 140,
       fixed: "right",
       render(order) {
@@ -159,7 +186,7 @@ const createColumns = () => {
                   },
                 },
                 {
-                  default: "线下支付确认",
+                  default: () => "线下支付确认",
                 }
               )
             );
@@ -176,7 +203,7 @@ const createColumns = () => {
                     orderSyncComfirm(order.orderId);
                   },
                 },
-                { default: "差错同步确认" }
+                { default: () => "差错同步确认" }
               )
             );
           }
@@ -191,11 +218,13 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      align: "center",
       width: 100,
     });
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

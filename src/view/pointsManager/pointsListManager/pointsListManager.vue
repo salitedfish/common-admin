@@ -41,6 +41,12 @@
   </n-modal>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "pointsListManager",
+});
+</script>
 <script lang="ts" setup>
 // 框架
 import { computed, ref, onBeforeMount, h, reactive } from "vue";
@@ -125,16 +131,19 @@ const createColumns = () => {
       title: "积分名称",
       key: "pointsName",
       width: 120,
+      align: "center",
       fixed: "left",
     },
     {
       title: "积分编号",
       key: "pointsId",
+      align: "center",
       width: 160,
     },
     {
       title: "积分封面",
       key: "pointsCover",
+      align: "center",
       width: 100,
       render(row) {
         return h(NImage, {
@@ -146,17 +155,20 @@ const createColumns = () => {
     {
       title: "积分总量",
       key: "pointsTotal",
+      align: "center",
       width: 100,
     },
     {
       title: "积分库存",
       key: "pointsStock",
+      align: "center",
       width: 100,
     },
 
     {
       title: "代币标准",
       key: "ercStandard",
+      align: "center",
       width: 120,
     },
     // {
@@ -167,36 +179,44 @@ const createColumns = () => {
     {
       title: "创建时间",
       key: "createTime",
+      align: "center",
       width: 140,
+      render(order) {
+        return order.createTime || "/";
+      },
     },
     {
       title: "审核时间",
       key: "auditorTime",
+      align: "center",
       width: 180,
       render(row) {
-        return row.auditorTime ? row.auditorTime : "/";
+        return row.auditorTime || "/";
       },
     },
     {
       title: "审核备注",
       key: "auditorNote",
+      align: "center",
       width: 120,
       render(row) {
-        return row.auditorNote ? row.auditorNote : "/";
+        return row.auditorNote || "/";
       },
     },
     {
       title: "积分状态",
       key: "pointsState",
+      align: "center",
       width: 120,
       render(row) {
-        return pointsStateList[row.pointsState].label;
+        return pointsStateList.getItem(row.pointsState).label;
       },
     },
 
     {
       title: "操作",
       key: "operaction",
+      align: "center",
       width: 200,
       fixed: "right",
       render(points) {
@@ -357,6 +377,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商铺名称",
       key: "merchantName",
+      align: "center",
       width: 120,
       render: (points) => {
         return points.merchantUid === "0" ? "平台" : points.merchantName;
@@ -366,6 +387,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

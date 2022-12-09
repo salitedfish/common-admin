@@ -8,6 +8,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "用户管理",
       icon: "yonghu1",
+      keepAlive: true,
     },
   },
   {
@@ -35,6 +36,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商户管理",
       icon: "shanghuguanli",
+      keepAlive: true,
     },
   },
 ];

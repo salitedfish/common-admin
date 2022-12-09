@@ -86,13 +86,13 @@ export const updateTimingAirDropState = (params: { id: number; state: number }):
     body: JSON.stringify(params),
   });
 };
-export const addLimitAirDrop = (params: TimingAirDropAddParams): Promise<Return<unknown>> => {
+export const addTimingAirDrop = (params: TimingAirDropAddParams): Promise<Return<unknown>> => {
   return ultraFetch.post({
     URL: "/manager/airdrop/task/submit",
     body: JSON.stringify(params),
   });
 };
-export const editLimitAirDrop = (params: TimingAirDropAddParams): Promise<Return<unknown>> => {
+export const editTimingAirDrop = (params: TimingAirDropAddParams): Promise<Return<unknown>> => {
   return ultraFetch.post({
     URL: "/manager/airdrop/task/update",
     body: JSON.stringify(params),

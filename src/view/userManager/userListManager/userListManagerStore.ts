@@ -1,13 +1,8 @@
 export enum UserState {
-  ALL = -1,
   FROZEN,
   NORMAL,
 }
 export const userStateList = [
-  {
-    label: "全部",
-    value: UserState.ALL,
-  },
   {
     label: "冻结",
     value: UserState.FROZEN,
@@ -19,17 +14,12 @@ export const userStateList = [
 ];
 
 export enum AccountTab {
-  ALL = -1,
   NORMAL,
   TEST,
   UN_MUST_LOGIN,
   ROBOTER,
 }
 export const accountTabList = [
-  {
-    label: "全部",
-    value: AccountTab.ALL,
-  },
   {
     label: "正常账号",
     value: AccountTab.NORMAL,

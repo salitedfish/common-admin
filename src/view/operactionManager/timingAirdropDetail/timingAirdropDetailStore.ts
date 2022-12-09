@@ -32,3 +32,17 @@ export const ruleTypeList = [
     label: "推广指定商品",
   },
 ];
+export enum HoldTimeType {
+  PART,
+  COMPLETE,
+}
+export const holdTimeTypeList = [
+  {
+    value: HoldTimeType.PART,
+    label: "不满足给部分",
+  },
+  {
+    value: HoldTimeType.COMPLETE,
+    label: "必须满足天数才给",
+  },
+];

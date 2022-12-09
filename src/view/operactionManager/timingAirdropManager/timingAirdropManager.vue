@@ -30,7 +30,7 @@ import { getListTimingAirDrop, deleteTimingAirDrop, updateTimingAirDropState } f
 // store
 import { useAuthStore } from "@/store/authStore";
 import { airDropTimeTypeList } from "./timingAirdropManagerStore";
-import { airDropItemTypeList, airDropStateList, airDropTaskStateList, AirDropStateType } from "../manualAirdropManager/manualAirdropManagerStore";
+import { airDropItemTypeList, airDropStateList, AirDropStateType } from "../manualAirdropManager/manualAirdropManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
@@ -48,50 +48,49 @@ const createColumns = () => {
       title: "空投名称",
       key: "name",
       width: 120,
+      align: "center",
       fixed: "left",
     },
     {
       title: "空投编号",
       key: "id",
+      align: "center",
       width: 100,
     },
     {
       title: "空投物品类型",
       key: "itemType",
+      align: "center",
       width: 120,
       render(row) {
-        return airDropItemTypeList[row.itemType].label;
+        return airDropItemTypeList.getItem(row.itemType).label;
       },
     },
     {
       title: "空投状态",
       width: 100,
+      align: "center",
       key: "state",
       render(row) {
-        return airDropStateList[row.state].label;
-      },
-    },
-    {
-      title: "空投进度",
-      width: 100,
-      key: "taskState",
-      render(row) {
-        return airDropTaskStateList[row.state].label;
+        return airDropStateList.getItem(row.state).label;
       },
     },
     {
       title: "商品/积分编号",
       key: "itemId",
+      align: "center",
       width: 160,
     },
     {
       title: "已执行次数",
       key: "runNum",
+      align: "center",
       width: 120,
     },
     {
       title: "总执行次数",
       key: "totalNum",
+      align: "center",
       width: 120,
       render: (row) => {
         return row.totalNum === 0 ? "不限次数" : row.totalNum;
@@ -100,26 +99,51 @@ const createColumns = () => {
     {
       title: "执行时间类型",
       key: "timeType",
+      align: "center",
       width: 120,
       render: (row) => {
-        return airDropTimeTypeList[row.timeType].label;
+        return airDropTimeTypeList.getItem(row.timeType).label;
       },
     },
     {
       title: "结果备注",
       key: "note",
+      align: "center",
       width: 120,
     },
     {
       title: "操作",
       key: "operaction",
+      align: "center",
       width: 200,
       fixed: "right",
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        const isMy = Number(authStore.getUserInfo()?.subMchid) === Number(row.merchantUid);
-
+        const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.getUserInfo()?.uid) === Number(row.merchantUid);
+        // 查看空投
+        list.push(
+          h(
+            NButton,
+            {
+              size,
+              type: "primary",
+              secondary: true,
+              onClick: () => {
+                router.push({
+                  name: "checkTimingAirdrop",
+                  query: {
+                    id: row.id,
+                    isCheck: "true",
+                  },
+                });
+              },
+            },
+            {
+              default: () => "详情",
+            }
+          )
+        );
         if (row.state === AirDropStateType.OFFLINE && isMy) {
           // 删除空投
           list.push(
@@ -175,8 +199,8 @@ const createColumns = () => {
           );
         }
         // 空投上下线
-        const lineActionLabel = airDropStateList[row.state].action.label;
-        const lineActionValue = airDropStateList[row.state].action.value;
+        const lineActionLabel = airDropStateList.getItem(row.state).action.label;
+        const lineActionValue = airDropStateList.getItem(row.state).action.value;
         if (isMy) {
           list.push(
             h(
@@ -203,7 +227,7 @@ const createColumns = () => {
                 },
               },
               {
-                default: () => airDropStateList[row.state].action.label,
+                default: () => airDropStateList.getItem(row.state).action.label,
               }
             )
           );
@@ -219,6 +243,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      align: "center",
       width: 100,
       render: (row) => {
         return row.merchantUid === "0" ? "平台" : row.merchantName;
@@ -227,6 +252,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

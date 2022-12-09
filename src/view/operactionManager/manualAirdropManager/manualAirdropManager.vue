@@ -50,63 +50,73 @@ const createColumns = () => {
       title: "空投名称",
       key: "name",
       width: 120,
+      align: "center",
       fixed: "left",
     },
     {
       title: "空投编号",
       key: "id",
+      align: "center",
       width: 100,
     },
     {
       title: "空投类型",
       key: "itemType",
+      align: "center",
       width: 120,
       render(row) {
-        return airDropTypeList[row.type].label;
+        return airDropTypeList.getItem(row.type).label;
       },
     },
     {
       title: "空投物品类型",
       key: "itemType",
+      align: "center",
       width: 120,
       render(row) {
-        return airDropItemTypeList[row.itemType].label;
+        return airDropItemTypeList.getItem(row.itemType).label;
       },
     },
     {
       title: "空投状态",
       width: 100,
+      align: "center",
       key: "state",
       render(row) {
-        return airDropStateList[row.state].label;
+        return airDropStateList.getItem(row.state).label;
       },
     },
     {
       title: "空投进度",
       width: 100,
+      align: "center",
       key: "taskState",
       render(row) {
-        return airDropTaskStateList[row.state].label;
+        return airDropTaskStateList.getItem(row.state).label;
       },
     },
     {
       title: "商品/积分编号",
       key: "itemId",
+      align: "center",
       width: 160,
     },
     {
       title: "实际空投人数",
       key: "hitUsers",
+      align: "center",
       width: 120,
     },
     {
       title: "总空投人数",
       key: "totalUsers",
+      align: "center",
       width: 100,
     },
     {
       title: "空投开始时间",
       key: "startTime",
+      align: "center",
       width: 180,
       render(row) {
         return row.startTime ? row.startTime : "/";
@@ -115,17 +125,19 @@ const createColumns = () => {
     {
       title: "结果备注",
       key: "note",
+      align: "center",
       width: 120,
     },
     {
       title: "操作",
       key: "operaction",
       width: 200,
+      align: "center",
       fixed: "right",
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        const isMy = Number(authStore.getUserInfo()?.subMchid) === Number(row.merchantUid);
+        const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.getUserInfo()?.uid) === Number(row.merchantUid);
 
         if (row.state === AirDropStateType.OFFLINE && row.type === AirDropTypeType.MANUAL && row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP && isMy) {
           // 删除空投
@@ -214,8 +226,8 @@ const createColumns = () => {
           );
         }
         // 空投上下线
-        const lineActionLabel = airDropStateList[row.state].action.label;
-        const lineActionValue = airDropStateList[row.state].action.value;
+        const lineActionLabel = airDropStateList.getItem(row.state).action.label;
+        const lineActionValue = airDropStateList.getItem(row.state).action.value;
         if (row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP && isMy) {
           list.push(
             h(
@@ -242,7 +254,7 @@ const createColumns = () => {
                 },
               },
               {
-                default: () => airDropStateList[row.state].action.label,
+                default: () => airDropStateList.getItem(row.state).action.label,
               }
             )
           );
@@ -310,6 +322,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      align: "center",
       width: 100,
       render: (row) => {
         return row.merchantUid === "0" ? "平台" : row.merchantName;
@@ -318,6 +331,7 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

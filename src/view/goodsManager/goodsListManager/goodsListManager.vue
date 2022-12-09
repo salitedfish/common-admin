@@ -116,15 +116,18 @@ const createColumns = () => {
       key: "goodsName",
       width: 120,
       fixed: "left",
+      align: "center",
     },
     {
       title: "商品编号",
       key: "goodsId",
+      align: "center",
       width: 160,
     },
     {
       title: "商品封面",
       key: "goodsCover",
+      align: "center",
       width: 100,
       render(row) {
         return h(NImage, {
@@ -137,42 +140,49 @@ const createColumns = () => {
     {
       title: "商品类型",
       key: "goodsType",
+      align: "center",
       width: 100,
       render(row) {
-        return goodsTypeList[row.goodsType].label;
+        return goodsTypeList.getItem(row.goodsType).label;
       },
     },
     {
       title: "销售类型",
       key: "saleType",
+      align: "center",
       width: 100,
       render(row) {
-        return saleTypeList[row.saleType].label;
+        return saleTypeList.getItem(row.saleType).label;
       },
     },
     {
       title: "商品价格",
       key: "goodsPrice",
+      align: "center",
       width: 100,
     },
     {
       title: "商品总量",
       key: "goodsTotal",
+      align: "center",
       width: 100,
     },
     {
       title: "商品库存",
       key: "goodsStock",
+      align: "center",
       width: 100,
     },
     {
       title: "商品收藏",
       key: "goodsCollections",
+      align: "center",
       width: 100,
     },
     {
       title: "上架时间",
       key: "activeTime",
+      align: "center",
       width: 180,
       render(row) {
         return row.activeTime ? row.activeTime : "/";
@@ -181,6 +191,7 @@ const createColumns = () => {
     {
       title: "销售开始时间",
       key: "goodsSaleTime",
+      align: "center",
       width: 180,
       render(row) {
         return row.goodsSaleTime ? row.goodsSaleTime : "/";
@@ -189,6 +200,7 @@ const createColumns = () => {
     {
       title: "审核时间",
       key: "auditorTime",
+      align: "center",
       width: 180,
       render(row) {
         return row.auditorTime ? row.auditorTime : "/";
@@ -197,6 +209,7 @@ const createColumns = () => {
     {
       title: "审核备注",
       key: "auditorNote",
+      align: "center",
       width: 180,
       render(row) {
         return row.auditorNote ? row.auditorNote : "/";
@@ -205,15 +218,17 @@ const createColumns = () => {
     {
       title: "商品状态",
       key: "goodsState",
+      align: "center",
       width: 100,
       render(row) {
-        return goodsStateList[row.goodsState].label;
+        return goodsStateList.getItem(row.goodsState).label;
       },
     },
 
     {
       title: "操作",
       key: "operaction",
+      align: "center",
       width: 320,
       fixed: "right",
       render(goods) {
@@ -768,11 +783,13 @@ const createColumns = () => {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
+      align: "center",
       width: 100,
     });
     list.splice(0, 0, {
       title: "商户编号",
       key: "merchantUid",
+      align: "center",
       width: 100,
     });
   }

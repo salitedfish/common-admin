@@ -41,16 +41,19 @@ const createColumns = () => {
     {
       title: "手机号",
       key: "phone",
+      align: "center",
       width: 120,
     },
     {
       title: "编号",
       key: "uid",
+      align: "center",
       width: 120,
     },
     {
       title: "数量",
       key: "unitNum",
+      align: "center",
       width: 120,
     },
   ];

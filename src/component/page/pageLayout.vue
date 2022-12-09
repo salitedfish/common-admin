@@ -1,12 +1,8 @@
 <template>
   <section class="page-layout-container" ref="pageDom">
-    <layout-scroll-card>
+    <layout-scroll-card :loading="commonStore.pageLoading">
       <slot></slot>
     </layout-scroll-card>
-
-    <div class="totast" v-if="commonStore.pageLoading">
-      <n-spin size="large" />
-    </div>
   </section>
 </template>
 
@@ -29,19 +25,5 @@ onMounted(() => {
 .page-layout-container {
   height: 100%;
   padding: 15px 18px 15px;
-
-  .totast {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: var(--background-color);
-    z-index: 99;
-    opacity: 0.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 }
 </style>
