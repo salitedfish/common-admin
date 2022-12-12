@@ -39,6 +39,7 @@ import {
   NPopconfirm,
   NTooltip,
   NTimePicker,
+  NEllipsis,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -82,5 +83,6 @@ export const naiveUIComponent = create({
     NPopconfirm,
     NTooltip,
     NTimePicker,
+    NEllipsis,
   ],
 });

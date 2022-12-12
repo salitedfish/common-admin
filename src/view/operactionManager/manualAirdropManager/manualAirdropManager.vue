@@ -47,18 +47,19 @@ const router = useRouter();
 const createColumns = () => {
   const list: DataTableColumns<ManualAirDropListItem> = [
     {
+      title: "空投编号",
+      key: "id",
+      align: "center",
+      width: 100,
+    },
+    {
       title: "空投名称",
       key: "name",
       width: 120,
       align: "center",
       fixed: "left",
     },
-    {
-      title: "空投编号",
-      key: "id",
-      align: "center",
-      width: 100,
-    },
+
     {
       title: "空投类型",
       key: "itemType",
@@ -75,6 +76,33 @@ const createColumns = () => {
       width: 120,
       render(row) {
         return airDropItemTypeList.getItem(row.itemType)?.label;
+      },
+    },
+    {
+      title: "商品/积分编号",
+      key: "itemId",
+      align: "center",
+      width: 160,
+    },
+    {
+      title: "总空投人数",
+      key: "totalUsers",
+      align: "center",
+      width: 100,
+    },
+    {
+      title: "实际空投人数",
+      key: "hitUsers",
+      align: "center",
+      width: 120,
+    },
+    {
+      title: "空投时间",
+      key: "startTime",
+      align: "center",
+      width: 180,
+      render(row) {
+        return row.startTime ? row.startTime : "-";
       },
     },
     {
@@ -95,33 +123,7 @@ const createColumns = () => {
         return airDropTaskStateList.getItem(row.state)?.label;
       },
     },
-    {
-      title: "商品/积分编号",
-      key: "itemId",
-      align: "center",
-      width: 160,
-    },
-    {
-      title: "实际空投人数",
-      key: "hitUsers",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "总空投人数",
-      key: "totalUsers",
-      align: "center",
-      width: 100,
-    },
-    {
-      title: "空投开始时间",
-      key: "startTime",
-      align: "center",
-      width: 180,
-      render(row) {
-        return row.startTime ? row.startTime : "/";
-      },
-    },
+
     {
       title: "结果备注",
       key: "note",
@@ -260,7 +262,7 @@ const createColumns = () => {
           );
         }
         // 差错同步-补发
-        if (row.taskState !== AirDropTaskStateType.BEFORE_AIR_DROP && isMy) {
+        if (row.taskState === AirDropTaskStateType.AIR_DROP_ING && isMy) {
           list.push(
             h(
               NButton,

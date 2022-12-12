@@ -37,7 +37,7 @@ export const uploadWCImg = (file: File) => {
   );
 };
 
-// 微信图片上传(上面的接口和这个都行，这个是给组件调用)
+// 微信图片上传(上面的接口和这个都行，这个是给组件调用)(不好用)
 export const uploadWCImgUrl = `${baseURL}/manager/merchant-wechat/apply/upload/image`;
 
 // 图片上传
@@ -55,7 +55,7 @@ export const uploadImg = (file: File): RequestReturn.Upload => {
   );
 };
 
-// 图片上传
+// 图片上传(上面的接口和这个都行，这个是给组件调用)(不好用)
 export const uploadImgUrl = `${baseURL}/manager/file/image`;
 
 // 视频上传

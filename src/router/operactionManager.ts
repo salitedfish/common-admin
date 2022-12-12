@@ -8,6 +8,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品推荐",
       icon: "tuijian",
+      id: 5001,
     },
   },
   {
@@ -18,6 +19,7 @@ export default <RouteRecordRaw[]>[
       label: "抽签管理",
       icon: "choujiang",
       keepAlive: true,
+      id: 5011,
     },
   },
   {
@@ -28,6 +30,7 @@ export default <RouteRecordRaw[]>[
       label: "空投管理",
       icon: "kongtou",
       keepAlive: true,
+      id: 5021,
     },
   },
   {
@@ -67,6 +70,7 @@ export default <RouteRecordRaw[]>[
       label: "定时空投任务",
       icon: "kongtou",
       keepAlive: true,
+      id: 5022,
     },
   },
   {
@@ -107,6 +111,7 @@ export default <RouteRecordRaw[]>[
       label: "搜索管理",
       icon: "sousuo",
       keepAlive: true,
+      id: 5031,
     },
   },
   {
@@ -115,6 +120,37 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/operactionManager/bulletinBoardManager/bulletinBoardManager.vue"),
     meta: {
       label: "公告管理",
+      icon: "gonggao",
+      keepAlive: true,
+      id: 5041,
+    },
+  },
+  {
+    path: "addBulletinBoard",
+    name: "addBulletinBoard",
+    component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
+    meta: {
+      label: "新增公告",
+      icon: "gonggao",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "checkBulletinBoard",
+    name: "checkBulletinBoard",
+    component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
+    meta: {
+      label: "查看公告",
+      icon: "gonggao",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "editBulletinBoard",
+    name: "editBulletinBoard",
+    component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
+    meta: {
+      label: "编辑公告",
       icon: "gonggao",
       keepAlive: true,
     },
@@ -126,6 +162,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "公告类目",
       icon: "tubiaozhizuomoban",
+      id: 5051,
     },
   },
   {
@@ -136,6 +173,7 @@ export default <RouteRecordRaw[]>[
       label: "Banner管理",
       icon: "shuffling-banner",
       keepAlive: true,
+      id: 5061,
     },
   },
 ];

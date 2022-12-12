@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "用户管理",
       icon: "yonghu1",
       keepAlive: true,
+      id: 4001,
     },
   },
   {
@@ -18,6 +19,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "用户资产",
       icon: "zichan",
+      id: 4011,
     },
   },
   {
@@ -27,16 +29,18 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "用户积分",
       icon: "jifen",
+      id: 4021,
     },
   },
   {
-    path: "merchantManager",
-    name: "merchantManager",
-    component: () => import("@/view/userManager/merchantManager/merchantManager.vue"),
+    path: "adminMerchantManager",
+    name: "adminMerchantManager",
+    component: () => import("@/view/userManager/adminMerchantManager/adminMerchantManager.vue"),
     meta: {
-      label: "商户管理",
+      label: "后台用户管理",
       icon: "shanghuguanli",
       keepAlive: true,
+      id: 4031,
     },
   },
 ];

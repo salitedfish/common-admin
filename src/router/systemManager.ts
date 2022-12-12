@@ -8,6 +8,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "系统配置",
       icon: "peizhi",
+      id: 7001,
     },
   },
   {
@@ -17,6 +18,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "操作日志",
       icon: "rizhi",
+      id: 7021,
     },
   },
   {
@@ -26,6 +28,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "系统版本",
       icon: "jurassic_version",
+      id: 7011,
     },
   },
 ];

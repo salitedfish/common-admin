@@ -25,6 +25,8 @@ export type ReturnList<T> = {
   totalSize: number;
 };
 
+export type RemoteRoute = { menu?: { name: string; route: string; id: number }[]; name: string; route: string; id: number };
+
 export type Step = {
   title: string;
   description: string;
@@ -79,4 +81,5 @@ export type WhiteListItem = {
   phone: string;
   uid: string;
   unitNum: number;
+  state?: number;
 };

@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "订单管理",
       icon: "dingdan",
       keepAlive: true,
+      id: 3001,
     },
   },
   {
@@ -19,6 +20,7 @@ export default <RouteRecordRaw[]>[
       label: "订单开票",
       icon: "fapiao",
       keepAlive: true,
+      id: 3011,
     },
   },
   {
@@ -29,6 +31,7 @@ export default <RouteRecordRaw[]>[
       label: "提货管理",
       icon: "tihuoshenqing",
       keepAlive: true,
+      id: 3021,
     },
   },
 ];

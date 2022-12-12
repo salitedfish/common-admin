@@ -28,7 +28,7 @@ export const ultraFetch = new UltraFetch(
       }
       return config;
     },
-    resHandler: (response, shallowResponse) => {
+    resHandler: (response) => {
       if (!response) {
         commonNotify("error", "网络异常！");
         return;
@@ -47,15 +47,13 @@ export const ultraFetch = new UltraFetch(
         router.push({ name: "login" });
         commonNotify("warning", response.message || "网络异常！");
       } else if (response instanceof Blob) {
-        console.log(1111, response, shallowResponse);
         return response;
       } else {
         commonNotify("warning", response.message || "网络异常！");
       }
     },
     errHandler: (err) => {
-      console.log(1111, err);
-      commonNotify("error", "网络异常！");
+      commonNotify("error", "未知异常，可尝试刷新页面！");
     },
   }
 );

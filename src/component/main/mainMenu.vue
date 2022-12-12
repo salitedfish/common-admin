@@ -11,6 +11,10 @@
       @expand="collapsed = false"
       :native-scrollbar="false"
     >
+      <n-button block type="primary" style="width: 90%; margin: 10px auto" @click="changeCollapsed">
+        <span v-show="!collapsed" style="font-size: 16px">菜单</span>
+        <customIcon name="caidan" :size="12"></customIcon>
+      </n-button>
       <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"> </n-menu>
     </n-layout-sider>
   </n-layout>
@@ -26,11 +30,15 @@ import customIcon from "@/component/common/customIcon.vue";
 import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
 import { useRouteStore } from "@/store/routeStore";
+import type { RemoteRoute } from "@/type/Common";
 
 const routeStore = useRouteStore();
 
 // 展开状态
 const collapsed = ref(false);
+const changeCollapsed = () => {
+  collapsed.value = !collapsed.value;
+};
 
 // 渲染menu图标
 const renderIcon = (name: string) => {
@@ -44,15 +52,20 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
   for (const item of routes) {
     const menuItem: MenuOption = {
       label: item.meta?.label,
+      // 值用于路由跳转时使用
       key: item.name as string,
       icon: renderIcon(item.meta?.icon as string),
       // 默认都创建菜单，但是默认先不显示，后面根据接口返回的路由判断是否显示
       show: !!item.meta?.show,
+      // 用来和后端传递的路由id进行匹配
+      routeId: item.meta ? (item.meta.id as number) : 0,
     };
+    // 如果有子路由则递归生成菜单
     if (item.children) {
       menuItem.children = mapMenuHandler(item.children);
     }
     rootRoutes.push(menuItem);
+    // 下面这个是菜单下面的横线
     if (item.meta?.divider) {
       rootRoutes.push({
         key: item.meta?.divider as string,
@@ -72,10 +85,10 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
 const menuOptions = reactive<MenuOption[]>([...mapMenuHandler(routes)]);
 
 // 根据远程的的路由来判断显示或不显示
-const authRouteHandler = (originRoute: MenuOption[], remoteRoute: { menu?: { name: string; route: string }[]; name: string; route: string }[]) => {
+const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[]) => {
   for (const item of originRoute) {
     for (const i of remoteRoute) {
-      if (item.label === i.name) {
+      if (item.routeId === i.id) {
         item.show = true;
         if (item.children && i.menu) {
           authRouteHandler(item.children, i.menu);
@@ -97,6 +110,7 @@ onBeforeMount(async () => {
 // 路由跳转
 const router = useRouter();
 const handleMenuClick = (key: string) => {
+  console.log(111, key);
   router.push({ name: key });
 };
 </script>

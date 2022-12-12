@@ -3,39 +3,39 @@
   <div class="apply-result-account" v-if="[ApplyState.NEED_APPOINT_ACCOUNT].includes(applyResult.state)">
     <div class="account-item">
       <div class="label">付款户名:</div>
-      <div class="content">{{ applyResult.result.account_name || "/" }}</div>
+      <div class="content">{{ applyResult.result.account_name || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">付款卡号:</div>
-      <div class="content">{{ applyResult.result.account_no || "/" }}</div>
+      <div class="content">{{ applyResult.result.account_no || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">汇款金额:</div>
-      <div class="content">{{ applyResult.result.pay_amount || "/" }}</div>
+      <div class="content">{{ applyResult.result.pay_amount || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">收款户名:</div>
-      <div class="content">{{ applyResult.result.destination_account_name || "/" }}</div>
+      <div class="content">{{ applyResult.result.destination_account_name || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">付款卡号:</div>
-      <div class="content">{{ applyResult.result.destination_account_number || "/" }}</div>
+      <div class="content">{{ applyResult.result.destination_account_number || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">开户银行:</div>
-      <div class="content">{{ applyResult.result.destination_account_bank || "/" }}</div>
+      <div class="content">{{ applyResult.result.destination_account_bank || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">省市信息:</div>
-      <div class="content">{{ applyResult.result.city || "/" }}</div>
+      <div class="content">{{ applyResult.result.city || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">备注信息:</div>
-      <div class="content">{{ applyResult.result.remark || "/" }}</div>
+      <div class="content">{{ applyResult.result.remark || "-" }}</div>
     </div>
     <div class="account-item">
       <div class="label">汇款截止时间:</div>
-      <div class="content">{{ applyResult.result.deadline || "/" }}</div>
+      <div class="content">{{ applyResult.result.deadline || "-" }}</div>
     </div>
   </div>
   <div class="apply-result-img" v-if="[ApplyState.NEED_VERTIFY_LINK, ApplyState.NEED_WC_CAPTCHA].includes(applyResult.state)">

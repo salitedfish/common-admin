@@ -1,20 +1,60 @@
-import { reactive, ref, computed, onBeforeMount } from "vue";
+import { reactive, ref, computed, onBeforeMount, h } from "vue";
 import type { Ref } from "vue";
-import { createDiscreteApi } from "naive-ui";
+import { createDiscreteApi, NButton } from "naive-ui";
 import { useCommonStore } from "@/store/commonStore";
 import type { Return, ReturnList, Paging } from "@/type/Common";
 import type { NotificationType, CascaderOption, DataTableColumns } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
-export const { notification } = createDiscreteApi(["notification"]);
+export const { notification, message: nmessage } = createDiscreteApi(["notification", "message"]);
 
 // 返回函数式调用的消息框
-export const commonNotify = (type: NotificationType, message: string) => {
-  notification[type]({
-    content: message,
-    duration: 2000,
-    keepAliveOnHover: true,
-  });
+export const commonNotify = (type: NotificationType, message: string, needComfirm = false) => {
+  if (needComfirm) {
+    let _needComfirm = true;
+    const n = notification[type]({
+      content: message,
+      keepAliveOnHover: true,
+      action: () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+            onClick: () => changeNeedComfirm(),
+          },
+          {
+            default: () => "我已知晓",
+          }
+        ),
+      onClose: () => {
+        if (_needComfirm) {
+          nmessage.warning("请点击'我已知晓'按钮后再点击关闭");
+          return false;
+        }
+      },
+    });
+    const changeNeedComfirm = () => {
+      _needComfirm = false;
+      n.action = () =>
+        h(
+          NButton,
+          {
+            text: true,
+            type: "primary",
+          },
+          {
+            default: () => "OK",
+          }
+        );
+    };
+  } else {
+    notification[type]({
+      content: message,
+      duration: 2000,
+      keepAliveOnHover: true,
+    });
+  }
 };
 
 // 返回省市列表

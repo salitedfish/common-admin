@@ -1,7 +1,7 @@
 <template>
   <section class="category-container">
     <layout-scroll-card v-for="(activeCategory, index) in activeCategoryList" :key="index" class="category-list">
-      <n-button secondary type="primary" @click="handleUpdate(index)" block style="margin-bottom: 10px">添加类目</n-button>
+      <n-button secondary type="primary" @click="handleUpdate(index)" block style="margin-bottom: 10px">添加{{ index + 1 }}级类目</n-button>
 
       <div
         v-for="(item, i) in activeCategory"
@@ -125,7 +125,7 @@ const initActiveCategoryList = (categoryList: CategoryTreeItem[]) => {
     const activeIndex = activeCategoryIndexList[categoryList[0].level - 1]; // 第几列的第几行
     const activeCategoryChild = categoryList[activeIndex]?.child || []; // 第几行的child
     initActiveCategoryList(activeCategoryChild);
-  } else if (activeCategoryList.length <= 3) {
+  } else if (activeCategoryList.length < activeCategoryIndexList.length) {
     activeCategoryList.push(categoryList);
   }
 };

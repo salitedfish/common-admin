@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "manualAirdropManager",
+  name: "timingAirdropManager",
 });
 </script>
 <script lang="ts" setup>
@@ -45,18 +45,19 @@ const router = useRouter();
 const createColumns = () => {
   const list: DataTableColumns<TimingAirDropListItem> = [
     {
-      title: "空投名称",
+      title: "任务编号",
+      key: "id",
+      align: "center",
+      width: 100,
+    },
+    {
+      title: "任务名称",
       key: "name",
       width: 120,
       align: "center",
       fixed: "left",
     },
-    {
-      title: "空投编号",
-      key: "id",
-      align: "center",
-      width: 100,
-    },
+
     {
       title: "空投物品类型",
       key: "itemType",
@@ -67,34 +68,10 @@ const createColumns = () => {
       },
     },
     {
-      title: "空投状态",
-      width: 100,
-      align: "center",
-      key: "state",
-      render(row) {
-        return airDropStateList.getItem(row.state)?.label;
-      },
-    },
-    {
       title: "商品/积分编号",
       key: "itemId",
       align: "center",
       width: 160,
-    },
-    {
-      title: "已执行次数",
-      key: "runNum",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "总执行次数",
-      key: "totalNum",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return row.totalNum === 0 ? "不限次数" : row.totalNum;
-      },
     },
     {
       title: "执行时间类型",
@@ -106,10 +83,28 @@ const createColumns = () => {
       },
     },
     {
-      title: "结果备注",
-      key: "note",
+      title: "总执行次数",
+      key: "totalNum",
       align: "center",
       width: 120,
+      render: (row) => {
+        return row.totalNum === 0 ? "不限次数" : row.totalNum;
+      },
+    },
+    {
+      title: "已执行次数",
+      key: "runNum",
+      align: "center",
+      width: 120,
+    },
+    {
+      title: "任务状态",
+      width: 100,
+      align: "center",
+      key: "state",
+      render(row) {
+        return airDropStateList.getItem(row.state)?.label;
+      },
     },
     {
       title: "操作",

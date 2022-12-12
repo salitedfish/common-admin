@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "资产流水",
       icon: "dingdan",
       keepAlive: true,
+      id: 6001,
     },
   },
   {
@@ -19,16 +20,29 @@ export default <RouteRecordRaw[]>[
       label: "分账管理",
       icon: "fenzhangguanli",
       keepAlive: true,
+      id: 6011,
     },
   },
   {
-    path: "blockChainRecordManager",
-    name: "blockChainRecordManager",
-    component: () => import("@/view/financeManager/blockChainRecordManager/blockChainRecordManager.vue"),
+    path: "goodsBlockChainRecordManager",
+    name: "goodsBlockChainRecordManager",
+    component: () => import("@/view/financeManager/goodsBlockChainRecordManager/goodsBlockChainRecordManager.vue"),
     meta: {
-      label: "区块链记录",
+      label: "商品区块链记录",
       icon: "qukuailian",
       keepAlive: true,
+      id: 6021,
+    },
+  },
+  {
+    path: "pointsBlockChainRecordManager",
+    name: "pointsBlockChainRecordManager",
+    component: () => import("@/view/financeManager/pointsBlockChainRecordManager/pointsBlockChainRecordManager.vue"),
+    meta: {
+      label: "积分区块链记录",
+      icon: "qukuailian",
+      keepAlive: true,
+      id: 6022,
     },
   },
 ];

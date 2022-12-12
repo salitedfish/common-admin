@@ -122,3 +122,54 @@ export type TimingAirDropAddParams = {
     categoryList: CategoryTreeItem[];
   }[];
 };
+
+export type GoodsRecommendListParams = {
+  goodsId?: string;
+  goodsName?: string;
+  merchantUid?: string;
+};
+export type GoodsRecommendListItem = {
+  goodsCover: string;
+  goodsId: string;
+  goodsName: string;
+  goodsSales: number;
+  goodsStock: number;
+  goodsTotal: number;
+  id: number;
+  merchantName: string;
+  merchantUid: number;
+  topState: number;
+};
+
+export type BulletinBoardListParams = {
+  classify?: number;
+  merchantUid?: string;
+  state?: number;
+  title?: string;
+  topState?: number;
+  type?: number;
+};
+export type BulletinBoardListItem = {
+  activeTime: string;
+  classifies: [];
+  content: string;
+  cover: string;
+  createTime: string;
+  id: number;
+  merchantName: string;
+  merchantUid: number;
+  state: number;
+  summary: string;
+  title: string;
+  topState: number;
+  type: number;
+};
+export type AddBulletinBoard = {
+  classifies: number[];
+  content: string;
+  cover: string;
+  id?: string;
+  summary: string;
+  title: string;
+  type: number | null;
+};

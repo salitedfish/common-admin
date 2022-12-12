@@ -47,6 +47,12 @@ const createColumns = () => {
       width: 180,
     },
     {
+      title: "商品编号",
+      key: "goodsId",
+      align: "center",
+      width: 180,
+    },
+    {
       title: "商品名称",
       key: "goodsName",
       width: 100,
@@ -70,12 +76,7 @@ const createColumns = () => {
         });
       },
     },
-    {
-      title: "商品编号",
-      key: "goodsId",
-      align: "center",
-      width: 180,
-    },
+
     {
       title: "商品类型",
       key: "goodsType",
@@ -128,7 +129,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(order) {
-        return order.orderTime || "/";
+        return order.orderTime || "-";
       },
     },
     {
@@ -137,7 +138,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(order) {
-        return order.payTime || "/";
+        return order.payTime || "-";
       },
     },
     {
@@ -149,15 +150,15 @@ const createColumns = () => {
         return orderStateList.getItem(order.orderState)?.label;
       },
     },
-    {
-      title: "开票状态",
-      key: "invoiceState",
-      align: "center",
-      width: 100,
-      render(order) {
-        return invoiceState.getItem(order.invoiceState)?.label;
-      },
-    },
+    // {
+    //   title: "开票状态",
+    //   key: "invoiceState",
+    //   align: "center",
+    //   width: 100,
+    //   render(order) {
+    //     return invoiceState.getItem(order.invoiceState)?.label;
+    //   },
+    // },
 
     // {
     //   title: "邀请人UID",

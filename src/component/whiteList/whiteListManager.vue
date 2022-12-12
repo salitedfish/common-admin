@@ -9,7 +9,7 @@
       :whiteListType="whiteListType"
     ></screen-section>
   </n-card>
-  <white-list :list="list" :searching="searching"></white-list>
+  <white-list :list="list" :searching="searching" :whiteListType="whiteListType"></white-list>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>

@@ -47,14 +47,28 @@ export enum AirDropTaskStateType {
 export const airDropTaskStateList = [
   {
     label: "未空投",
-    value: 0,
+    value: AirDropTaskStateType.BEFORE_AIR_DROP,
   },
   {
     label: "已空投",
-    value: 1,
+    value: AirDropTaskStateType.AFTER_AIE_DROP,
   },
   {
     label: "部分成功",
-    value: 2,
+    value: AirDropTaskStateType.AIR_DROP_ING,
+  },
+];
+export enum AirDropNameStateType {
+  BEFORE_HANDLE,
+  AFTER_HANDLE,
+}
+export const airDropNameStateList = [
+  {
+    label: "未处理",
+    value: AirDropNameStateType.BEFORE_HANDLE,
+  },
+  {
+    label: "已处理",
+    value: AirDropNameStateType.AFTER_HANDLE,
   },
 ];

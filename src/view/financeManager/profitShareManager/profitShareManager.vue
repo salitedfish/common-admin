@@ -41,7 +41,7 @@ export default defineComponent({
 // 框架
 import { h, ref, reactive } from "vue";
 // 组件库
-import { NSpace, NButton } from "naive-ui";
+import { NSpace, NButton, NEllipsis } from "naive-ui";
 // 自定义组件
 import screenSection from "./screenSection.vue";
 // 工具库
@@ -65,61 +65,15 @@ const isAdmin = useAuthStore().isAdmin();
 const createColumns = () => {
   const list: DataTableColumns<ProfitShareListItem> = [
     {
-      title: "编号",
+      title: "分账编号",
       key: "inOrderId",
       width: 180,
       align: "center",
     },
     {
-      title: "分账编号",
-      key: "id",
-      width: 120,
-      align: "center",
-    },
-    {
-      title: "商户分账金额",
-      key: "merchantAmount",
-      width: 120,
-      align: "center",
-    },
-    {
-      title: "商户分账比例(%)",
-      key: "merchantRate",
-      width: 140,
-      align: "center",
-    },
-    {
-      title: "平台分账金额",
-      key: "platformAmount",
-      width: 120,
-      align: "center",
-    },
-    {
-      title: "平台分账比例(%)",
-      key: "platformRate",
-      width: 140,
-      align: "center",
-    },
-    {
-      title: "分账状态",
-      key: "state",
-      width: 120,
-      align: "center",
-
-      render: (row) => {
-        return shareStateList.getItem(row.state)?.label;
-      },
-    },
-    {
       title: "订单编号",
       key: "orderId",
       width: 180,
-      align: "center",
-    },
-    {
-      title: "订单总价",
-      key: "orderTotalAmount",
-      width: 120,
       align: "center",
     },
     {
@@ -133,9 +87,34 @@ const createColumns = () => {
       },
     },
     {
-      title: "第三方分账编号",
-      key: "outOrderId",
-      width: 180,
+      title: "订单总价",
+      key: "orderTotalAmount",
+      width: 120,
+      align: "center",
+    },
+
+    // {
+    //   title: "商户分账金额",
+    //   key: "merchantAmount",
+    //   width: 120,
+    //   align: "center",
+    // },
+    // {
+    //   title: "商户分账比例(%)",
+    //   key: "merchantRate",
+    //   width: 140,
+    //   align: "center",
+    // },
+    {
+      title: "平台分账比例(%)",
+      key: "platformRate",
+      width: 140,
+      align: "center",
+    },
+    {
+      title: "平台分账金额",
+      key: "platformAmount",
+      width: 120,
       align: "center",
     },
     {
@@ -149,13 +128,38 @@ const createColumns = () => {
       },
     },
     {
+      title: "第三方分账编号",
+      key: "outOrderId",
+      width: 180,
+      align: "center",
+      render(row) {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => row.outOrderId,
+          }
+        );
+      },
+    },
+    {
       title: "分账时间",
       key: "createTime",
       width: 180,
       align: "center",
 
       render: (row) => {
-        return row.createTime || "/";
+        return row.createTime || "-";
+      },
+    },
+    {
+      title: "分账状态",
+      key: "state",
+      width: 120,
+      align: "center",
+
+      render: (row) => {
+        return shareStateList.getItem(row.state)?.label;
       },
     },
     {

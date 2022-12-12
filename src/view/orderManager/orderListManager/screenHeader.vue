@@ -6,7 +6,7 @@
     <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()"></n-input>
     <n-input v-model:value="params.orderId" autosize placeholder="请输入订单编号" style="width: 200px" :disabled="searching"></n-input>
     <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching"></n-input>
-    <n-select v-model:value="params.invoiceState" :options="invoiceState" placeholder="请选择开票状态" style="width: 200px" :disabled="searching" clearable />
+    <!-- <n-select v-model:value="params.invoiceState" :options="invoiceState" placeholder="请选择开票状态" style="width: 200px" :disabled="searching" clearable /> -->
     <n-select v-model:value="params.orderState" :options="orderStateList" placeholder="请选择订单状态" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.orderType" :options="orderTypeList" placeholder="请选择订单类型" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.payChannel" :options="payChannelList" placeholder="请选择付款渠道" style="width: 200px" :disabled="searching" clearable />

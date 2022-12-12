@@ -128,18 +128,19 @@ const submitSearch = (params: GetPointsListParams) => {
 const createColumns = () => {
   const list: DataTableColumns<PointsItem> = [
     {
+      title: "积分编号",
+      key: "pointsId",
+      align: "center",
+      width: 160,
+    },
+    {
       title: "积分名称",
       key: "pointsName",
       width: 120,
       align: "center",
       fixed: "left",
     },
-    {
-      title: "积分编号",
-      key: "pointsId",
-      align: "center",
-      width: 160,
-    },
+
     {
       title: "积分封面",
       key: "pointsCover",
@@ -165,12 +166,12 @@ const createColumns = () => {
       width: 100,
     },
 
-    {
-      title: "代币标准",
-      key: "ercStandard",
-      align: "center",
-      width: 120,
-    },
+    // {
+    //   title: "代币标准",
+    //   key: "ercStandard",
+    //   align: "center",
+    //   width: 120,
+    // },
     // {
     //   title: "区块链哈希",
     //   key: "chainHash",
@@ -180,9 +181,9 @@ const createColumns = () => {
       title: "创建时间",
       key: "createTime",
       align: "center",
-      width: 140,
+      width: 180,
       render(order) {
-        return order.createTime || "/";
+        return order.createTime || "-";
       },
     },
     {
@@ -191,7 +192,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(row) {
-        return row.auditorTime || "/";
+        return row.auditorTime || "-";
       },
     },
     {
@@ -200,7 +201,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return row.auditorNote || "/";
+        return row.auditorNote || "-";
       },
     },
     {

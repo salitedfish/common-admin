@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "积分管理",
       icon: "jifen",
       keepAlive: true,
+      id: 2001,
     },
   },
   {

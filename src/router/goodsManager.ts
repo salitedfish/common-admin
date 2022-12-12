@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "商品管理",
       icon: "dingdan",
       keepAlive: true,
+      id: 1001,
     },
   },
   {
@@ -57,6 +58,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品类目",
       icon: "tubiaozhizuomoban",
+      id: 1011,
     },
   },
 ];

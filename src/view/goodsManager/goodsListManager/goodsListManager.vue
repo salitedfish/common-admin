@@ -112,18 +112,19 @@ const dialog = useDialog();
 const createColumns = () => {
   const list: DataTableColumns<GoodsListItem> = [
     {
+      title: "商品编号",
+      key: "goodsId",
+      align: "center",
+      width: 160,
+    },
+    {
       title: "商品名称",
       key: "goodsName",
       width: 120,
       fixed: "left",
       align: "center",
     },
-    {
-      title: "商品编号",
-      key: "goodsId",
-      align: "center",
-      width: 160,
-    },
+
     {
       title: "商品封面",
       key: "goodsCover",
@@ -185,7 +186,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(row) {
-        return row.activeTime ? row.activeTime : "/";
+        return row.activeTime ? row.activeTime : "-";
       },
     },
     {
@@ -194,7 +195,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(row) {
-        return row.goodsSaleTime ? row.goodsSaleTime : "/";
+        return row.goodsSaleTime ? row.goodsSaleTime : "-";
       },
     },
     {
@@ -203,7 +204,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(row) {
-        return row.auditorTime ? row.auditorTime : "/";
+        return row.auditorTime ? row.auditorTime : "-";
       },
     },
     {
@@ -212,7 +213,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(row) {
-        return row.auditorNote ? row.auditorNote : "/";
+        return row.auditorNote ? row.auditorNote : "-";
       },
     },
     {
@@ -795,7 +796,7 @@ const createColumns = () => {
   }
   return list;
 };
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, 1);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns);
 
 // 更改商品状态modal框的状态和数据
 const showAuditModal = ref(false);

@@ -2,6 +2,7 @@
   <n-space>
     <n-input v-model:value="params.phone" autosize placeholder="请输入手机号" style="width: 200px" :disabled="searching"></n-input>
     <n-input v-model:value="params.uid" autosize placeholder="请输入编号" style="width: 200px" :disabled="searching"></n-input>
+    <n-select v-model:value="params.state" :options="airDropNameStateList" :clearable="true" v-if="whiteListType === WhiteListTypeEnum.AIR_DROP" style="width: 200px"></n-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索/刷新</n-button>
     <n-button @click="handleDownloadWhiteList" type="primary" :disabled="downloading" :loading="downloading">导出名单</n-button>
   </n-space>
@@ -18,6 +19,8 @@ import { commonNotify } from "@/util/common";
 // 网络请求
 
 // store
+import { WhiteListType as WhiteListTypeEnum } from "@/type/Common";
+import { airDropNameStateList } from "@/view/operactionManager/manualAirdropManager/manualAirdropManagerStore";
 // 类型
 import type { WhiteListSearchParams } from "@/type/Common";
 

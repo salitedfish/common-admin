@@ -123,7 +123,7 @@ const loginHandler = async () => {
     routeStore.resetHistoryRoutes();
     commonNotify("success", "登录成功！");
     router.push({
-      name: "homeManager",
+      name: "goodsListManager",
     });
   }
 };

@@ -12,13 +12,16 @@ import { computed } from "vue";
 // 网络请求
 // store
 import { useCommonStore } from "@/store/commonStore";
+import { WhiteListType } from "@/type/Common";
+import { airDropNameStateList } from "@/view/operactionManager/manualAirdropManager/manualAirdropManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
 import type { WhiteListItem } from "@/type/Common";
 
-defineProps<{
+const props = defineProps<{
   list: WhiteListItem[];
   searching: boolean;
+  whiteListType: number;
 }>();
 
 const commonStore = useCommonStore();
@@ -57,6 +60,17 @@ const createColumns = () => {
       width: 120,
     },
   ];
+  if (props.whiteListType === WhiteListType.AIR_DROP) {
+    list.push({
+      title: "状态",
+      key: "state",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return airDropNameStateList.getItem(row.state)?.label;
+      },
+    });
+  }
   return list;
 };
 </script>

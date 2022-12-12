@@ -57,7 +57,7 @@ export default defineComponent({
 // 框架
 import { ref, onBeforeMount, h, reactive } from "vue";
 // 组件库
-import { NImage, NButton, NSpace } from "naive-ui";
+import { NImage, NButton, NSpace, NEllipsis } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
@@ -90,6 +90,12 @@ const createColumns = () => {
       width: 180,
     },
     {
+      title: "商品编号",
+      key: "goodsId",
+      align: "center",
+      width: 180,
+    },
+    {
       title: "商品名称",
       key: "goodsName",
       width: 180,
@@ -113,13 +119,6 @@ const createColumns = () => {
           src: row.goodsCover,
         });
       },
-    },
-
-    {
-      title: "商品编号",
-      key: "goodsId",
-      align: "center",
-      width: 180,
     },
 
     {
@@ -151,6 +150,15 @@ const createColumns = () => {
       key: "userRegion",
       align: "center",
       width: 180,
+      render(order) {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => order.userRegion,
+          }
+        );
+      },
     },
     {
       title: "提货备注",
@@ -176,7 +184,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(order) {
-        return order.orderTime || "/";
+        return order.orderTime || "-";
       },
     },
     {
@@ -185,7 +193,7 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(order) {
-        return order.deliveryTime || "/";
+        return order.deliveryTime || "-";
       },
     },
     {
@@ -194,18 +202,18 @@ const createColumns = () => {
       align: "center",
       width: 180,
       render(order) {
-        return order.finishTime || "/";
+        return order.finishTime || "-";
       },
     },
-    {
-      title: "取消时间",
-      key: "cancelTime",
-      align: "center",
-      width: 180,
-      render(order) {
-        return order.cancelTime || "/";
-      },
-    },
+    // {
+    //   title: "取消时间",
+    //   key: "cancelTime",
+    //   align: "center",
+    //   width: 180,
+    //   render(order) {
+    //     return order.cancelTime || "-";
+    //   },
+    // },
     {
       title: "订单状态",
       key: "orderState",

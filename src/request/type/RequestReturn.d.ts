@@ -1,5 +1,5 @@
 // 定义接口返回类型
-import type { Return, ReturnList, CategoryTreeItem, WhiteListItem } from "@/type/Common";
+import type { Return, ReturnList, CategoryTreeItem, WhiteListItem, RemoteRoute } from "@/type/Common";
 import type { GoodsListItem, GoodsDetail } from "@/type/GoodsManager";
 import type { UserListItem } from "@/type/User";
 import type { OrderListItem, ExpressOrderListItem, LogisticsInfo, ExpressCompany } from "@/type/Order";
@@ -18,7 +18,7 @@ export type Register = Promise<
     authentication: string;
   }>
 >;
-export type GetAuthRoutes = Promise<Return<{ menu: { name: string; route: string }[]; name: string; route: string }[]>>;
+export type GetAuthRoutes = Promise<Return<RemoteRoute[]>>;
 export type GetProvinces = Promise<
   Return<
     {

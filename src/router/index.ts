@@ -11,17 +11,18 @@ import systemManager from "./systemManager";
 
 // 具体的页面路由
 export const routes = [
-  {
-    path: "homeManager",
-    name: "homeManager",
-    component: () => import("@/view/homeManager/homeManager.vue"),
-    meta: {
-      label: "主页",
-      icon: "zhuye",
-      divider: "divider_1",
-      show: true,
-    },
-  },
+  // {
+  //   path: "homeManager",
+  //   name: "homeManager",
+  //   component: () => import("@/view/homeManager/homeManager.vue"),
+  //   meta: {
+  //     label: "主页",
+  //     icon: "zhuye",
+  //     divider: "divider_1",
+  //     show: true,
+  //     id: 0,
+  //   },
+  // },
   {
     path: "goodsManager",
     name: "goodsManager",
@@ -30,6 +31,7 @@ export const routes = [
     meta: {
       label: "商品中心",
       icon: "shangpin",
+      id: 1000,
     },
   },
   {
@@ -40,6 +42,7 @@ export const routes = [
     meta: {
       label: "积分中心",
       icon: "jifen",
+      id: 2000,
     },
   },
   {
@@ -50,6 +53,7 @@ export const routes = [
     meta: {
       label: "用户中心",
       icon: "yonghu1",
+      id: 4000,
     },
   },
   {
@@ -60,6 +64,7 @@ export const routes = [
     meta: {
       label: "订单中心",
       icon: "dingdan",
+      id: 3000,
     },
   },
   {
@@ -70,6 +75,7 @@ export const routes = [
     meta: {
       label: "财务中心",
       icon: "zichan",
+      id: 6000,
     },
   },
   {
@@ -80,6 +86,7 @@ export const routes = [
     meta: {
       label: "运营中心",
       icon: "yunyingguanli",
+      id: 5000,
     },
   },
   {
@@ -90,6 +97,7 @@ export const routes = [
     meta: {
       label: "平台中心",
       icon: "xitong",
+      id: 7000,
     },
   },
 ];

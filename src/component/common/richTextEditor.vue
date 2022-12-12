@@ -1,5 +1,7 @@
 <template>
-  <editor :init="tinymceInit" v-model="editValue" :disabled="disabled"></editor>
+  <div class="richEditorBox">
+    <editor :init="tinymceInit" v-model="editValue" :disabled="disabled"></editor>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -17,10 +19,16 @@ import { uploadImg } from "@/request/common";
 // store
 // 类型
 
-const props = defineProps<{
-  modelValue: string;
-  disabled: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    modelValue: string;
+    disabled: boolean;
+    placeHolder?: string;
+  }>(),
+  {
+    placeHolder: "编辑商品详情",
+  }
+);
 const emit = defineEmits<{
   (event: "update:modelValue", value: string): void;
 }>();
@@ -43,7 +51,7 @@ const tinymceInit = {
   skin_url: "/tinymce/skins/ui/oxide",
   content_css: "/tinymce/skins/content/default/content.css ",
   plugins: " wordcount quickbars paste insertdatetime image hr charmap table lists advlist",
-  placeholder: "编辑商品详情",
+  placeholder: props.placeHolder,
   width: 375,
   height: 750,
   language: "zh_CN",
@@ -67,4 +75,8 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.richEditorBox {
+  background-color: rgb(255, 255, 255);
+}
+</style>

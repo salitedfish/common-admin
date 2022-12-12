@@ -33,7 +33,7 @@
 // 框架
 import { ref, onBeforeMount, h, reactive } from "vue";
 // 组件库
-import { NImage, NButton, NSpace, useDialog } from "naive-ui";
+import { NImage, NButton, NSpace, useDialog, NEllipsis } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
@@ -89,6 +89,15 @@ const createColumns = () => {
       key: "chainAddress",
       align: "center",
       width: 140,
+      render(user) {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => user.chainAddress,
+          }
+        );
+      },
     },
     {
       title: "状态",
@@ -126,25 +135,25 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(user) {
-        return user.registerCode || "/";
+        return user.registerCode || "-";
       },
     },
     {
       title: "注册时间",
       key: "registerTime",
       align: "center",
-      width: 140,
-      render(goods) {
-        return goods.registerTime || "/";
+      width: 180,
+      render(user) {
+        return user.registerTime || "-";
       },
     },
     {
       title: "最近登录时间",
       key: "lastLoginTime",
       align: "center",
-      width: 140,
-      render(goods) {
-        return goods.lastLoginTime || "/";
+      width: 180,
+      render(user) {
+        return user.lastLoginTime || "-";
       },
     },
 
@@ -154,12 +163,12 @@ const createColumns = () => {
       align: "center",
       width: 120,
       fixed: "right",
-      render(goods) {
+      render(user) {
         const btnList = [
           h(
             NButton,
-            { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(goods) },
-            { default: () => (goods.state === UserState.FROZEN ? "解冻" : "冻结") }
+            { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(user) },
+            { default: () => (user.state === UserState.FROZEN ? "解冻" : "冻结") }
           ),
           h(
             NButton,
@@ -168,9 +177,9 @@ const createColumns = () => {
               size: "small",
               secondary: true,
               onClick: () => {
-                userInfo.tab = goods.tab;
-                userInfo.title = goods.nickName;
-                userInfo.uid = goods.uid;
+                userInfo.tab = user.tab;
+                userInfo.title = user.nickName;
+                userInfo.uid = user.uid;
                 showUserTabModal.value = true;
               },
             },
