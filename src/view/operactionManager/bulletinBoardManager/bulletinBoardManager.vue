@@ -42,7 +42,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { h, reactive, ref } from "vue";
+import { h, ref } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
 import { NSpace, NButton, useDialog, NImage } from "naive-ui";

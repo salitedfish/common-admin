@@ -27,7 +27,6 @@
 <script lang="ts" setup>
 // 框架
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 // 工具库
@@ -36,8 +35,6 @@ import { useRouter } from "vue-router";
 // store
 // 类型
 import type { AdminLogRecordListParams } from "@/type/System";
-
-const router = useRouter();
 
 defineProps<{
   searching: boolean;

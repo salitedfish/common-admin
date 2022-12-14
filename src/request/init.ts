@@ -53,7 +53,7 @@ export const ultraFetch = new UltraFetch(
         commonNotify("warning", response.message || "网络异常！");
       }
     },
-    errHandler: (err) => {
+    errHandler: () => {
       commonNotify("error", "未知异常，可尝试刷新页面！");
     },
   }

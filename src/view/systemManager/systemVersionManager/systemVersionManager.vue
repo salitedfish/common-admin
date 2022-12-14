@@ -22,7 +22,6 @@ import { useListPage, commonNotify } from "@/util/common";
 // 网络请求
 import { getSystemVersionList, updateSystemVersion, deleteSystemVersion } from "@/request/system";
 // store
-import { useAuthStore } from "@/store/authStore";
 import { forceUpdateList, versionStateList, VersionState } from "./systemVersionManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -34,8 +33,6 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-const isAdmin = useAuthStore().isAdmin();
-const authStore = useAuthStore();
 const dialog = useDialog();
 const router = useRouter();
 

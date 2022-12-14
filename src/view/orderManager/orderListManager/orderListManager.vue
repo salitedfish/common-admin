@@ -28,7 +28,7 @@ import { commonNotify, useListPage } from "@/util/common";
 import { getOrderList as getListRequest, orderOffLineComfirm as orderOffLineComfirmRequest, orderSyncComfirm as orderSyncComfirmRequest } from "@/request/order";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { invoiceState, orderStateList, orderTypeList, payChannelList, OrderState, PayChannel } from "./orderListManagerStore";
+import { orderStateList, orderTypeList, payChannelList, OrderState, PayChannel } from "./orderListManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 // 类型
 import type { VNode } from "vue";

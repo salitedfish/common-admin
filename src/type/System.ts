@@ -1,5 +1,3 @@
-import { type } from "os";
-
 export type SystemVersionListParams = {
   channel?: string;
   state?: number;
