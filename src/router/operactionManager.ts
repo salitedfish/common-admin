@@ -176,4 +176,24 @@ export default <RouteRecordRaw[]>[
       id: 5061,
     },
   },
+  {
+    path: "addBanner",
+    name: "addBanner",
+    component: () => import("@/view/operactionManager/bannerDetail/bannerDetail.vue"),
+    meta: {
+      label: "添加Banner",
+      icon: "shuffling-banner",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "editBanner",
+    name: "editBanner",
+    component: () => import("@/view/operactionManager/bannerDetail/bannerDetail.vue"),
+    meta: {
+      label: "编辑Banner",
+      icon: "shuffling-banner",
+      keepAlive: true,
+    },
+  },
 ];

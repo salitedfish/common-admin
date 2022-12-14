@@ -14,6 +14,9 @@ import type {
   BulletinBoardListParams,
   BulletinBoardListItem,
   AddBulletinBoard,
+  BannerListParams,
+  BannerListItem,
+  AddBannerParams,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -160,5 +163,37 @@ export const getBulletinBoard = (params: { id: string }): Promise<Return<Bulleti
   return ultraFetch.get({
     URL: "/manager/bulletin-board/detail",
     params,
+  });
+};
+
+// banner管理
+export const getBannerList = (params: Paging & BannerListParams): Promise<Return<ReturnList<BannerListItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/banner/page",
+    body: JSON.stringify(params),
+  });
+};
+export const addEditBanner = (params: AddBannerParams): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/banner/submit",
+    body: JSON.stringify(params),
+  });
+};
+export const getBanner = (params: { id: number }): Promise<Return<BannerListItem>> => {
+  return ultraFetch.get({
+    URL: "/manager/banner/detail",
+    params,
+  });
+};
+export const updateBannerState = (params: { id: number; state: number }): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/banner/state",
+    body: JSON.stringify(params),
+  });
+};
+export const deleteBanner = (params: { id: number }): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/banner/delete",
+    body: JSON.stringify(params),
   });
 };

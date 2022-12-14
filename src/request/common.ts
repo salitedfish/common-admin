@@ -76,6 +76,21 @@ export const uploadVideo = (file: File): RequestReturn.Upload => {
 // 视频上传
 export const uploadVideoUrl = `${baseURL}/manager/file/video`;
 
+// app上传
+export const uploadApp = (file: File) => {
+  const data = new FormData();
+  data.append("file", file);
+  return ultraFetch.post(
+    {
+      URL: "/manager/file/apk",
+      body: data,
+    },
+    {
+      pureHeaders: true,
+    }
+  );
+};
+
 // 获取类目树
 export const getCategoryTree = (type: number): RequestReturn.GetCategoryTree => {
   return ultraFetch.get({

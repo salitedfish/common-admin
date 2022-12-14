@@ -42,6 +42,8 @@ const params = reactive<ExpressOrderListParam>({});
 const searchHandler = () => {
   if (categoryList.value.length >= 1) {
     params.classify = categoryList.value[categoryList.value.length - 1].id;
+  } else {
+    params.classify = undefined;
   }
 
   emit("submitSearch", params);

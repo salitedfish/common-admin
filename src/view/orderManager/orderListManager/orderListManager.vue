@@ -232,7 +232,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, 1);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, { heightLevel: 1 });
 
 // 线下支付确认
 const orderOffLineComfirm = (orderId: string) => {

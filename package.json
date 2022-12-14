@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "prepare": "husky install",
-    "dev": "vite --host",
     "build": "run-p type-check build_only",
     "build_only": "vite build",
     "preview": "vite preview --port 4173",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "deploy_test": "pnpm run build_only && bash deploy_test.sh"
+    "dev": "vite --host",
+    "deploy_test": "vite build --mode test && bash deploy_test.sh",
+    "deploy_production": "vite build --mode production && bash deploy_production.sh"
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "4.0.5",
@@ -19,7 +20,8 @@
     "pinia": "^2.0.16",
     "tinymce": "5.10.2",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.2"
+    "vue-router": "^4.1.2",
+    "vue3-json-viewer": "^2.2.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

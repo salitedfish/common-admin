@@ -141,7 +141,6 @@ const getCategoryTree = async () => {
 
 // 选中类目index第几列，i第几个
 const selectCategory = (index: number, i: number) => {
-  console.log(activeCategoryList);
   if (activeCategoryIndexList[index] === i) return;
   // 选中一个其他类目时,除了将其设为活跃类目，还要将其子类目的第一个类目设为活跃类目
   activeCategoryIndexList[index] = i;

@@ -16,16 +16,17 @@ enum RequestCodeState {
 
 export const ultraFetch = new UltraFetch(
   {
-    baseURL: "/api",
+    baseURL: import.meta.env.VITE_SERVICE_URL,
+    // baseURL: "/api",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   },
   {
     reqHandler: (config) => {
-      if (config.headers) {
-        config.headers = { ...config.headers, ...{ token: useGetLStorage("token")("") as string } };
-      }
+      config.headers = { ...config.headers, ...{ authentication: useGetLStorage("token")("") as string } };
+
       return config;
     },
     resHandler: (response) => {

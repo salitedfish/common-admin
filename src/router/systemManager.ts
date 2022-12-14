@@ -9,6 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "系统配置",
       icon: "peizhi",
       id: 7001,
+      keepAlive: true,
     },
   },
   {
@@ -19,6 +20,7 @@ export default <RouteRecordRaw[]>[
       label: "操作日志",
       icon: "rizhi",
       id: 7021,
+      keepAlive: true,
     },
   },
   {
@@ -29,6 +31,27 @@ export default <RouteRecordRaw[]>[
       label: "系统版本",
       icon: "jurassic_version",
       id: 7011,
+      keepAlive: true,
+    },
+  },
+  {
+    path: "addSystemVersion",
+    name: "addSystemVersion",
+    component: () => import("@/view/systemManager/systemVersionDetail/systemVersionDetail.vue"),
+    meta: {
+      label: "更新版本",
+      icon: "jurassic_version",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "editSystemVersion",
+    name: "editSystemVersion",
+    component: () => import("@/view/systemManager/systemVersionDetail/systemVersionDetail.vue"),
+    meta: {
+      label: "编辑版本",
+      icon: "jurassic_version",
+      keepAlive: true,
     },
   },
 ];

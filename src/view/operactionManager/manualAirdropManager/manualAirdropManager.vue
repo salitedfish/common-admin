@@ -120,7 +120,7 @@ const createColumns = () => {
       align: "center",
       key: "taskState",
       render(row) {
-        return airDropTaskStateList.getItem(row.state)?.label;
+        return airDropTaskStateList.getItem(row.taskState)?.label;
       },
     },
 
@@ -340,7 +340,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListManualAirDrop, createColumns, 1);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListManualAirDrop, createColumns, { heightLevel: 1 });
 </script>
 
 <style scoped lang="less"></style>

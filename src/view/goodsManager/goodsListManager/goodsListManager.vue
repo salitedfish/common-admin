@@ -70,13 +70,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  name: "goodsListManager",
-});
-</script>
-
-<script lang="ts" setup>
 import { onBeforeMount, ref, h, reactive } from "vue";
 import { useRouter } from "vue-router";
 import type { VNode } from "vue";
@@ -102,7 +95,13 @@ import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, Sal
 import { useAuthStore } from "@/store/authStore";
 import { commonNotify, useListPage } from "@/util/common";
 import { WhiteListType } from "@/type/Common";
+import { defineComponent } from "vue";
+export default defineComponent({
+  name: "goodsListManager",
+});
+</script>
 
+<script lang="ts" setup>
 const authStore = useAuthStore();
 const isAdmin = authStore.isAdmin();
 const router = useRouter();
@@ -244,7 +243,6 @@ const createColumns = () => {
               type: "primary",
               size,
               secondary: true,
-
               onClick: () =>
                 router.push({
                   name: "goodsCheckManager",
@@ -348,7 +346,6 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-
                 onClick: () => {
                   auditInfo.auditTitle = "撤销审核";
                   auditInfo.goodsId = goods.goodsId;
@@ -520,7 +517,6 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-
                 onClick: () => {
                   auditInfo.auditTitle = "审核";
                   auditInfo.goodsId = goods.goodsId;
@@ -573,7 +569,6 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
-
                 onClick: () => {
                   auditInfo.auditTitle = "上架";
                   auditInfo.goodsId = goods.goodsId;
@@ -597,7 +592,6 @@ const createColumns = () => {
                 type: "warning",
                 size,
                 secondary: true,
-
                 onClick: () => {
                   auditInfo.auditTitle = "下架";
                   auditInfo.goodsId = goods.goodsId;
@@ -786,6 +780,9 @@ const createColumns = () => {
       key: "merchantName",
       align: "center",
       width: 100,
+      render: (row) => {
+        return Number(row.merchantUid) === 0 ? "平台" : row.merchantName;
+      },
     });
     list.splice(0, 0, {
       title: "商户编号",

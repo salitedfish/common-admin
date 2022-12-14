@@ -173,3 +173,33 @@ export type AddBulletinBoard = {
   title: string;
   type: number | null;
 };
+
+// banner管理
+export type BannerListParams = {
+  merchantUid?: string;
+  state?: number;
+  title?: string;
+};
+export type BannerListItem = {
+  cover: string;
+  endTime: string;
+  id: number;
+  merchantName: string;
+  merchantUid: string;
+  order: number;
+  startTime: string;
+  state: number;
+  target: string;
+  title: string;
+  type: number;
+};
+export type AddBannerParams = {
+  cover?: string;
+  endTime?: string;
+  id?: number;
+  order?: number;
+  startTime?: string;
+  target?: string;
+  title?: string;
+  type?: number;
+};

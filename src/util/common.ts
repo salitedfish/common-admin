@@ -102,12 +102,17 @@ export const useInfinityTimeStamp = () => {
   return 4133865600000;
 };
 
-// 创建通用列表所需的数据Hook
+// 创建分页列表页面所需的数据Hook
 export const useListPage = <P extends Paging, R>(
   getListRequest: (searchParams: P) => Promise<Return<ReturnList<R>>>,
   createColumns: () => DataTableColumns<R>,
-  heightLevel = 0,
-  size = 10
+  options: {
+    heightLevel?: number;
+    size?: number;
+  } = {
+    heightLevel: 0,
+    size: 10,
+  }
 ) => {
   type SearchParams = Omit<P, "page" | "size">;
   const commonStore = useCommonStore();
@@ -122,13 +127,13 @@ export const useListPage = <P extends Paging, R>(
     return width;
   });
   const listYHeight = computed(() => {
-    return commonStore.pageContentHeight - [185, 228][heightLevel];
+    return commonStore.pageContentHeight - [185, 228][options.heightLevel || 0];
   });
 
   // 筛选的参数
   const searchParam = <Ref<P>>ref({
     page: 1,
-    size,
+    size: options.size || 10,
   });
   // 数据总数
   const totalPage = ref(0);
@@ -165,6 +170,57 @@ export const useListPage = <P extends Paging, R>(
     searching,
     list,
     submitSearch,
+    getList,
+  };
+};
+
+// 创建不需要分页列表页面所需的数据Hook
+export const useListNoPage = <R>(
+  getListRequest: () => Promise<Return<R[]>>,
+  createColumns: () => DataTableColumns<R>,
+  options: {
+    heightLevel?: number;
+  } = {
+    heightLevel: 0,
+  }
+) => {
+  const commonStore = useCommonStore();
+
+  // 列表宽度和高度
+  const listXWidth = computed(() => {
+    let width = 0;
+    const list = createColumns();
+    for (const item of list) {
+      width = <number>item.width + width;
+    }
+    return width;
+  });
+  const listYHeight = computed(() => {
+    return commonStore.pageContentHeight - [245, 288][options.heightLevel || 0];
+  });
+  // 查询状态
+  const searching = ref(false);
+  // 展示的列表
+  const list: Ref<R[]> = ref([]);
+
+  // 请求数据
+  const getList = async () => {
+    searching.value = true;
+    const res = await getListRequest();
+    if (res && res.code === 0) {
+      list.value = res.data;
+    }
+    searching.value = false;
+  };
+
+  onBeforeMount(() => {
+    getList();
+  });
+  return {
+    listXWidth,
+    listYHeight,
+    searching,
+    list,
     getList,
   };
 };

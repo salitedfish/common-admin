@@ -105,12 +105,12 @@ const createColumns = () => {
       },
     },
     {
-      title: "状态",
-      key: "state",
+      title: "类型",
+      key: "type",
       align: "center",
       width: 120,
       render: (row) => {
-        return bulletinBoardStateList.getItem(row.state)?.label;
+        return bulletinBoardTypeList.getItem(row.type)?.label;
       },
     },
     {
@@ -123,20 +123,27 @@ const createColumns = () => {
       },
     },
     {
-      title: "类型",
-      key: "type",
+      title: "状态",
+      key: "state",
       align: "center",
       width: 120,
       render: (row) => {
-        return bulletinBoardTypeList.getItem(row.type)?.label;
+        return bulletinBoardStateList.getItem(row.state)?.label;
       },
     },
+
     {
       title: "创建时间",
       key: "createTime",
       width: 180,
       align: "center",
     },
+    // {
+    //   title: "上架时间",
+    //   key: "activeTime",
+    //   width: 180,
+    //   align: "center",
+    // },
 
     {
       title: "操作",

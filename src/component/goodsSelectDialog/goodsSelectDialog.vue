@@ -105,7 +105,7 @@ const createColumns = () => {
   }
   return list;
 };
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, 1);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, { heightLevel: 1 });
 
 // 初始获取一次列表
 onBeforeMount(() => {

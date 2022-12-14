@@ -7,6 +7,7 @@ import { uiComponent } from "@/component/uiComponent";
 
 import "@/util/extendsProto";
 import "@/assets/css/index.less";
+import "vue3-json-viewer/dist/index.css";
 
 const app = createApp(App);
 
@@ -16,4 +17,4 @@ app.use(uiComponent);
 
 app.mount("#app");
 
-console.log("当前模式：", import.meta.env.VITE_ENV);
+console.log("runtime：", import.meta.env.VITE_ENV, import.meta.env.VITE_SERVICE_URL);

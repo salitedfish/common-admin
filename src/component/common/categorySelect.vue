@@ -68,7 +68,7 @@ const getCategoryTree = async () => {
 
 // 选择的值更新后反射出去
 const selectCategory = (categoryId: number, category: CategoryTreeItem, categoryList: CategoryTreeItem[]) => {
-  emit("update:modelValue", categoryList);
+  emit("update:modelValue", categoryList || []);
 };
 onBeforeMount(() => {
   getCategoryTree();

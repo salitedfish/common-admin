@@ -110,7 +110,6 @@ onBeforeMount(async () => {
 // 路由跳转
 const router = useRouter();
 const handleMenuClick = (key: string) => {
-  console.log(111, key);
   router.push({ name: key });
 };
 </script>

@@ -9,3 +9,8 @@
 ## 工具库使用@ultra-man/noa
 
 [@ultra-man/noa](https://www.npmjs.com/package/@ultra-man/noa)
+
+## 测试环境地址和域名
+
+121.43.181.31
+https://malladmintest.8n.cn/login

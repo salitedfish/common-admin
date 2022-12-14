@@ -16,7 +16,7 @@
 
       <n-form label-placement="left" label-width="80px" label-align="left">
         <n-form-item label="用户标签:">
-          <n-select v-model:value="userInfo.tab" :options="accountTabList.slice(1, accountTabList.length)" :disabled="updateTabLoading"></n-select>
+          <n-select v-model:value="userInfo.tab" :options="accountTabList" :disabled="updateTabLoading"></n-select>
         </n-form-item>
       </n-form>
 
