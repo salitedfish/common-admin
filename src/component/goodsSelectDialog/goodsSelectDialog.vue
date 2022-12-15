@@ -16,7 +16,7 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-import { onBeforeMount, h } from "vue";
+import { h } from "vue";
 import { NImage } from "naive-ui";
 import screenSection from "./component/screenSection.vue";
 
