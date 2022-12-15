@@ -194,7 +194,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteBulletinBoard({ id: row.id });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "商品推荐删除成功");
                       }
                       dialogInfo.loading = false;
@@ -247,7 +247,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await updateBulletinBoardState({ id: row.id, state: row.state, topState: topStateAction?.value as number });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `${topStateAction?.label}${row.title}成功`);
                       }
                       dialogInfo.loading = false;
@@ -277,7 +277,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await updateBulletinBoardState({ id: row.id, state: stateAction?.value as number, topState: row.topState });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `${stateAction?.label}${row.title}成功`);
                       }
                       dialogInfo.loading = false;
@@ -352,7 +352,7 @@ const comfirmUpdateClassify = async () => {
   });
   const res = await updateBulletinBoardClassify({ id: currentBulletinBoard.value?.id as number, classifies });
   if (res) {
-    getList();
+    await getList();
     commonNotify("success", `${currentBulletinBoard.value?.title}修改类目成功`);
     showUpdateClassifyDialog.value = false;
   }

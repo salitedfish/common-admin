@@ -16,7 +16,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, h } from "vue";
+import { h } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
 // 自定义组件
@@ -244,7 +244,7 @@ const orderOffLineComfirm = (orderId: string) => {
       dialogInfo.loading = true;
       const res = await orderOffLineComfirmRequest({ orderId });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", "线下支付确认成功");
       }
       dialogInfo.loading = false;
@@ -261,18 +261,13 @@ const orderSyncComfirm = (orderId: string) => {
       dialogInfo.loading = true;
       const res = await orderSyncComfirmRequest({ orderId });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", "差错同步确认成功");
       }
       dialogInfo.loading = false;
     },
   });
 };
-
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
 </script>
 
 <style scoped lang="less"></style>

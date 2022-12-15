@@ -1,9 +1,9 @@
-export type GetPointsListParams = {
-  merchantUid?: string;
-  pointsId?: string;
-  pointsName?: string;
-  pointsState?: number;
-};
+export type GetPointsListParams = Partial<{
+  merchantUid: string;
+  pointsId: string;
+  pointsName: string;
+  pointsState: number;
+}>;
 
 export type PointsItem = {
   auditorNote: string;

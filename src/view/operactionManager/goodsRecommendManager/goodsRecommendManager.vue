@@ -124,7 +124,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteGoodsRecommend({ goodsId: row.goodsId });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "商品推荐删除成功");
                       }
                       dialogInfo.loading = false;
@@ -156,7 +156,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await updateGoodsRecommendState({ goodsId: row.goodsId, topState: actionValue });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `${actionLabel}成功`);
                       }
                       dialogInfo.loading = false;

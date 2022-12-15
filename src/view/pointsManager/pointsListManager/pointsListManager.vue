@@ -49,7 +49,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { computed, ref, onBeforeMount, h, reactive } from "vue";
+import { ref, h, reactive } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
@@ -58,7 +58,7 @@ import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
-import { commonNotify } from "@/util/common";
+import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
 import {
   getPointsList as getPointsListRequest,
@@ -67,7 +67,6 @@ import {
   updatePointsState as updatePointsStateRequest,
 } from "@/request/points";
 // store
-import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 import { pointsStateList } from "./pointsListManagerStore";
 import { PointsState, approvialList, approvialNewList } from "./pointsListManagerStore";
@@ -75,54 +74,11 @@ import { PointsState, approvialList, approvialNewList } from "./pointsListManage
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
-import type { PointsItem, GetPointsListParams } from "@/type/Points";
-import type * as RequestParam from "@/request/type/RequestParam";
+import type { PointsItem } from "@/type/Points";
 
-const commonStore = useCommonStore();
 const authStore = useAuthStore();
 const dialog = useDialog();
 const router = useRouter();
-
-// 列表宽度和高度
-const listXWidth = computed(() => {
-  let width = 0;
-  const list = createColumns();
-  for (const item of list) {
-    width = (item.width as number) + width;
-  }
-  return width;
-});
-const listYHeight = computed(() => {
-  return commonStore.pageContentHeight - 185;
-});
-
-// 筛选的参数
-const searchParam = ref<RequestParam.GetPointsList>({
-  page: 1,
-  size: 10,
-});
-// 数据总数
-const totalPage = ref(0);
-// 查询状态
-const searching = ref(false);
-// 展示的列表
-const list = ref<PointsItem[]>([]);
-// 请求列表
-const getList = async () => {
-  searching.value = true;
-  const res = await getPointsListRequest(searchParam.value);
-  if (res) {
-    list.value = res.data.data;
-    totalPage.value = res.data.totalPage;
-  }
-  searching.value = false;
-};
-
-// 组合请求参数
-const submitSearch = (params: GetPointsListParams) => {
-  searchParam.value = { ...searchParam.value, ...params };
-  getList();
-};
 
 // 列表渲染函数
 const createColumns = () => {
@@ -224,7 +180,7 @@ const createColumns = () => {
         const btnList: VNode[] = [];
         const size = "small";
         const isAdmin = authStore.isAdmin();
-        if ([PointsState.DRAFT, PointsState.APPROVIAL_FAILED, PointsState.PUBLISH_SUCCESS, PointsState.DRAFT_NEW, PointsState.TO_BE_APPROVIAL_NEW].includes(points.pointsState)) {
+        if ([PointsState.DRAFT, PointsState.APPROVIAL_FAILED, PointsState.PUBLISH_SUCCESS, PointsState.DRAFT_NEW].includes(points.pointsState)) {
           if ((isAdmin && points.merchantUid === "0") || !isAdmin) {
             btnList.push(
               h(
@@ -405,7 +361,7 @@ const handleDelete = (points: PointsItem) => {
       dialogInfo.loading = true;
       const res = await deletePointsRequest({ pointsId: points.pointsId });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", "商品删除成功");
       }
       dialogInfo.loading = false;
@@ -447,10 +403,7 @@ const comfirmUpdate = async () => {
   updateLoading.value = false;
 };
 
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getPointsListRequest, createColumns);
 </script>
 
 <style scoped lang="less">

@@ -49,13 +49,13 @@ export type ManualAirDropAddParams = {
   startTime: string | null;
 };
 
-export type TimingAirDropListSearchParams = {
-  itemId?: string;
-  itemType?: number;
-  merchantUid?: string;
-  name?: string;
-  timeType?: number;
-};
+export type TimingAirDropListSearchParams = Partial<{
+  itemId: string;
+  itemType: number;
+  merchantUid: string;
+  name: string;
+  timeType: number;
+}>;
 export type TimingAirDropListItem = {
   createTime: string;
   expireMinute: number;
@@ -123,11 +123,11 @@ export type TimingAirDropAddParams = {
   }[];
 };
 
-export type GoodsRecommendListParams = {
-  goodsId?: string;
-  goodsName?: string;
-  merchantUid?: string;
-};
+export type GoodsRecommendListParams = Partial<{
+  goodsId: string;
+  goodsName: string;
+  merchantUid: string;
+}>;
 export type GoodsRecommendListItem = {
   goodsCover: string;
   goodsId: string;
@@ -141,14 +141,14 @@ export type GoodsRecommendListItem = {
   topState: number;
 };
 
-export type BulletinBoardListParams = {
-  classify?: number;
-  merchantUid?: string;
-  state?: number;
-  title?: string;
-  topState?: number;
-  type?: number;
-};
+export type BulletinBoardListParams = Partial<{
+  classify: number;
+  merchantUid: string;
+  state: number;
+  title: string;
+  topState: number;
+  type: number;
+}>;
 export type BulletinBoardListItem = {
   activeTime: string;
   classifies: [];
@@ -175,11 +175,11 @@ export type AddBulletinBoard = {
 };
 
 // banner管理
-export type BannerListParams = {
-  merchantUid?: string;
-  state?: number;
-  title?: string;
-};
+export type BannerListParams = Partial<{
+  merchantUid: string;
+  state: number;
+  title: string;
+}>;
 export type BannerListItem = {
   cover: string;
   endTime: string;
@@ -193,13 +193,20 @@ export type BannerListItem = {
   title: string;
   type: number;
 };
-export type AddBannerParams = {
-  cover?: string;
-  endTime?: string;
-  id?: number;
-  order?: number;
-  startTime?: string;
-  target?: string;
-  title?: string;
-  type?: number;
+export type AddBannerParams = Partial<{
+  cover: string;
+  endTime: string;
+  id: number;
+  order: number;
+  startTime: string;
+  target: string;
+  title: string;
+  type: number;
+}>;
+
+// 搜索管理
+export type SearchKeywordsListItem = {
+  id: number;
+  keyword: string;
+  order: number;
 };

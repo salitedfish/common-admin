@@ -163,7 +163,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteSystemVersion({ id: row.id });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `${row.versionName}删除成功`);
                       }
                       dialogInfo.loading = false;
@@ -196,7 +196,7 @@ const createColumns = () => {
                     dialogInfo.loading = true;
                     const res = await updateSystemVersion({ id: row.id, state: actionValue });
                     if (res) {
-                      getList();
+                      await getList();
                       commonNotify("success", `${row.versionName}${actionLabel}成功`);
                     }
                     dialogInfo.loading = false;

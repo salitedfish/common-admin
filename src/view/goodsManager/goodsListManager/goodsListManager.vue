@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, ref, h, reactive } from "vue";
+import { ref, h, reactive } from "vue";
 import { useRouter } from "vue-router";
 import type { VNode } from "vue";
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
@@ -274,7 +274,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await goodsDeleteRequest({ goodsId: goods.goodsId });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "商品删除成功");
                       }
                       dialogInfo.loading = false;
@@ -814,8 +814,8 @@ const comfirmAudit = async () => {
   // 管理员和商户用的审核接口不一样
   const res = isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
   if (res && res.code === 0) {
+    await getList();
     commonNotify("success", `${auditInfo.auditTitle}成功`);
-    getList();
   }
   auditInfo.auditNote = "";
   auditInfo.auditTip = "";
@@ -841,17 +841,12 @@ const comfirmUpdateCategory = async () => {
   }
   const res = await updateGoodsCategoryRequest({ classifies, goodsId: updateCategoryInfo.goodsId });
   if (res && res.code === 0) {
+    await getList();
     commonNotify("success", "类目更改成功");
-    getList();
   }
   updateCategoryLoading.value = false;
   showUpdateCategoryModal.value = false;
 };
-
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
 </script>
 
 <style scoped lang="less">

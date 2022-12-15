@@ -115,6 +115,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "addSearchKeywords",
+    name: "addSearchKeywords",
+    component: () => import("@/view/operactionManager/searchKeywordsDetail/searchKeywordsDetail.vue"),
+    meta: {
+      label: "添加关键词",
+      icon: "sousuo",
+      keepAlive: true,
+    },
+  },
+  {
     path: "bulletinBoardManager",
     name: "bulletinBoardManager",
     component: () => import("@/view/operactionManager/bulletinBoardManager/bulletinBoardManager.vue"),

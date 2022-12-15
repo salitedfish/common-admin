@@ -1,16 +1,16 @@
-export type OrderListParam = {
-  classify?: number;
-  goodsId?: string;
-  goodsName?: string;
-  invoiceState?: number;
-  merchantUid?: string;
-  orderId?: string;
-  orderState?: number;
-  orderType?: number;
-  payChannel?: number;
-  type?: number;
-  uid?: string;
-};
+export type OrderListParam = Partial<{
+  classify: number;
+  goodsId: string;
+  goodsName: string;
+  invoiceState: number;
+  merchantUid: string;
+  orderId: string;
+  orderState: number;
+  orderType: number;
+  payChannel: number;
+  type: number;
+  uid: string;
+}>;
 export type OrderListItem = {
   buyerUid: number;
   cancelTime: string;
@@ -36,15 +36,15 @@ export type OrderListItem = {
   sellerUid: number;
 };
 
-export type ExpressOrderListParam = {
-  classify?: number;
-  goodsId?: string;
-  goodsName?: string;
-  merchantUid?: string;
-  orderId?: string;
-  orderState?: number;
-  uid?: string;
-};
+export type ExpressOrderListParam = Partial<{
+  classify: number;
+  goodsId: string;
+  goodsName: string;
+  merchantUid: string;
+  orderId: string;
+  orderState: number;
+  uid: string;
+}>;
 export type ExpressOrderListItem = {
   cancelTime: string;
   deliveryTime: string;

@@ -64,18 +64,18 @@ export enum WhiteListType {
   DRAW_ALL,
 }
 
-export type WhiteListSearchParams = {
-  phone?: string;
-  uid?: string;
+export type WhiteListSearchParams = Partial<{
+  phone: string;
+  uid: string;
   // 空投和抽签
-  id?: string;
+  id: string;
   // 商品专用
-  goodsId?: string;
+  goodsId: string;
   // 空投专用
-  state?: number;
+  state: number;
   // 抽签全部名单专用
-  type?: number;
-};
+  type: number;
+}>;
 
 export type WhiteListItem = {
   phone: string;

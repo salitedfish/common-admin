@@ -159,7 +159,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteManualAirDrop({ id: row.id });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "空投删除成功");
                       }
                       dialogInfo.loading = false;
@@ -213,7 +213,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteWhiteList({ id: String(row.id) }, WhiteListType.AIR_DROP);
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "白名单删除成功");
                       }
                       dialogInfo.loading = false;
@@ -247,7 +247,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await updateManualAirDropState({ id: row.id, state: lineActionValue });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `空投${lineActionLabel}成功`);
                       }
                       dialogInfo.loading = false;
@@ -279,7 +279,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await syncManualAirDrop({ id: row.id });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "空投补发成功");
                       }
                       dialogInfo.loading = false;

@@ -62,6 +62,15 @@ const createColumns = () => {
       },
     },
     {
+      title: "指向类型",
+      key: "type",
+      width: 100,
+      align: "center",
+      render: (row) => {
+        return bannerTargetTypeList.getItem(row.type)?.label;
+      },
+    },
+    {
       title: "目标地址/编号",
       key: "target",
       align: "center",
@@ -91,15 +100,7 @@ const createColumns = () => {
         return bannerStateList.getItem(row.state)?.label;
       },
     },
-    {
-      title: "指向类型",
-      key: "type",
-      width: 100,
-      align: "center",
-      render: (row) => {
-        return bannerTargetTypeList.getItem(row.type)?.label;
-      },
-    },
+
     {
       title: "有效开始时间",
       key: "startTime",
@@ -121,10 +122,68 @@ const createColumns = () => {
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.getUserInfo()?.uid) === Number(row.merchantUid);
-        if (isMy) {
-          const actionLabel = bannerStateList.getItem(row.state)?.action.label;
-          const actionValue = bannerStateList.getItem(row.state)?.action.value as number;
+        const actionLabel = bannerStateList.getItem(row.state)?.action.label;
+        const actionValue = bannerStateList.getItem(row.state)?.action.value as number;
+        list.push(
+          h(
+            NButton,
+            {
+              size,
+              type: "primary",
+              secondary: true,
+              onClick: () => {
+                const dialogInfo = dialog.success({
+                  title: actionLabel,
+                  content: `确认${actionLabel}${row.title}吗？`,
+                  positiveText: "确认",
+                  onPositiveClick: async () => {
+                    dialogInfo.loading = true;
+                    const res = await updateBannerState({ id: row.id, state: actionValue });
+                    if (res) {
+                      await getList();
+                      commonNotify("success", `${row.title}${actionLabel}成功`);
+                    }
+                    dialogInfo.loading = false;
+                  },
+                });
+              },
+            },
+            {
+              default: () => actionLabel,
+            }
+          )
+        );
+
+        if (row.state === BannerState.OFFLINE) {
+          list.push(
+            h(
+              NButton,
+              {
+                size,
+                type: "warning",
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "删除",
+                    content: `确认删除${row.title}吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await deleteBanner({ id: row.id });
+                      if (res) {
+                        await getList();
+                        commonNotify("success", `${row.title}删除成功`);
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "删除",
+              }
+            )
+          );
           list.push(
             h(
               NButton,
@@ -133,80 +192,19 @@ const createColumns = () => {
                 type: "primary",
                 secondary: true,
                 onClick: () => {
-                  const dialogInfo = dialog.success({
-                    title: actionLabel,
-                    content: `确认${actionLabel}${row.title}吗？`,
-                    positiveText: "确认",
-                    onPositiveClick: async () => {
-                      dialogInfo.loading = true;
-                      const res = await updateBannerState({ id: row.id, state: actionValue });
-                      if (res) {
-                        getList();
-                        commonNotify("success", `${row.title}${actionLabel}成功`);
-                      }
-                      dialogInfo.loading = false;
+                  router.push({
+                    name: "editBanner",
+                    query: {
+                      id: row.id,
                     },
                   });
                 },
               },
               {
-                default: () => actionLabel,
+                default: () => "编辑",
               }
             )
           );
-
-          if (row.state === BannerState.OFFLINE) {
-            list.push(
-              h(
-                NButton,
-                {
-                  size,
-                  type: "warning",
-                  secondary: true,
-                  onClick: () => {
-                    const dialogInfo = dialog.warning({
-                      title: "删除",
-                      content: `确认删除${row.title}吗？`,
-                      positiveText: "确认",
-                      onPositiveClick: async () => {
-                        dialogInfo.loading = true;
-                        const res = await deleteBanner({ id: row.id });
-                        if (res) {
-                          getList();
-                          commonNotify("success", `${row.title}删除成功`);
-                        }
-                        dialogInfo.loading = false;
-                      },
-                    });
-                  },
-                },
-                {
-                  default: () => "删除",
-                }
-              )
-            );
-            list.push(
-              h(
-                NButton,
-                {
-                  size,
-                  type: "primary",
-                  secondary: true,
-                  onClick: () => {
-                    router.push({
-                      name: "editBanner",
-                      query: {
-                        id: row.id,
-                      },
-                    });
-                  },
-                },
-                {
-                  default: () => "编辑",
-                }
-              )
-            );
-          }
         }
 
         // 用来放按钮的容器

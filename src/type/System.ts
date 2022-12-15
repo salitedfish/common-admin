@@ -1,7 +1,7 @@
-export type SystemVersionListParams = {
-  channel?: string;
-  state?: number;
-};
+export type SystemVersionListParams = Partial<{
+  channel: string;
+  state: number;
+}>;
 export type SystemVersionListItem = {
   channel: string;
   description: string;
@@ -33,12 +33,12 @@ export type SystemConfigListItem = {
   valueType: number;
 };
 
-export type AdminLogRecordListParams = {
-  adminUid?: string;
-  clientIp?: string;
-  endTime?: string;
-  startTime?: string;
-};
+export type AdminLogRecordListParams = Partial<{
+  adminUid: string;
+  clientIp: string;
+  endTime: string;
+  startTime: string;
+}>;
 
 export type AdminLogRecordListItem = {
   adminUid: number;

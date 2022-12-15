@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { ref, onBeforeMount, h, reactive } from "vue";
+import { ref, h, reactive } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, useDialog, NEllipsis } from "naive-ui";
 // 自定义组件
@@ -209,7 +209,7 @@ const handleFrozen = (user: UserListItem) => {
       dialogInfo.loading = true;
       const res = await updateUserStateRequest({ state: actionState, uid: user.uid });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", `${action}${user.nickName}成功`);
       }
       dialogInfo.loading = false;
@@ -229,17 +229,12 @@ const comfirmUpdateUserTab = async () => {
   updateTabLoading.value = true;
   const res = await updateUserTabRequest({ uid: userInfo.uid, tab: userInfo.tab });
   if (res) {
-    getList();
+    await getList();
     commonNotify("success", `${userInfo.title}标签设置成功`);
     showUserTabModal.value = false;
   }
   updateTabLoading.value = false;
 };
-
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
 </script>
 
 <style scoped lang="less"></style>

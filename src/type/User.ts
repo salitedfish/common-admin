@@ -1,11 +1,11 @@
-export type UserListParam = {
-  chainAddress?: string;
-  inviteCode?: string;
-  phone?: string;
-  state?: number;
-  tab?: number;
-  uid?: string;
-};
+export type UserListParam = Partial<{
+  chainAddress: string;
+  inviteCode: string;
+  phone: string;
+  state: number;
+  tab: number;
+  uid: string;
+}>;
 export type UserListItem = {
   chainAddress: string;
   headUrl: string;
@@ -21,12 +21,12 @@ export type UserListItem = {
   uid: number;
 };
 
-export type AdminMerchantListParam = {
-  chainAddress?: string;
-  phone?: string;
-  role?: number;
-  uid?: string;
-};
+export type AdminMerchantListParam = Partial<{
+  chainAddress: string;
+  phone: string;
+  role: number;
+  uid: string;
+}>;
 export type AdminMerchantListItem = {
   chainAddress: string;
   chainPublicKey: string;

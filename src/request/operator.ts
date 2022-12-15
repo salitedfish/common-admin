@@ -17,6 +17,7 @@ import type {
   BannerListParams,
   BannerListItem,
   AddBannerParams,
+  SearchKeywordsListItem,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -194,6 +195,27 @@ export const updateBannerState = (params: { id: number; state: number }): Promis
 export const deleteBanner = (params: { id: number }): Promise<Return<unknown>> => {
   return ultraFetch.post({
     URL: "/manager/banner/delete",
+    body: JSON.stringify(params),
+  });
+};
+
+// 搜索关键字管理
+export const getSearchKeywordsList = (): Promise<Return<SearchKeywordsListItem[]>> => {
+  return ultraFetch.get({
+    URL: "/manager/search-keyword/list",
+  });
+};
+
+export const deleteSearchKeywords = (params: { id: number }): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/search-keyword/delete",
+    body: JSON.stringify(params),
+  });
+};
+
+export const addEditSearchKeywords = (params: { id?: number; keyword: string; order: number | null }): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/search-keyword/submit",
     body: JSON.stringify(params),
   });
 };

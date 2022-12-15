@@ -61,7 +61,7 @@ const initPoints = async (id: string) => {
       hashName: useFileNameFromURL(pointsCover)(true),
     });
     params.pointsName = pointsName;
-    params.pointsTotal = pointsTotal;
+    params.pointsTotal = Number(pointsTotal);
   }
   commonStore.pageLoading = false;
 };

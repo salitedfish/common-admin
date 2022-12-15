@@ -1,12 +1,12 @@
 import type { CategoryTreeItem } from "@/type/Common";
-export type SearchParams = {
-  classify?: number;
-  goodsId?: string;
-  goodsName?: string;
-  goodsState?: number;
-  goodsType?: number;
-  merchantUid?: string;
-};
+export type SearchParams = Partial<{
+  classify: number;
+  goodsId: string;
+  goodsName: string;
+  goodsState: number;
+  goodsType: number;
+  merchantUid: string;
+}>;
 
 export type GoodsListItem = {
   activeTime: string;

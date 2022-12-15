@@ -172,7 +172,7 @@ const handleFrozen = (user: AdminMerchantListItem) => {
       dialogInfo.loading = true;
       const res = await updateAdminMerchantState({ state: actionState, uid: user.uid });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", `${action}${user.nickName}成功`);
       }
       dialogInfo.loading = false;
@@ -190,18 +190,13 @@ const handleResetpassword = (user: AdminMerchantListItem) => {
       dialogInfo.loading = true;
       const res = await resetAdminMerchantPassword({ uid: user.uid });
       if (res) {
-        getList();
+        await getList();
         commonNotify("success", `密码重置为:${res.data.password}`, true);
       }
       dialogInfo.loading = false;
     },
   });
 };
-
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
 </script>
 
 <style scoped lang="less"></style>

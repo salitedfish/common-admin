@@ -313,8 +313,8 @@ const comfirmExpress = async () => {
   expressLoading.value = true;
   const res = await expressDeliveryRequest(expressInfo);
   if (res) {
-    commonNotify("success", "确认发货成功");
     await getList();
+    commonNotify("success", "确认发货成功");
     showExpressModal.value = false;
   }
   expressLoading.value = false;
@@ -335,11 +335,6 @@ const checkLogistics = async (order: ExpressOrderListItem) => {
   }
   logisticsLoading.value = false;
 };
-
-// 初始获取一次列表
-onBeforeMount(() => {
-  getList();
-});
 </script>
 
 <style scoped lang="less">

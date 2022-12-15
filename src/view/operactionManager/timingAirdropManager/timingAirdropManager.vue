@@ -157,7 +157,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await deleteTimingAirDrop({ id: row.id });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", "空投删除成功");
                       }
                       dialogInfo.loading = false;
@@ -213,7 +213,7 @@ const createColumns = () => {
                       dialogInfo.loading = true;
                       const res = await updateTimingAirDropState({ id: row.id, state: lineActionValue });
                       if (res) {
-                        getList();
+                        await getList();
                         commonNotify("success", `空投${lineActionLabel}成功`);
                       }
                       dialogInfo.loading = false;

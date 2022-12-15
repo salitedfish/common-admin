@@ -95,16 +95,7 @@ const id = computed(() => {
 });
 
 const fileList = ref<FileUpload[]>([]);
-const formData = reactive<AddBannerParams>({
-  cover: undefined,
-  endTime: undefined,
-  id: undefined,
-  order: undefined,
-  startTime: undefined,
-  target: undefined,
-  title: undefined,
-  type: undefined,
-});
+const formData = reactive<AddBannerParams>({});
 
 const submiting = ref(false);
 const handleSubmit = async () => {
@@ -149,17 +140,16 @@ const initData = async () => {
   commonStore.pageLoading = false;
 };
 
-watch(
-  () => formData.type,
-  () => {
-    formData.target = undefined;
-  }
-);
-
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (isEdit.value) {
-    initData();
+    await initData();
   }
+  watch(
+    () => formData.type,
+    () => {
+      formData.target = undefined;
+    }
+  );
 });
 </script>
 
