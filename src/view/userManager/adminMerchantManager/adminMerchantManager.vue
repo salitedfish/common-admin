@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, h } from "vue";
+import { h } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, useDialog, NEllipsis } from "naive-ui";
 // 自定义组件

@@ -55,7 +55,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { ref, onBeforeMount, h, reactive } from "vue";
+import { ref, h, reactive } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, NEllipsis } from "naive-ui";
 // 自定义组件

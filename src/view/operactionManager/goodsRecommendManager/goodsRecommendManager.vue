@@ -17,7 +17,6 @@ export default defineComponent({
 <script lang="ts" setup>
 // 框架
 import { h } from "vue";
-import { useRouter } from "vue-router";
 // 组件库
 import { NSpace, NButton, useDialog, NImage } from "naive-ui";
 // 自定义组件
@@ -29,7 +28,7 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getGoodsRecommendList, deleteGoodsRecommend, updateGoodsRecommendState } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { goodsRecommendTopStateList, GoodsRecommendTopState } from "./goodsRecommendManagerStore";
+import { goodsRecommendTopStateList } from "./goodsRecommendManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
@@ -38,7 +37,6 @@ import type { GoodsRecommendListItem } from "@/type/Operator";
 const isAdmin = useAuthStore().isAdmin();
 const authStore = useAuthStore();
 const dialog = useDialog();
-const router = useRouter();
 
 // 列表项
 const createColumns = () => {
