@@ -1,7 +1,15 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号, 0表示平台" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.title" autosize placeholder="请输入公告标题" style="width: 200px" :disabled="searching"></n-input>
+    <n-input
+      v-model:value="params.merchantUid"
+      autosize
+      placeholder="请输入商户编号, 0表示平台"
+      v-if="authStore.isAdmin()"
+      style="width: 220px"
+      :disabled="searching"
+      clearable
+    ></n-input>
+    <n-input v-model:value="params.title" autosize placeholder="请输入公告标题" style="width: 200px" :disabled="searching" clearable></n-input>
     <category-select v-model="categoryList" checkType="all" style="width: 200px" :type="CategoryType.NOTICE"></category-select>
     <n-select v-model:value="params.state" :options="bulletinBoardStateList" placeholder="请选择公告状态" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.topState" :options="bulletinBoardTopStateList" placeholder="请选择公告置顶状态" style="width: 200px" :disabled="searching" clearable />

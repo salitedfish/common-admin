@@ -39,7 +39,7 @@ export const userTypeList = [
 ];
 
 export enum RecordType {
-  FIRST_BUY,
+  FIRST_BUY = 1,
   SUBGIFT,
   AIRDROP,
   SYNTHESIS,

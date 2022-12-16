@@ -198,6 +198,15 @@ const createColumns = () => {
       },
     },
     {
+      title: "商品状态",
+      key: "goodsState",
+      align: "center",
+      width: 100,
+      render(row) {
+        return goodsStateList.getItem(row.goodsState)?.label;
+      },
+    },
+    {
       title: "审核时间",
       key: "auditorTime",
       align: "center",
@@ -213,15 +222,6 @@ const createColumns = () => {
       width: 180,
       render(row) {
         return row.auditorNote ? row.auditorNote : "-";
-      },
-    },
-    {
-      title: "商品状态",
-      key: "goodsState",
-      align: "center",
-      width: 100,
-      render(row) {
-        return goodsStateList.getItem(row.goodsState)?.label;
       },
     },
 

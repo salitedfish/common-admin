@@ -110,7 +110,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "搜索管理",
       icon: "sousuo",
-      keepAlive: true,
+      // keepAlive: true,
       id: 5031,
     },
   },
@@ -131,7 +131,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "公告管理",
       icon: "gonggao",
-      keepAlive: true,
+      // keepAlive: true,
       id: 5041,
     },
   },
@@ -182,7 +182,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "Banner管理",
       icon: "shuffling-banner",
-      keepAlive: true,
+      // keepAlive: true,
       id: 5061,
     },
   },

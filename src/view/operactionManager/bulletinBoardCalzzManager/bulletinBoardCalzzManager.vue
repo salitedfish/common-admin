@@ -75,7 +75,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { computed, onBeforeMount, ref, reactive } from "vue";
+import { computed, onMounted, ref, reactive } from "vue";
 // 组件库
 import { useDialog } from "naive-ui";
 // 自定义组件
@@ -231,7 +231,7 @@ const handleHidden = (index: number, i: number, state: number) => {
   });
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
   commonStore.pageLoading = true;
   await getCategoryTree();
   commonStore.pageLoading = false;

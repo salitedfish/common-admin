@@ -1,4 +1,4 @@
-import { reactive, ref, computed, onBeforeMount, h, onActivated } from "vue";
+import { reactive, ref, computed, onMounted, h, onActivated } from "vue";
 import type { Ref } from "vue";
 import { createDiscreteApi, NButton } from "naive-ui";
 import { useCommonStore } from "@/store/commonStore";
@@ -159,11 +159,13 @@ export const useListPage = <P extends Paging, R>(
     searching.value = false;
   };
 
-  onBeforeMount(() => {
-    getList();
+  let init = true;
+  onMounted(async () => {
+    if (init) await getList();
+    init = false;
   });
   onActivated(() => {
-    getList();
+    if (!init) getList();
   });
   return {
     listXWidth,
@@ -216,11 +218,13 @@ export const useListNoPage = <R>(
     searching.value = false;
   };
 
-  onBeforeMount(() => {
-    getList();
+  let init = true;
+  onMounted(async () => {
+    if (init) await getList();
+    init = false;
   });
   onActivated(() => {
-    getList();
+    if (!init) getList();
   });
   return {
     listXWidth,

@@ -143,6 +143,15 @@ const createColumns = () => {
       },
     },
     {
+      title: "积分状态",
+      key: "pointsState",
+      align: "center",
+      width: 120,
+      render(row) {
+        return pointsStateList.getItem(row.pointsState)?.label;
+      },
+    },
+    {
       title: "审核时间",
       key: "auditorTime",
       align: "center",
@@ -158,15 +167,6 @@ const createColumns = () => {
       width: 120,
       render(row) {
         return row.auditorNote || "-";
-      },
-    },
-    {
-      title: "积分状态",
-      key: "pointsState",
-      align: "center",
-      width: 120,
-      render(row) {
-        return pointsStateList.getItem(row.pointsState)?.label;
       },
     },
 

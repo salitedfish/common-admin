@@ -13,7 +13,7 @@
 import { h } from "vue";
 import { defineComponent } from "vue";
 // 组件库
-import { NSpace, NButton, useDialog, NEllipsis, NImage } from "naive-ui";
+import { NSpace, NButton, useDialog, NEllipsis } from "naive-ui";
 // 自定义组件
 import screenSection from "./screenSection.vue";
 // 工具库
@@ -41,14 +41,14 @@ const createColumns = () => {
       title: "转让编号",
       key: "transferId",
       align: "center",
-      width: 120,
+      width: 180,
       fixed: "left",
     },
     {
       title: "积分编号",
       key: "pointsId",
       align: "center",
-      width: 120,
+      width: 180,
     },
     {
       title: "积分名称",
@@ -56,17 +56,38 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
+    // {
+    //   title: "积分封面",
+    //   key: "pointsCover",
+    //   align: "center",
+    //   width: 100,
+    //   render(row) {
+    //     return h(NImage, {
+    //       width: 50,
+    //       src: row.pointsCover,
+    //     });
+    //   },
+    // },
     {
-      title: "积分封面",
-      key: "pointsCover",
+      title: "token",
+      key: "token",
       align: "center",
-      width: 100,
-      render(row) {
-        return h(NImage, {
-          width: 50,
-          src: row.pointsCover,
-        });
+      width: 120,
+      render: (row) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => row.token,
+          }
+        );
       },
+    },
+    {
+      title: "积分数量",
+      key: "num",
+      align: "center",
+      width: 120,
     },
 
     {
@@ -78,37 +99,6 @@ const createColumns = () => {
         return recordTypeList.getItem(row.recordType)?.label;
       },
     },
-    {
-      title: "区块链哈希",
-      key: "chainHash",
-      align: "center",
-      width: 180,
-      render: (row) => {
-        return h(
-          NEllipsis,
-          {},
-          {
-            default: () => row.chainHash,
-          }
-        );
-      },
-    },
-    {
-      title: "来源地址",
-      key: "fromChainAddress",
-      align: "center",
-      width: 180,
-      render: (row) => {
-        return h(
-          NEllipsis,
-          {},
-          {
-            default: () => row.fromChainAddress,
-          }
-        );
-      },
-    },
-
     {
       title: "来源用户类型",
       key: "fromType",
@@ -125,8 +115,8 @@ const createColumns = () => {
       width: 100,
     },
     {
-      title: "去向地址",
-      key: "toChainAddress",
+      title: "来源地址",
+      key: "fromChainAddress",
       align: "center",
       width: 180,
       render: (row) => {
@@ -134,7 +124,7 @@ const createColumns = () => {
           NEllipsis,
           {},
           {
-            default: () => row.toChainAddress,
+            default: () => row.fromChainAddress,
           }
         );
       },
@@ -155,20 +145,36 @@ const createColumns = () => {
       width: 100,
     },
     {
-      title: "token",
-      key: "token",
+      title: "去向地址",
+      key: "toChainAddress",
       align: "center",
-      width: 120,
+      width: 180,
       render: (row) => {
         return h(
           NEllipsis,
           {},
           {
-            default: () => row.token,
+            default: () => row.toChainAddress,
           }
         );
       },
     },
+    {
+      title: "区块链哈希",
+      key: "chainHash",
+      align: "center",
+      width: 180,
+      render: (row) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => row.chainHash,
+          }
+        );
+      },
+    },
+
     {
       title: "状态",
       key: "transState",

@@ -9,7 +9,7 @@ export default <RouteRecordRaw[]>[
       label: "系统配置",
       icon: "peizhi",
       id: 7001,
-      keepAlive: true,
+      // keepAlive: true,
     },
   },
   {
@@ -20,7 +20,7 @@ export default <RouteRecordRaw[]>[
       label: "操作日志",
       icon: "rizhi",
       id: 7021,
-      keepAlive: true,
+      // keepAlive: true,
     },
   },
   {
@@ -31,7 +31,7 @@ export default <RouteRecordRaw[]>[
       label: "系统版本",
       icon: "jurassic_version",
       id: 7011,
-      keepAlive: true,
+      // keepAlive: true,
     },
   },
   {

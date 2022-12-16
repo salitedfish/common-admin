@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { h, ref, reactive, onBeforeMount } from "vue";
+import { h, ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import { NIcon } from "naive-ui";
@@ -100,7 +100,7 @@ const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[])
 };
 
 // 生成菜单后再判断显示哪些
-onBeforeMount(async () => {
+onMounted(async () => {
   const res = await getAuthRoutesRequest();
   if (res && res.code === 0) {
     authRouteHandler(menuOptions, res.data);

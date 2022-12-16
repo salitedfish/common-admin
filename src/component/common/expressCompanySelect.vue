@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { reactive, ref, onBeforeMount } from "vue";
+import { reactive, ref, onMounted } from "vue";
 // 组件库
 // 自定义组件
 import { getExpressCompanyList as getExpressCompanyListRequest } from "@/request/order";
@@ -70,7 +70,7 @@ const comfirmValue = (value: string) => {
   emit("update:modelValue", value);
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   request();
 });
 </script>

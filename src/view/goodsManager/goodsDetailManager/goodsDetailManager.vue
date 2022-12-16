@@ -291,7 +291,7 @@ export default defineComponent({
 
 <script lang="ts" setup>
 // 框架
-import { reactive, ref, computed, watch, onBeforeMount } from "vue";
+import { reactive, ref, computed, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 
@@ -348,7 +348,7 @@ const editTypeLimit = computed(() => {
   return !!editType.value;
 });
 
-onBeforeMount(() => {
+onMounted(() => {
   if (isCheck.value || isEdit.value) {
     getGoodsDetail();
   }

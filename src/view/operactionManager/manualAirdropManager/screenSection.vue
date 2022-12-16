@@ -1,8 +1,16 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号, 0表示平台" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.name" autosize placeholder="请输入空投名称" style="width: 200px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.itemId" autosize placeholder="请输入商品/积分编号" style="width: 200px" :disabled="searching"></n-input>
+    <n-input
+      v-model:value="params.merchantUid"
+      autosize
+      placeholder="请输入商户编号, 0表示平台"
+      v-if="authStore.isAdmin()"
+      style="width: 220px"
+      :disabled="searching"
+      clearable
+    ></n-input>
+    <n-input v-model:value="params.name" autosize placeholder="请输入空投名称" style="width: 200px" :disabled="searching" clearable></n-input>
+    <n-input v-model:value="params.itemId" autosize placeholder="请输入商品/积分编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select v-model:value="params.type" :options="airDropTypeList" placeholder="请选择空投类型" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.itemType" :options="airDropItemTypeList" placeholder="请选择空投物品类型" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.state" :options="airDropStateList" placeholder="请选择空投状态" style="width: 200px" :disabled="searching" clearable />

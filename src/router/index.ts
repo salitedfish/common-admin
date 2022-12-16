@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useRouteStore } from "@/store/routeStore";
 
 import goodsManager from "./goodsManager";
 import orderManager from "./orderManager";

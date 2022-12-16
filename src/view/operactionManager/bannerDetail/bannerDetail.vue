@@ -57,7 +57,7 @@
 
 <script lang="ts">
 // 框架
-import { defineComponent, reactive, ref, computed, onBeforeMount, watch } from "vue";
+import { defineComponent, reactive, ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 import { useFileNameFromURL } from "@ultra-man/noa";
@@ -140,7 +140,7 @@ const initData = async () => {
   commonStore.pageLoading = false;
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
   if (isEdit.value) {
     await initData();
   }

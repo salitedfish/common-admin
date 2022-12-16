@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 // 组件库
 // 自定义组件
 // 工具库
@@ -54,7 +54,7 @@ const valueChange = (aaa: string) => {
   emit("update:modelValue", aaa);
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   initData();
 });
 </script>

@@ -43,7 +43,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { computed, reactive, ref, onBeforeMount } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 import { useFileNameFromURL } from "@ultra-man/noa";
@@ -113,7 +113,7 @@ const submitHandler = async () => {
   submiting.value = false;
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   if (isCheck.value || isEdit.value) {
     initForm();
   }

@@ -36,7 +36,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { reactive, ref, computed, onBeforeMount } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 // 自定义组件
@@ -110,7 +110,7 @@ const initFormData = async () => {
   commonStore.pageLoading = false;
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   if (isEdit.value) {
     initFormData();
   }

@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 // 组件库
 // 自定义组件
 // 工具库
@@ -70,7 +70,7 @@ const getCategoryTree = async () => {
 const selectCategory = (categoryId: number, category: CategoryTreeItem, categoryList: CategoryTreeItem[]) => {
   emit("update:modelValue", categoryList || []);
 };
-onBeforeMount(() => {
+onMounted(() => {
   getCategoryTree();
 });
 </script>

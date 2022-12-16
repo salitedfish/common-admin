@@ -58,6 +58,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "商品类目",
       icon: "tubiaozhizuomoban",
+      keepAlive: true,
       id: 1011,
     },
   },

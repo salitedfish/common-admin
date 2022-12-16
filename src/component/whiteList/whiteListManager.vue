@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 // 组件库
 // 自定义组件
 import screenSection from "@/component/whiteList/screenSection.vue";
@@ -67,7 +67,7 @@ const getList = async () => {
   searching.value = false;
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   getList();
 });
 </script>

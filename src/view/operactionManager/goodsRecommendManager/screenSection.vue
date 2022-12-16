@@ -1,8 +1,16 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号, 0表示平台" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching"></n-input>
+    <n-input
+      v-model:value="params.merchantUid"
+      autosize
+      placeholder="请输入商户编号, 0表示平台"
+      v-if="authStore.isAdmin()"
+      style="width: 220px"
+      :disabled="searching"
+      clearable
+    ></n-input>
+    <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching" clearable></n-input>
+    <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
 
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="addGoodsRecommend">添加推荐</n-button>

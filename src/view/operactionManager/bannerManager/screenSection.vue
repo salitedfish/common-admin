@@ -1,7 +1,7 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()"></n-input>
-    <n-input v-model:value="params.title" autosize placeholder="请输入banner标题" style="width: 200px" :disabled="searching"></n-input>
+    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()" clearable></n-input>
+    <n-input v-model:value="params.title" autosize placeholder="请输入banner标题" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select :options="bannerStateList" v-model:value="params.state" clearable :disabled="searching" style="width: 200px" placeholder="请选择banner状态"></n-select>
 
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>

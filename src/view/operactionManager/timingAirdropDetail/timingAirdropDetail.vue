@@ -89,7 +89,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { ref, reactive, computed, onBeforeMount } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 // 组件库
 // 自定义组件
@@ -219,7 +219,7 @@ const initForm = async () => {
   commonStore.pageLoading = false;
 };
 
-onBeforeMount(() => {
+onMounted(() => {
   if (isEdit.value || isCheck.value) {
     initForm();
   }

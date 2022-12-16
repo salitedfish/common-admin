@@ -1,7 +1,15 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号, 0表示平台" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching"></n-input>
-    <n-input v-model:value="params.orderId" autosize placeholder="请输入订单编号" style="width: 200px" :disabled="searching"></n-input>
+    <n-input
+      v-model:value="params.merchantUid"
+      autosize
+      placeholder="请输入商户编号, 0表示平台"
+      v-if="authStore.isAdmin()"
+      style="width: 220px"
+      :disabled="searching"
+      clearable
+    ></n-input>
+    <n-input v-model:value="params.orderId" autosize placeholder="请输入订单编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select :options="payChannelList" v-model:value="params.channelType" placeholder="请选择分账渠道" style="width: 200px" :disabled="searching" clearable></n-select>
     <n-select :options="orderTypeList" v-model:value="params.orderType" placeholder="请选择订单类型" style="width: 200px" :disabled="searching" clearable></n-select>
     <n-select :options="shareStateList" v-model:value="params.state" placeholder="请选择分账状态" style="width: 200px" :disabled="searching" clearable></n-select>

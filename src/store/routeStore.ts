@@ -74,7 +74,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       return item.key === key;
     });
     currentRoute.value = historyRoutes[index];
-    router.push({
+    router.replace({
       name: currentRoute.value.name,
       query: currentRoute.value.query,
     });
@@ -99,6 +99,11 @@ export const useRouteStore = defineStore("routeStore", () => {
       }
     }
   };
+  // 清除当前路由外的其他路由
+  const clearHistoryRoute = () => {
+    historyRoutes.length = 0;
+    historyRoutes.push(currentRoute.value);
+  };
 
   return {
     currentRoutePath,
@@ -111,5 +116,6 @@ export const useRouteStore = defineStore("routeStore", () => {
     deleteHistoryRoutes,
     resetHistoryRoutes,
     deleteCurrentRoute,
+    clearHistoryRoute,
   };
 });

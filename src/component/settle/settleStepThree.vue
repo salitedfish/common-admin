@@ -57,7 +57,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { onBeforeMount, reactive, computed } from "vue";
+import { onMounted, reactive, computed } from "vue";
 // 组件库
 import { useLoadingBar } from "naive-ui";
 // 自定义组件
@@ -137,7 +137,7 @@ const activeClass = computed(() => {
   }
 });
 
-onBeforeMount(async () => {
+onMounted(async () => {
   loadingBar.start();
   const res = await getMerchantApplyResultRequest();
   if (res && res.code === 0) {
