@@ -13,7 +13,6 @@
 <script lang="ts" setup>
 // 框架
 import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 import categorySelect from "@/component/common/categorySelect.vue";
@@ -27,7 +26,6 @@ import { goodsStateList, goodsTypeList } from "@/view/goodsManager/goodsListMana
 import type { SearchParams } from "@/type/GoodsManager";
 import type { CategoryTreeItem } from "@/type/Common";
 
-const router = useRouter();
 const authStore = useAuthStore();
 
 defineProps<{

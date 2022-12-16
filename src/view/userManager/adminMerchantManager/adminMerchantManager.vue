@@ -70,7 +70,7 @@ const createColumns = () => {
       width: 100,
       render(user) {
         return h(NImage, {
-          width: 50,
+          width: 30,
           src: user.headUrl,
         });
       },

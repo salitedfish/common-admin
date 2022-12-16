@@ -79,7 +79,7 @@ const createColumns = () => {
       width: 100,
       render(user) {
         return h(NImage, {
-          width: 50,
+          width: 30,
           src: user.headUrl,
         });
       },
@@ -161,7 +161,7 @@ const createColumns = () => {
       title: "操作",
       key: "operaction",
       align: "center",
-      width: 120,
+      width: 180,
       fixed: "right",
       render(user) {
         const btnList = [

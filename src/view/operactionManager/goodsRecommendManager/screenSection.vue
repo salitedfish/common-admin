@@ -20,7 +20,6 @@
 <script lang="ts" setup>
 // 框架
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 // 工具库
@@ -32,7 +31,6 @@ import { useAuthStore } from "@/store/authStore";
 import type { GoodsRecommendListParams } from "@/type/Operator";
 
 const authStore = useAuthStore();
-const router = useRouter();
 
 defineProps<{
   searching: boolean;

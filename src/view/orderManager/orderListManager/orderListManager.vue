@@ -71,7 +71,7 @@ const createColumns = () => {
       width: 100,
       render(order) {
         return h(NImage, {
-          width: 50,
+          width: 30,
           src: order.goodsCover,
         });
       },
