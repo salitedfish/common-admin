@@ -26,7 +26,7 @@ import categorySelect from "@/component/common/categorySelect.vue";
 // 网络请求
 // store
 import { useAuthStore } from "@/store/authStore";
-import { invoiceState, orderStateList, orderTypeList, payChannelList, orderExchangeTypeList } from "./orderListManagerStore";
+import { orderStateList, orderTypeList, payChannelList, orderExchangeTypeList } from "./orderListManagerStore";
 // 类型
 import type { OrderListParam } from "@/type/Order";
 import type { CategoryTreeItem } from "@/type/Common";
