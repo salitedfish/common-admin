@@ -10,9 +10,9 @@
 
 <script lang="ts" setup>
 // 框架
-import { ref, h, reactive } from "vue";
+import { h } from "vue";
 // 组件库
-import { NImage, NButton, NSpace, useDialog, NEllipsis } from "naive-ui";
+import { NImage } from "naive-ui";
 // 自定义组件
 import screenSection from "./screenSection.vue";
 // 工具库
