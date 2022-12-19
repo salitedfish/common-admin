@@ -15,7 +15,7 @@ export default <RouteRecordRaw[]>[
   {
     path: "userAssetManager",
     name: "userAssetManager",
-    component: () => import("@/view/userManager/userAssetManager/userAssetManager.vue"),
+    component: () => import("@/view/userManager/userAssetManager/userAssetsManager.vue"),
     meta: {
       label: "用户资产",
       icon: "zichan",

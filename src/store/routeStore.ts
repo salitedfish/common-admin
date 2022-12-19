@@ -35,12 +35,11 @@ export const useRouteStore = defineStore("routeStore", () => {
     const index = historyRoutes.findIndex((item) => {
       return item.key === route.key;
     });
-
     if (index === -1) {
       // 如果不存在直接推入
       historyRoutes.push(route);
       currentRoute.value = route;
-    } else {
+    } else if (currentRoute.value.key !== historyRoutes[index].key) {
       currentRoute.value = historyRoutes[index];
     }
   };

@@ -139,7 +139,7 @@ const registerHandler = async () => {
 <style scoped lang="less">
 .form {
   // height: 100%;
-  margin-top: 100px;
+  margin-top: 6%;
   display: flex;
   align-items: center;
   justify-content: center;

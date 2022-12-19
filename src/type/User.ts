@@ -41,3 +41,49 @@ export type AdminMerchantListItem = {
   subMchid: string;
   uid: number;
 };
+
+export type GetUserAssetsListParams = Partial<{
+  classify: number;
+  freezeType: number;
+  goodsId: string;
+  goodsName: string;
+  goodsType: number;
+  token: string;
+  uid: string;
+}>;
+export type UserAssetsListItem = {
+  freezeNum: number;
+  freezeType: number;
+  goodsCover: string;
+  goodsId: string;
+  goodsLevel: number;
+  goodsName: string;
+  goodsTotal: number;
+  goodsType: number;
+  holdNum: number;
+  price: number;
+  recordType: number;
+  token: string;
+  uid: number;
+  updateTime: string;
+};
+
+export type GetUserPointsListParams = Partial<{
+  merchantUid: string;
+  pointsId: string;
+  pointsName: string;
+  token: string;
+  uid: string;
+}>;
+export type UserPointsListItem = {
+  freezeNum: number;
+  holdNum: number;
+  merchantName: string;
+  merchantUid: number;
+  pointsCover: string;
+  pointsId: string;
+  pointsName: string;
+  token: string;
+  uid: number;
+  updateTime: string;
+};

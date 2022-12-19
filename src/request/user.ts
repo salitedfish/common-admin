@@ -1,6 +1,6 @@
 import { ultraFetch } from "./init";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { AdminMerchantListParam, AdminMerchantListItem } from "@/type/User";
+import type { AdminMerchantListParam, AdminMerchantListItem, GetUserAssetsListParams, GetUserPointsListParams, UserAssetsListItem, UserPointsListItem } from "@/type/User";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 
@@ -44,6 +44,21 @@ export const updateAdminMerchantState = (params: { uid: number; state: number })
 export const resetAdminMerchantPassword = (params: { uid: number }): Promise<Return<{ password: string }>> => {
   return ultraFetch.post({
     URL: "/manager/admin-merchant/reset-password",
+    body: JSON.stringify(params),
+  });
+};
+
+// 用户资产
+export const getUserAssetsList = (params: Paging & GetUserAssetsListParams): Promise<Return<ReturnList<UserAssetsListItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/user-asset/page",
+    body: JSON.stringify(params),
+  });
+};
+// 用户积分
+export const getUserPointsList = (params: Paging & GetUserPointsListParams): Promise<Return<ReturnList<UserPointsListItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/user-points/page",
     body: JSON.stringify(params),
   });
 };

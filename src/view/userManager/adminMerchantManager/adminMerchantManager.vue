@@ -21,7 +21,7 @@ import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
 import { getAdminMerchantList, updateAdminMerchantState, resetAdminMerchantPassword } from "@/request/user";
 // store
-import { accountRoleList, AdminMerchantState, userStateList } from "./adminMerchantManagerStore";
+import { accountRoleList, AdminMerchantState, userStateList, AccountRole } from "./adminMerchantManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
 import type { AdminMerchantListItem } from "@/type/User";
@@ -141,14 +141,16 @@ const createColumns = () => {
       width: 120,
       fixed: "right",
       render(user) {
-        const btnList = [
-          h(
-            NButton,
-            { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(user) },
-            { default: () => (user.state === AdminMerchantState.FROZEN ? "解冻" : "冻结") }
-          ),
-          h(NButton, { type: "warning", size: "small", secondary: true, onClick: () => handleResetpassword(user) }, { default: () => "重置密码" }),
-        ];
+        const btnList = [h(NButton, { type: "warning", size: "small", secondary: true, onClick: () => handleResetpassword(user) }, { default: () => "重置密码" })];
+        if (user.role === AccountRole.MERCHANT) {
+          btnList.push(
+            h(
+              NButton,
+              { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(user) },
+              { default: () => (user.state === AdminMerchantState.FROZEN ? "解冻" : "冻结") }
+            )
+          );
+        }
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => btnList });
         return btnBox;
