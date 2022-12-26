@@ -32,9 +32,15 @@ const dialog = useDialog();
 // 列表项
 const createColumns = () => {
   const list: DataTableColumns<{ id: number; keyword: string; order: number }> = [
+    // {
+    //   title: "id",
+    //   key: "id",
+    //   align: "center",
+    //   width: 80,
+    // },
     {
-      title: "id",
-      key: "id",
+      title: "排序",
+      key: "order",
       align: "center",
       width: 80,
     },
@@ -43,12 +49,6 @@ const createColumns = () => {
       key: "keyword",
       align: "center",
       width: 160,
-    },
-    {
-      title: "排序",
-      key: "order",
-      align: "center",
-      width: 80,
     },
     {
       title: "操作",

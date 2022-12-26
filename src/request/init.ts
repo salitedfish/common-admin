@@ -10,6 +10,7 @@ enum RequestCodeState {
   ERROR = -1,
   SETTLE_TWO = 351,
   SETTLE_THREE = 352,
+  LOGGED_IN_EXPIRED = 301,
   NOT_LOGGED_IN = 302,
   ACCOUNT_FROZEN = 303,
 }
@@ -43,8 +44,8 @@ export const ultraFetch = new UltraFetch(
       } else if (response.code === RequestCodeState.SETTLE_THREE) {
         router.push({ name: "settle", query: { step: 3 } });
         commonNotify("warning", response.message || "网络异常！");
-      } else if ([RequestCodeState.NOT_LOGGED_IN, RequestCodeState.ACCOUNT_FROZEN].includes(response.code)) {
-        // 302：未登录，303：账号冻结
+      } else if ([RequestCodeState.LOGGED_IN_EXPIRED, RequestCodeState.NOT_LOGGED_IN, RequestCodeState.ACCOUNT_FROZEN].includes(response.code)) {
+        // 301：登录过期，302：未登录，303：账号冻结
         router.push({ name: "login" });
         commonNotify("warning", response.message || "网络异常！");
       } else if (response instanceof Blob) {

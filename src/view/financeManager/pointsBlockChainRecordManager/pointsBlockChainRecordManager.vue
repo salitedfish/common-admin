@@ -38,7 +38,7 @@ const dialog = useDialog();
 const createColumns = () => {
   const list: DataTableColumns<PointsChainRecordItem> = [
     {
-      title: "转让编号",
+      title: "交易编号",
       key: "transferId",
       align: "center",
       width: 180,
@@ -91,7 +91,7 @@ const createColumns = () => {
     },
 
     {
-      title: "记录类型",
+      title: "交易类型",
       key: "recordType",
       align: "center",
       width: 100,
@@ -176,7 +176,7 @@ const createColumns = () => {
     },
 
     {
-      title: "状态",
+      title: "交易状态",
       key: "transState",
       align: "center",
       width: 100,
@@ -185,7 +185,7 @@ const createColumns = () => {
       },
     },
     {
-      title: "记录开始时间",
+      title: "交易时间",
       key: "createTime",
       align: "center",
       width: 180,

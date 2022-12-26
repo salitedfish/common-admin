@@ -4,6 +4,8 @@ export type GetProfitShareListParams = Partial<{
   orderId: string;
   orderType: number;
   state: number;
+  endTime: string;
+  startTime: string;
 }>;
 
 export type ProfitShareListItem = {
@@ -33,6 +35,8 @@ export type ChainRecordParams = Partial<{
   transState: number;
   uid: string;
   userType: number;
+  endTime: string;
+  startTime: string;
 }>;
 
 export type GoodsChainRecordItem = {

@@ -241,7 +241,7 @@
           >
         </n-form-item>
         <n-form-item label="奖励上限:">
-          <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限：0表示无上限" :min="0" :style="{ width: inputWidth }" :disabled="formDisabled">
+          <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限，0表示无上限" :min="0" :style="{ width: inputWidth }" :disabled="formDisabled">
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>

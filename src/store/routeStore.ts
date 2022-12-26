@@ -55,17 +55,15 @@ export const useRouteStore = defineStore("routeStore", () => {
         return;
       } else if (index === 0) {
         currentRoute.value = historyRoutes[1];
-      } else if (index === historyRoutes.length - 1) {
-        currentRoute.value = historyRoutes[historyRoutes.length - 2];
       } else {
-        currentRoute.value = historyRoutes[Number(index) - 1];
+        currentRoute.value = historyRoutes[index - 1];
       }
       router.replace({
         name: currentRoute.value.name,
         query: currentRoute.value.query,
       });
     }
-    historyRoutes.splice(Number(index), 1);
+    historyRoutes.splice(index, 1);
   };
   // tab选择路由
   const selectHistoryRoutes = (key: string) => {

@@ -21,7 +21,7 @@ export enum AccountTab {
 }
 export const accountTabList = [
   {
-    label: "正常账号",
+    label: "普通账号",
     value: AccountTab.NORMAL,
   },
   {

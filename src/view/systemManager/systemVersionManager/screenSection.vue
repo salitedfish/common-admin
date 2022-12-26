@@ -1,7 +1,7 @@
 <template>
   <n-space>
-    <n-select :options="versionStateList" v-model:value="params.state" clearable :disabled="searching" style="width: 200px"></n-select>
     <app-channel-select v-model="params.channel" :searching="searching"></app-channel-select>
+    <n-select :options="versionStateList" v-model:value="params.state" placeholder="请选择版本状态" clearable :disabled="searching" style="width: 200px"></n-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="addVersion">更新版本</n-button>
   </n-space>

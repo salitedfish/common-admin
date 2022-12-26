@@ -23,6 +23,13 @@ export const getGoodsChainRecord = (params: Paging & ChainRecordParams): Promise
   });
 };
 
+export const exportGoodsChainRecord = (params: ChainRecordParams): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/chain-transfer/asset/excel",
+    params,
+  });
+};
+
 export const getBalanceByToken = (params: { address: string; token: string }): Promise<Return<number>> => {
   return ultraFetch.post({
     URL: "/manager/chain-transfer/asset/balance",
@@ -48,5 +55,12 @@ export const syncPointsChainRecord = (params: { transferId: string }): Promise<R
   return ultraFetch.post({
     URL: "/manager/chain-transfer/points/sync",
     body: JSON.stringify(params),
+  });
+};
+
+export const exportPointsChainRecord = (params: ChainRecordParams): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/chain-transfer/points/excel",
+    params,
   });
 };

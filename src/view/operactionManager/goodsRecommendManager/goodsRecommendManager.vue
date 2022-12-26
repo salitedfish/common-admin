@@ -67,17 +67,8 @@ const createColumns = () => {
       },
     },
     {
-      title: "置顶状态",
-      key: "topState",
-      width: 120,
-      align: "center",
-      render: (row) => {
-        return goodsRecommendTopStateList.getItem(row.topState)?.label;
-      },
-    },
-    {
-      title: "商品销量",
-      key: "goodsSales",
+      title: "商品总量",
+      key: "goodsTotal",
       width: 120,
       align: "center",
     },
@@ -88,12 +79,20 @@ const createColumns = () => {
       align: "center",
     },
     {
-      title: "商品总量",
-      key: "goodsTotal",
+      title: "商品销量",
+      key: "goodsSales",
       width: 120,
       align: "center",
     },
-
+    {
+      title: "置顶状态",
+      key: "topState",
+      width: 120,
+      align: "center",
+      render: (row) => {
+        return goodsRecommendTopStateList.getItem(row.topState)?.label;
+      },
+    },
     {
       title: "操作",
       key: "operaction",

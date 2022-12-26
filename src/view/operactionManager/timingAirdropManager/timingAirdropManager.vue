@@ -68,13 +68,13 @@ const createColumns = () => {
       },
     },
     {
-      title: "商品/积分编号",
+      title: "空投商品/积分编号",
       key: "itemId",
       align: "center",
       width: 160,
     },
     {
-      title: "执行时间类型",
+      title: "执行类型",
       key: "timeType",
       align: "center",
       width: 120,

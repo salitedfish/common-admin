@@ -43,7 +43,24 @@ const createColumns = () => {
       align: "center",
       width: 140,
     },
-
+    {
+      title: "状态",
+      key: "state",
+      align: "center",
+      width: 100,
+      render(user) {
+        return userStateList.getItem(user.state)?.label;
+      },
+    },
+    {
+      title: "类型",
+      key: "tab",
+      align: "center",
+      width: 120,
+      render(user) {
+        return accountRoleList.getItem(user.role)?.label;
+      },
+    },
     {
       title: "名称/商户名称",
       key: "nickName",
@@ -73,15 +90,6 @@ const createColumns = () => {
           width: 30,
           src: user.headUrl,
         });
-      },
-    },
-    {
-      title: "类型",
-      key: "tab",
-      align: "center",
-      width: 120,
-      render(user) {
-        return accountRoleList.getItem(user.role)?.label;
       },
     },
     {
@@ -124,16 +132,6 @@ const createColumns = () => {
         return user.lastLoginTime || "-";
       },
     },
-    {
-      title: "状态",
-      key: "state",
-      align: "center",
-      width: 100,
-      render(user) {
-        return userStateList.getItem(user.state)?.label;
-      },
-    },
-
     {
       title: "操作",
       key: "operaction",

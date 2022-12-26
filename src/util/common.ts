@@ -109,6 +109,7 @@ export const useListPage = <P extends Paging, R>(
   options: {
     heightLevel?: number;
     size?: number;
+    params?: Omit<P, "page" | "size">;
   } = {
     heightLevel: 0,
     size: 10,
@@ -135,6 +136,7 @@ export const useListPage = <P extends Paging, R>(
     page: 1,
     size: options.size || 10,
   });
+  searchParam.value = { ...searchParam.value, ...options.params };
   // 数据总数
   const totalPage = ref(0);
   // 查询状态
@@ -180,11 +182,12 @@ export const useListPage = <P extends Paging, R>(
 };
 
 // 创建不需要分页列表页面所需的数据Hook
-export const useListNoPage = <R>(
-  getListRequest: () => Promise<Return<R[]>>,
+export const useListNoPage = <P, R>(
+  getListRequest: (searchParams: P) => Promise<Return<R[]>>,
   createColumns: () => DataTableColumns<R>,
   options: {
     heightLevel?: number;
+    params?: P;
   } = {
     heightLevel: 0,
   }
@@ -207,11 +210,20 @@ export const useListNoPage = <R>(
   const searching = ref(false);
   // 展示的列表
   const list: Ref<R[]> = ref([]);
+  // 筛选的参数
+  const searchParam = <Ref<P>>ref({});
+  searchParam.value = { ...searchParam.value, ...options.params };
+
+  // 整合筛选参数
+  const submitSearch = (params: P) => {
+    searchParam.value = { ...searchParam.value, ...params };
+    getList();
+  };
 
   // 请求数据
   const getList = async () => {
     searching.value = true;
-    const res = await getListRequest();
+    const res = await getListRequest(searchParam.value);
     if (res && res.code === 0) {
       list.value = res.data;
     }
@@ -231,6 +243,7 @@ export const useListNoPage = <R>(
     listYHeight,
     searching,
     list,
+    submitSearch,
     getList,
   };
 };

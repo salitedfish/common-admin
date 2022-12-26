@@ -5,6 +5,8 @@ export type UserListParam = Partial<{
   state: number;
   tab: number;
   uid: string;
+  endTime: string;
+  startTime: string;
 }>;
 export type UserListItem = {
   chainAddress: string;
@@ -26,6 +28,8 @@ export type AdminMerchantListParam = Partial<{
   phone: string;
   role: number;
   uid: string;
+  endTime: string;
+  startTime: string;
 }>;
 export type AdminMerchantListItem = {
   chainAddress: string;

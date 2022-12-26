@@ -121,27 +121,6 @@ const createColumns = () => {
       align: "center",
       width: 100,
     },
-
-    // {
-    //   title: "代币标准",
-    //   key: "ercStandard",
-    //   align: "center",
-    //   width: 120,
-    // },
-    // {
-    //   title: "区块链哈希",
-    //   key: "chainHash",
-    //   width: 160,
-    // },
-    {
-      title: "创建时间",
-      key: "createTime",
-      align: "center",
-      width: 180,
-      render(order) {
-        return order.createTime || "-";
-      },
-    },
     {
       title: "积分状态",
       key: "pointsState",
@@ -149,6 +128,15 @@ const createColumns = () => {
       width: 120,
       render(row) {
         return pointsStateList.getItem(row.pointsState)?.label;
+      },
+    },
+    {
+      title: "创建时间",
+      key: "createTime",
+      align: "center",
+      width: 180,
+      render(order) {
+        return order.createTime || "-";
       },
     },
     {

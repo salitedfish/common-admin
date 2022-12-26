@@ -13,6 +13,46 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "editBlindBox",
+    name: "editBlindBox",
+    component: () => import("@/view/goodsManager/blindBoxDetail/blindBoxDetail.vue"),
+    meta: {
+      label: "编辑盲盒",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "checkBlindBox",
+    name: "checkBlindBox",
+    component: () => import("@/view/goodsManager/blindBoxDetail/blindBoxDetail.vue"),
+    meta: {
+      label: "查看盲盒",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "blindBoxOpenRecord",
+    name: "blindBoxOpenRecord",
+    component: () => import("@/view/goodsManager/blindBoxOpenRecord/blindBoxOpenRecord.vue"),
+    meta: {
+      label: "查看开盒记录",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "goodsPublishRecord",
+    name: "goodsPublishRecord",
+    component: () => import("@/view/goodsManager/goodsPublishRecord/goodsPublishRecord.vue"),
+    meta: {
+      label: "发行记录",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
     path: "goodsWhiteListManager",
     name: "goodsWhiteListManager",
     component: () => import("@/view/goodsManager/goodsWhiteListManager/goodsWhiteListManager.vue"),

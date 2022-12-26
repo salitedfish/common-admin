@@ -6,6 +6,29 @@
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
+
+  <n-modal :show="showRefundDialog" @update:show="(state: boolean) => (showRefundDialog = state)">
+    <n-card style="width: 600px" title="退款审核" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <template #header-extra>
+        <custom-icon name="guanbi" :size="16" @click="showRefundDialog = false"></custom-icon>
+      </template>
+
+      <n-form label-placement="left" label-width="80px" label-align="left">
+        <n-form-item label="审核备注:">
+          <n-input v-model:value="refundInfo.note" placeholder="请输入审核备注"></n-input>
+        </n-form-item>
+        <n-form-item label="审核结果:">
+          <n-select v-model:value="refundInfo.state" :options="refundExamStateList" placeholder="请选择审核结果" />
+        </n-form-item>
+      </n-form>
+
+      <template #footer>
+        <div style="display: flex; justify-content: end">
+          <n-button type="primary" inline-block @click="handleRefund" :disabled="refundIng" :loading="refundIng">确认</n-button>
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -16,19 +39,26 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { h } from "vue";
+import { h, ref, reactive } from "vue";
 // 组件库
 import { NImage, NButton, NSpace, useDialog } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
+import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
 import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
-import { getOrderList as getListRequest, orderOffLineComfirm as orderOffLineComfirmRequest, orderSyncComfirm as orderSyncComfirmRequest } from "@/request/order";
+import {
+  getOrderList as getListRequest,
+  orderOffLineComfirm as orderOffLineComfirmRequest,
+  orderSyncComfirm as orderSyncComfirmRequest,
+  orderRefundSyncComfirm as orderRefundSyncComfirmRequest,
+  orderRefundComfirm,
+} from "@/request/order";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { orderStateList, orderTypeList, payChannelList, OrderState, PayChannel } from "./orderListManagerStore";
+import { orderStateList, orderTypeList, payChannelList, OrderState, PayChannel, orderRefundStateList, OrderRefundState, refundExamStateList } from "./orderListManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -120,7 +150,25 @@ const createColumns = () => {
       align: "center",
       width: 100,
       render(order) {
-        return payChannelList.getItem(order.payChannel)?.label;
+        return payChannelList.getItem(order.payChannel)?.label || "-";
+      },
+    },
+    {
+      title: "订单状态",
+      key: "orderState",
+      align: "center",
+      width: 100,
+      render(order) {
+        return orderStateList.getItem(order.orderState)?.label;
+      },
+    },
+    {
+      title: "退款状态",
+      key: "refundState",
+      align: "center",
+      width: 100,
+      render(order) {
+        return orderRefundStateList.getItem(order.refundState)?.label || "-";
       },
     },
     {
@@ -139,15 +187,6 @@ const createColumns = () => {
       width: 180,
       render(order) {
         return order.payTime || "-";
-      },
-    },
-    {
-      title: "订单状态",
-      key: "orderState",
-      align: "center",
-      width: 100,
-      render(order) {
-        return orderStateList.getItem(order.orderState)?.label;
       },
     },
     // {
@@ -209,6 +248,43 @@ const createColumns = () => {
             );
           }
         }
+        if (order.refundState === OrderRefundState.REFUND_APPLY) {
+          btnList.push(
+            h(
+              NButton,
+              {
+                type: "warning",
+                size: "small",
+                secondary: true,
+                onClick: () => {
+                  showRefundDialog.value = true;
+                  refundInfo.orderId = order.orderId;
+                },
+              },
+              {
+                default: () => "退款审核",
+              }
+            )
+          );
+        }
+        if (order.refundState === OrderRefundState.REFUND_ING) {
+          btnList.push(
+            h(
+              NButton,
+              {
+                type: "warning",
+                size: "small",
+                secondary: true,
+                onClick: () => {
+                  orderRefundSyncComfirm(order.orderId);
+                },
+              },
+              {
+                default: () => "退款差错同步确认",
+              }
+            )
+          );
+        }
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => btnList });
         return btnBox;
@@ -267,6 +343,40 @@ const orderSyncComfirm = (orderId: string) => {
       dialogInfo.loading = false;
     },
   });
+};
+// 退款差错同步确认
+const orderRefundSyncComfirm = (orderId: string) => {
+  const dialogInfo = dialog.warning({
+    title: "退款差错同步确认",
+    content: "是否确认腿款差错同步",
+    positiveText: "确认",
+    onPositiveClick: async () => {
+      dialogInfo.loading = true;
+      const res = await orderRefundSyncComfirmRequest({ orderId });
+      if (res) {
+        await getList();
+        commonNotify("success", "退款差错同步确认成功");
+      }
+      dialogInfo.loading = false;
+    },
+  });
+};
+// 退款相关
+const showRefundDialog = ref(false);
+const refundIng = ref(false);
+const refundInfo = reactive({
+  state: null,
+  note: "",
+  orderId: "",
+});
+const handleRefund = async () => {
+  refundIng.value = true;
+  const res = await orderRefundComfirm(refundInfo);
+  if (res) {
+    commonNotify("success", "退款审核完成");
+    showRefundDialog.value = false;
+  }
+  refundIng.value = false;
 };
 </script>
 

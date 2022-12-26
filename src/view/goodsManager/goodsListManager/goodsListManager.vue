@@ -85,6 +85,7 @@ import {
   updateGoodsState as updateGoodsStateRequest,
   updateGoodsAudit as updateGoodsAuditRequest,
   updateGoodsCategory as updateGoodsCategoryRequest,
+  clearBlindBoxPrize,
 } from "@/request/goods";
 import { deleteWhiteList as deleteWhiteListRequest } from "@/request/common";
 
@@ -180,6 +181,15 @@ const createColumns = () => {
       width: 100,
     },
     {
+      title: "商品状态",
+      key: "goodsState",
+      align: "center",
+      width: 100,
+      render(row) {
+        return goodsStateList.getItem(row.goodsState)?.label;
+      },
+    },
+    {
       title: "上架时间",
       key: "activeTime",
       align: "center",
@@ -195,15 +205,6 @@ const createColumns = () => {
       width: 180,
       render(row) {
         return row.goodsSaleTime ? row.goodsSaleTime : "-";
-      },
-    },
-    {
-      title: "商品状态",
-      key: "goodsState",
-      align: "center",
-      width: 100,
-      render(row) {
-        return goodsStateList.getItem(row.goodsState)?.label;
       },
     },
     {
@@ -638,6 +639,15 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "goodsPublishRecord",
+                    query: {
+                      id: goods.goodsId,
+                      name: goods.goodsName,
+                    },
+                  });
+                },
               },
               {
                 default: () => "发行记录",
@@ -668,6 +678,7 @@ const createColumns = () => {
             )
           );
         }
+        // 查看盲盒
         if (goodsType === GoodsType.BLIND_BOX && [GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
@@ -676,6 +687,15 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "checkBlindBox",
+                    query: {
+                      id: goods.goodsId,
+                      name: goods.goodsName,
+                    },
+                  });
+                },
               },
               {
                 default: () => "查看盲盒",
@@ -683,6 +703,7 @@ const createColumns = () => {
             )
           );
         }
+        // 编辑盲盒
         if (goodsType === GoodsType.BLIND_BOX && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
@@ -691,6 +712,15 @@ const createColumns = () => {
                 type: "primary",
                 secondary: true,
                 size,
+                onClick: () => {
+                  router.push({
+                    name: "editBlindBox",
+                    query: {
+                      id: goods.goodsId,
+                      name: goods.goodsName,
+                    },
+                  });
+                },
               },
               {
                 default: () => "编辑盲盒",
@@ -698,6 +728,7 @@ const createColumns = () => {
             )
           );
         }
+        // 清空盲盒
         if (goodsType === GoodsType.BLIND_BOX && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
@@ -706,6 +737,21 @@ const createColumns = () => {
                 type: "warning",
                 size,
                 secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "清空盲盒",
+                    content: `确认清空${goods.goodsName}的盲盒奖品吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await clearBlindBoxPrize({ goodsId: goods.goodsId });
+                      if (res) {
+                        commonNotify("success", "盲盒奖品清空成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
               },
               {
                 default: () => "清空盲盒",
@@ -713,6 +759,7 @@ const createColumns = () => {
             )
           );
         }
+        // 查看开盒记录
         if (isAdmin && goodsType === GoodsType.BLIND_BOX && [GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
@@ -721,6 +768,14 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "blindBoxOpenRecord",
+                    query: {
+                      id: goods.goodsId,
+                    },
+                  });
+                },
               },
               {
                 default: () => "查看开盒记录",

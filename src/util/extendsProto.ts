@@ -12,6 +12,6 @@ Object.defineProperty(Array.prototype, "getItem", {
       }
     }
   },
-  enumerable: false,
+  // enumerable: false,
 });
 export {};

@@ -55,7 +55,7 @@ const createColumns = () => {
     {
       title: "用户编号",
       key: "uid",
-      width: 120,
+      width: 100,
       align: "center",
       fixed: "left",
     },
@@ -63,7 +63,25 @@ const createColumns = () => {
       title: "手机号",
       key: "phone",
       align: "center",
-      width: 140,
+      width: 120,
+    },
+    {
+      title: "状态",
+      key: "state",
+      align: "center",
+      width: 100,
+      render(user) {
+        return userStateList.getItem(user.state)?.label;
+      },
+    },
+    {
+      title: "类型",
+      key: "tab",
+      align: "center",
+      width: 100,
+      render(user) {
+        return accountTabList.getItem(user.tab)?.label;
+      },
     },
     {
       title: "用户昵称",
@@ -97,24 +115,6 @@ const createColumns = () => {
             default: () => user.chainAddress,
           }
         );
-      },
-    },
-    {
-      title: "状态",
-      key: "state",
-      align: "center",
-      width: 100,
-      render(user) {
-        return userStateList.getItem(user.state)?.label;
-      },
-    },
-    {
-      title: "类型",
-      key: "tab",
-      align: "center",
-      width: 120,
-      render(user) {
-        return accountTabList.getItem(user.tab)?.label;
       },
     },
     {

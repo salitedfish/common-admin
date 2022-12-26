@@ -38,7 +38,7 @@ const createColumns = () => {
     {
       title: "积分token",
       key: "token",
-      width: 120,
+      width: 100,
       align: "center",
     },
     {
@@ -66,19 +66,6 @@ const createColumns = () => {
       },
     },
     {
-      title: "商铺编号",
-      key: "merchantUid",
-      width: 120,
-      align: "center",
-    },
-    {
-      title: "商铺名称",
-      key: "merchantName",
-      width: 120,
-      align: "center",
-    },
-
-    {
       title: "持有数量",
       key: "holdNum",
       width: 100,
@@ -88,12 +75,6 @@ const createColumns = () => {
       title: "冻结数量",
       key: "freezeNum",
       width: 100,
-      align: "center",
-    },
-    {
-      title: "获取时间",
-      key: "updateTime",
-      width: 180,
       align: "center",
     },
   ];

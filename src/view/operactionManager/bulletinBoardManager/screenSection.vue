@@ -9,11 +9,11 @@
       :disabled="searching"
       clearable
     ></n-input>
+    <n-select v-model:value="params.type" :options="bulletinBoardTypeList" placeholder="请选择公告类型" style="width: 200px" :disabled="searching" clearable />
     <n-input v-model:value="params.title" autosize placeholder="请输入公告标题" style="width: 200px" :disabled="searching" clearable></n-input>
-    <category-select v-model="categoryList" checkType="all" style="width: 200px" :type="CategoryType.NOTICE"></category-select>
     <n-select v-model:value="params.state" :options="bulletinBoardStateList" placeholder="请选择公告状态" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.topState" :options="bulletinBoardTopStateList" placeholder="请选择公告置顶状态" style="width: 200px" :disabled="searching" clearable />
-    <n-select v-model:value="params.type" :options="bulletinBoardTypeList" placeholder="请选择类型" style="width: 200px" :disabled="searching" clearable />
+    <category-select v-model="categoryList" checkType="all" style="width: 200px" :type="CategoryType.NOTICE"></category-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="addBulletinBoard">添加公告</n-button>
   </n-space>

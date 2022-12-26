@@ -35,14 +35,14 @@ const createColumns = () => {
     {
       title: "用户编号",
       key: "uid",
-      width: 120,
+      width: 100,
       align: "center",
       fixed: "left",
     },
     {
       title: "资产token",
       key: "token",
-      width: 120,
+      width: 100,
       align: "center",
     },
     {
@@ -81,17 +81,32 @@ const createColumns = () => {
     {
       title: "商品品级",
       key: "goodsLevel",
-      width: 100,
+      width: 80,
       align: "center",
       render: (row) => {
         return goodsLevelList.getItem(row.goodsLevel)?.label;
       },
     },
     {
-      title: "获取时价格（元）",
-      key: "price",
-      width: 140,
+      title: "持有数量",
+      key: "holdNum",
+      width: 80,
       align: "center",
+    },
+    {
+      title: "冻结数量",
+      key: "freezeNum",
+      width: 80,
+      align: "center",
+    },
+    {
+      title: "冻结原因",
+      key: "freezeType",
+      width: 80,
+      align: "center",
+      render: (row) => {
+        return freezeReasonList.getItem(row.freezeType)?.label;
+      },
     },
     {
       title: "获取方式",
@@ -103,40 +118,16 @@ const createColumns = () => {
       },
     },
     {
+      title: "获取价格",
+      key: "price",
+      width: 100,
+      align: "center",
+    },
+    {
       title: "获取时间",
       key: "updateTime",
       width: 180,
       align: "center",
-    },
-    {
-      title: "持有数量",
-      key: "holdNum",
-      width: 100,
-      align: "center",
-    },
-
-    {
-      title: "商品总量",
-      key: "goodsTotal",
-      width: 100,
-      align: "center",
-    },
-
-    {
-      title: "冻结数量",
-      key: "freezeNum",
-      width: 100,
-      align: "center",
-    },
-
-    {
-      title: "冻结原因",
-      key: "freezeType",
-      width: 100,
-      align: "center",
-      render: (row) => {
-        return freezeReasonList.getItem(row.freezeType)?.label;
-      },
     },
   ];
   return list;

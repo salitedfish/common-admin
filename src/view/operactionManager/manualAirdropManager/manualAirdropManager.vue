@@ -79,31 +79,22 @@ const createColumns = () => {
       },
     },
     {
-      title: "商品/积分编号",
+      title: "空投商品/积分编号",
       key: "itemId",
       align: "center",
       width: 160,
     },
     {
-      title: "总空投人数",
+      title: "名单人数",
       key: "totalUsers",
       align: "center",
       width: 100,
     },
     {
-      title: "实际空投人数",
+      title: "空投人数",
       key: "hitUsers",
       align: "center",
-      width: 120,
-    },
-    {
-      title: "空投时间",
-      key: "startTime",
-      align: "center",
-      width: 180,
-      render(row) {
-        return row.startTime ? row.startTime : "-";
-      },
+      width: 100,
     },
     {
       title: "空投状态",
@@ -123,7 +114,15 @@ const createColumns = () => {
         return airDropTaskStateList.getItem(row.taskState)?.label;
       },
     },
-
+    {
+      title: "空投时间",
+      key: "startTime",
+      align: "center",
+      width: 180,
+      render(row) {
+        return row.startTime ? row.startTime : "-";
+      },
+    },
     {
       title: "结果备注",
       key: "note",

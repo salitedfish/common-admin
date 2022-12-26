@@ -6,10 +6,13 @@ export type OrderListParam = Partial<{
   merchantUid: string;
   orderId: string;
   orderState: number;
+  refundState: number;
   orderType: number;
   payChannel: number;
   type: number;
   uid: string;
+  endTime: string;
+  startTime: string;
 }>;
 export type OrderListItem = {
   buyerUid: number;
@@ -27,6 +30,7 @@ export type OrderListItem = {
   orderNum: number;
   orderPrice: number;
   orderState: number;
+  refundState: number;
   orderTime: string;
   orderToken: string;
   orderTotalAmount: number;
@@ -44,6 +48,8 @@ export type ExpressOrderListParam = Partial<{
   orderId: string;
   orderState: number;
   uid: string;
+  endTime: string;
+  startTime: string;
 }>;
 export type ExpressOrderListItem = {
   cancelTime: string;
@@ -98,4 +104,28 @@ export type ExpressCompany = {
   phone: string;
   simpleName: string;
   url: string;
+};
+
+export type InvoiceListParam = Partial<{
+  endTime: string;
+  invoiceState: number;
+  startTime: string;
+  uid: string;
+}>;
+export type InvoiceListItem = {
+  bankCardCode: string;
+  bankName: string;
+  createTime: string;
+  electronicImage: string;
+  invoiceAmount: number;
+  invoiceState: number;
+  orderId: string;
+  registerAddress: string;
+  registerPhone: string;
+  tin: string;
+  title: string;
+  titleType: number;
+  type: number;
+  uid: number;
+  updateTime: string;
 };

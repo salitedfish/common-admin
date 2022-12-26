@@ -24,6 +24,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "addInvoice",
+    name: "addInvoice",
+    component: () => import("@/view/orderManager/addInvoice/addInvoice.vue"),
+    meta: {
+      label: "开票",
+      icon: "fapiao",
+      keepAlive: true,
+    },
+  },
+  {
     path: "expressListManager",
     name: "expressListManager",
     component: () => import("@/view/orderManager/expressListManager/expressListManager.vue"),

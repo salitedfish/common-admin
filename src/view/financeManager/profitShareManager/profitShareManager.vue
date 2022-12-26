@@ -143,16 +143,6 @@ const createColumns = () => {
       },
     },
     {
-      title: "分账时间",
-      key: "createTime",
-      width: 180,
-      align: "center",
-
-      render: (row) => {
-        return row.createTime || "-";
-      },
-    },
-    {
       title: "分账状态",
       key: "state",
       width: 120,
@@ -160,6 +150,16 @@ const createColumns = () => {
 
       render: (row) => {
         return shareStateList.getItem(row.state)?.label;
+      },
+    },
+    {
+      title: "分账时间",
+      key: "createTime",
+      width: 180,
+      align: "center",
+
+      render: (row) => {
+        return row.createTime || "-";
       },
     },
     {

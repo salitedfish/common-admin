@@ -6,6 +6,7 @@ export type SearchParams = Partial<{
   goodsState: number;
   goodsType: number;
   merchantUid: string;
+  goodsStates: number[];
 }>;
 
 export type GoodsListItem = {
@@ -83,4 +84,28 @@ export type GoodsDetail = {
     type: number | null;
     unitNum: number | null;
   }[];
+};
+
+export type BlindBoxPrizeListItem = {
+  boxGoodsId: string;
+  boxRate: number;
+  goodsName: string;
+  id: number;
+};
+
+export type BlindBoxOpenRecordItem = {
+  boxGoodsId: string;
+  createTime: string;
+  goodsName: string;
+  id: number;
+  nickName: string;
+  uid: number;
+};
+
+export type GoodsPublishRecordItem = {
+  chainHash: string;
+  endNum: number;
+  startNum: number;
+  state: number;
+  updateTime: string;
 };

@@ -55,10 +55,22 @@ export const getUserAssetsList = (params: Paging & GetUserAssetsListParams): Pro
     body: JSON.stringify(params),
   });
 };
+export const exportUserAssestList = (params: GetUserAssetsListParams): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/user-asset/excel",
+    params,
+  });
+};
 // 用户积分
 export const getUserPointsList = (params: Paging & GetUserPointsListParams): Promise<Return<ReturnList<UserPointsListItem>>> => {
   return ultraFetch.post({
     URL: "/manager/user-points/page",
     body: JSON.stringify(params),
+  });
+};
+export const exportUserPointsList = (params: GetUserPointsListParams): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/user-points/excel",
+    params,
   });
 };

@@ -140,12 +140,6 @@ const createColumns = () => {
       width: 120,
     },
     {
-      title: "详细地址",
-      key: "userLocation",
-      align: "center",
-      width: 180,
-    },
-    {
       title: "所在地区",
       key: "userRegion",
       align: "center",
@@ -161,14 +155,14 @@ const createColumns = () => {
       },
     },
     {
-      title: "提货备注",
-      key: "userNote",
+      title: "详细地址",
+      key: "userLocation",
       align: "center",
       width: 180,
     },
     {
-      title: "快递单号",
-      key: "expressCode",
+      title: "提货备注",
+      key: "userNote",
       align: "center",
       width: 180,
     },
@@ -177,6 +171,21 @@ const createColumns = () => {
       key: "expressName",
       align: "center",
       width: 100,
+    },
+    {
+      title: "快递单号",
+      key: "expressCode",
+      align: "center",
+      width: 180,
+    },
+    {
+      title: "订单状态",
+      key: "orderState",
+      align: "center",
+      width: 100,
+      render(order) {
+        return expressOrderStateList.getItem(order.orderState)?.label;
+      },
     },
     {
       title: "提货时间",
@@ -214,15 +223,6 @@ const createColumns = () => {
     //     return order.cancelTime || "-";
     //   },
     // },
-    {
-      title: "订单状态",
-      key: "orderState",
-      align: "center",
-      width: 100,
-      render(order) {
-        return expressOrderStateList.getItem(order.orderState)?.label;
-      },
-    },
 
     {
       title: "操作",

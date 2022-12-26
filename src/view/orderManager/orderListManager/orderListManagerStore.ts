@@ -1,22 +1,22 @@
-export enum InvoiceState {
-  BEFORE_INVOICE,
-  IN_INVOICE,
-  AFTER_INVOICE,
-}
-export const invoiceState = [
-  {
-    label: "未开发票",
-    value: InvoiceState.BEFORE_INVOICE,
-  },
-  {
-    label: "申请发票",
-    value: InvoiceState.IN_INVOICE,
-  },
-  {
-    label: "已开发票",
-    value: InvoiceState.AFTER_INVOICE,
-  },
-];
+// export enum InvoiceState {
+//   BEFORE_INVOICE,
+//   IN_INVOICE,
+//   AFTER_INVOICE,
+// }
+// export const invoiceState = [
+//   {
+//     label: "未开发票",
+//     value: InvoiceState.BEFORE_INVOICE,
+//   },
+//   {
+//     label: "申请发票",
+//     value: InvoiceState.IN_INVOICE,
+//   },
+//   {
+//     label: "已开发票",
+//     value: InvoiceState.AFTER_INVOICE,
+//   },
+// ];
 
 export enum OrderState {
   BEFORE_PAY,
@@ -43,6 +43,36 @@ export const orderStateList = [
   },
 ];
 
+export enum OrderRefundState {
+  NONE,
+  REFUND_APPLY,
+  REFUND_ING,
+  REFUND_SUCCESS,
+  REFUND_REJECT,
+}
+export const orderRefundStateList = [
+  // {
+  //   label: "-",
+  //   value: OrderRefundState.NONE,
+  // },
+  {
+    label: "申请退款",
+    value: OrderRefundState.REFUND_APPLY,
+  },
+  {
+    label: "退款中",
+    value: OrderRefundState.REFUND_ING,
+  },
+  {
+    label: "退款成功",
+    value: OrderRefundState.REFUND_SUCCESS,
+  },
+  {
+    label: "退款拒绝",
+    value: OrderRefundState.REFUND_REJECT,
+  },
+];
+
 export enum OrderType {
   FIRST = 1,
   SECOND,
@@ -66,10 +96,10 @@ export enum PayChannel {
   OFF_LINE,
 }
 export const payChannelList = [
-  {
-    label: "无",
-    value: PayChannel.NONE,
-  },
+  // {
+  //   label: "-",
+  //   value: PayChannel.NONE,
+  // },
   {
     label: "微信",
     value: PayChannel.WX,
@@ -100,5 +130,20 @@ export const orderExchangeTypeList = [
   {
     label: "卖",
     value: OrderExchangeType.SALE,
+  },
+];
+
+export enum RefundExamState {
+  DISAGREE,
+  AGREE,
+}
+export const refundExamStateList = [
+  {
+    label: "不同意",
+    value: RefundExamState.DISAGREE,
+  },
+  {
+    label: "同意",
+    value: RefundExamState.AGREE,
   },
 ];

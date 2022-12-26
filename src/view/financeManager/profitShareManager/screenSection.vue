@@ -1,18 +1,28 @@
 <template>
   <n-space>
-    <n-input
-      v-model:value="params.merchantUid"
-      autosize
-      placeholder="请输入商户编号, 0表示平台"
-      v-if="authStore.isAdmin()"
-      style="width: 220px"
-      :disabled="searching"
-      clearable
-    ></n-input>
+    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.orderId" autosize placeholder="请输入订单编号" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select :options="payChannelList" v-model:value="params.channelType" placeholder="请选择分账渠道" style="width: 200px" :disabled="searching" clearable></n-select>
     <n-select :options="orderTypeList" v-model:value="params.orderType" placeholder="请选择订单类型" style="width: 200px" :disabled="searching" clearable></n-select>
+    <n-select :options="payChannelList" v-model:value="params.channelType" placeholder="请选择分账渠道" style="width: 200px" :disabled="searching" clearable></n-select>
     <n-select :options="shareStateList" v-model:value="params.state" placeholder="请选择分账状态" style="width: 200px" :disabled="searching" clearable></n-select>
+    <n-date-picker
+      placeholder="请选择开始时间"
+      v-model:formatted-value="params.startTime"
+      value-format="yyyy-MM-dd HH:mm:ss"
+      type="datetime"
+      style="width: 200px"
+      clearable
+      :disabled="searching"
+    />
+    <n-date-picker
+      placeholder="请选择结束时间"
+      v-model:formatted-value="params.endTime"
+      value-format="yyyy-MM-dd HH:mm:ss"
+      type="datetime"
+      style="width: 200px"
+      clearable
+      :disabled="searching"
+    />
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
   </n-space>
 </template>

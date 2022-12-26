@@ -1,20 +1,11 @@
 <template>
   <n-space>
-    <n-input
-      v-model:value="params.merchantUid"
-      autosize
-      placeholder="请输入商户编号，-1为全部，0为系统"
-      style="width: 200px"
-      :disabled="searching"
-      clearable
-      v-if="authStore.isAdmin()"
-    ></n-input>
+    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.pointsId" autosize placeholder="请输入积分编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.pointsName" autosize placeholder="请输入积分名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-input v-model:value="params.token" autosize placeholder="请输入token" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" clearable></n-input>
 
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
+    <custom-export-btn :export-params="params" :export-request="exportUserPointsList" file-name="用户积分"></custom-export-btn>
   </n-space>
 </template>
 
@@ -23,15 +14,15 @@
 import { reactive } from "vue";
 // 组件库
 // 自定义组件
+import customExportBtn from "@/component/common/customExportBtn.vue";
+
 // 工具库
 // 自定义工具
 // 网络请求
+import { exportUserPointsList } from "@/request/user";
 // store
-import { useAuthStore } from "@/store/authStore";
 // 类型
 import type { GetUserPointsListParams } from "@/type/User";
-
-const authStore = useAuthStore();
 
 defineProps<{
   searching: boolean;

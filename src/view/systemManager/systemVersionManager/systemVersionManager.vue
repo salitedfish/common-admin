@@ -101,12 +101,6 @@ const createColumns = () => {
       },
     },
     {
-      title: "更新时间",
-      key: "updateTime",
-      width: 180,
-      align: "center",
-    },
-    {
       title: "状态",
       key: "state",
       width: 120,
@@ -114,6 +108,12 @@ const createColumns = () => {
       render: (row) => {
         return versionStateList.getItem(row.state)?.label;
       },
+    },
+    {
+      title: "更新时间",
+      key: "updateTime",
+      width: 180,
+      align: "center",
     },
 
     {

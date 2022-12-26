@@ -22,7 +22,7 @@ export enum GoodsLevel {
 export const goodsLevelList = [
   {
     value: GoodsLevel.NONE,
-    label: "无等级",
+    label: "-",
   },
   {
     value: GoodsLevel.N,
