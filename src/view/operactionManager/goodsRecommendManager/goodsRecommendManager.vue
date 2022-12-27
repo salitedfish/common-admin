@@ -102,7 +102,7 @@ const createColumns = () => {
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.getUserInfo()?.uid) === Number(row.merchantUid);
+        const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.userInfo?.uid) === Number(row.merchantUid);
         if (isMy) {
           // 删除
           list.push(

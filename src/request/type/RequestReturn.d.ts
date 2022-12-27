@@ -4,6 +4,7 @@ import type { GoodsListItem, GoodsDetail } from "@/type/GoodsManager";
 import type { UserListItem } from "@/type/User";
 import type { OrderListItem, ExpressOrderListItem, LogisticsInfo, ExpressCompany } from "@/type/Order";
 import type { PointsItem } from "@/type/Points";
+import type { UserInfo } from "@/type/Auth";
 
 export type GetGoodsList = Promise<Return<ReturnList<GoodsListItem>>>;
 export type GetCaptcha = Promise<Return<>>;
@@ -42,21 +43,7 @@ export type GetMerchantApplyResult = Promise<
     result: any;
   }>
 >;
-export type GetUserInfo = Promise<
-  Return<{
-    chainAddress: string;
-    chainPublicKey: string;
-    headUrl: string;
-    lastLoginTime: string;
-    loginPassword: string;
-    nickName: string;
-    phone: string;
-    role: number;
-    state: number;
-    subMchid: string;
-    uid: number;
-  }>
->;
+export type GetUserInfo = Promise<Return<UserInfo>>;
 
 export type GetCategoryTree = Promise<Return<CategoryTreeItem[]>>;
 export type GetGoodsDetail = Promise<Return<GoodsDetail>>;

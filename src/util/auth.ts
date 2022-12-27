@@ -3,6 +3,7 @@ import { useSetLStorage, useGetLStorage, useRmLStorage } from "@ultra-man/noa";
 import router from "@/router";
 import { commonNotify } from "@/util/common";
 import { login as loginRequest, logout as logoutRequest, getUserInfo as getUserInfoRequest } from "@/request";
+import { useAuthStore } from "@/store/authStore";
 import type * as RequestParam from "@/request/type/RequestParam";
 
 // 登录hook
@@ -14,9 +15,8 @@ export const useLogin = () => {
     loginState.value = true;
     loginDisabled.value = true;
     const res = await loginRequest(params);
-    if (res && res.code === 0) {
+    if (res) {
       useSetLStorage("token")(res.data.authentication);
-      await getUserInfo();
     }
     loginState.value = false;
     loginDisabled.value = false;
@@ -32,9 +32,10 @@ export const useLogin = () => {
 
 // 获取用户信息
 export const getUserInfo = async () => {
+  const authStore = useAuthStore();
   const res = await getUserInfoRequest();
-  if (res && res.code === 0) {
-    useSetLStorage("userInfo")(res.data);
+  if (res) {
+    authStore.setUserInfo(res.data);
   }
   return res;
 };
@@ -59,11 +60,10 @@ export const useLogout = () => {
   };
 };
 
-// 检查本地token和用户信息 hook
+// 检查本地token
 export const useNeedLogin = () => {
   const token = useGetLStorage("token")(null);
-  const userInfo = useGetLStorage("userInfo")(null);
-  if (!token || !userInfo) {
+  if (!token) {
     commonNotify("warning", "未找到登录信息，请重新登录!");
     router.push({
       name: "login",

@@ -1,33 +1,23 @@
-import { useGetLStorage } from "@ultra-man/noa";
+import { ref } from "vue";
 import { defineStore } from "pinia";
 import { UserRole } from "@/type/Common";
+import type { UserInfo } from "@/type/Auth";
 
 export const useAuthStore = defineStore("authStore", () => {
   // const devCompletedRoutes: string[] = ["homeManager", "goodsListManager"];
-  const getUserInfo = () => {
-    return <
-      {
-        chainAddress: string;
-        chainPublicKey: string;
-        headUrl: string;
-        lastLoginTime: string;
-        loginPassword: string;
-        nickName: string;
-        phone: string;
-        role: number;
-        state: number;
-        subMchid: string;
-        uid: number;
-      } | null
-    >useGetLStorage("userInfo")(null);
+
+  const userInfo = ref<UserInfo | null>(null);
+  const setUserInfo = (info: UserInfo) => {
+    userInfo.value = info;
   };
 
   // 判断是不是管理员
   const isAdmin = () => {
-    return getUserInfo()?.role === UserRole.ADMIN;
+    return userInfo.value?.role === UserRole.ADMIN;
   };
   return {
-    getUserInfo,
+    userInfo,
+    setUserInfo,
     isAdmin,
   };
 });

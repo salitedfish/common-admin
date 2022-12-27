@@ -3,6 +3,7 @@ import { whiteListUrls } from "./urls/whiteListUrls";
 import { WhiteListType } from "@/type/Common";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
+import type { Return } from "@/type/Common";
 const baseURL = "/api";
 
 // 获取省份列表
@@ -130,13 +131,14 @@ export const downLoadWhiteListTemplate = (): Promise<Blob> => {
   });
 };
 
+// 下面四个是产品、手动空投、抽签、中签的白名单通用接口，根据不同whiteListType请求不同的url
 // 白名单上传
 export const uploadWhiteList = (params: { id: string; file: File }, whiteListType: number) => {
   const data = new FormData();
   data.append("file", params.file);
   return ultraFetch.post(
     {
-      URL: `${whiteListUrls[whiteListType].uploadWhiteListUrl}${params.id}`,
+      URL: `${whiteListUrls.getItem(whiteListType)?.URLS.uploadWhiteListUrl}${params.id}`,
       body: data,
     },
     {
@@ -151,7 +153,7 @@ export const downLoadWhiteList = (params: { id: string; goodsId?: string }, whit
     params.goodsId = params.id;
   }
   return ultraFetch.get({
-    URL: whiteListUrls[whiteListType].downLoadWhiteListUrl,
+    URL: whiteListUrls.getItem(whiteListType)?.URLS.downLoadWhiteListUrl,
     params: params,
   });
 };
@@ -162,18 +164,40 @@ export const deleteWhiteList = (params: { id: string; goodsId?: string }, whiteL
     params.goodsId = params.id;
   }
   return ultraFetch.post({
-    URL: whiteListUrls[whiteListType].deleteWhiteListUrl,
+    URL: whiteListUrls.getItem(whiteListType)?.URLS.deleteWhiteListUrl,
     body: JSON.stringify(params),
   });
 };
 
 // 获取白名单列表
-export const getGoodsWhiteList = (params: RequestParam.GetWhiteList, whiteListType: number): RequestReturn.GetWhiteList => {
+export const getWhiteList = (params: RequestParam.GetWhiteList, whiteListType: number): RequestReturn.GetWhiteList => {
   if (whiteListType === WhiteListType.GOODS) {
     params.goodsId = params.id;
   }
   return ultraFetch.post({
-    URL: whiteListUrls[whiteListType].getWhiteListUrl,
+    URL: whiteListUrls.getItem(whiteListType)?.URLS.getWhiteListUrl,
     body: JSON.stringify(params),
   });
+};
+
+// 修改密码
+export const updatePassword = (params: { newPassword: string; oldPassword: string }): Promise<Return<unknown>> => {
+  return ultraFetch.post({
+    URL: "/manager/account/login-password/update",
+    body: JSON.stringify(params),
+  });
+};
+// 头像上传
+export const uploadProfilePicture = (file: File): RequestReturn.Upload => {
+  const data = new FormData();
+  data.append("file", file);
+  return ultraFetch.post(
+    {
+      URL: "/manager/user-admin/head",
+      body: data,
+    },
+    {
+      pureHeaders: true,
+    }
+  );
 };

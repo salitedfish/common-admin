@@ -10,17 +10,15 @@
     </section>
 
     <section class="head-right">
-      <div style="margin-right: 10px">{{ authStore.getUserInfo()?.nickName }}</div>
+      <div style="margin-right: 10px">{{ authStore.userInfo?.nickName }}</div>
       <n-dropdown trigger="hover" :options="options" @select="handleSelect">
         <div class="user-box">
-          <img :src="authStore.getUserInfo()?.headUrl" alt="" />
+          <img v-if="authStore.userInfo?.headUrl" :src="authStore.userInfo?.headUrl" alt="" />
         </div>
       </n-dropdown>
     </section>
 
-    <n-modal v-model:show="showModal">
-      <n-card style="width: 600px" title="用户中心" :bordered="false" size="huge" role="dialog" aria-modal="true"> </n-card>
-    </n-modal>
+    <user-center-dialog v-model:showUserCenterModal="showUserCenterModal"></user-center-dialog>
   </section>
 </template>
 
@@ -30,14 +28,21 @@ import { useRouter } from "vue-router";
 import { useDialog } from "naive-ui";
 import customIcon from "@/component/common/customIcon.vue";
 import { useThemeStore, useRouteStore, useAuthStore } from "@/store";
-import { useLogout } from "@/util/auth";
+import { useLogout, getUserInfo } from "@/util/auth";
 import { commonNotify } from "@/util/common";
+import userCenterDialog from "@/component/userCenterDialog/userCenterDialog.vue";
 
 const dialog = useDialog();
 const router = useRouter();
 const routeStore = useRouteStore();
 const authStore = useAuthStore();
 const { logout } = useLogout();
+
+// 每次初始化获取一次用户信息
+getUserInfo();
+
+// 显示模态框
+const showUserCenterModal = ref(false);
 
 enum Options {
   LOGOUT = 0,
@@ -48,6 +53,10 @@ enum Options {
 // 弹出的选项
 const options = [
   {
+    label: "用户中心",
+    key: Options.USER_CENTER,
+  },
+  {
     label: "主题切换",
     key: Options.THEME,
   },
@@ -55,10 +64,6 @@ const options = [
     label: "退出",
     key: Options.LOGOUT,
   },
-  // {
-  //   label: "用户中心",
-  //   key: Options.USER_CENTER,
-  // },
 ];
 
 const handleSelect = async (key: string | number) => {
@@ -66,6 +71,8 @@ const handleSelect = async (key: string | number) => {
     handleLogout();
   } else if (key === Options.THEME) {
     handleClick();
+  } else if (key === Options.USER_CENTER) {
+    showUserCenterModal.value = true;
   }
 };
 
@@ -92,9 +99,6 @@ const themeStore = useThemeStore();
 const handleClick = () => {
   themeStore.switchTheme();
 };
-
-// 显示模态框
-const showModal = ref(false);
 </script>
 
 <style scoped lang="less">

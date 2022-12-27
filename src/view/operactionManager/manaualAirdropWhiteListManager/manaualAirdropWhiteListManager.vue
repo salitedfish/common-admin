@@ -3,7 +3,7 @@
     :id="id"
     :name="name"
     :downLoadWhiteListRequest="downLoadWhiteList"
-    :getListRequest="getGoodsWhiteList"
+    :getListRequest="getWhiteList"
     :whiteListType="WhiteListType.AIR_DROP"
   ></white-list-manager>
 </template>
@@ -18,7 +18,7 @@ import whiteListManager from "@/component/whiteList/whiteListManager.vue";
 // 工具库
 // 自定义工具
 // 网络请求
-import { getGoodsWhiteList, downLoadWhiteList } from "@/request/common";
+import { getWhiteList, downLoadWhiteList } from "@/request/common";
 // store
 // 类型
 import { WhiteListType } from "@/type/Common";

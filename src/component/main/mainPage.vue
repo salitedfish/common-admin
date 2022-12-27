@@ -62,7 +62,7 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
   routeStore.addHistoryRoutes(route);
 };
 
-// 初始化和每次路由更新时都检查一次，是否有token和用户信息，没有则需要重新登录
+// 初始化和每次路由更新时都检查一次，是否有token，没有则需要重新登录
 // 初始化和每次路由更新时都监听，更新路由路径和历史路由
 onMounted(() => {
   useNeedLogin();

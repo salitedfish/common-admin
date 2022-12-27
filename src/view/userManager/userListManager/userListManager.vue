@@ -195,7 +195,7 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getUserListRequest, createColumns);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getUserListRequest, createColumns, { heightLevel: 1 });
 
 // 冻结或解冻
 const handleFrozen = (user: UserListItem) => {

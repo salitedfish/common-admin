@@ -1,11 +1,5 @@
 <template>
-  <white-list-manager
-    :id="id"
-    :name="name"
-    :downLoadWhiteListRequest="downLoadWhiteList"
-    :getListRequest="getGoodsWhiteList"
-    :whiteListType="WhiteListType.GOODS"
-  ></white-list-manager>
+  <white-list-manager :id="id" :name="name" :downLoadWhiteListRequest="downLoadWhiteList" :getListRequest="getWhiteList" :whiteListType="WhiteListType.GOODS"></white-list-manager>
 </template>
 
 <script lang="ts" setup>
@@ -18,7 +12,7 @@ import whiteListManager from "@/component/whiteList/whiteListManager.vue";
 // 工具库
 // 自定义工具
 // 网络请求
-import { getGoodsWhiteList, downLoadWhiteList } from "@/request/common";
+import { getWhiteList, downLoadWhiteList } from "@/request/common";
 // store
 // 类型
 import { WhiteListType } from "@/type/Common";
