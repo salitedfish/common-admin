@@ -4,7 +4,7 @@
       v-model:value="params.merchantUid"
       autosize
       placeholder="请输入商户编号, 0表示平台"
-      v-if="authStore.isAdmin()"
+      v-if="authStore.isAdmin"
       style="width: 220px"
       :disabled="searching"
       clearable

@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { UserRole } from "@/type/Common";
 import type { UserInfo } from "@/type/Auth";
@@ -12,9 +12,9 @@ export const useAuthStore = defineStore("authStore", () => {
   };
 
   // 判断是不是管理员
-  const isAdmin = () => {
+  const isAdmin = computed(() => {
     return userInfo.value?.role === UserRole.ADMIN;
-  };
+  });
   return {
     userInfo,
     setUserInfo,

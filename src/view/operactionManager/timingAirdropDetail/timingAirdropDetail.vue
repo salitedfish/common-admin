@@ -125,7 +125,7 @@ const isEdit = computed(() => {
 const timingAirdropId = computed(() => {
   return route.query.id;
 });
-const isAdmin = authStore.isAdmin();
+const isAdmin = authStore.isAdmin;
 
 const formData = reactive<TimingAirDropAddParams>({
   info: {

@@ -71,7 +71,7 @@ const formData = reactive<ManualAirDropAddParams>({
 });
 
 const itemTypeChangedisable = ref(false);
-if (authStore.isAdmin()) {
+if (authStore.isAdmin) {
   formData.itemType = 1;
   itemTypeChangedisable.value = true;
 }

@@ -36,7 +36,7 @@ import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { TimingAirDropListItem } from "@/type/Operator";
 
-const isAdmin = useAuthStore().isAdmin();
+const isAdmin = useAuthStore().isAdmin;
 const authStore = useAuthStore();
 const dialog = useDialog();
 const router = useRouter();

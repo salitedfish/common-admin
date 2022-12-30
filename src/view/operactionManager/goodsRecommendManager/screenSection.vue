@@ -1,6 +1,6 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" v-if="authStore.isAdmin()" style="width: 220px" :disabled="searching" clearable></n-input>
+    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" v-if="authStore.isAdmin" style="width: 220px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
 

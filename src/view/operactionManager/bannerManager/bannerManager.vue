@@ -36,7 +36,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const isAdmin = authStore.isAdmin();
+const isAdmin = authStore.isAdmin;
 const router = useRouter();
 const dialog = useDialog();
 // 列表项

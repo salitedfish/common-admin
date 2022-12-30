@@ -2,7 +2,7 @@
   <n-space>
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品ID" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()" clearable></n-input>
+    <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin" clearable></n-input>
     <category-select v-model="categoryList" checkType="all" style="width: 200px"></category-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
   </n-space>

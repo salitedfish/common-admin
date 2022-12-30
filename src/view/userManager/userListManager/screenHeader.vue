@@ -1,7 +1,7 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()" clearable></n-input>
-    <n-input v-model:value="params.phone" autosize placeholder="请输入手机号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin()" clearable></n-input>
+    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin" clearable></n-input>
+    <n-input v-model:value="params.phone" autosize placeholder="请输入手机号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin" clearable></n-input>
     <n-input v-model:value="params.chainAddress" autosize placeholder="请输入区块链地址" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.inviteCode" autosize placeholder="请输入邀请码" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select v-model:value="params.tab" :options="accountTabList" placeholder="请选择用户类型" style="width: 200px" :disabled="searching" clearable />

@@ -78,7 +78,7 @@ import type { ExpressOrderListItem, LogisticsInfo } from "@/type/Order";
 import { expressOrderStateList } from "./expressListManagerStore";
 
 const authStore = useAuthStore();
-const isAdmin = authStore.isAdmin();
+const isAdmin = authStore.isAdmin;
 
 // 列表渲染函数
 const createColumns = () => {
@@ -232,7 +232,7 @@ const createColumns = () => {
       fixed: "right",
       render(order) {
         const btnList: VNode[] = [];
-        if (order.orderState === ExpressOrderState.BEFORE_EXPRESS && !authStore.isAdmin()) {
+        if (order.orderState === ExpressOrderState.BEFORE_EXPRESS && !authStore.isAdmin) {
           btnList.push(
             h(
               NButton,

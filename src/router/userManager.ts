@@ -19,6 +19,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "用户资产",
       icon: "zichan",
+      keepAlive: true,
       id: 4011,
     },
   },
@@ -29,6 +30,7 @@ export default <RouteRecordRaw[]>[
     meta: {
       label: "用户积分",
       icon: "jifen",
+      keepAlive: true,
       id: 4021,
     },
   },

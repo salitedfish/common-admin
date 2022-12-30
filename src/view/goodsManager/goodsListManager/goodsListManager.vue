@@ -104,7 +104,7 @@ export default defineComponent({
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-const isAdmin = authStore.isAdmin();
+// const authStore.isAdmin = authStore.authStore.isAdmin;
 const router = useRouter();
 const dialog = useDialog();
 
@@ -291,7 +291,7 @@ const createColumns = () => {
         }
         // 编辑
         if (
-          !isAdmin &&
+          !authStore.isAdmin &&
           [GoodsState.DRAFT, GoodsState.APPROVIAL_FAILED, GoodsState.TO_BE_SHELVES, GoodsState.NEED_APPROVIAL, GoodsState.APPROVIAL_FAILED_NEW].includes(goodsState)
         ) {
           list.push(
@@ -316,7 +316,7 @@ const createColumns = () => {
           );
         }
         // 提交审核
-        if (!isAdmin && [GoodsState.DRAFT, GoodsState.NEED_APPROVIAL].includes(goodsState)) {
+        if (!authStore.isAdmin && [GoodsState.DRAFT, GoodsState.NEED_APPROVIAL].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -339,7 +339,7 @@ const createColumns = () => {
           );
         }
         // 撤销审核
-        if (!isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
+        if (!authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -362,7 +362,11 @@ const createColumns = () => {
           );
         }
         // 上传白名单
-        if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
+        if (
+          !authStore.isAdmin &&
+          [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) &&
+          saleType === SaleType.WHITE_LIST
+        ) {
           list.push(
             h(whiteListUploadBtn, {
               id: goods.goodsId,
@@ -371,7 +375,11 @@ const createColumns = () => {
           );
         }
         // 删除白名单
-        if (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) && saleType === SaleType.WHITE_LIST) {
+        if (
+          !authStore.isAdmin &&
+          [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState) &&
+          saleType === SaleType.WHITE_LIST
+        ) {
           list.push(
             h(
               NButton,
@@ -404,8 +412,8 @@ const createColumns = () => {
         // 查看白名单
         if (
           saleType === SaleType.WHITE_LIST &&
-          ((isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) ||
-            (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState)))
+          ((authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) ||
+            (!authStore.isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.NEED_APPROVIAL].includes(goodsState)))
         ) {
           list.push(
             h(
@@ -427,7 +435,7 @@ const createColumns = () => {
             )
           );
         }
-        if (goodsType === GoodsType.SYNTHETIC && !isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState, GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        if (goodsType === GoodsType.SYNTHETIC && !authStore.isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState, GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -444,8 +452,8 @@ const createColumns = () => {
         }
         if (
           goodsType === GoodsType.SYNTHETIC &&
-          ((isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) ||
-            (!isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)))
+          ((authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) ||
+            (!authStore.isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)))
         ) {
           list.push(
             h(
@@ -462,7 +470,7 @@ const createColumns = () => {
           );
         }
         // 修改积分
-        // if (goodsType === GoodsType.POINT && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        // if (goodsType === GoodsType.POINT && !authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
         //   list.push(
         //     h(
         //       NButton,
@@ -486,7 +494,7 @@ const createColumns = () => {
         //   );
         // }
         // 修改拓展参数
-        if (!isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        if (!authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -510,7 +518,7 @@ const createColumns = () => {
           );
         }
         // 审核
-        if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
+        if (authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -531,7 +539,7 @@ const createColumns = () => {
             )
           );
         }
-        // if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
+        // if (authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
         //   list.push(
         //     h(
         //       NButton,
@@ -546,7 +554,7 @@ const createColumns = () => {
         //     )
         //   );
         // }
-        if (isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
+        if (authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -562,7 +570,7 @@ const createColumns = () => {
           );
         }
         // 上架
-        if (!isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        if (!authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -608,7 +616,7 @@ const createColumns = () => {
           );
         }
         // 重新发行
-        if (isAdmin && [GoodsState.PUBLISH_FAILED].includes(goodsState)) {
+        if (authStore.isAdmin && [GoodsState.PUBLISH_FAILED].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -704,7 +712,7 @@ const createColumns = () => {
           );
         }
         // 编辑盲盒
-        if (goodsType === GoodsType.BLIND_BOX && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        if (goodsType === GoodsType.BLIND_BOX && !authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -729,7 +737,7 @@ const createColumns = () => {
           );
         }
         // 清空盲盒
-        if (goodsType === GoodsType.BLIND_BOX && !isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
+        if (goodsType === GoodsType.BLIND_BOX && !authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -760,7 +768,7 @@ const createColumns = () => {
           );
         }
         // 查看开盒记录
-        if (isAdmin && goodsType === GoodsType.BLIND_BOX && [GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        if (authStore.isAdmin && goodsType === GoodsType.BLIND_BOX && [GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -783,7 +791,7 @@ const createColumns = () => {
             )
           );
         }
-        // if (!isAdmin && [GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        // if (!authStore.isAdmin && [GoodsState.ON_THE_SHELF].includes(goodsState)) {
         //   list.push(
         //     h(
         //       NButton,
@@ -799,7 +807,7 @@ const createColumns = () => {
         //   );
         // }
         // 重新增发
-        if (isAdmin && [GoodsState.ADD_PUBLISH_FAILED].includes(goodsState)) {
+        if (authStore.isAdmin && [GoodsState.ADD_PUBLISH_FAILED].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -829,7 +837,7 @@ const createColumns = () => {
       },
     },
   ];
-  if (isAdmin) {
+  if (authStore.isAdmin) {
     list.splice(0, 0, {
       title: "商户名称",
       key: "merchantName",
@@ -867,7 +875,7 @@ const comfirmAudit = async () => {
   const { auditNote, goodsId, goodsState } = auditInfo;
   const params = { auditNote, goodsId, goodsState };
   // 管理员和商户用的审核接口不一样
-  const res = isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
+  const res = authStore.isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
   if (res && res.code === 0) {
     await getList();
     commonNotify("success", `${auditInfo.auditTitle}成功`);

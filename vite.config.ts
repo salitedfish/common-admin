@@ -7,6 +7,7 @@ import autoprefixer from "autoprefixer";
 import viteCompression from "vite-plugin-compression";
 
 export default defineConfig({
+  // base: "/test/",
   plugins: [vue(), vueJsx(), viteCompression()],
   resolve: {
     alias: {

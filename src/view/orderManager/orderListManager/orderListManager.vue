@@ -65,7 +65,7 @@ import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { OrderListItem } from "@/type/Order";
 const dialog = useDialog();
-const isAdmin = useAuthStore().isAdmin();
+const isAdmin = useAuthStore().isAdmin;
 
 // 列表渲染函数
 const createColumns = () => {

@@ -167,7 +167,7 @@ const createColumns = () => {
       render(points) {
         const btnList: VNode[] = [];
         const size = "small";
-        const isAdmin = authStore.isAdmin();
+        const isAdmin = authStore.isAdmin;
         if ([PointsState.DRAFT, PointsState.APPROVIAL_FAILED, PointsState.PUBLISH_SUCCESS, PointsState.DRAFT_NEW].includes(points.pointsState)) {
           if ((isAdmin && points.merchantUid === "0") || !isAdmin) {
             btnList.push(
@@ -318,7 +318,7 @@ const createColumns = () => {
       },
     },
   ];
-  if (authStore.isAdmin()) {
+  if (authStore.isAdmin) {
     list.splice(0, 0, {
       title: "商铺名称",
       key: "merchantName",

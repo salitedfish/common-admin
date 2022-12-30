@@ -59,7 +59,7 @@ import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { ProfitShareListItem } from "@/type/Finance";
 
-const isAdmin = useAuthStore().isAdmin();
+const isAdmin = useAuthStore().isAdmin;
 
 // 列表项
 const createColumns = () => {

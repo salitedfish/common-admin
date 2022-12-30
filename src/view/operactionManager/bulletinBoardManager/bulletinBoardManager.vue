@@ -65,7 +65,7 @@ import type { DataTableColumns } from "naive-ui";
 import type { BulletinBoardListItem } from "@/type/Operator";
 import type { CategoryTreeItem } from "@/type/Common";
 
-const isAdmin = useAuthStore().isAdmin();
+const isAdmin = useAuthStore().isAdmin;
 const authStore = useAuthStore();
 const dialog = useDialog();
 const router = useRouter();
