@@ -33,7 +33,38 @@ export type GoodsListItem = {
   classifies: number[];
 };
 
-export type GoodsDetail = {
+// 商品详情相关的类型，包括提交产品的参数类型
+export type ConsignmentParams = Partial<{
+  giftTime: string;
+  giftType: number;
+  goodsId: string;
+  primaryPlatformRate: number;
+  secondaryMerchantRate: number;
+  secondaryMerchantSandWalletId: string;
+  secondaryPlatformRate: number;
+  secondaryPrice: number;
+  secondaryTime: string;
+  secondaryType: number;
+}>;
+
+export type GoodsExtend = {
+  expressEndTime: string | null;
+  expressTime: string | null;
+  expressType: number | null;
+  goodsId: string | null;
+  goodsLevel: number | null;
+  goodsSaleTime: string | null;
+  goodsTabType: number | null;
+  goodsType: number | null;
+  normalSaleTime: string | null;
+  orderLimit: number | null;
+  priorityPrice: number | null;
+  ruleCalcTime: string | null;
+  saleType: number | null;
+  traceHash: string | null;
+};
+
+export type GoodsAddParams = {
   spu: {
     classifies: number[];
     ercStandard: string | null;
@@ -51,22 +82,7 @@ export type GoodsDetail = {
     goodsVideoCover: string;
     goodsState?: number;
   };
-  extend: {
-    expressEndTime: string | null;
-    expressTime: string | null;
-    expressType: number | null;
-    goodsId: string | null;
-    goodsLevel: number | null;
-    goodsSaleTime: string | null;
-    goodsTabType: number | null;
-    goodsType: number | null;
-    normalSaleTime: string | null;
-    orderLimit: number | null;
-    priorityPrice: number | null;
-    ruleCalcTime: string | null;
-    saleType: number | null;
-    traceHash: string | null;
-  };
+  extend: GoodsExtend;
   points: {
     goodsId: string | null;
     needNum: number | null;
@@ -86,6 +102,11 @@ export type GoodsDetail = {
   }[];
 };
 
+export type GoodsDetail = Omit<GoodsAddParams, "extend"> & {
+  extend: ConsignmentParams & GoodsExtend;
+};
+
+// 下面是盲盒相关
 export type BlindBoxPrizeListItem = {
   boxGoodsId: string;
   boxRate: number;
@@ -102,6 +123,7 @@ export type BlindBoxOpenRecordItem = {
   uid: number;
 };
 
+// 商品发布记录类型
 export type GoodsPublishRecordItem = {
   chainHash: string;
   endNum: number;

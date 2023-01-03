@@ -92,6 +92,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "consignmentParameter",
+    name: "consignmentParameter",
+    component: () => import("@/view/goodsManager/consignmentParameter/ConsignmentParameter.vue"),
+    meta: {
+      label: "修改转赠类型与分账比例",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
     path: "goodsClazzManager",
     name: "goodsClazzManager",
     component: () => import("@/view/goodsManager/goodsClazzManager/goodsClazzManager.vue"),

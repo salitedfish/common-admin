@@ -1,6 +1,6 @@
 // 定义接口参数类型
 import type { Paging, WhiteListSearchParams } from "@/type/Common";
-import type { GoodsDetail } from "@/type/GoodsManager";
+import type { GoodsAddParams } from "@/type/GoodsManager";
 import type { SearchParams as GoodsListSearchParams } from "@/type/GoodsManager";
 import type { UserListParam as UserListSearchParams } from "@/type/User";
 import type { OrderListParam as OrderListSearchParams, ExpressOrderListParam as ExpressOrderListSearchParams } from "@/type/Order";
@@ -60,7 +60,7 @@ export type SubmitMerchantInfo = {
   storeName: string;
   shortName: string;
 };
-export type GoodsSubmit = GoodsDetail;
+export type GoodsSubmit = GoodsAddParams;
 export type EditCategory = { id: number | null; name: string; order: number | null; parentId: number | null; type: number | null };
 export type GetUserList = Paging & UserListSearchParams;
 export type GetOrderList = Paging & OrderListSearchParams;

@@ -316,7 +316,7 @@ import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../g
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
 // 类型
-import type { GoodsDetail } from "@/type/GoodsManager";
+import type { GoodsAddParams } from "@/type/GoodsManager";
 import type { CategoryTreeItem, FileUpload } from "@/type/Common";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 
@@ -363,7 +363,7 @@ const getGoodsDetail = async () => {
   commonStore.pageLoading = false;
 };
 
-const initForm = (goodsDetail: GoodsDetail) => {
+const initForm = (goodsDetail: GoodsAddParams) => {
   const { spu, extend, rules, points } = goodsDetail;
   // 处理spu
   spu.goodsPrice = Number(spu.goodsPrice);
@@ -428,7 +428,7 @@ const goodsImagesList = ref<FileUpload[]>([]);
 const goodsVideoList = ref<FileUpload[]>([]);
 const goodsVideoCoverList = ref<FileUpload[]>([]);
 
-const goodsInfo = reactive<GoodsDetail>({
+const goodsInfo = reactive<GoodsAddParams>({
   spu: {
     classifies: [],
     ercStandard: null,

@@ -554,6 +554,7 @@ const createColumns = () => {
         //     )
         //   );
         // }
+        // 修改转赠类型与分账比例
         if (authStore.isAdmin && [GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF, GoodsState.TO_BE_APPROVIAL_NEW].includes(goodsState)) {
           list.push(
             h(
@@ -562,6 +563,15 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "consignmentParameter",
+                    query: {
+                      id: goods.goodsId,
+                      name: goods.goodsName,
+                    },
+                  });
+                },
               },
               {
                 default: () => "修改转赠类型与分账比例",

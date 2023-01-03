@@ -2,7 +2,7 @@ import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Return, Paging, ReturnList } from "@/type/Common";
-import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem } from "@/type/GoodsManager";
+import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams } from "@/type/GoodsManager";
 
 export const getGoodsList = (params: RequestParam.GetGoodsList): RequestReturn.GetGoodsList => {
   return ultraFetch.post({
@@ -38,6 +38,14 @@ export const getGoodsDetail = (goodsId: string): RequestReturn.GetGoodsDetail =>
     params: {
       goodsId,
     },
+  });
+};
+
+// 修改二级参数与分账比例
+export const updateGoodsConsignmentParams = (params: ConsignmentParams) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/profit-sharing",
+    body: JSON.stringify(params),
   });
 };
 

@@ -6,9 +6,9 @@ import type { Return, ReturnList, Paging } from "@/type/Common";
 import type { NotificationType, CascaderOption, DataTableColumns } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
-export const { notification, message: nmessage } = createDiscreteApi(["notification", "message"]);
+export const { notification, message: nmessage, dialog } = createDiscreteApi(["notification", "message", "dialog"]);
 
-// 返回函数式调用的消息框
+// 返回函数式调用的消息框(不能随主题变化样式)
 export const commonNotify = (type: NotificationType, message: string, needComfirm = false) => {
   if (needComfirm) {
     let _needComfirm = true;
@@ -55,6 +55,30 @@ export const commonNotify = (type: NotificationType, message: string, needComfir
       keepAliveOnHover: true,
     });
   }
+};
+
+// 返回异步确认框(不能随主题变化样式)
+export const dialogComfirm = {
+  warning(callBack: () => Promise<unknown>) {
+    this.handler(callBack, "warning", "警告");
+  },
+  comfirm(callBack: () => Promise<unknown>) {
+    this.handler(callBack, "success", "确认");
+  },
+  handler: (callBack: () => Promise<unknown>, method: keyof typeof dialog, title: string) => {
+    const dialogInfo = dialog[method]({
+      title,
+      content: "确认此操作吗？",
+      positiveText: "确认",
+      onPositiveClick: async () => {
+        if (dialogInfo) {
+          dialogInfo.loading = true;
+          await callBack();
+          dialogInfo.loading = false;
+        }
+      },
+    });
+  },
 };
 
 // 返回省市列表
