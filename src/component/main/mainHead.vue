@@ -28,7 +28,7 @@ import { useRouter } from "vue-router";
 import { useDialog } from "naive-ui";
 import customIcon from "@/component/common/customIcon.vue";
 import { useThemeStore, useRouteStore, useAuthStore } from "@/store";
-import { useLogout, getUserInfo } from "@/util/auth";
+import { useLogout } from "@/util/auth";
 import { commonNotify } from "@/util/common";
 import userCenterDialog from "@/component/userCenterDialog/userCenterDialog.vue";
 
@@ -37,9 +37,6 @@ const router = useRouter();
 const routeStore = useRouteStore();
 const authStore = useAuthStore();
 const { logout } = useLogout();
-
-// 每次初始化获取一次用户信息
-getUserInfo();
 
 // 显示模态框
 const showUserCenterModal = ref(false);

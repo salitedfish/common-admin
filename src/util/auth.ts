@@ -3,6 +3,7 @@ import { useSetLStorage, useGetLStorage, useRmLStorage } from "@ultra-man/noa";
 import router from "@/router";
 import { commonNotify } from "@/util/common";
 import { login as loginRequest, logout as logoutRequest, getUserInfo as getUserInfoRequest } from "@/request";
+import { RequestCodeState } from "@/request/init";
 import { useAuthStore } from "@/store/authStore";
 import type * as RequestParam from "@/request/type/RequestParam";
 
@@ -36,8 +37,8 @@ export const getUserInfo = async () => {
   const res = await getUserInfoRequest();
   if (res) {
     authStore.setUserInfo(res.data);
+    return res;
   }
-  return res;
 };
 
 // 退出hook
@@ -47,7 +48,7 @@ export const useLogout = () => {
   const logout = async () => {
     logoutState.value = true;
     const res = await logoutRequest();
-    if (res && res.code === 0) {
+    if (res) {
       useRmLStorage("token");
     }
     logoutState.value = false;

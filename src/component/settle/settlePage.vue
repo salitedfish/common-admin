@@ -3,7 +3,7 @@
     <n-card contentStyle="display: flex; flex-direction: column; height: 100%;">
       <header-layout class="settle-head">
         <template v-slot:left>
-          <div class="head-left" @click="goLoginHandler"><custom-icon name="fanhui" :size="18"></custom-icon> <span class="back-text">登录</span></div>
+          <div class="head-left" @click="goLoginHandler"><custom-icon name="fanhui" :size="18"></custom-icon> <span class="back-text">退出登录</span></div>
         </template>
         <template v-slot:center>
           <div class="head-text">商户入驻</div>

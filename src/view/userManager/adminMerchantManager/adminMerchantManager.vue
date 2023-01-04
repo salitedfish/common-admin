@@ -23,6 +23,7 @@ import { getAdminMerchantList, updateAdminMerchantState, resetAdminMerchantPassw
 // store
 import { accountRoleList, AdminMerchantState, userStateList, AccountRole } from "./adminMerchantManagerStore";
 // 类型
+import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { AdminMerchantListItem } from "@/type/User";
 const dialog = useDialog();
@@ -139,7 +140,7 @@ const createColumns = () => {
       width: 120,
       fixed: "right",
       render(user) {
-        const btnList = [h(NButton, { type: "warning", size: "small", secondary: true, onClick: () => handleResetpassword(user) }, { default: () => "重置密码" })];
+        const btnList: VNode[] = [];
         if (user.role === AccountRole.MERCHANT) {
           btnList.push(
             h(
@@ -148,6 +149,8 @@ const createColumns = () => {
               { default: () => (user.state === AdminMerchantState.FROZEN ? "解冻" : "冻结") }
             )
           );
+
+          btnList.push(h(NButton, { type: "warning", size: "small", secondary: true, onClick: () => handleResetpassword(user) }, { default: () => "重置密码" }));
         }
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => btnList });

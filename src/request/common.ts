@@ -4,7 +4,8 @@ import { WhiteListType } from "@/type/Common";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Return } from "@/type/Common";
-const baseURL = "/api";
+const baseURL = import.meta.env.VITE_SERVICE_URL;
+// const baseURL = "/api";
 
 // 获取省份列表
 export const getProvinces = (): RequestReturn.GetProvinces => {

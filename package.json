@@ -1,6 +1,7 @@
 {
   "name": "newmall-admin",
   "version": "0.0.0",
+  "packageManager": "pnpm@7.12.1",
   "scripts": {
     "prepare": "husky install",
     "build": "run-p type-check build_only",
@@ -12,6 +13,7 @@
     "deploy_test": "vite build --mode test && bash deploy_test.sh",
     "deploy_production": "vite build --mode production && bash deploy_production.sh"
   },
+  
   "dependencies": {
     "@tinymce/tinymce-vue": "4.0.5",
     "@ultra-man/noa": "0.0.13",

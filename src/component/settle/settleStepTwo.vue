@@ -24,6 +24,10 @@
                 onUploadFinish(options, 'businessLicenseFileList');
               }
             "
+            :with-credentials="true"
+            :headers="{
+              authentication: token,
+            }"
             :disabled="submitLoading"
           >
           </n-upload>
@@ -64,6 +68,10 @@
               onUploadFinish(options, 'idCardFrontImageFileList');
             }
           "
+          :headers="{
+            authentication: token,
+          }"
+          :with-credentials="true"
           :disabled="submitLoading"
         >
         </n-upload>
@@ -80,6 +88,10 @@
               onUploadFinish(options, 'idCardBackImageFileList');
             }
           "
+          :headers="{
+            authentication: token,
+          }"
+          :with-credentials="true"
           :disabled="submitLoading"
         >
         </n-upload>
@@ -174,6 +186,10 @@
                 onUploadFinish(options, 'contactIdCardFrontImageFileList');
               }
             "
+            :headers="{
+              authentication: token,
+            }"
+            :with-credentials="true"
             :disabled="submitLoading"
           >
           </n-upload>
@@ -190,6 +206,10 @@
                 onUploadFinish(options, 'contactIdCardBackImageFileList');
               }
             "
+            :headers="{
+              authentication: token,
+            }"
+            :with-credentials="true"
             :disabled="submitLoading"
           >
           </n-upload>
@@ -214,6 +234,10 @@
                 onUploadFinish(options, 'businessAuthorizationLetterFileList');
               }
             "
+            :headers="{
+              authentication: token,
+            }"
+            :with-credentials="true"
           >
           </n-upload>
         </n-form-item>
@@ -250,6 +274,8 @@ import type * as RequestParam from "@/request/type/RequestParam";
 const emit = defineEmits<{
   (event: "updateStep"): void;
 }>();
+
+const token = localStorage.getItem("token") || "";
 
 // 获取hook数据
 const now = useNowTimeStamp();

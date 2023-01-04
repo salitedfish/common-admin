@@ -46,7 +46,7 @@ import type * as RequestParam from "@/request/type/RequestParam";
 import { getLoginCaptcha } from "@/request/auth";
 // 工具
 import { usePhoneLegal } from "@ultra-man/noa";
-import { passwordLegal, commonNotify, useLogin } from "@/util";
+import { passwordLegal, commonNotify, useLogin, getUserInfo } from "@/util";
 import { useRouteStore } from "@/store/routeStore";
 
 // 初始化路由
@@ -119,12 +119,16 @@ const loginHandler = async () => {
     params.captcha = formData.captcha;
   }
   const res = await login(params);
-  if (res && res.code === 0) {
-    routeStore.resetHistoryRoutes();
-    commonNotify("success", "登录成功！");
-    router.push({
-      name: "goodsListManager",
-    });
+  if (res) {
+    // 登录完获取一次用户信息，如果信息没问题才登录成功
+    const ret = await getUserInfo();
+    if (ret) {
+      routeStore.resetHistoryRoutes();
+      commonNotify("success", "登录成功！");
+      router.push({
+        name: "goodsListManager",
+      });
+    }
   }
 };
 

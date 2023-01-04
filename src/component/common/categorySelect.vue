@@ -62,7 +62,9 @@ const searching = ref(false);
 const getCategoryTree = async () => {
   searching.value = true;
   const res = await getCategoryTreeRequest(props.type);
-  selectTree.value = res.data;
+  if (res) {
+    selectTree.value = res.data;
+  }
   searching.value = false;
 };
 

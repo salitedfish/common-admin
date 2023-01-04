@@ -40,9 +40,9 @@ const goodsId = computed(() => {
 const createColumns = () => {
   const list: DataTableColumns<BlindBoxOpenRecordItem> = [
     {
-      title: "编号",
-      key: "id",
-      width: 100,
+      title: "盲盒奖品编号",
+      key: "boxGoodsId",
+      width: 180,
       align: "center",
       fixed: "left",
     },
@@ -65,12 +65,6 @@ const createColumns = () => {
       align: "center",
     },
 
-    {
-      title: "盲盒奖品编号",
-      key: "boxGoodsId",
-      width: 180,
-      align: "center",
-    },
     {
       title: "开盒时间",
       key: "createTime",
