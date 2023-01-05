@@ -3,6 +3,8 @@ export type GetPointsListParams = Partial<{
   pointsId: string;
   pointsName: string;
   pointsState: number;
+  // 筛选的时候赋值的是string，请求时转为number[]
+  pointsStates: string | number[];
 }>;
 
 export type PointsItem = {

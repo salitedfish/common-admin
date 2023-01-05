@@ -6,7 +6,8 @@ export type SearchParams = Partial<{
   goodsState: number;
   goodsType: number;
   merchantUid: string;
-  goodsStates: number[];
+  // 筛选的时候赋值的是string，请求时转为number[]
+  goodsStates: string | number[];
 }>;
 
 export type GoodsListItem = {

@@ -1,12 +1,12 @@
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left">
     <n-card title="基本信息：" style="margin-bottom: 15px">
-      <n-form-item label="商品名称:">
+      <n-form-item label="商品名称:" required>
         <n-input :value="goodsName" disabled></n-input>
       </n-form-item>
     </n-card>
     <n-card title="奖品列表：">
-      <n-form-item label="选择盲盒奖品:">
+      <n-form-item label="选择盲盒奖品:" required>
         <div>
           <n-space v-for="(item, key) in goodsSelectedList" :key="key" style="margin-bottom: 5px">
             <n-input :value="String(item.goodsId)" disabled style="width: 200px"></n-input>

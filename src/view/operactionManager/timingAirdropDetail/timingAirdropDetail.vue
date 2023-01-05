@@ -1,44 +1,44 @@
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left" :disabled="submiting || isCheck">
     <n-card title="基本信息：" style="margin-bottom: 15px">
-      <n-form-item label="空投名称:">
+      <n-form-item label="空投名称:" required>
         <n-input v-model:value="formData.info.name" placeholder="请输入空投名称"></n-input>
       </n-form-item>
-      <n-form-item label="空投物品类型：">
+      <n-form-item label="空投物品类型：" required>
         <n-select :options="airDropItemTypeList" v-model:value="formData.info.itemType" placeholder="请选择空投物品类型" :disabled="isAdmin || submiting || isCheck"></n-select>
       </n-form-item>
-      <n-form-item label="商品编号：" v-show="formData.info.itemType === AirDropItemType.GOODS && !isAdmin">
+      <n-form-item label="商品编号：" v-show="formData.info.itemType === AirDropItemType.GOODS && !isAdmin" required>
         <n-input v-model:value="formData.info.itemId" placeholder="请输入商品编号,必须为空投商品"></n-input>
       </n-form-item>
-      <n-form-item label="积分编号：" v-show="formData.info.itemType === AirDropItemType.POINTS">
+      <n-form-item label="积分编号：" v-show="formData.info.itemType === AirDropItemType.POINTS" required>
         <n-input v-model:value="formData.info.itemId" placeholder="请输入积分编号"></n-input>
       </n-form-item>
-      <n-form-item label="执行时间类型：">
+      <n-form-item label="执行时间类型：" required>
         <n-select :options="airDropTimeTypeList" v-model:value="formData.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
-      <n-form-item label="投放日(每月)：" v-show="formData.info.timeType === AirDropTimeType.MONTH">
+      <n-form-item label="投放日(每月)：" v-show="formData.info.timeType === AirDropTimeType.MONTH" required>
         <n-select :options="commonStore.monthMap" v-model:value="formData.info.timeDay" placeholder="请选择投放日"></n-select>
       </n-form-item>
-      <n-form-item label="投放日(每周)：" v-show="formData.info.timeType === AirDropTimeType.WEEK">
+      <n-form-item label="投放日(每周)：" v-show="formData.info.timeType === AirDropTimeType.WEEK" required>
         <n-select :options="commonStore.weekMap" v-model:value="formData.info.timeDay" placeholder="请选择投放日"></n-select>
       </n-form-item>
-      <n-form-item label="投放时：">
+      <n-form-item label="投放时：" required>
         <n-select :options="commonStore.hourMap" v-model:value="formData.info.timeHour" placeholder="请选择持投放时"></n-select>
       </n-form-item>
-      <n-form-item label="计算名单距开始空投时间：">
+      <n-form-item label="计算名单距开始空投时间：" required>
         <n-input-number v-model:value="formData.info.expireMinute" placeholder="请输入时间分钟" style="width: 100%"> <template #suffix> 分钟 </template></n-input-number>
       </n-form-item>
-      <n-form-item label="总执行次数：">
+      <n-form-item label="总执行次数：" required>
         <n-input-number v-model:value="formData.info.totalNum" placeholder="请输入总执行次数，0表示一直执行" style="width: 100%"></n-input-number>
       </n-form-item>
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in formData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
-        <n-form-item label="规则类型:">
+        <n-form-item label="规则类型:" required>
           <n-select v-model:value="item.type" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
         </n-form-item>
-        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))">
+        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))" required>
           <category-select
             @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
             placeholder="请选择商品类目"
@@ -48,13 +48,13 @@
             :disabled="isCheck || submiting"
           ></category-select>
         </n-form-item>
-        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))">
+        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))" required>
           <n-input placeholder="请输入商品编号" v-model:value="item.itemId"></n-input>
         </n-form-item>
-        <n-form-item label="单位数量:">
+        <n-form-item label="单位数量:" required>
           <n-input-number v-model:value="item.holdNum" placeholder="请输入奖励所需的单位数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
-        <n-form-item label="持有天数:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))">
+        <n-form-item label="持有天数:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))" required>
           <n-input-number
             v-model:value="item.holdTime"
             @update:value="(value) => ruleHoldTimeChange(value, item)"
@@ -64,13 +64,13 @@
             ><template #suffix> 天 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))">
+        <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))" required>
           <n-select :options="holdTimeTypeList" v-model:value="item.holdTimeType" placeholder="请选择持有天数类型"></n-select>
         </n-form-item>
-        <n-form-item label="奖励数量:">
+        <n-form-item label="奖励数量:" required>
           <n-input-number v-model:value="item.unitNum" placeholder="请输入每单位数量奖励数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
-        <n-form-item label="奖励上限:">
+        <n-form-item label="奖励上限:" required>
           <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限，0表示无上限" :min="0" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
         <template #footer> <n-button block secondary type="warning" v-if="!isCheck" :disabled="submiting" @click="deleteRule(key)">-删除规则</n-button> </template>

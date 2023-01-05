@@ -1,19 +1,19 @@
 <template>
   <n-card>
     <n-form label-placement="left" label-width="120px" label-align="left" :disabled="submiting">
-      <n-form-item label="空投名称:">
+      <n-form-item label="空投名称:" required>
         <n-input v-model:value="formData.name" placeholder="请输入空投名称"></n-input>
       </n-form-item>
-      <n-form-item label="空投物品类型:">
+      <n-form-item label="空投物品类型:" required>
         <n-select :options="airDropItemTypeList" v-model:value="formData.itemType" :disabled="itemTypeChangedisable || submiting"></n-select>
       </n-form-item>
-      <n-form-item label="商品编号:" v-show="formData.itemType === AirDropItemType.GOODS">
+      <n-form-item label="商品编号:" v-show="formData.itemType === AirDropItemType.GOODS" required>
         <n-input v-model:value="formData.itemId" placeholder="请输入商品编号"></n-input>
       </n-form-item>
-      <n-form-item label="积分编号:" v-show="formData.itemType === AirDropItemType.POINTS">
+      <n-form-item label="积分编号:" v-show="formData.itemType === AirDropItemType.POINTS" required>
         <n-input v-model:value="formData.itemId" placeholder="请输入积分编号"></n-input>
       </n-form-item>
-      <n-form-item label="空投时间:">
+      <n-form-item label="空投时间:" required>
         <n-date-picker
           placeholder="请选择空投时间"
           v-model:formatted-value="formData.startTime"

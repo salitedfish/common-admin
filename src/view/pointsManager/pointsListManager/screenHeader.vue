@@ -11,7 +11,7 @@
     ></n-input>
     <n-input v-model:value="params.pointsId" autosize placeholder="请输入积分编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.pointsName" autosize placeholder="请输入积分名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select v-model:value="params.pointsState" :options="pointsStateList" placeholder="请选择积分状态" style="width: 200px" :disabled="searching" clearable />
+    <n-select v-model:value="params.pointsStates" :options="pointsStateSearchList" placeholder="请选择积分状态" style="width: 200px" :disabled="searching" clearable />
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="gotoAddPoints">添加积分</n-button>
   </n-space>
@@ -28,7 +28,7 @@ import { useRouter } from "vue-router";
 // 网络请求
 // store
 import { useAuthStore } from "@/store/authStore";
-import { pointsStateList } from "./pointsListManagerStore";
+import { pointsStateSearchList } from "./pointsListManagerStore";
 // 类型
 import type { GetPointsListParams } from "@/type/Points";
 

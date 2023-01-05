@@ -188,7 +188,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="溯源哈希:" required>
+      <n-form-item label="溯源哈希:">
         <n-input v-model:value="goodsInfo.extend.traceHash" placeholder="请输入溯源哈希" :disabled="formDisabled"></n-input>
       </n-form-item>
       <n-form-item label="标记类型:" required>

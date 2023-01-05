@@ -57,6 +57,33 @@ export const pointsStateList = [
     value: PointsState.ADD_PUBLISH_FAILED,
   },
 ];
+export const pointsStateSearchList = [
+  {
+    label: "需要提交审核",
+    value: JSON.stringify([PointsState.DRAFT, PointsState.DRAFT_NEW]),
+  },
+  {
+    label: "待审核",
+    value: JSON.stringify([PointsState.TO_BE_APPROVIAL, PointsState.TO_BE_APPROVIAL_NEW]),
+  },
+
+  {
+    label: "审核未通过",
+    value: JSON.stringify([PointsState.APPROVIAL_FAILED, PointsState.APPROVIAL_FAILED_NEW]),
+  },
+  {
+    label: "发行中",
+    value: JSON.stringify([PointsState.PUBLISHING, PointsState.ADD_PUBLISHING]),
+  },
+  {
+    label: "发行失败",
+    value: JSON.stringify([PointsState.PUBLISH_FAILED, PointsState.ADD_PUBLISH_FAILED]),
+  },
+  {
+    label: "发行成功",
+    value: JSON.stringify([PointsState.PUBLISH_SUCCESS]),
+  },
+];
 
 export const approvialList = [
   {

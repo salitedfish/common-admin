@@ -4,10 +4,10 @@
       <!-- <n-form-item label="积分封面:">
         <common-upload type="img" :max="1" v-model="fileList" :disabled="disabled"></common-upload>
       </n-form-item> -->
-      <n-form-item label="积分名称:">
+      <n-form-item label="积分名称:" required>
         <n-input v-model:value="params.pointsName" placeholder="请输入积分名称" :disabled="disabled"></n-input>
       </n-form-item>
-      <n-form-item label="积分总量:">
+      <n-form-item label="积分总量:" required>
         <n-input-number v-model:value="params.pointsTotal" style="width: 100%" :min="1" placeholder="请输入积分总量" :disabled="disabled" :loading="submiting"></n-input-number>
       </n-form-item>
     </n-form>

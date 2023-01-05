@@ -66,7 +66,7 @@ const typeMapMethod = {
   video: {
     method: uploadVideo,
     acceptType: "video/mp4",
-    tipType: "map4",
+    tipType: "mp4",
   },
   img: {
     method: uploadImg,

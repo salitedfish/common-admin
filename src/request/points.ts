@@ -3,6 +3,9 @@ import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 
 export const getPointsList = (params: RequestParam.GetPointsList): RequestReturn.GetPointsList => {
+  if (typeof params.pointsStates === "string") {
+    params.pointsStates = JSON.parse(params.pointsStates);
+  }
   return ultraFetch.post({
     URL: "/manager/points/page",
     body: JSON.stringify(params),

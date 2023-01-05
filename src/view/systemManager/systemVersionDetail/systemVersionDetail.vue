@@ -1,22 +1,22 @@
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left" :disabled="submiting">
     <n-card>
-      <n-form-item label="版本号：">
+      <n-form-item label="版本号：" required>
         <n-input-number :min="0" v-model:value="params.versionCode" style="width: 100%" placeholder="请输入版本号"></n-input-number>
       </n-form-item>
-      <n-form-item label="版本名称：">
+      <n-form-item label="版本名称：" required>
         <n-input v-model:value="params.versionName" placeholder="请输入版本名称"></n-input>
       </n-form-item>
-      <n-form-item label="选择渠道：">
+      <n-form-item label="选择渠道：" required>
         <app-channel-select v-model="params.channel" :searching="submiting" width="100%"></app-channel-select>
       </n-form-item>
       <n-form-item label="新渠道：">
         <n-input v-model:value="newChannel" placeholder="请输入新版本渠道，如果使用原有的渠道可不填"></n-input>
       </n-form-item>
-      <n-form-item label="更新内容：">
+      <n-form-item label="更新内容：" required>
         <n-input type="textarea" v-model:value="params.description" placeholder="请输入更新内容"></n-input>
       </n-form-item>
-      <n-form-item label="是否强制更新：">
+      <n-form-item label="是否强制更新：" required>
         <n-radio-group v-model:value="params.forceUpdate">
           <n-space>
             <n-radio v-for="(item, key) in forceUpdateList" :key="key" :value="item.value" :label="item.label">
@@ -28,7 +28,7 @@
       <n-form-item label="软件包：">
         <common-upload v-model="fileList" :max="1" type="file" @update:model-value="handleDownloadUrlChange" style="margin-right: 10px" :disabled="submiting"></common-upload>
       </n-form-item>
-      <n-form-item label="下载地址：">
+      <n-form-item label="下载地址：" required>
         <n-input v-model:value="params.downloadUrl" placeholder="请输入下载地址" :disabled="submiting"></n-input>
       </n-form-item>
     </n-card>

@@ -5,6 +5,9 @@ import type { Return, Paging, ReturnList } from "@/type/Common";
 import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams } from "@/type/GoodsManager";
 
 export const getGoodsList = (params: RequestParam.GetGoodsList): RequestReturn.GetGoodsList => {
+  if (typeof params.goodsStates === "string") {
+    params.goodsStates = JSON.parse(params.goodsStates);
+  }
   return ultraFetch.post({
     URL: "/manager/goods/page",
     body: JSON.stringify(params),

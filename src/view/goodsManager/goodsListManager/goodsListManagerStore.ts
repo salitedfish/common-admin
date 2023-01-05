@@ -62,6 +62,36 @@ export const goodsStateList = [
     value: GoodsState.ADD_PUBLISH_FAILED,
   },
 ];
+export const goodsStateSearchList = [
+  {
+    label: "需要提交审核",
+    value: JSON.stringify([GoodsState.DRAFT, GoodsState.NEED_APPROVIAL]),
+  },
+  {
+    label: "待审核",
+    value: JSON.stringify([GoodsState.TO_BE_APPROVIAL, GoodsState.TO_BE_APPROVIAL_NEW]),
+  },
+  {
+    label: "审核未通过",
+    value: JSON.stringify([GoodsState.APPROVIAL_FAILED, GoodsState.APPROVIAL_FAILED_NEW]),
+  },
+  {
+    label: "发行中",
+    value: JSON.stringify([GoodsState.PUBLISHING, GoodsState.ADD_PUBLISHING]),
+  },
+  {
+    label: "发行失败",
+    value: JSON.stringify([GoodsState.PUBLISH_FAILED, GoodsState.ADD_PUBLISH_FAILED]),
+  },
+  {
+    label: "待上架",
+    value: JSON.stringify([GoodsState.TO_BE_SHELVES]),
+  },
+  {
+    label: "已上架",
+    value: JSON.stringify([GoodsState.ON_THE_SHELF]),
+  },
+];
 
 export enum GoodsType {
   COMMON = 0,
