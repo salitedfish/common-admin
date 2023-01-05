@@ -25,11 +25,11 @@
           </n-space>
         </n-radio-group>
       </n-form-item>
+      <n-form-item label="软件包：">
+        <common-upload v-model="fileList" :max="1" type="file" @update:model-value="handleDownloadUrlChange" style="margin-right: 10px" :disabled="submiting"></common-upload>
+      </n-form-item>
       <n-form-item label="下载地址：">
-        <div style="display: flex; align-items: center; width: 100%">
-          <common-upload v-model="fileList" :max="1" type="file" @update:model-value="handleDownloadUrlChange" style="margin-right: 10px" :disabled="submiting"></common-upload>
-          <n-input v-model:value="params.downloadUrl" placeholder="请输入下载地址" :disabled="submiting"></n-input>
-        </div>
+        <n-input v-model:value="params.downloadUrl" placeholder="请输入下载地址" :disabled="submiting"></n-input>
       </n-form-item>
     </n-card>
   </n-form>

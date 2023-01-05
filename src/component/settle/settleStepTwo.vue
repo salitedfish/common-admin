@@ -131,7 +131,7 @@
       <n-form-item label="银行账号" path="accountNumber">
         <n-input class="form-input" placeholder="请输入银行账号" v-model:value="formData.accountNumber" :disabled="submitLoading"></n-input>
       </n-form-item>
-      <n-form-item label="开户银行省市编码" path="bankAddressCode">
+      <n-form-item label="开户银行省市" path="bankAddressCode">
         <n-cascader
           v-model:value="formData.bankAddressCode"
           :options="bankAddressCodes"
@@ -140,6 +140,7 @@
           remote
           :show-path="true"
           :disabled="submitLoading"
+          placeholder="请选择开户银行省市"
         ></n-cascader>
       </n-form-item>
       <n-form-item label="开户银行全称" path="bankName">

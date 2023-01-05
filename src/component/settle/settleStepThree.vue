@@ -46,7 +46,7 @@
   </div> -->
   <div class="apply-result-message" v-if="[ApplyState.REJECTED, ApplyState.FROZEN].includes(applyResult.state)">
     <div v-for="(item, key) in applyResult.result" :key="key">
-      {{ item.reject_reason }}
+      {{ key + 1 + "、" + item.reject_reason }}
     </div>
   </div>
   <n-button @click="preStepHandler" class="re-apply" block type="primary" v-if="[ApplyState.REJECTED, ApplyState.NEED_APPOINT_ACCOUNT].includes(applyResult.state)"
@@ -192,7 +192,9 @@ const goManagerHandler = () => {
   text-align: center;
 }
 .apply-result-message {
-  text-align: center;
+  // text-align: center;
+  width: 50%;
+  margin: 0 auto;
 }
 .re-apply {
   width: 180px;

@@ -3,7 +3,6 @@ import { useSetLStorage, useGetLStorage, useRmLStorage } from "@ultra-man/noa";
 import router from "@/router";
 import { commonNotify } from "@/util/common";
 import { login as loginRequest, logout as logoutRequest, getUserInfo as getUserInfoRequest } from "@/request";
-import { RequestCodeState } from "@/request/init";
 import { useAuthStore } from "@/store/authStore";
 import type * as RequestParam from "@/request/type/RequestParam";
 

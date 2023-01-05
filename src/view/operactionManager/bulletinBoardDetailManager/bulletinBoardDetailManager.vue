@@ -5,13 +5,13 @@
         <n-input v-model:value="bulletinBoardInfo.title" placeholder="请输入公告标题" :disabled="isCheck || submiting"></n-input>
       </n-form-item>
 
-      <n-form-item label="公告封面">
+      <!-- <n-form-item label="公告封面">
         <common-upload type="img" v-model="coverList" :max="1" :disabled="isCheck || submiting"></common-upload>
-      </n-form-item>
+      </n-form-item> -->
 
-      <n-form-item label="公告概述：">
+      <!-- <n-form-item label="公告概述：">
         <n-input v-model:value="bulletinBoardInfo.summary" placeholder="请输入公告概述" :disabled="isCheck || submiting"></n-input>
-      </n-form-item>
+      </n-form-item> -->
 
       <n-form-item label="公告内容：">
         <rich-text-editor v-model="bulletinBoardInfo.content" placeHolder="编辑公告内容" :disabled="isCheck || submiting"></rich-text-editor>
@@ -50,7 +50,7 @@ import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义组件
 import richTextEditor from "@/component/common/richTextEditor.vue";
 import categorySelect from "@/component/common/categorySelect.vue";
-import commonUpload from "@/component/common/commonUpload.vue";
+// import commonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 // 自定义工具
 import { commonNotify } from "@/util/common";
@@ -93,14 +93,14 @@ const bulletinBoardInfo = reactive<AddBulletinBoard>({
 
 const submiting = ref(false);
 const submitHandler = async () => {
-  if (coverList.value.length <= 0) {
-    commonNotify("warning", "请上传公告背景图片");
-    return;
-  }
+  // if (coverList.value.length <= 0) {
+  //   commonNotify("warning", "请上传公告背景图片");
+  //   return;
+  // }
   if (classify.value.length > 0) {
     bulletinBoardInfo.classifies = classify.value.map((item) => item.id);
   }
-  bulletinBoardInfo.cover = coverList.value[0].hashName;
+  // bulletinBoardInfo.cover = coverList.value[0].hashName;
   submiting.value = true;
   const res = await addEditBulletinBoard(bulletinBoardInfo);
   if (res) {

@@ -12,7 +12,7 @@
       :native-scrollbar="false"
     >
       <n-button block type="primary" style="width: 90%; margin: 10px auto" @click="changeCollapsed">
-        <span v-show="!collapsed" style="font-size: 16px">菜单</span>
+        <span v-show="!collapsed" style="font-size: 16px">上链购管理后台</span>
         <customIcon name="caidan" :size="12"></customIcon>
       </n-button>
       <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"> </n-menu>

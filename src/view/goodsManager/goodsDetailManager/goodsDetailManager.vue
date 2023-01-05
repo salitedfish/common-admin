@@ -1,7 +1,7 @@
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left">
     <n-card title="基本信息：" style="margin-bottom: 15px">
-      <n-form-item label="商品类目:">
+      <n-form-item label="商品类目:" required>
         <category-select
           placeholder="请选择商品类目"
           v-model="goodsCategoryInfoList"
@@ -9,13 +9,13 @@
           :disabled="formDisabled || editTypeLimit"
         ></category-select>
       </n-form-item>
-      <n-form-item label="商品名称:">
+      <n-form-item label="商品名称:" required>
         <n-input placeholder="请输入商品名称" v-model:value="goodsInfo.spu.goodsName" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
-      <n-form-item label="商品描述:">
+      <n-form-item label="商品描述:" required>
         <n-input placeholder="请输入商品描述" v-model:value="goodsInfo.spu.goodsDes" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
-      <n-form-item label="商品详情:">
+      <n-form-item label="商品详情:" required>
         <!-- <n-input placeholder="请输入商品详情" v-model:value="goodsInfo.spu.goodsDetail" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input> -->
         <rich-text-editor v-model="goodsInfo.spu.goodsDetail" :disabled="formDisabled || editTypeLimit"></rich-text-editor>
       </n-form-item>
@@ -31,19 +31,19 @@
           </n-space>
         </n-card>
       </n-form-item>
-      <n-form-item label="商品封面:">
-        <common-upload type="img" v-model="goodsCoverList" :max="1" :disabled="formDisabled || editTypeLimit"></common-upload>
+      <n-form-item label="商品封面:" required>
+        <common-upload type="img" v-model="goodsCoverList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
       </n-form-item>
-      <n-form-item label="商品图片:">
-        <common-upload type="img" v-model="goodsImagesList" :max="6" :disabled="formDisabled || editTypeLimit"></common-upload>
+      <n-form-item label="商品图片:" required>
+        <common-upload type="img" v-model="goodsImagesList" :max="6" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
       </n-form-item>
       <n-form-item label="商品视频:">
-        <common-upload type="video" v-model="goodsVideoList" :max="1" :disabled="formDisabled || editTypeLimit"></common-upload>
+        <common-upload type="video" v-model="goodsVideoList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="100"></common-upload>
       </n-form-item>
       <n-form-item label="视频封面:">
-        <common-upload type="img" v-model="goodsVideoCoverList" :max="1" :disabled="formDisabled || editTypeLimit"></common-upload>
+        <common-upload type="img" v-model="goodsVideoCoverList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
       </n-form-item>
-      <n-form-item label="商品价格:">
+      <n-form-item label="商品价格:" required>
         <n-input-number
           placeholder="请输入商品价格"
           v-model:value="goodsInfo.spu.goodsPrice"
@@ -54,7 +54,7 @@
           <template #suffix> 元 </template></n-input-number
         >
       </n-form-item>
-      <n-form-item label="代币标准:">
+      <n-form-item label="代币标准:" required>
         <n-select
           v-model:value="goodsInfo.spu.ercStandard"
           :options="ercStandardList"
@@ -64,7 +64,7 @@
           :disabled="formDisabled || editTypeLimit"
         />
       </n-form-item>
-      <n-form-item label="商品总量:">
+      <n-form-item label="商品总量:" required>
         <n-input-number
           placeholder="请输入商品总量"
           v-model:value="goodsInfo.spu.goodsTotal"
@@ -77,7 +77,7 @@
       </n-form-item>
     </n-card>
     <n-card title="扩展信息：" style="margin-bottom: 15px">
-      <n-form-item label="商品类型:">
+      <n-form-item label="商品类型:" required>
         <n-select
           v-model:value="goodsInfo.extend.goodsType"
           :options="goodsTypeList"
@@ -87,7 +87,7 @@
           clearable
         />
       </n-form-item>
-      <n-form-item label="商品等级:" v-if="goodsInfo.extend.goodsType === GoodsType.BLIND_BOX_PRIZE">
+      <n-form-item label="商品等级:" v-if="goodsInfo.extend.goodsType === GoodsType.BLIND_BOX_PRIZE" required>
         <n-select
           v-model:value="goodsInfo.extend.goodsLevel"
           :options="goodsLevelList"
@@ -97,7 +97,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="销售开始时间:">
+      <n-form-item label="销售开始时间:" required>
         <n-date-picker
           placeholder="请选择销售开始时间"
           v-model:formatted-value="goodsInfo.extend.goodsSaleTime"
@@ -108,7 +108,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="销售方式:">
+      <n-form-item label="销售方式:" required>
         <n-select
           placeholder="请选择销售方式"
           v-model:value="goodsInfo.extend.saleType"
@@ -118,12 +118,12 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="优先购价格:" v-if="goodsInfo.extend.saleType !== SaleType.NOAMAL">
+      <n-form-item label="优先购价格:" v-if="goodsInfo.extend.saleType !== SaleType.NOAMAL" required>
         <n-input-number placeholder="请输入优先购价格" v-model:value="goodsInfo.extend.priorityPrice" :min="minPrice" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 元 </template></n-input-number
         >
       </n-form-item>
-      <n-form-item label="特殊销售转正常销售时间:" v-if="goodsInfo.extend.saleType !== SaleType.NOAMAL">
+      <n-form-item label="特殊销售转正常销售时间:" v-if="goodsInfo.extend.saleType !== SaleType.NOAMAL" required>
         <n-date-picker
           placeholder="请选择特殊销售转正常销售时间"
           v-model:formatted-value="goodsInfo.extend.normalSaleTime"
@@ -134,7 +134,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="规则计算名单时间:" v-if="goodsInfo.extend.saleType === SaleType.RULES">
+      <n-form-item label="规则计算名单时间:" v-if="goodsInfo.extend.saleType === SaleType.RULES" required>
         <n-date-picker
           placeholder="请选择规则计算名单时间"
           v-model:formatted-value="goodsInfo.extend.ruleCalcTime"
@@ -145,7 +145,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="限购数量:">
+      <n-form-item label="限购数量:" required>
         <n-input-number
           placeholder="请输入限购总量：-1表示不限购；0表示不可购买"
           v-model:value="goodsInfo.extend.orderLimit"
@@ -156,7 +156,7 @@
           <template #suffix> 份 </template></n-input-number
         >
       </n-form-item>
-      <n-form-item label="提货类型:">
+      <n-form-item label="提货类型:" required>
         <n-select
           v-model:value="goodsInfo.extend.expressType"
           :options="expresList"
@@ -166,7 +166,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES">
+      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES" required>
         <n-date-picker
           placeholder="请选择提货开始时间"
           v-model:formatted-value="goodsInfo.extend.expressTime"
@@ -177,7 +177,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES">
+      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES" required>
         <n-date-picker
           placeholder="请选择提货结束时间"
           v-model:formatted-value="goodsInfo.extend.expressEndTime"
@@ -188,10 +188,10 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="溯源哈希:">
+      <n-form-item label="溯源哈希:" required>
         <n-input v-model:value="goodsInfo.extend.traceHash" placeholder="请输入溯源哈希" :disabled="formDisabled"></n-input>
       </n-form-item>
-      <n-form-item label="标记类型:">
+      <n-form-item label="标记类型:" required>
         <n-select
           v-model:value="goodsInfo.extend.goodsTabType"
           :options="goodsTabList"
@@ -203,10 +203,10 @@
       </n-form-item>
     </n-card>
     <n-card title="积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT" style="margin-bottom: 15px">
-      <n-form-item label="积分编号:">
+      <n-form-item label="积分编号:" required>
         <n-input v-model:value="goodsInfo.points.pointsId" placeholder="请输入积分编号" :disabled="formDisabled"></n-input>
       </n-form-item>
-      <n-form-item label="所需数量:">
+      <n-form-item label="所需数量:" required>
         <n-input-number v-model:value="goodsInfo.points.needNum" placeholder="请输入所需积分数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 份 </template></n-input-number
         >
@@ -214,10 +214,10 @@
     </n-card>
     <n-card title="规则：" v-if="goodsInfo.extend.saleType === SaleType.RULES" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in goodsInfo.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
-        <n-form-item label="规则类型:">
+        <n-form-item label="规则类型:" required>
           <n-select v-model:value="item.type" :options="ruleTypeList" placeholder="请选择规则类型" :style="{ width: inputWidth }" clearable :disabled="formDisabled" />
         </n-form-item>
-        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))">
+        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))" required>
           <category-select
             @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
             placeholder="请选择商品类目"
@@ -227,20 +227,20 @@
             :disabled="formDisabled"
           ></category-select>
         </n-form-item>
-        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))">
+        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))" required>
           <n-input placeholder="请输入商品编号" v-model:value="item.itemId" :disabled="formDisabled"></n-input>
         </n-form-item>
-        <n-form-item label="单位数量:">
+        <n-form-item label="单位数量:" required>
           <n-input-number v-model:value="item.holdNum" placeholder="请输入奖励所需的单位数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="奖励数量:">
+        <n-form-item label="奖励数量:" required>
           <n-input-number v-model:value="item.unitNum" placeholder="请输入每单位数量奖励数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="奖励上限:">
+        <n-form-item label="奖励上限:" required>
           <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限，0表示无上限" :min="0" :style="{ width: inputWidth }" :disabled="formDisabled">
             <template #suffix> 份 </template></n-input-number
           >
@@ -248,6 +248,7 @@
         <n-form-item
           label="开始时间:"
           v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.type || 0)"
+          required
         >
           <n-date-picker
             placeholder="请选择开始时间"
@@ -262,6 +263,7 @@
         <n-form-item
           label="结束时间:"
           v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.type || 0)"
+          required
         >
           <n-date-picker
             placeholder="请选择结束时间"

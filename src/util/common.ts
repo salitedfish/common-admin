@@ -2,62 +2,79 @@ import { reactive, ref, computed, onMounted, h, onActivated } from "vue";
 import type { Ref } from "vue";
 import { createDiscreteApi, NButton } from "naive-ui";
 import { useCommonStore } from "@/store/commonStore";
+import { useThemeStore } from "@/store/themeStore";
 import type { Return, ReturnList, Paging } from "@/type/Common";
 import type { NotificationType, CascaderOption, DataTableColumns } from "naive-ui";
 import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } from "@/request/common";
 
-export const { notification, message: nmessage, dialog } = createDiscreteApi(["notification", "message", "dialog"]);
+const themeStore = useThemeStore();
 
-// 返回函数式调用的消息框(不能随主题变化样式)
+export const {
+  notification,
+  message: nmessage,
+  dialog,
+} = createDiscreteApi(["notification", "message", "dialog"], {
+  configProviderProps: computed(() => ({ theme: themeStore.themeList[themeStore.activeTheme].lib })),
+});
+
+// 返回函数式调用的消息框
+let notifying = false;
 export const commonNotify = (type: NotificationType, message: string, needComfirm = false) => {
-  if (needComfirm) {
-    let _needComfirm = true;
-    const n = notification[type]({
-      content: message,
-      keepAliveOnHover: true,
-      action: () =>
-        h(
-          NButton,
-          {
-            text: true,
-            type: "primary",
-            onClick: () => changeNeedComfirm(),
-          },
-          {
-            default: () => "我已知晓",
+  // 优化一下提示体验3秒内只提示一个
+  if (!notifying) {
+    notifying = true;
+    setTimeout(() => {
+      notifying = false;
+    }, 3000);
+    if (needComfirm) {
+      let _needComfirm = true;
+      const n = notification[type]({
+        content: message,
+        keepAliveOnHover: true,
+        action: () =>
+          h(
+            NButton,
+            {
+              text: true,
+              type: "primary",
+              onClick: () => changeNeedComfirm(),
+            },
+            {
+              default: () => "我已知晓",
+            }
+          ),
+        onClose: () => {
+          if (_needComfirm) {
+            nmessage.warning("请点击'我已知晓'按钮后再点击关闭");
+            return false;
           }
-        ),
-      onClose: () => {
-        if (_needComfirm) {
-          nmessage.warning("请点击'我已知晓'按钮后再点击关闭");
-          return false;
-        }
-      },
-    });
-    const changeNeedComfirm = () => {
-      _needComfirm = false;
-      n.action = () =>
-        h(
-          NButton,
-          {
-            text: true,
-            type: "primary",
-          },
-          {
-            default: () => "OK",
-          }
-        );
-    };
-  } else {
-    notification[type]({
-      content: message,
-      duration: 2000,
-      keepAliveOnHover: true,
-    });
+        },
+      });
+      const changeNeedComfirm = () => {
+        _needComfirm = false;
+        n.action = () =>
+          h(
+            NButton,
+            {
+              text: true,
+              type: "primary",
+            },
+            {
+              default: () => "OK",
+            }
+          );
+      };
+    } else {
+      notification[type]({
+        content: message,
+        duration: 2000,
+        keepAliveOnHover: true,
+      });
+    }
   }
 };
 
-// 返回异步确认框(不能随主题变化样式)
+// 返回异步确认框
 export const dialogComfirm = {
   warning(callBack: () => Promise<unknown>) {
     this.handler(callBack, "warning", "警告");

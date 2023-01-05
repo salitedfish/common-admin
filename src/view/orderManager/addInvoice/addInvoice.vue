@@ -2,7 +2,7 @@
   <n-form label-placement="left" label-width="120px" label-align="left">
     <n-card title="发票信息：" style="margin-bottom: 15px">
       <n-form-item label="发票照片:">
-        <common-upload type="img" v-model="fileList" :max="1"></common-upload>
+        <common-upload type="img" v-model="fileList" :max="1" :maxSize="2"></common-upload>
       </n-form-item>
     </n-card>
   </n-form>

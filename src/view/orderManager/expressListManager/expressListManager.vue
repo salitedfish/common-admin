@@ -292,7 +292,9 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getExpressOrderListRequest, createColumns);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getExpressOrderListRequest, createColumns, {
+  heightLevel: 1,
+});
 
 const currentOrder = ref<ExpressOrderListItem | null>(null);
 

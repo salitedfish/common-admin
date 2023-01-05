@@ -1,9 +1,9 @@
 <template>
   <n-card>
     <n-form label-placement="left" label-width="120px" label-align="left">
-      <n-form-item label="积分封面:">
+      <!-- <n-form-item label="积分封面:">
         <common-upload type="img" :max="1" v-model="fileList" :disabled="disabled"></common-upload>
-      </n-form-item>
+      </n-form-item> -->
       <n-form-item label="积分名称:">
         <n-input v-model:value="params.pointsName" placeholder="请输入积分名称" :disabled="disabled"></n-input>
       </n-form-item>
@@ -29,7 +29,7 @@ import { reactive, ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 // 组件库
 // 自定义组件
-import commonUpload from "@/component/common/commonUpload.vue";
+// import commonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
@@ -87,16 +87,16 @@ const disabled = computed(() => {
 const submiting = ref(false);
 
 const submitHandler = () => {
-  if (fileList.value.length >= 1) {
-    params.pointsCover = fileList.value[0].hashName;
-    if (isEdit.value) {
-      doEdit();
-    } else {
-      doSubmit();
-    }
+  // if (fileList.value.length >= 1) {
+  // params.pointsCover = fileList.value[0].hashName;
+  if (isEdit.value) {
+    doEdit();
   } else {
-    commonNotify("warning", "请上传积分封面");
+    doSubmit();
   }
+  // } else {
+  //   commonNotify("warning", "请上传积分封面");
+  // }
 };
 
 const doEdit = async () => {

@@ -92,18 +92,18 @@ const createColumns = () => {
     //   align: "center",
     //   width: 160,
     // },
-    {
-      title: "封面",
-      key: "cover",
-      align: "center",
-      width: 100,
-      render(row) {
-        return h(NImage, {
-          width: 30,
-          src: row.cover,
-        });
-      },
-    },
+    // {
+    //   title: "封面",
+    //   key: "cover",
+    //   align: "center",
+    //   width: 100,
+    //   render(row) {
+    //     return h(NImage, {
+    //       width: 30,
+    //       src: row.cover,
+    //     });
+    //   },
+    // },
     {
       title: "类型",
       key: "type",
