@@ -2,10 +2,13 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useCommonStore = defineStore("commonStore", () => {
-  const pageContentHeight = ref(600);
+  const appName = import.meta.env.VITE_APP_NAME;
+  // 页面减去padding后主要内容的高度
+  const pageContentHeight = ref(0);
   const pageLoading = ref(false);
   const setPageContentHeight = (height: number) => {
-    pageContentHeight.value = height;
+    // 减去padding
+    pageContentHeight.value = height - 110;
   };
   // 周
   const weekMap = [
@@ -75,7 +78,9 @@ export const useCommonStore = defineStore("commonStore", () => {
     { label: "22：00", value: 22 },
     { label: "23：00", value: 23 },
   ];
+
   return {
+    appName,
     pageContentHeight,
     setPageContentHeight,
     pageLoading,

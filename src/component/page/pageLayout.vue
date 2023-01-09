@@ -16,7 +16,7 @@ const pageDom = ref<HTMLElement | null>(null);
 const commonStore = useCommonStore();
 
 onMounted(() => {
-  const pageContentHeight = (pageDom.value as HTMLElement).offsetHeight - 125;
+  const pageContentHeight = (pageDom.value as HTMLElement).offsetHeight;
   commonStore.setPageContentHeight(pageContentHeight);
 });
 </script>

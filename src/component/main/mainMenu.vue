@@ -12,7 +12,7 @@
       :native-scrollbar="false"
     >
       <n-button block type="primary" style="width: 90%; margin: 10px auto" @click="changeCollapsed">
-        <span v-show="!collapsed" style="font-size: 16px">上链购管理后台</span>
+        <span v-show="!collapsed" style="font-size: 16px">{{ commonStore.appName }}</span>
         <customIcon name="caidan" :size="12"></customIcon>
       </n-button>
       <n-menu class="menu" :options="menuOptions" :collapsed="collapsed" @update:value="handleMenuClick" :value="routeStore.currentRoute.name"> </n-menu>
@@ -29,9 +29,11 @@ import type { MenuOption } from "naive-ui";
 import customIcon from "@/component/common/customIcon.vue";
 import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
+import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
 import type { RemoteRoute } from "@/type/Common";
 
+const commonStore = useCommonStore();
 const routeStore = useRouteStore();
 
 // 展开状态
@@ -102,8 +104,13 @@ const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[])
 // 生成菜单后再判断显示哪些
 onMounted(async () => {
   const res = await getAuthRoutesRequest();
-  if (res && res.code === 0) {
+  if (res) {
     authRouteHandler(menuOptions, res.data);
+  }
+  // 根据env配置的VITE_APP_NAME修改title
+  const titleDoms = document.getElementsByTagName("title");
+  for (let i = 0; i <= titleDoms.length - 1; i++) {
+    titleDoms[i].innerHTML = commonStore.appName;
   }
 });
 

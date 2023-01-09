@@ -46,7 +46,7 @@
   </div> -->
   <div class="apply-result-message" v-if="[ApplyState.REJECTED, ApplyState.FROZEN].includes(applyResult.state)">
     <div v-for="(item, key) in applyResult.result" :key="key">
-      {{ key + 1 + "、" + item.reject_reason }}
+      {{ handleReason(item.reject_reason, key) }}
     </div>
   </div>
   <n-button @click="preStepHandler" class="re-apply" block type="primary" v-if="[ApplyState.REJECTED, ApplyState.NEED_APPOINT_ACCOUNT].includes(applyResult.state)"
@@ -72,6 +72,15 @@ const loadingBar = useLoadingBar();
 const emit = defineEmits<{
   (name: "preStep"): void;
 }>();
+
+// 微信返回的reason不规范，有些有句号，有些没有,这里都加上句号
+const handleReason = (reason: string, key: number) => {
+  if (reason[reason.length - 1] === "。") {
+    return `${key + 1}、${reason}`;
+  } else {
+    return `${key + 1}、${reason}。`;
+  }
+};
 
 enum ApplyState {
   CHECKING = 0,

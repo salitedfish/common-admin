@@ -144,6 +144,6 @@ const handleSelect = async (key: string | number, index: number) => {
 <style scoped lang="less">
 .upload-tip {
   margin-top: 5px;
-  color: rgb(238, 69, 46);
+  color: var(--font-color-danger);
 }
 </style>
