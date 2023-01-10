@@ -52,7 +52,7 @@ export default defineComponent({
 import { ref, h, reactive } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
-import { NImage, NButton, NSpace, useDialog } from "naive-ui";
+import { NButton, NSpace, useDialog } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";

@@ -107,7 +107,6 @@ onMounted(async () => {
   if (res) {
     authRouteHandler(menuOptions, res.data);
   }
-
 });
 
 // 路由跳转
