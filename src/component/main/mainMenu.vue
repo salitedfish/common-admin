@@ -107,11 +107,7 @@ onMounted(async () => {
   if (res) {
     authRouteHandler(menuOptions, res.data);
   }
-  // 根据env配置的VITE_APP_NAME修改title
-  const titleDoms = document.getElementsByTagName("title");
-  for (let i = 0; i <= titleDoms.length - 1; i++) {
-    titleDoms[i].innerHTML = commonStore.appName;
-  }
+
 });
 
 // 路由跳转

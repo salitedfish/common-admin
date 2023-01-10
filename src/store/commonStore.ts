@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useCommonStore = defineStore("commonStore", () => {
+  // app的名字
   const appName = import.meta.env.VITE_APP_NAME;
   // 页面减去padding后主要内容的高度
   const pageContentHeight = ref(0);

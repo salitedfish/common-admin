@@ -95,6 +95,7 @@ const createColumns = () => {
               }
             },
             max: 1,
+            maxSize: 2,
           });
         }
       },

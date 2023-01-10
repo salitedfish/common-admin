@@ -12,10 +12,21 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted } from "vue";
 import { zhCN, dateZhCN } from "naive-ui";
 import { useGetLStorage } from "@ultra-man/noa";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store";
+import { useCommonStore } from "@/store/commonStore";
+
+// 根据env配置的VITE_APP_NAME修改title
+const commonStore = useCommonStore();
+onMounted(() => {
+  const titleDoms = document.getElementsByTagName("title");
+  for (let i = 0; i <= titleDoms.length - 1; i++) {
+    titleDoms[i].innerHTML = commonStore.appName;
+  }
+});
 
 // 获取主题
 const themeStore = useThemeStore();

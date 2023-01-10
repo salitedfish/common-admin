@@ -45,7 +45,7 @@ export default defineComponent({
 import { h, ref } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
-import { NSpace, NButton, useDialog, NImage } from "naive-ui";
+import { NSpace, NButton, useDialog } from "naive-ui";
 // 自定义组件
 import screenSection from "./screenSection.vue";
 import customIcon from "@/component/common/customIcon.vue";
