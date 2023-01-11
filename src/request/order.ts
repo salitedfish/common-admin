@@ -23,7 +23,7 @@ export const orderRefundComfirm = (params: { orderId: string; note: string; stat
     body: JSON.stringify(params),
   });
 };
-export const orderOffLineComfirm = (params: { orderId: string }) => {
+export const orderOffLineComfirm = (params: { orderId: string; state: number | null }) => {
   return ultraFetch.post({
     URL: "/manager/order/offline-confirm",
     body: JSON.stringify(params),

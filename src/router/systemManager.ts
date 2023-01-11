@@ -35,7 +35,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addSystemVersion",
+    path: "systemVersionManager/addSystemVersion",
     name: "addSystemVersion",
     component: () => import("@/view/systemManager/systemVersionDetail/systemVersionDetail.vue"),
     meta: {
@@ -45,7 +45,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editSystemVersion",
+    path: "systemVersionManager/editSystemVersion",
     name: "editSystemVersion",
     component: () => import("@/view/systemManager/systemVersionDetail/systemVersionDetail.vue"),
     meta: {

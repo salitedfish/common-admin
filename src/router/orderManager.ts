@@ -24,7 +24,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addInvoice",
+    path: "invoiceListManager/addInvoice",
     name: "addInvoice",
     component: () => import("@/view/orderManager/addInvoice/addInvoice.vue"),
     meta: {

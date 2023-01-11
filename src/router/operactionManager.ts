@@ -34,7 +34,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addManualAirdrop",
+    path: "manualAirdropManager/addManualAirdrop",
     name: "addManualAirdrop",
     component: () => import("@/view/operactionManager/manualAirdropDetail/manualAirdropDetail.vue"),
     meta: {
@@ -44,7 +44,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editManualAirdrop",
+    path: "manualAirdropManager/editManualAirdrop",
     name: "editManualAirdrop",
     component: () => import("@/view/operactionManager/manualAirdropDetail/manualAirdropDetail.vue"),
     meta: {
@@ -54,7 +54,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "manaualAirdropWhiteListManager",
+    path: "manualAirdropManager/manaualAirdropWhiteListManager",
     name: "manaualAirdropWhiteListManager",
     component: () => import("@/view/operactionManager/manaualAirdropWhiteListManager/manaualAirdropWhiteListManager.vue"),
     meta: {
@@ -74,7 +74,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addTimingAirdrop",
+    path: "timingAirdropManager/addTimingAirdrop",
     name: "addTimingAirdrop",
     component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
     meta: {
@@ -84,7 +84,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "checkTimingAirdrop",
+    path: "timingAirdropManager/checkTimingAirdrop",
     name: "checkTimingAirdrop",
     component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
     meta: {
@@ -94,7 +94,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editTimingAirdrop",
+    path: "timingAirdropManager/editTimingAirdrop",
     name: "editTimingAirdrop",
     component: () => import("@/view/operactionManager/timingAirdropDetail/timingAirdropDetail.vue"),
     meta: {
@@ -136,7 +136,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addBulletinBoard",
+    path: "bulletinBoardManager/addBulletinBoard",
     name: "addBulletinBoard",
     component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
     meta: {
@@ -146,7 +146,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "checkBulletinBoard",
+    path: "bulletinBoardManager/checkBulletinBoard",
     name: "checkBulletinBoard",
     component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
     meta: {
@@ -156,7 +156,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editBulletinBoard",
+    path: "bulletinBoardManager/editBulletinBoard",
     name: "editBulletinBoard",
     component: () => import("@/view/operactionManager/bulletinBoardDetailManager/bulletinBoardDetailManager.vue"),
     meta: {
@@ -187,7 +187,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addBanner",
+    path: "bannerManager/addBanner",
     name: "addBanner",
     component: () => import("@/view/operactionManager/bannerDetail/bannerDetail.vue"),
     meta: {
@@ -197,7 +197,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editBanner",
+    path: "bannerManager/editBanner",
     name: "editBanner",
     component: () => import("@/view/operactionManager/bannerDetail/bannerDetail.vue"),
     meta: {

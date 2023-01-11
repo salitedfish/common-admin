@@ -8,7 +8,7 @@ import pointsManager from "./pointsManager";
 import userManager from "./userManager";
 import systemManager from "./systemManager";
 
-// 具体的页面路由
+// 具体的页面路由（这样写如果路由是三层或者四层就无法缓存了，还是直接展开为一层方便缓存。页面菜单完全根据接口返回生成）
 export const routes = [
   // {
   //   path: "homeManager",

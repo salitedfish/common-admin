@@ -13,7 +13,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editBlindBox",
+    path: "goodsListManager/editBlindBox",
     name: "editBlindBox",
     component: () => import("@/view/goodsManager/blindBoxDetail/blindBoxDetail.vue"),
     meta: {
@@ -23,7 +23,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "checkBlindBox",
+    path: "goodsListManager/checkBlindBox",
     name: "checkBlindBox",
     component: () => import("@/view/goodsManager/blindBoxDetail/blindBoxDetail.vue"),
     meta: {
@@ -33,7 +33,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "blindBoxOpenRecord",
+    path: "goodsListManager/blindBoxOpenRecord",
     name: "blindBoxOpenRecord",
     component: () => import("@/view/goodsManager/blindBoxOpenRecord/blindBoxOpenRecord.vue"),
     meta: {
@@ -43,7 +43,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "goodsPublishRecord",
+    path: "goodsListManager/goodsPublishRecord",
     name: "goodsPublishRecord",
     component: () => import("@/view/goodsManager/goodsPublishRecord/goodsPublishRecord.vue"),
     meta: {
@@ -53,7 +53,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "goodsWhiteListManager",
+    path: "goodsListManager/goodsWhiteListManager",
     name: "goodsWhiteListManager",
     component: () => import("@/view/goodsManager/goodsWhiteListManager/goodsWhiteListManager.vue"),
     meta: {
@@ -62,7 +62,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "goodsAddManager",
+    path: "goodsListManager/goodsAddManager",
     name: "goodsAddManager",
     component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
     meta: {
@@ -72,7 +72,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "goodsCheckManager",
+    path: "goodsListManager/goodsCheckManager",
     name: "goodsCheckManager",
     component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
     meta: {
@@ -82,7 +82,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "goodsEditManager",
+    path: "goodsListManager/goodsEditManager",
     name: "goodsEditManager",
     component: () => import("@/view/goodsManager/goodsDetailManager/goodsDetailManager.vue"),
     meta: {
@@ -92,7 +92,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "consignmentParameter",
+    path: "goodsListManager/consignmentParameter",
     name: "consignmentParameter",
     component: () => import("@/view/goodsManager/consignmentParameter/ConsignmentParameter.vue"),
     meta: {

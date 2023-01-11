@@ -13,7 +13,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "addPoints",
+    path: "pointsListManager/addPoints",
     name: "addPoints",
     component: () => import("@/view/pointsManager/pointsDetailManager/pointsDetailManager.vue"),
     meta: {
@@ -23,7 +23,7 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
-    path: "editPoints",
+    path: "pointsListManager/editPoints",
     name: "editPoints",
     component: () => import("@/view/pointsManager/pointsDetailManager/pointsDetailManager.vue"),
     meta: {

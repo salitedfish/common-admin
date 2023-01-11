@@ -29,6 +29,26 @@
       </template>
     </n-card>
   </n-modal>
+
+  <n-modal :show="offlinePayComfirmDialog" @update:show="(state: boolean) => (offlinePayComfirmDialog = state)">
+    <n-card style="width: 600px" title="线下支付确认" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <template #header-extra>
+        <custom-icon name="guanbi" :size="16" @click="offlinePayComfirmDialog = false"></custom-icon>
+      </template>
+
+      <n-form label-placement="left" label-width="80px" label-align="left">
+        <n-form-item label="是否同意:">
+          <n-select v-model:value="offlinePayComfirmInfo.state" :options="refundExamStateList" placeholder="请选择是否同意" />
+        </n-form-item>
+      </n-form>
+
+      <template #footer>
+        <div style="display: flex; justify-content: end">
+          <n-button type="primary" inline-block @click="handleOfflinePayComfirm" :disabled="offlinePayComfirming" :loading="offlinePayComfirming">确认</n-button>
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -222,7 +242,8 @@ const createColumns = () => {
                   size: "small",
                   secondary: true,
                   onClick: () => {
-                    orderOffLineComfirm(order.orderId);
+                    offlinePayComfirmDialog.value = true;
+                    offlinePayComfirmInfo.orderId = order.orderId;
                   },
                 },
                 {
@@ -310,23 +331,6 @@ const createColumns = () => {
 
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, { heightLevel: 1 });
 
-// 线下支付确认
-const orderOffLineComfirm = (orderId: string) => {
-  const dialogInfo = dialog.warning({
-    title: "线下支付确认",
-    content: "是否确认线下支付",
-    positiveText: "确认",
-    onPositiveClick: async () => {
-      dialogInfo.loading = true;
-      const res = await orderOffLineComfirmRequest({ orderId });
-      if (res) {
-        await getList();
-        commonNotify("success", "线下支付确认成功");
-      }
-      dialogInfo.loading = false;
-    },
-  });
-};
 // 差错同步确认
 const orderSyncComfirm = (orderId: string) => {
   const dialogInfo = dialog.warning({
@@ -337,8 +341,8 @@ const orderSyncComfirm = (orderId: string) => {
       dialogInfo.loading = true;
       const res = await orderSyncComfirmRequest({ orderId });
       if (res) {
-        await getList();
         commonNotify("success", "差错同步确认成功");
+        await getList();
       }
       dialogInfo.loading = false;
     },
@@ -354,8 +358,8 @@ const orderRefundSyncComfirm = (orderId: string) => {
       dialogInfo.loading = true;
       const res = await orderRefundSyncComfirmRequest({ orderId });
       if (res) {
-        await getList();
         commonNotify("success", "退款差错同步确认成功");
+        await getList();
       }
       dialogInfo.loading = false;
     },
@@ -374,9 +378,27 @@ const handleRefund = async () => {
   const res = await orderRefundComfirm(refundInfo);
   if (res) {
     commonNotify("success", "退款审核完成");
+    await getList();
     showRefundDialog.value = false;
   }
   refundIng.value = false;
+};
+// 线下支付确认
+const offlinePayComfirmDialog = ref(false);
+const offlinePayComfirming = ref(false);
+const offlinePayComfirmInfo = reactive({
+  state: null,
+  orderId: "",
+});
+const handleOfflinePayComfirm = async () => {
+  offlinePayComfirming.value = true;
+  const res = await orderOffLineComfirmRequest(offlinePayComfirmInfo);
+  if (res) {
+    commonNotify("success", "线下支付确认操作成功");
+    await getList();
+    offlinePayComfirmDialog.value = false;
+  }
+  offlinePayComfirming.value = false;
 };
 </script>
 
