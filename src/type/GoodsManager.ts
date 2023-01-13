@@ -1,4 +1,4 @@
-import type { CategoryTreeItem } from "@/type/Common";
+import type { CategoryTreeItem, GetEnumValue } from "@/type/Common";
 export enum GoodsFuncType {
   NONE = -1,
   SELECT_BLIND_BOX = 0,
@@ -12,7 +12,7 @@ export type SearchParams = Partial<{
   goodsStates: string | number[];
   goodsType: number;
   merchantUid: string;
-  funcType: number;
+  funcType: GetEnumValue<GoodsFuncType>;
 }>;
 
 export type GoodsListItem = {

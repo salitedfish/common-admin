@@ -1,8 +1,7 @@
 // 定义项目中使用地方比较多的类型
-export type Paging = {
-  page: number;
-  size: number;
-};
+type GetNumberEnumValue<E extends number> = `${E}` extends `${infer T extends number}` ? T : never;
+type GetStringEnumValue<E extends string | number> = `${E}`;
+export type GetEnumValue<E extends number | string> = E extends number ? GetNumberEnumValue<E> : GetStringEnumValue<E>;
 
 export type Return<T> = {
   code: number;
