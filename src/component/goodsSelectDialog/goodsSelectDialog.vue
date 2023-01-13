@@ -49,6 +49,7 @@ const props = withDefaults(
     multiple?: boolean;
     goodsType?: number;
     goodsStates?: number[];
+    funcType?: number;
   }>(),
   {
     multiple: true,
@@ -120,7 +121,7 @@ const createColumns = () => {
 };
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, {
   heightLevel: 1,
-  params: { goodsType: props.goodsType, goodsStates: props.goodsStates },
+  params: { goodsType: props.goodsType, goodsStates: props.goodsStates, funcType: props.funcType },
 });
 </script>
 

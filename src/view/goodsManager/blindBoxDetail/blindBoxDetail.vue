@@ -8,10 +8,15 @@
     <n-card title="奖品列表：">
       <n-form-item label="选择盲盒奖品:" required>
         <div>
+          <n-space v-for="(item, key) in goodsSelectedListOrigin" :key="key" style="margin-bottom: 5px">
+            <n-input :value="String(item.goodsId)" disabled style="width: 200px"></n-input>
+            <n-input :value="item.goodsName" disabled style="width: 300px"></n-input>
+            <n-button type="warning" secondary v-if="!isCheck" :disabled="submiting" @click="deletePrize(key, goodsSelectedListOrigin)">删除奖品</n-button>
+          </n-space>
           <n-space v-for="(item, key) in goodsSelectedList" :key="key" style="margin-bottom: 5px">
             <n-input :value="String(item.goodsId)" disabled style="width: 200px"></n-input>
             <n-input :value="item.goodsName" disabled style="width: 300px"></n-input>
-            <n-button type="warning" secondary v-if="!isCheck" :disabled="submiting" @click="deletePrize(key)">删除奖品</n-button>
+            <n-button type="warning" secondary v-if="!isCheck" :disabled="submiting" @click="deletePrize(key, goodsSelectedList)">删除奖品</n-button>
           </n-space>
           <n-button type="primary" secondary @click="showGoodsSelectModal = true" v-if="!isCheck" :disabled="submiting" style="width: 608px">添加奖品</n-button>
         </div>
@@ -26,6 +31,7 @@
     v-model:goodsSelectedList="goodsSelectedList"
     :goodsType="GoodsType.BLIND_BOX_PRIZE"
     :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
+    :funcType="GoodsFuncType.SELECT_BLIND_BOX"
   ></goodsSelectModal>
 </template>
 
@@ -45,8 +51,8 @@ import { getBlindBoxPrizeList, submitBlindBoxPrize } from "@/request/goods";
 import { useRouteStore } from "@/store/routeStore";
 import { useCommonStore } from "@/store/commonStore";
 import { GoodsType } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
+import { GoodsFuncType } from "@/type/GoodsManager";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
-
 // 类型
 // 组件名
 export default defineComponent({
@@ -70,12 +76,13 @@ const isCheck = computed(() => {
 });
 
 const showGoodsSelectModal = ref(false);
+const goodsSelectedListOrigin = ref<{ goodsId: string | number; goodsName: string }[]>([]);
 const goodsSelectedList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
 
 const initData = async () => {
   const res = await getBlindBoxPrizeList({ goodsId: goodsId.value });
   if (res) {
-    goodsSelectedList.value = res.data.map((item) => {
+    goodsSelectedListOrigin.value = res.data.map((item) => {
       return {
         goodsId: item.boxGoodsId,
         goodsName: item.goodsName,
@@ -84,14 +91,14 @@ const initData = async () => {
   }
 };
 
-const deletePrize = (index: number) => {
-  goodsSelectedList.value.splice(index, 1);
+const deletePrize = (index: number, list: { goodsId: string | number; goodsName: string }[]) => {
+  list.splice(index, 1);
 };
 
 const submiting = ref(false);
 const submitHandler = async () => {
   submiting.value = true;
-  const list = goodsSelectedList.value.map((item) => String(item.goodsId));
+  const list = [...goodsSelectedListOrigin.value, ...goodsSelectedList.value].map((item) => String(item.goodsId));
   const res = await submitBlindBoxPrize({ boxGoodsIds: list, goodsId: goodsId.value });
   submiting.value = false;
   if (res) {

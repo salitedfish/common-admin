@@ -1,13 +1,18 @@
 import type { CategoryTreeItem } from "@/type/Common";
+export enum GoodsFuncType {
+  NONE = -1,
+  SELECT_BLIND_BOX = 0,
+}
 export type SearchParams = Partial<{
   classify: number;
   goodsId: string;
   goodsName: string;
   goodsState: number;
-  goodsType: number;
-  merchantUid: string;
   // 筛选的时候赋值的是string，请求时转为number[]
   goodsStates: string | number[];
+  goodsType: number;
+  merchantUid: string;
+  funcType: number;
 }>;
 
 export type GoodsListItem = {
