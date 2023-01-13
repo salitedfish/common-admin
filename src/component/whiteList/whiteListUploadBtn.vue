@@ -36,6 +36,7 @@ const handleUploadWhiteList = async (event: Event) => {
     if (res) {
       commonNotify("success", "白名单上传成功");
     }
+    if (inputDom.value) (inputDom.value as HTMLInputElement).value = "";
     uploading.value = false;
   }
 };

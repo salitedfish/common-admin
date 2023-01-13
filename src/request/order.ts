@@ -88,7 +88,7 @@ export const exportInvoiceList = (params: InvoiceListParam): Promise<Blob> => {
     params,
   });
 };
-export const addInvoice = (params: { electronicImage: string; orderId: string }) => {
+export const addInvoice = (params: { electronicImage: string; orderId: string; state: number }) => {
   return ultraFetch.post({
     URL: "/manager/order/invoice/make",
     body: JSON.stringify(params),

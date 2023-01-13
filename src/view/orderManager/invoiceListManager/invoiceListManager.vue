@@ -6,6 +6,29 @@
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
+
+  <n-modal :show="showApprovialModal" @update:show="(state: boolean) => (showApprovialModal = state)">
+    <n-card style="width: 600px" title="开票审核" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <template #header-extra>
+        <custom-icon name="guanbi" :size="16" @click="showApprovialModal = false"></custom-icon>
+      </template>
+
+      <n-form label-placement="left" label-width="100px" label-align="left">
+        <n-form-item label="是否同意:" required>
+          <n-select v-model:value="approvialInfo.state" :options="approvialInvoiceList" placeholder="请选择是否同意" />
+        </n-form-item>
+        <n-form-item label="发票照片:" v-show="approvialInfo.state === ApprovialInvoice.YES" required>
+          <common-upload type="img" v-model="fileList" :max="1" :maxSize="2"></common-upload>
+        </n-form-item>
+      </n-form>
+
+      <template #footer>
+        <div style="display: flex; justify-content: end">
+          <n-button type="primary" inline-block @click="handleApprovialComfirm" :disabled="approvialIng" :loading="approvialIng">确认</n-button>
+        </div>
+      </template>
+    </n-card>
+  </n-modal>
 </template>
 
 <script lang="ts">
@@ -16,77 +39,29 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 // 框架
-import { h } from "vue";
-import { useRouter } from "vue-router";
+import { h, ref, reactive } from "vue";
 // 组件库
 import { NImage, NEllipsis, NSpace, NButton } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
+import commonUpload from "@/component/common/commonUpload.vue";
+import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
-import { useListPage } from "@/util/common";
+import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
-import { getInvoiceList } from "@/request/order";
+import { getInvoiceList, addInvoice } from "@/request/order";
 // store
-import { invoiceStateList, invoiceTitleTypeList, invoiceTypeList, InvoiceState } from "./invoiceListManagerStore";
+import { invoiceStateList, invoiceTitleTypeList, invoiceTypeList, InvoiceState, approvialInvoiceList, ApprovialInvoice } from "./invoiceListManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { InvoiceListItem } from "@/type/Order";
-
-const router = useRouter();
+import type { FileUpload } from "@/type/Common";
 
 // 列表渲染函数
 const createColumns = () => {
   const list: DataTableColumns<InvoiceListItem> = [
-    {
-      title: "税号",
-      key: "tin",
-      align: "center",
-      width: 180,
-      render: (invoice) => {
-        return h(
-          NEllipsis,
-          {},
-          {
-            default: () => invoice.tin || "-",
-          }
-        );
-      },
-    },
-    {
-      title: "发票抬头",
-      key: "title",
-      align: "center",
-      width: 180,
-      render: (invoice) => {
-        return h(
-          NEllipsis,
-          {},
-          {
-            default: () => invoice.title || "-",
-          }
-        );
-      },
-    },
-    {
-      title: "抬头类型",
-      key: "titleType",
-      align: "center",
-      width: 140,
-      render: (invoice) => {
-        return invoiceTitleTypeList.getItem(invoice.titleType)?.label;
-      },
-    },
-    {
-      title: "发票类型",
-      key: "type",
-      align: "center",
-      width: 140,
-      render: (invoice) => {
-        return invoiceTypeList.getItem(invoice.type)?.label;
-      },
-    },
     {
       title: "订单编号",
       key: "orderId",
@@ -118,31 +93,58 @@ const createColumns = () => {
       },
     },
     {
-      title: "电子发票",
-      key: "electronicImage",
-      align: "center",
-      width: 100,
-      render(row) {
-        return h(NImage, {
-          width: 30,
-          src: row.electronicImage,
-        });
-      },
-    },
-    {
       title: "开票金额（元）",
       key: "invoiceAmount",
       align: "center",
       width: 140,
     },
     {
-      title: "开票状态",
-      key: "invoiceState",
+      title: "发票类型",
+      key: "type",
       align: "center",
       width: 140,
-
       render: (invoice) => {
-        return invoiceStateList.getItem(invoice.invoiceState)?.label;
+        return invoiceTypeList.getItem(invoice.type)?.label;
+      },
+    },
+    {
+      title: "抬头类型",
+      key: "titleType",
+      align: "center",
+      width: 140,
+      render: (invoice) => {
+        return invoiceTitleTypeList.getItem(invoice.titleType)?.label;
+      },
+    },
+    {
+      title: "发票抬头",
+      key: "title",
+      align: "center",
+      width: 180,
+      render: (invoice) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => invoice.title || "-",
+          }
+        );
+      },
+    },
+
+    {
+      title: "税号",
+      key: "tin",
+      align: "center",
+      width: 180,
+      render: (invoice) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => invoice.tin || "-",
+          }
+        );
       },
     },
     {
@@ -176,21 +178,6 @@ const createColumns = () => {
       },
     },
     {
-      title: "银行账户",
-      key: "bankCardCode",
-      align: "center",
-      width: 180,
-      render: (invoice) => {
-        return h(
-          NEllipsis,
-          {},
-          {
-            default: () => invoice.bankCardCode || "-",
-          }
-        );
-      },
-    },
-    {
       title: "开户银行",
       key: "bankName",
       align: "center",
@@ -205,6 +192,45 @@ const createColumns = () => {
         );
       },
     },
+
+    {
+      title: "银行账户",
+      key: "bankCardCode",
+      align: "center",
+      width: 180,
+      render: (invoice) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => invoice.bankCardCode || "-",
+          }
+        );
+      },
+    },
+
+    {
+      title: "开票状态",
+      key: "invoiceState",
+      align: "center",
+      width: 140,
+
+      render: (invoice) => {
+        return invoiceStateList.getItem(invoice.invoiceState)?.label;
+      },
+    },
+    {
+      title: "电子发票",
+      key: "electronicImage",
+      align: "center",
+      width: 100,
+      render(row) {
+        return h(NImage, {
+          width: 30,
+          src: row.electronicImage,
+        });
+      },
+    },
     {
       title: "申请时间",
       key: "createTime",
@@ -212,10 +238,19 @@ const createColumns = () => {
       width: 180,
     },
     {
-      title: "开票时间",
+      title: "审核时间",
       key: "updateTime",
       align: "center",
       width: 180,
+      render: (invoice) => {
+        return h(
+          NEllipsis,
+          {},
+          {
+            default: () => invoice.updateTime || "-",
+          }
+        );
+      },
     },
     {
       title: "操作",
@@ -234,16 +269,13 @@ const createColumns = () => {
                 size: "small",
                 secondary: true,
                 onClick: () => {
-                  router.push({
-                    name: "addInvoice",
-                    query: {
-                      id: invoice.orderId,
-                    },
-                  });
+                  approvialInfo.orderId = invoice.orderId;
+                  approvialInfo.state = ApprovialInvoice.NO;
+                  showApprovialModal.value = true;
                 },
               },
               {
-                default: () => "开票",
+                default: () => "审核",
               }
             )
           );
@@ -259,6 +291,33 @@ const createColumns = () => {
 };
 
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getInvoiceList, createColumns);
+
+/**审核开票 */
+const fileList = ref<FileUpload[]>([]);
+const showApprovialModal = ref(false);
+const approvialIng = ref(false);
+const approvialInfo = reactive({
+  orderId: "",
+  state: ApprovialInvoice.NO,
+  electronicImage: "",
+});
+const handleApprovialComfirm = async () => {
+  if (approvialInfo.state === ApprovialInvoice.YES && fileList.value.length <= 0) {
+    commonNotify("warning", "请上传发票图片");
+    return;
+  }
+  for (const item of fileList.value) {
+    approvialInfo.electronicImage = item.hashName;
+  }
+  approvialIng.value = true;
+  const res = await addInvoice(approvialInfo);
+  if (res) {
+    commonNotify("success", "开票审核完成");
+    await getList();
+    showApprovialModal.value = false;
+  }
+  approvialIng.value = false;
+};
 </script>
 
 <style scoped lang="less">

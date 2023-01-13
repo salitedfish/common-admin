@@ -43,7 +43,7 @@ const goLoginHandler = () => {
 // 步骤条
 const steps = reactive<Step[]>([
   { title: "注册", description: "注册账号" },
-  { title: "完善信息", description: "完善企业相关信息" },
+  { title: "完善信息", description: "完善相关信息" },
   { title: "申请结果", description: "确认入驻申请结果" },
 ]);
 const currentStep = ref(Number(route.query.step) || 1);
