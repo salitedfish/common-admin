@@ -34,7 +34,6 @@ import pageLayout from "@/component/page/pageLayout.vue";
 
 import { useRouteStore } from "@/store";
 import { useNeedLogin } from "@/util";
-import { getUserInfo } from "@/util/auth";
 
 const routeStore = useRouteStore();
 const route = useRoute();
@@ -64,11 +63,9 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
 };
 
 // 初始化和每次路由更新时都检查一次，是否有token，没有则需要重新登录
-// 初始化时获取一次用户信息
 // 初始化和每次路由更新时都监听，更新路由路径和历史路由
 onMounted(() => {
   useNeedLogin();
-  getUserInfo();
   updateHistoryRoutes(route);
   updateRoutePath(route.matched);
 });

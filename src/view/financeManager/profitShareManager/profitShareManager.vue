@@ -8,14 +8,14 @@
   </n-card>
 
   <n-modal :show="showDialog" @update:show="(state: boolean) => (showDialog = state)">
-    <n-card style="width: 600px" title="差错同步确认" :bordered="false" size="huge" role="dialog" aria-modal="true">
+    <n-card style="width: 700px" title="差错同步确认" :bordered="false" size="huge" role="dialog" aria-modal="true">
       <template #header-extra>
         <custom-icon name="guanbi" :size="16" @click="showDialog = false"></custom-icon>
       </template>
 
       <n-form label-placement="left" label-width="100px" label-align="left">
         <n-form-item label="更换分账金额:">
-          <n-select v-model:value="syncInfo.accept" placeholder="待分账小于分账金额时，是否接受使用待分账金额分账" :options="acceptList" />
+          <n-select v-model:value="syncInfo.accept" placeholder="待分账金额大于微信未分账金额时，是否使用微信未分账金进行分账" :options="acceptList" />
         </n-form-item>
         <n-form-item label="处理结果:">
           <n-select v-model:value="syncInfo.state" placeholder="请选择处理结果" :options="asyncActionList" />
@@ -153,6 +153,12 @@ const createColumns = () => {
       },
     },
     {
+      title: "分账备注",
+      key: "note",
+      width: 180,
+      align: "center",
+    },
+    {
       title: "分账时间",
       key: "createTime",
       width: 180,
@@ -162,12 +168,7 @@ const createColumns = () => {
         return row.createTime || "-";
       },
     },
-    {
-      title: "分账备注",
-      key: "note",
-      width: 100,
-      align: "center",
-    },
+
     {
       title: "操作",
       key: "operaction",
@@ -178,7 +179,8 @@ const createColumns = () => {
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        if (row.state === ShareState.SHARING && isAdmin) {
+
+        if (row.state === ShareState.FAIL && isAdmin) {
           if (row.channelType === PayChannel.WX) {
             list.push(
               h(
@@ -240,6 +242,7 @@ const comfirmSync = async () => {
   const res = await syncProfitShare(syncInfo);
   if (res) {
     await getList();
+    showDialog.value = false;
     commonNotify("success", "差错同步成功");
   }
   syncing.value = false;

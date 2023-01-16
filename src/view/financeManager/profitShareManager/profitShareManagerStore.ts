@@ -50,7 +50,7 @@ export const acceptList = [
 ];
 export const asyncActionList = [
   {
-    label: "重新分配",
+    label: "重新分账",
     value: 0,
   },
   {

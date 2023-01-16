@@ -49,6 +49,7 @@ export const useLogout = () => {
     const res = await logoutRequest();
     if (res) {
       useRmLStorage("token");
+      useRmLStorage("userInfo");
     }
     logoutState.value = false;
     return res;
@@ -60,10 +61,11 @@ export const useLogout = () => {
   };
 };
 
-// 检查本地token
+// 检查本地token和用户信息是否全，少一个就需要重新登录
 export const useNeedLogin = () => {
   const token = useGetLStorage("token")(null);
-  if (!token) {
+  const userInfo = useGetLStorage("userInfo")(null);
+  if (!token || !userInfo) {
     commonNotify("warning", "未找到登录信息，请重新登录!");
     router.push({
       name: "login",
