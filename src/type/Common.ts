@@ -11,6 +11,11 @@ export type Return<T> = {
   traceId: string;
 };
 
+export type Paging = {
+  page: number;
+  size: number;
+};
+
 export type ReturnList<T> = {
   data: T[];
   dataSize: number;

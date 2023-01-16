@@ -36,6 +36,8 @@ import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListMan
 import { useListPage } from "@/util/common";
 import { defineComponent, computed } from "vue";
 import type { DataTableRowKey } from "naive-ui";
+import type { GetEnumValue } from "@/type/Common";
+import type { GoodsFuncType } from "@/type/GoodsManager";
 export default defineComponent({
   name: "goodsListManager",
 });
@@ -49,7 +51,7 @@ const props = withDefaults(
     multiple?: boolean;
     goodsType?: number;
     goodsStates?: number[];
-    funcType?: number;
+    funcType?: GetEnumValue<GoodsFuncType>;
   }>(),
   {
     multiple: true,

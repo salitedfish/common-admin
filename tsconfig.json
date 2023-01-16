@@ -8,7 +8,7 @@
       "@/*": ["./src/*"]
     },
     "importsNotUsedAsValues": "error",
-    "types": ["node","naive-ui/volar"],
+    "types": ["naive-ui/volar"],
   },
 
   "references": [
