@@ -18,7 +18,7 @@ export const expressOrderStateList = [
     value: ExpressOrderState.RECEICED,
   },
   {
-    label: "已收货",
+    label: "已取消",
     value: ExpressOrderState.CANCEL_EXPRESS,
   },
 ];

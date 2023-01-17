@@ -9,7 +9,7 @@
   <!-- 查看物流 -->
   <n-modal style="height: 600px; width: 1000px" :show="showLogisticsModal" @update:show="(state: boolean) => {showLogisticsModal = state }">
     <layoutScrollCard :loading="logisticsLoading">
-      <div class="step-box" v-if="!logisticsLoading && logisticsInfo?.data && logisticsInfo?.data.length >= 1">
+      <div class="step-box" v-if="!logisticsLoading && logisticsInfo?.data && logisticsInfo?.data?.length >= 1">
         <n-steps vertical :current="logisticsInfo?.data?.length">
           <n-step v-for="(item, index) in logisticsInfo?.data" :key="index" :title="item.time" :description="item.context">
             <template #icon>
@@ -333,7 +333,7 @@ const checkLogistics = async (order: ExpressOrderListItem) => {
   const res = await getExpressLogisticsRequest({ orderId: order.orderId });
   if (res) {
     logisticsInfo.value = res.data;
-    logisticsInfo.value.data.reverse();
+    logisticsInfo.value && logisticsInfo.value.data ? logisticsInfo.value.data.reverse() : null;
   }
   logisticsLoading.value = false;
 };
