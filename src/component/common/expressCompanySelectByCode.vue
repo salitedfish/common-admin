@@ -48,13 +48,15 @@ const loading = ref(false);
 
 // 请求快递公司
 const getExpressCompany = async (params: { expressCode: string }) => {
+  loading.value = true;
   const res = await getExpressCompanyListByCode(params);
   if (res.data) {
     return res.data.data;
   }
+  loading.value = false;
 };
 
-// 监听到快递单号改变时查询快递公司
+// 监听到快递单号改变时查询快递公司（500ms防抖）
 watch(
   () => props.expressCode,
   useDebounce(async (newValue) => {
