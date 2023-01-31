@@ -177,7 +177,7 @@ const createColumns = () => {
         ];
 
         // 删除
-        if (isMy && row.state === BulletinBoardState.TO_BE_SHELVES) {
+        if (row.state === BulletinBoardState.TO_BE_SHELVES) {
           list.push(
             h(
               NButton,
@@ -207,27 +207,29 @@ const createColumns = () => {
               }
             )
           );
-          list.push(
-            h(
-              NButton,
-              {
-                size,
-                secondary: true,
-                type: "primary",
-                onClick: () => {
-                  router.push({
-                    name: "editBulletinBoard",
-                    query: {
-                      id: row.id,
-                    },
-                  });
+          if (isMy) {
+            list.push(
+              h(
+                NButton,
+                {
+                  size,
+                  secondary: true,
+                  type: "primary",
+                  onClick: () => {
+                    router.push({
+                      name: "editBulletinBoard",
+                      query: {
+                        id: row.id,
+                      },
+                    });
+                  },
                 },
-              },
-              {
-                default: () => "编辑",
-              }
-            )
-          );
+                {
+                  default: () => "编辑",
+                }
+              )
+            );
+          }
         }
         if (isMy) {
           const topStateAction = bulletinBoardTopStateList.getItem(row.topState)?.action;

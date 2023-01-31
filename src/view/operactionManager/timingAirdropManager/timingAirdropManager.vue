@@ -139,7 +139,7 @@ const createColumns = () => {
             }
           )
         );
-        if (row.state === AirDropStateType.OFFLINE && isMy) {
+        if (row.state === AirDropStateType.OFFLINE) {
           // 删除空投
           list.push(
             h(
@@ -170,28 +170,30 @@ const createColumns = () => {
               }
             )
           );
-          // 编辑空投
-          list.push(
-            h(
-              NButton,
-              {
-                size,
-                type: "primary",
-                secondary: true,
-                onClick: () => {
-                  router.push({
-                    name: "editTimingAirdrop",
-                    query: {
-                      id: row.id,
-                    },
-                  });
+          if (isMy) {
+            // 编辑空投
+            list.push(
+              h(
+                NButton,
+                {
+                  size,
+                  type: "primary",
+                  secondary: true,
+                  onClick: () => {
+                    router.push({
+                      name: "editTimingAirdrop",
+                      query: {
+                        id: row.id,
+                      },
+                    });
+                  },
                 },
-              },
-              {
-                default: () => "编辑",
-              }
-            )
-          );
+                {
+                  default: () => "编辑",
+                }
+              )
+            );
+          }
         }
         // 空投上下线
         const lineActionLabel = airDropStateList.getItem(row.state)?.action.label;

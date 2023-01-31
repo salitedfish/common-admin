@@ -91,3 +91,10 @@ export type UserPointsListItem = {
   uid: number;
   updateTime: string;
 };
+
+export type UserRealInfo = {
+  createTime: string;
+  idCardCode: string;
+  idCardName: string;
+  uid: string;
+};

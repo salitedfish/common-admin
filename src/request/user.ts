@@ -1,6 +1,14 @@
 import { ultraFetch } from "./init";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { AdminMerchantListParam, AdminMerchantListItem, GetUserAssetsListParams, GetUserPointsListParams, UserAssetsListItem, UserPointsListItem } from "@/type/User";
+import type {
+  AdminMerchantListParam,
+  AdminMerchantListItem,
+  GetUserAssetsListParams,
+  GetUserPointsListParams,
+  UserAssetsListItem,
+  UserPointsListItem,
+  UserRealInfo,
+} from "@/type/User";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 
@@ -19,10 +27,24 @@ export const updateUserState = (params: { state: number; uid: number }) => {
   });
 };
 
-export const updateUserTab = (params: { tab: number; uid: number }) => {
+export const updateUserTab = (params: { tab: number; uid: number; phone?: string }) => {
   return ultraFetch.post({
     URL: "/manager/user/tab",
     body: JSON.stringify(params),
+  });
+};
+
+export const updateUserPhone = (params: { tab: number; uid?: number; phone: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/user/phone",
+    body: JSON.stringify(params),
+  });
+};
+
+export const getUserRealInfo = (params: { uid: number }): Promise<Return<UserRealInfo>> => {
+  return ultraFetch.get({
+    URL: "/manager/user/identity-verification",
+    params,
   });
 };
 

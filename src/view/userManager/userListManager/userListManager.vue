@@ -7,16 +7,19 @@
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
 
-  <!-- 改变用户类型 -->
+  <!-- 用户设置 -->
   <n-modal :show="showUserTabModal" @update:show="(state: boolean) => (showUserTabModal = state)">
-    <n-card style="width: 600px" :title="userInfo.title" :bordered="false" size="huge" role="dialog" aria-modal="true">
+    <n-card style="width: 600px" :title="'用户' + userInfo.title" :bordered="false" size="huge" role="dialog" aria-modal="true">
       <template #header-extra>
         <customIcon name="guanbi" :size="16" @click="showUserTabModal = false"></customIcon>
       </template>
 
       <n-form label-placement="left" label-width="80px" label-align="left">
-        <n-form-item label="用户标签:">
+        <n-form-item label="用户标签:" v-if="userInfo.setType === SetInfoType.TAB">
           <n-select v-model:value="userInfo.tab" :options="accountTabList" :disabled="updateTabLoading"></n-select>
+        </n-form-item>
+        <n-form-item label="手机号:" v-if="userInfo.setType === SetInfoType.PHONE">
+          <n-input v-model:value="userInfo.phone" :disabled="updateTabLoading"></n-input>
         </n-form-item>
       </n-form>
 
@@ -26,6 +29,29 @@
         </div>
       </template>
     </n-card>
+  </n-modal>
+
+  <!-- 实名信息 -->
+  <n-modal style="min-height: 200px; width: 600px" :show="showUserRealInfoModal" @update:show="(state: boolean) => {showUserRealInfoModal = state }">
+    <layoutScrollCard :loading="getRealInfoLoading">
+      <div v-if="!getRealInfoLoading && userRealInfo?.idCardCode">
+        <n-form label-placement="left" label-width="80px" label-align="left">
+          <n-form-item label="用户编号:">
+            <n-input v-model:value="userRealInfo.uid" :disabled="true"></n-input>
+          </n-form-item>
+          <n-form-item label="用户名称:">
+            <n-input v-model:value="userRealInfo.idCardName" :disabled="true"></n-input>
+          </n-form-item>
+          <n-form-item label="身份证号:">
+            <n-input v-model:value="userRealInfo.idCardCode" :disabled="true"></n-input>
+          </n-form-item>
+          <n-form-item label="实名时间:">
+            <n-input v-model:value="userRealInfo.createTime" :disabled="true"></n-input>
+          </n-form-item>
+        </n-form>
+      </div>
+      <div v-else-if="!getRealInfoLoading" style="text-align: center">未查询到用户实名信息</div>
+    </layoutScrollCard>
   </n-modal>
 </template>
 
@@ -37,17 +63,38 @@ import { NImage, NButton, NSpace, useDialog, NEllipsis } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
+import layoutScrollCard from "@/component/common/layoutScrollCard.vue";
 // 工具库
 // 自定义工具
 import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
-import { getUserList as getUserListRequest, updateUserState as updateUserStateRequest, updateUserTab as updateUserTabRequest } from "@/request/user";
+import {
+  getUserList as getUserListRequest,
+  updateUserState as updateUserStateRequest,
+  updateUserTab as updateUserTabRequest,
+  updateUserPhone as updateUserPhoneRequest,
+  getUserRealInfo as getUserRealInfoRequest,
+} from "@/request/user";
 // store
 import { UserState, userStateList, accountTabList } from "./userListManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
-import type { UserListItem } from "@/type/User";
+import type { UserListItem, UserRealInfo } from "@/type/User";
 const dialog = useDialog();
+
+// 争对用户的不同操作类型
+enum SetInfoType {
+  TAB,
+  PHONE,
+}
+const setInfoTypeAction = {
+  [SetInfoType.TAB]: {
+    method: updateUserTabRequest,
+  },
+  [SetInfoType.PHONE]: {
+    method: updateUserPhoneRequest,
+  },
+};
 
 // 列表渲染函数
 const createColumns = () => {
@@ -161,7 +208,7 @@ const createColumns = () => {
       title: "操作",
       key: "operaction",
       align: "center",
-      width: 180,
+      width: 340,
       fixed: "right",
       render(user) {
         const btnList = [
@@ -177,13 +224,43 @@ const createColumns = () => {
               size: "small",
               secondary: true,
               onClick: () => {
+                userInfo.setType = SetInfoType.TAB;
                 userInfo.tab = user.tab;
                 userInfo.title = user.nickName;
                 userInfo.uid = user.uid;
                 showUserTabModal.value = true;
               },
             },
-            { default: () => "标签设置" }
+            { default: () => "标签" }
+          ),
+          h(
+            NButton,
+            {
+              type: "primary",
+              size: "small",
+              secondary: true,
+              onClick: () => {
+                getUserRealInfoHandler(user.uid);
+                showUserRealInfoModal.value = true;
+              },
+            },
+            { default: () => "实名信息" }
+          ),
+          h(
+            NButton,
+            {
+              type: "primary",
+              size: "small",
+              secondary: true,
+              onClick: () => {
+                userInfo.setType = SetInfoType.PHONE;
+                userInfo.phone = user.phone;
+                userInfo.title = user.nickName;
+                userInfo.uid = user.uid;
+                showUserTabModal.value = true;
+              },
+            },
+            { default: () => "修改手机号" }
           ),
         ];
         // 用来放按钮的容器
@@ -217,23 +294,38 @@ const handleFrozen = (user: UserListItem) => {
   });
 };
 
-// 用户类型相关
+// 用户设置相关
 const showUserTabModal = ref(false);
 const updateTabLoading = ref(false);
 const userInfo = reactive({
+  setType: SetInfoType.TAB,
   title: "",
   tab: 0,
   uid: 0,
+  phone: "",
 });
 const comfirmUpdateUserTab = async () => {
   updateTabLoading.value = true;
-  const res = await updateUserTabRequest({ uid: userInfo.uid, tab: userInfo.tab });
+  const res = await setInfoTypeAction[userInfo.setType].method({ uid: userInfo.uid, tab: userInfo.tab, phone: userInfo.phone });
   if (res) {
     await getList();
-    commonNotify("success", `${userInfo.title}标签设置成功`);
+    commonNotify("success", `用户${userInfo.title}设置成功`);
     showUserTabModal.value = false;
   }
   updateTabLoading.value = false;
+};
+
+// 展示用户实名信息
+const showUserRealInfoModal = ref(false);
+const getRealInfoLoading = ref(false);
+const userRealInfo = ref<Partial<UserRealInfo>>({});
+const getUserRealInfoHandler = async (uid: number) => {
+  getRealInfoLoading.value = true;
+  const res = await getUserRealInfoRequest({ uid });
+  if (res) {
+    userRealInfo.value = res.data;
+  }
+  getRealInfoLoading.value = false;
 };
 </script>
 

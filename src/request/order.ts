@@ -64,12 +64,12 @@ export const getExpressLogistics = (params: { orderId: string }): RequestReturn.
 
 export const getExpressCompanyList = (params: { name?: string; page: number; size: number }): RequestReturn.GetExpressCompanyList => {
   return ultraFetch.post({
-    URL: "/manager/order/express/express-type",
+    URL: "/manager/order/express/express-type/page",
     body: JSON.stringify(params),
   });
 };
 
-export const expressDelivery = (params: { expressCode?: string; expressName?: string; orderId: string }) => {
+export const expressDelivery = (params: { expressCode?: string | null; expressName?: string | null; orderId: string; expressCom: string | null }) => {
   return ultraFetch.post({
     URL: "/manager/order/express/delivery",
     body: JSON.stringify(params),

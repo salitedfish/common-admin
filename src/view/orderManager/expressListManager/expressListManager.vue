@@ -10,7 +10,7 @@
   <n-modal style="height: 600px; width: 1000px" :show="showLogisticsModal" @update:show="(state: boolean) => {showLogisticsModal = state }">
     <layoutScrollCard :loading="logisticsLoading">
       <div class="step-box" v-if="!logisticsLoading && logisticsInfo?.data && logisticsInfo?.data?.length >= 1">
-        <n-steps vertical :current="logisticsInfo?.data?.length">
+        <n-steps vertical :current="1">
           <n-step v-for="(item, index) in logisticsInfo?.data" :key="index" :title="item.time" :description="item.context">
             <template #icon>
               <customIcon name="wuliu" :size="14"></customIcon>
@@ -31,16 +31,17 @@
 
       <n-form label-placement="left" label-width="80px" label-align="left">
         <n-form-item label="快递单号:">
-          <n-input v-model="expressInfo.orderId" placeholder="请输入快递单号" :disabled="expressLoading"></n-input>
+          <n-input v-model:value="expressInfo.expressCode" placeholder="请输入快递单号，如果不需要快递可不填" :disabled="expressLoading"></n-input>
         </n-form-item>
         <n-form-item label="物流公司:">
-          <expressCompanySelect v-model="expressInfo.expressName" :disabled="expressLoading"></expressCompanySelect>
+          <expressCompanySelect v-model="expressInfo.expressCom" v-model:expressName="expressInfo.expressName" :disabled="expressLoading"></expressCompanySelect>
         </n-form-item>
       </n-form>
 
       <template #footer>
         <div style="display: flex; justify-content: end">
-          <n-button type="primary" inline-block @click="comfirmExpress" :disabled="expressLoading" :loading="expressLoading">确认</n-button>
+          <n-button type="primary" inline-block @click="comfirmExpressEmpey" :disabled="expressLoading" :loading="expressLoading" style="margin-right: 10px">无需快递</n-button>
+          <n-button type="primary" inline-block @click="comfirmExpress" :disabled="expressLoading" :loading="expressLoading">确认快递</n-button>
         </div>
       </template>
     </n-card>
@@ -250,7 +251,7 @@ const createColumns = () => {
             )
           );
         }
-        if ([ExpressOrderState.AFTER_EXPRESS, ExpressOrderState.RECEICED].includes(order.orderState)) {
+        if ([ExpressOrderState.AFTER_EXPRESS, ExpressOrderState.RECEICED].includes(order.orderState) && order.expressCode) {
           btnList.push(
             h(
               NButton,
@@ -260,6 +261,7 @@ const createColumns = () => {
                 secondary: true,
                 onClick: () => {
                   checkLogistics(order);
+                  // handleExpress(order);
                 },
               },
               {
@@ -302,14 +304,21 @@ const currentOrder = ref<ExpressOrderListItem | null>(null);
 const showExpressModal = ref(false);
 const expressLoading = ref(false);
 const expressInfo = reactive({
-  expressCode: "",
-  expressName: "",
+  expressCode: null,
+  expressName: null,
+  expressCom: null,
   orderId: "",
 });
 const handleExpress = async (order: ExpressOrderListItem) => {
   currentOrder.value = order;
   showExpressModal.value = true;
   expressInfo.orderId = currentOrder.value.orderId;
+};
+const comfirmExpressEmpey = () => {
+  expressInfo.expressCode = null;
+  expressInfo.expressName = null;
+  expressInfo.expressCom = null;
+  comfirmExpress();
 };
 const comfirmExpress = async () => {
   expressLoading.value = true;
@@ -333,7 +342,7 @@ const checkLogistics = async (order: ExpressOrderListItem) => {
   const res = await getExpressLogisticsRequest({ orderId: order.orderId });
   if (res) {
     logisticsInfo.value = res.data;
-    logisticsInfo.value && logisticsInfo.value.data ? logisticsInfo.value.data.reverse() : null;
+    logisticsInfo.value && logisticsInfo.value.data ? logisticsInfo.value.data : null;
   }
   logisticsLoading.value = false;
 };

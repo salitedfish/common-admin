@@ -140,7 +140,7 @@ const createColumns = () => {
         const size = "small";
         const isMy = isAdmin ? Number(row.merchantUid) === 0 : Number(authStore.userInfo?.uid) === Number(row.merchantUid);
 
-        if (row.state === AirDropStateType.OFFLINE && row.type === AirDropTypeType.MANUAL && row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP && isMy) {
+        if (row.state === AirDropStateType.OFFLINE && row.type === AirDropTypeType.MANUAL && row.taskState === AirDropTaskStateType.BEFORE_AIR_DROP) {
           // 删除空投
           list.push(
             h(
@@ -171,60 +171,62 @@ const createColumns = () => {
               }
             )
           );
-          // 编辑
-          list.push(
-            h(
-              NButton,
-              {
-                size,
-                type: "primary",
-                secondary: true,
-                onClick: () => {
-                  router.push({
-                    name: "editManualAirdrop",
-                    query: {
-                      id: row.id,
-                    },
-                  });
+          if (isMy) {
+            // 编辑
+            list.push(
+              h(
+                NButton,
+                {
+                  size,
+                  type: "primary",
+                  secondary: true,
+                  onClick: () => {
+                    router.push({
+                      name: "editManualAirdrop",
+                      query: {
+                        id: row.id,
+                      },
+                    });
+                  },
                 },
-              },
-              {
-                default: () => "编辑",
-              }
-            )
-          );
-          // 上传白名单
-          list.push(h(whiteListUploadBtn, { id: String(row.id), whiteListType: WhiteListType.AIR_DROP }));
-          // 删除白名单
-          list.push(
-            h(
-              NButton,
-              {
-                type: "warning",
-                size,
-                secondary: true,
-                onClick: () => {
-                  const dialogInfo = dialog.warning({
-                    title: "删除白名单",
-                    content: `确认删除${row.name}的白名单吗？`,
-                    positiveText: "确认",
-                    onPositiveClick: async () => {
-                      dialogInfo.loading = true;
-                      const res = await deleteWhiteList({ id: String(row.id) }, WhiteListType.AIR_DROP);
-                      if (res) {
-                        await getList();
-                        commonNotify("success", "白名单删除成功");
-                      }
-                      dialogInfo.loading = false;
-                    },
-                  });
+                {
+                  default: () => "编辑",
+                }
+              )
+            );
+            // 上传白名单
+            list.push(h(whiteListUploadBtn, { id: String(row.id), whiteListType: WhiteListType.AIR_DROP }));
+            // 删除白名单
+            list.push(
+              h(
+                NButton,
+                {
+                  type: "warning",
+                  size,
+                  secondary: true,
+                  onClick: () => {
+                    const dialogInfo = dialog.warning({
+                      title: "删除白名单",
+                      content: `确认删除${row.name}的白名单吗？`,
+                      positiveText: "确认",
+                      onPositiveClick: async () => {
+                        dialogInfo.loading = true;
+                        const res = await deleteWhiteList({ id: String(row.id) }, WhiteListType.AIR_DROP);
+                        if (res) {
+                          await getList();
+                          commonNotify("success", "白名单删除成功");
+                        }
+                        dialogInfo.loading = false;
+                      },
+                    });
+                  },
                 },
-              },
-              {
-                default: () => "删除白名单",
-              }
-            )
-          );
+                {
+                  default: () => "删除白名单",
+                }
+              )
+            );
+          }
         }
         // 空投上下线
         const lineActionLabel = airDropStateList.getItem(row.state)?.action.label;
