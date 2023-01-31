@@ -97,6 +97,15 @@ export type LogisticsInfo = {
   upgrade_info: string;
 };
 
+export type ExpressCompanyByCode = {
+  msg: string;
+  flag: boolean;
+  data: {
+    expName: string;
+    simpleName: string;
+    comCode: string;
+  }[];
+};
 export type ExpressCompany = {
   expName: string;
   imgUrl: string;

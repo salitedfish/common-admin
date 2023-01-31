@@ -1,0 +1,86 @@
+<template>
+  <n-select
+    @update:value="comfirmValue"
+    clearable
+    remote
+    filterable
+    :loading="loading"
+    :options="list"
+    placeholder="请选择物流公司，如果不确定可不选"
+    :disabled="disabled"
+  ></n-select>
+</template>
+
+<script lang="ts">
+// 框架
+import { defineComponent, ref, reactive, watch } from "vue";
+// 组件库
+// 自定义组件
+// 工具库
+import { useDebounce } from "@ultra-man/noa";
+// 自定义工具
+// 网络请求
+import { getExpressCompanyListByCode } from "@/request/order";
+// store
+// 类型
+// 组件名
+export default defineComponent({
+  name: "expressCompanySelectByCode",
+});
+</script>
+
+<script lang="ts" setup>
+const props = defineProps<{
+  expressCode: string | null;
+  modelValue: string | null;
+  disabled?: boolean;
+  expressName: string | null;
+}>();
+const emit = defineEmits<{
+  (event: "update:modelValue", payload: string): void;
+  (event: "update:expressName", payload: string): void;
+}>();
+
+// 组件自身的展示列表
+const params = reactive({ expressCode: props.expressCode || "" });
+const list = ref<{ label: string; value: string }[]>([]);
+const loading = ref(false);
+
+// 请求快递公司
+const getExpressCompany = async (params: { expressCode: string }) => {
+  const res = await getExpressCompanyListByCode(params);
+  if (res.data) {
+    return res.data.data;
+  }
+};
+
+// 监听到快递单号改变时查询快递公司
+watch(
+  () => props.expressCode,
+  useDebounce(async (newValue) => {
+    params.expressCode = newValue;
+    if (params.expressCode) {
+      const listOrigin = await getExpressCompany(params);
+      if (listOrigin) {
+        list.value = listOrigin.map((item) => {
+          return {
+            label: item.expName,
+            value: item.simpleName,
+          };
+        });
+      }
+    } else {
+      list.value = [];
+      emit("update:modelValue", "");
+      emit("update:expressName", "");
+    }
+  }, 500)
+);
+
+const comfirmValue = (value: string, { label }: { label: string }) => {
+  emit("update:modelValue", value);
+  emit("update:expressName", label);
+};
+</script>
+
+<style scoped lang="less"></style>

@@ -34,7 +34,13 @@
           <n-input v-model:value="expressInfo.expressCode" placeholder="请输入快递单号，如果不需要快递可不填" :disabled="expressLoading"></n-input>
         </n-form-item>
         <n-form-item label="物流公司:">
-          <expressCompanySelect v-model="expressInfo.expressCom" v-model:expressName="expressInfo.expressName" :disabled="expressLoading"></expressCompanySelect>
+          <!-- <expressCompanySelect v-model="expressInfo.expressCom" v-model:expressName="expressInfo.expressName" :disabled="expressLoading"></expressCompanySelect> -->
+          <expressCompanySelectByCode
+            :expressCode="expressInfo.expressCode"
+            v-model="expressInfo.expressCom"
+            v-model:expressName="expressInfo.expressName"
+            :disabled="expressLoading"
+          ></expressCompanySelectByCode>
         </n-form-item>
       </n-form>
 
@@ -63,7 +69,8 @@ import { NImage, NButton, NSpace, NEllipsis } from "naive-ui";
 import screenHeader from "./screenHeader.vue";
 import customIcon from "@/component/common/customIcon.vue";
 import layoutScrollCard from "@/component/common/layoutScrollCard.vue";
-import expressCompanySelect from "@/component/common/expressCompanySelect.vue";
+// import expressCompanySelect from "@/component/common/expressCompanySelect.vue";
+import expressCompanySelectByCode from "@/component/common/expressCompanySelectByCode.vue";
 // 工具库
 // 自定义工具
 import { commonNotify, useListPage } from "@/util/common";
