@@ -33,8 +33,8 @@ const props = defineProps<{
   expressName: string | null;
 }>();
 const emit = defineEmits<{
-  (event: "update:modelValue", payload: string): void;
-  (event: "update:expressName", payload: string): void;
+  (event: "update:modelValue", payload: string | null): void;
+  (event: "update:expressName", payload: string | null): void;
 }>();
 
 // 组件自身保存的value
@@ -79,9 +79,9 @@ const request = async () => {
   loading.value = false;
 };
 
-const comfirmValue = (value: string, { label }: { label: string }) => {
+const comfirmValue = (value: string | null, payload: { label: string; value: string }) => {
   emit("update:modelValue", value);
-  emit("update:expressName", label);
+  emit("update:expressName", payload ? payload.label : null);
 };
 
 onMounted(() => {

@@ -240,7 +240,7 @@ const createColumns = () => {
       fixed: "right",
       render(order) {
         const btnList: VNode[] = [];
-        if (order.orderState === ExpressOrderState.BEFORE_EXPRESS && !authStore.isAdmin) {
+        if ([ExpressOrderState.BEFORE_EXPRESS].includes(order.orderState) && !authStore.isAdmin) {
           btnList.push(
             h(
               NButton,
@@ -254,6 +254,24 @@ const createColumns = () => {
               },
               {
                 default: () => "发货确认",
+              }
+            )
+          );
+        }
+        if ([ExpressOrderState.AFTER_EXPRESS].includes(order.orderState) && !authStore.isAdmin) {
+          btnList.push(
+            h(
+              NButton,
+              {
+                type: "primary",
+                size: "small",
+                secondary: true,
+                onClick: () => {
+                  handleExpress(order);
+                },
+              },
+              {
+                default: () => "更改物流",
               }
             )
           );
@@ -318,8 +336,11 @@ const expressInfo = reactive({
 });
 const handleExpress = async (order: ExpressOrderListItem) => {
   currentOrder.value = order;
-  showExpressModal.value = true;
+  expressInfo.expressCode = null;
+  expressInfo.expressName = null;
+  expressInfo.expressCom = null;
   expressInfo.orderId = currentOrder.value.orderId;
+  showExpressModal.value = true;
 };
 const comfirmExpressEmpey = () => {
   expressInfo.expressCode = null;

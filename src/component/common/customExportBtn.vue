@@ -30,10 +30,10 @@ const props = defineProps<{
 const exporting = ref(false);
 const exportHandler = async () => {
   exporting.value = true;
-  // 后端接口不支持null的值，这里再筛选一下
+  // 后端接口不支持null和undefined的值，这里再筛选一下
   const params: Record<string, unknown> = {};
   for (const key in props.exportParams) {
-    if (props.exportParams[key] !== null) {
+    if (props.exportParams[key] !== null && props.exportParams[key] !== undefined) {
       params[key] = props.exportParams[key];
     }
   }

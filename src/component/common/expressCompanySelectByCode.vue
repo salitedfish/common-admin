@@ -1,5 +1,6 @@
 <template>
   <n-select
+    :value="modelValue"
     @update:value="comfirmValue"
     clearable
     remote
@@ -37,8 +38,8 @@ const props = defineProps<{
   expressName: string | null;
 }>();
 const emit = defineEmits<{
-  (event: "update:modelValue", payload: string): void;
-  (event: "update:expressName", payload: string): void;
+  (event: "update:modelValue", payload: string | null): void;
+  (event: "update:expressName", payload: string | null): void;
 }>();
 
 // 组件自身的展示列表
@@ -50,10 +51,17 @@ const loading = ref(false);
 const getExpressCompany = async (params: { expressCode: string }) => {
   loading.value = true;
   const res = await getExpressCompanyListByCode(params);
+  loading.value = false;
   if (res.data) {
     return res.data.data;
   }
-  loading.value = false;
+};
+
+// 清空所有数据
+const clear = () => {
+  list.value = [];
+  emit("update:modelValue", null);
+  emit("update:expressName", null);
 };
 
 // 监听到快递单号改变时查询快递公司（500ms防抖）
@@ -70,18 +78,20 @@ watch(
             value: item.simpleName,
           };
         });
+      } else {
+        // 如果未查到快递公司则都要清空
+        clear();
       }
     } else {
-      list.value = [];
-      emit("update:modelValue", "");
-      emit("update:expressName", "");
+      // 如果用户清空快递单号,则都要清空
+      clear();
     }
   }, 500)
 );
 
-const comfirmValue = (value: string, { label }: { label: string }) => {
+const comfirmValue = (value: string | null, payload: { label: string; value: string }) => {
   emit("update:modelValue", value);
-  emit("update:expressName", label);
+  emit("update:expressName", payload ? payload.label : null);
 };
 </script>
 
