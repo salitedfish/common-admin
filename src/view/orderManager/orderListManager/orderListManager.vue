@@ -137,6 +137,12 @@ const createColumns = () => {
       },
     },
     {
+      title: "用户编号",
+      key: "buyerUid",
+      width: 100,
+      align: "center",
+    },
+    {
       title: "订单类型",
       key: "orderType",
       align: "center",
