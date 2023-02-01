@@ -24,18 +24,19 @@ import { onMounted, ref, watch } from "vue";
 import { getCategoryTree as getCategoryTreeRequest } from "@/request/common";
 // store
 // 类型
-import type { CategoryTreeItem } from "@/type/Common";
+import { CategoryType as CategoryTypeValue } from "@/type/Common";
+import type { CategoryType, CategoryTreeItem } from "@/type/Common";
 
 const props = withDefaults(
   defineProps<{
     defaultValue?: number;
-    type?: 0 | 1;
+    type?: CategoryType;
     modelValue: CategoryTreeItem[];
     checkType?: "all" | "child";
     disabled?: boolean;
   }>(),
   {
-    type: 0,
+    type: CategoryTypeValue.GOODS,
     checkType: "child",
   }
 );
