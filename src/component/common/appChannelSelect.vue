@@ -2,11 +2,13 @@
   <n-select
     :value="modelValue"
     :options="channelList"
-    placeholder="请选择版本渠道"
+    :placeholder="placeholder || '请选择版本渠道'"
     :style="style"
     @update:value="valueChange"
     :disabled="disabled || searching"
     :clearable="true"
+    :filterable="createable"
+    tag
   ></n-select>
 </template>
 
@@ -26,6 +28,8 @@ const props = defineProps<{
   modelValue?: string;
   searching?: boolean;
   width?: string;
+  createable?: boolean;
+  placeholder?: string;
 }>();
 const emit = defineEmits<{
   (event: "update:modelValue", value: string): void;
@@ -50,8 +54,8 @@ const initData = async () => {
   disabled.value = false;
 };
 
-const valueChange = (aaa: string) => {
-  emit("update:modelValue", aaa);
+const valueChange = (value: string) => {
+  emit("update:modelValue", value);
 };
 
 onMounted(() => {

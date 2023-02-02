@@ -8,10 +8,13 @@
         <n-input v-model:value="params.versionName" placeholder="请输入版本名称"></n-input>
       </n-form-item>
       <n-form-item label="选择渠道：" required>
-        <app-channel-select v-model="params.channel" :searching="submiting" width="100%"></app-channel-select>
-      </n-form-item>
-      <n-form-item label="新渠道：">
-        <n-input v-model:value="newChannel" placeholder="请输入新版本渠道，如果使用原有的渠道可不填"></n-input>
+        <app-channel-select
+          v-model="params.channel"
+          :searching="submiting"
+          width="100%"
+          :createable="true"
+          placeholder="请选择版本渠道，如果使用新渠道可手动输入"
+        ></app-channel-select>
       </n-form-item>
       <n-form-item label="更新内容：" required>
         <n-input type="textarea" v-model:value="params.description" placeholder="请输入更新内容"></n-input>
@@ -87,7 +90,6 @@ const params = reactive<AddSystemVersionParams>({
   versionCode: null,
   versionName: "",
 });
-const newChannel = ref("");
 
 const submiting = ref(false);
 const submitHandler = async () => {
@@ -95,9 +97,6 @@ const submitHandler = async () => {
   if (isEdit.value) {
     params.id = Number(id.value);
   }
-  // 如果用户填了新渠道，则使用新渠道
-  const newChannelValue = newChannel.value;
-  newChannelValue ? (params.channel = newChannelValue) : null;
   const res = isEdit.value ? await editSystemVersion(params) : await addSystemVersion(params);
   if (res) {
     commonNotify("success", "版本提交成功");
