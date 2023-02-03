@@ -33,6 +33,7 @@
       </n-card>
     </section>
   </login-layout>
+  <section class="recordNo">{{ recordNo }}</section>
 </template>
 
 <script lang="ts" setup>
@@ -53,6 +54,9 @@ import { useRouteStore } from "@/store/routeStore";
 const router = useRouter();
 
 const routeStore = useRouteStore();
+
+// 备案号
+const recordNo = import.meta.env.VITE_RecordNo;
 
 // 登录表单数据
 const formData = reactive({
@@ -182,5 +186,12 @@ const settleHandler = () => {
       }
     }
   }
+}
+.recordNo {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translate(-50%);
+  color: black;
 }
 </style>

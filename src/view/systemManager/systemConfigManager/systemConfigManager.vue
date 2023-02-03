@@ -1,13 +1,13 @@
 <template>
   <n-card>
-    <screen-section @submitSearch="() => getList()" :searching="searching"></screen-section>
+    <screen-section @submitSearch="() => getList()" :searching="searching" :showDeploy="showDeploy"></screen-section>
   </n-card>
   <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"> </n-data-table>
 </template>
 
 <script lang="ts">
 // 框架
-import { h, ref, defineComponent } from "vue";
+import { h, ref, defineComponent, computed } from "vue";
 // 组件库
 import { NEllipsis, NInput, NButton, NSpace, NImage } from "naive-ui";
 // 自定义组件
@@ -144,6 +144,15 @@ const createColumns = () => {
 };
 
 const { getList, list, listXWidth, listYHeight, searching } = useListNoPage(getSystemConfigList, createColumns);
+
+const showDeploy = computed(() => {
+  for (const item of list.value) {
+    if (item.key === "mall:config:block_chain:contract:address" && item.value) {
+      return false;
+    }
+  }
+  return true;
+});
 </script>
 
 <style scoped lang="less"></style>

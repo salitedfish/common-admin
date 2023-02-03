@@ -2,6 +2,7 @@
   <n-space>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="apply" :disabled="applying || searching" :loading="applying">应用系统配置</n-button>
+    <n-button type="primary" @click="deploy" :disabled="deploying || searching" :loading="deploying" v-if="showDeploy">部署合约</n-button>
   </n-space>
 </template>
 
@@ -14,12 +15,13 @@ import { reactive, ref } from "vue";
 // 自定义工具
 import { commonNotify } from "@/util/common";
 // 网络请求
-import { applySystemConfig } from "@/request/system";
+import { applySystemConfig, deployContract } from "@/request/system";
 // store
 // 类型
 
 defineProps<{
   searching: boolean;
+  showDeploy: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -31,6 +33,7 @@ const params = reactive<Record<string, unknown>>({});
 const searchHandler = () => {
   emit("submitSearch", params);
 };
+
 const applying = ref(false);
 const apply = async () => {
   applying.value = true;
@@ -40,6 +43,17 @@ const apply = async () => {
     searchHandler();
   }
   applying.value = false;
+};
+
+const deploying = ref(false);
+const deploy = async () => {
+  deploying.value = true;
+  const res = await deployContract();
+  if (res) {
+    commonNotify("success", "合约部署成功");
+    searchHandler();
+  }
+  deploying.value = false;
 };
 </script>
 

@@ -68,6 +68,11 @@ export const applySystemConfig = () => {
     URL: "/manager/config/use",
   });
 };
+export const deployContract = () => {
+  return ultraFetch.post({
+    URL: "/manager/config/deploy-evm",
+  });
+};
 
 // 平台日志
 export const getAdminLogRecordList = (params: Paging & AdminLogRecordListParams): Promise<Return<ReturnList<AdminLogRecordListItem>>> => {
