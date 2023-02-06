@@ -14,13 +14,13 @@
 
         <n-card style="margin-bottom: 15px">
           <n-form-item label="原密码:">
-            <n-input v-model:value="passwordInfo.oldPassword" type="password" show-password-on="mousedown" placeholder="请输入原密码" :maxlength="8"></n-input>
+            <n-input v-model:value="passwordInfo.oldPassword" type="password" show-password-on="mousedown" placeholder="请输入原密码" :maxlength="16"></n-input>
           </n-form-item>
           <n-form-item label="新密码:">
-            <n-input v-model:value="passwordInfo.newPassword" type="password" show-password-on="mousedown" placeholder="请输入新密码" :maxlength="8"></n-input>
+            <n-input v-model:value="passwordInfo.newPassword" type="password" show-password-on="mousedown" placeholder="请输入新密码" :maxlength="16"></n-input>
           </n-form-item>
           <n-form-item label="确认新密码:">
-            <n-input v-model:value="passwordInfo.comfirmNewPassword" type="password" show-password-on="mousedown" placeholder="请再次输入新密码" :maxlength="8"></n-input>
+            <n-input v-model:value="passwordInfo.comfirmNewPassword" type="password" show-password-on="mousedown" placeholder="请再次输入新密码" :maxlength="16"></n-input>
           </n-form-item>
           <n-button type="primary" @click="submitPasswordHandler" block style="margin: 5px 0" :loading="passwordSubmiting" :disabled="passwordSubmiting">确认修改密码</n-button>
         </n-card>

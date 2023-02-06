@@ -4,14 +4,15 @@
   "packageManager": "pnpm@7.12.1",
   "scripts": {
     "prepare": "husky install",
-    "build": "run-p type-check build_only",
-    "build_only": "vite build",
-    "preview": "vite preview --port 4173",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "preview": "vite preview --port 4173",
+    "build": "run-p type-check build_only",
+
+
     "dev": "vite --host",
-    "deploy_test": "vite build --mode test && bash deploy_test.sh",
-    "deploy_production": "vite build --mode production && bash deploy_production.sh"
+    "build_production": "vite build --mode production",
+    "deploy_test": "vite build --mode test && bash deploy_test.sh"
   },
   
   "dependencies": {

@@ -5,7 +5,7 @@
       <n-card content-style="display: flex; flex-direction: column; justify-content: space-around;">
         <section class="action-head">
           <div>欢迎来到</div>
-          <div>上链购管理平台!</div>
+          <div>{{ title }}!</div>
         </section>
 
         <section class="action-form">
@@ -16,7 +16,7 @@
               type="password"
               show-password-on="mousedown"
               placeholder="密码"
-              :maxlength="8"
+              :maxlength="16"
               v-model:value="formData.password"
               v-show="loginType === LoginType.PASSWORD"
               :disabled="loginDisabled"
@@ -57,6 +57,7 @@ const routeStore = useRouteStore();
 
 // 备案号
 const recordNo = import.meta.env.VITE_RecordNo;
+const title = import.meta.env.VITE_APP_NAME;
 
 // 登录表单数据
 const formData = reactive({
