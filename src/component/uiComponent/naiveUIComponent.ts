@@ -41,6 +41,7 @@ import {
   NTimePicker,
   NEllipsis,
   NPopover,
+  NCheckbox,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -86,5 +87,6 @@ export const naiveUIComponent = create({
     NTimePicker,
     NEllipsis,
     NPopover,
+    NCheckbox,
   ],
 });

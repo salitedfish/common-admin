@@ -11,7 +11,8 @@
 
 
     "dev": "vite --host",
-    "build_production": "vite build --mode production",
+    "build_production_fxsp": "vite build --mode production_fxsp",
+    "build_production_slg": "vite build --mode production_slg",
     "deploy_test": "vite build --mode test && bash deploy_test.sh"
   },
   

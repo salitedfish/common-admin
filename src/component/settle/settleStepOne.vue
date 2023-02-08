@@ -23,12 +23,20 @@
           </div>
         </n-form-item>
       </n-form>
+
+      <section class="agreement">
+        <n-checkbox size="small" v-model:checked="agreementAble"></n-checkbox>
+        勾选表示您同意<span class="text" @click="goAgreement('serviceAgreement')">《商户服务协议》</span>与
+        <span class="text" @click="goAgreement('privacyAgreement')">《商户隐私协议》</span>
+      </section>
       <section class="btn-box">
         <n-button @click="cancelRegisterHandler" :disabled="registerState">取消注册</n-button>
         <n-button type="primary" @click="submitRegisterHandler" :loading="registerState" :disabled="registerState">提交注册</n-button>
       </section>
     </div>
   </section>
+
+  <!-- 协议信息 -->
 </template>
 
 <script lang="ts" setup>
@@ -102,6 +110,14 @@ const formDataRules: FormRules = {
   ],
 };
 
+// 协议勾选状态
+const agreementAble = ref(false);
+
+const goAgreement = (agreement: string) => {
+  const url = agreement === "privacyAgreement" ? import.meta.env.VITE_PRIVACY_AGREEMENT_URL : import.meta.env.VITE_SERVICE_AGREEMENT_URL;
+  window.open(url);
+};
+
 // 注册状态
 const registerState = ref(false);
 
@@ -111,6 +127,10 @@ const cancelRegisterHandler = () => {
 };
 // 提交注册
 const submitRegisterHandler = (e: MouseEvent) => {
+  if (!agreementAble.value) {
+    commonNotify("warning", "请勾选同意协议！");
+    return;
+  }
   e.preventDefault();
   formDom.value?.validate((errors) => {
     if (!errors) {
@@ -153,6 +173,13 @@ const registerHandler = async () => {
   .btn-box {
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
+  }
+}
+.agreement {
+  .text {
+    color: var(--primary-color);
+    cursor: pointer;
   }
 }
 </style>
