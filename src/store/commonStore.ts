@@ -9,7 +9,7 @@ export const useCommonStore = defineStore("commonStore", () => {
   const pageLoading = ref(false);
   const setPageContentHeight = (height: number) => {
     // 减去padding
-    pageContentHeight.value = height - 110;
+    pageContentHeight.value = height - 60;
   };
   // 周
   const weekMap = [

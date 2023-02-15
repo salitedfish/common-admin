@@ -9,6 +9,7 @@ import { getProvinces as getProvincesRequest, getCities as getCitiesRequest } fr
 
 const themeStore = useThemeStore();
 
+// 返回可以函数式调用的组件
 export const {
   notification,
   message: nmessage,
@@ -170,7 +171,7 @@ export const useListPage = <P extends Paging, R>(
   });
   const listYHeight = computed(() => {
     // 没有自动获取筛选部分的高度，如果筛选只有一行则传0，两行则传1
-    return commonStore.pageContentHeight - [180, 220][options.heightLevel || 0];
+    return commonStore.pageContentHeight - [190, 230][options.heightLevel || 0];
   });
 
   // 筛选的参数
@@ -247,7 +248,7 @@ export const useListNoPage = <P, R>(
   });
   const listYHeight = computed(() => {
     // 没有自动获取筛选部分的高度，如果筛选只有一行则传0，两行则传1（无分页页面列表的高度比有分页的高）
-    return commonStore.pageContentHeight - [110, 180][options.heightLevel || 0];
+    return commonStore.pageContentHeight - [120, 190][options.heightLevel || 0];
   });
   // 查询状态
   const searching = ref(false);

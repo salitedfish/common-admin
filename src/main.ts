@@ -16,5 +16,3 @@ app.use(router);
 app.use(uiComponent);
 
 app.mount("#app");
-
-console.log("runtime：", import.meta.env.VITE_ENV, import.meta.env.VITE_SERVICE_URL);
