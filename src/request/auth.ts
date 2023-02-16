@@ -33,6 +33,14 @@ export const getUserInfo = (): RequestReturn.GetUserInfo => {
   });
 };
 
+// 编辑用户信息
+export const updateUserInfer = (data: RequestParam.UpdateUserInferParam) => {
+  return ultraFetch.post({
+    URL: "/manager/user-admin/merchant",
+    body: JSON.stringify(data),
+  });
+};
+
 // 退出
 export const logout = (): RequestReturn.Logout => {
   return ultraFetch.get({

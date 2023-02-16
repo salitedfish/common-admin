@@ -19,6 +19,7 @@
     </section>
 
     <user-center-dialog v-model:showUserCenterModal="showUserCenterModal"></user-center-dialog>
+    <key-words-dialog v-model:showKeywordsModal="showKeywordsModal"></key-words-dialog>
   </section>
 </template>
 
@@ -31,6 +32,7 @@ import { useThemeStore, useRouteStore, useAuthStore } from "@/store";
 import { useLogout } from "@/util/auth";
 import { commonNotify } from "@/util/common";
 import userCenterDialog from "@/component/userCenterDialog/userCenterDialog.vue";
+import keyWordsDialog from "@/component/keywordsDialog/keyWordsDialog.vue";
 
 const dialog = useDialog();
 const router = useRouter();
@@ -40,10 +42,12 @@ const { logout } = useLogout();
 
 // 显示模态框
 const showUserCenterModal = ref(false);
+const showKeywordsModal = ref(false);
 
 enum Options {
   LOGOUT = 0,
   USER_CENTER,
+  KEY_WORDS,
   THEME,
 }
 
@@ -52,6 +56,10 @@ const options = [
   {
     label: "用户中心",
     key: Options.USER_CENTER,
+  },
+  {
+    label: "修改密码",
+    key: Options.KEY_WORDS,
   },
   {
     label: "主题切换",
@@ -70,6 +78,8 @@ const handleSelect = async (key: string | number) => {
     handleClick();
   } else if (key === Options.USER_CENTER) {
     showUserCenterModal.value = true;
+  } else if (key === Options.KEY_WORDS) {
+    showKeywordsModal.value = true;
   }
 };
 

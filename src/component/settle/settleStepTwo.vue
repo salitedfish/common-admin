@@ -250,7 +250,26 @@
         <n-input class="form-input" placeholder="请输入店铺名称" v-model:value="formData.storeName" :disabled="submitLoading"></n-input>
       </n-form-item>
       <n-form-item label="店铺简称" path="shortName">
-        <n-input class="form-input" placeholder="请输入店铺简称" v-model:value="formData.shortName" :disabled="submitLoading"></n-input>
+        <n-input class="form-input" placeholder="请输入店铺简称，用于向用户展示" v-model:value="formData.shortName" :disabled="submitLoading" :maxlength="64"></n-input>
+      </n-form-item>
+      <n-form-item label="店铺描述" path="storeDescription">
+        <n-input
+          type="textarea"
+          class="form-input"
+          placeholder="请输入店铺描述，最多2048个字，用于向用户展示"
+          v-model:value="formData.storeDescription"
+          :disabled="submitLoading"
+          :maxlength="21"
+        ></n-input>
+      </n-form-item>
+      <n-form-item label="店铺地址" path="storeAddress">
+        <n-input class="form-input" placeholder="请输入店铺地址，用于向用户展示" v-model:value="formData.storeAddress" :disabled="submitLoading"></n-input>
+      </n-form-item>
+      <n-form-item label="店铺联系方式" path="storeContact">
+        <n-input class="form-input" placeholder="请输入店铺联系方式，用于向用户展示" v-model:value="formData.storeContact" :disabled="submitLoading"></n-input>
+      </n-form-item>
+      <n-form-item label="店铺证照" path="storeLicense" v-if="formData.organizationType !== OrganizationTypes.MICRO">
+        <common-upload type="img" v-model="formData.storeLicense" :max="1" :disabled="submitLoading" :maxSize="2"></common-upload>
       </n-form-item>
     </n-form>
     <n-button @click="submitHandler" type="primary" block :loading="submitLoading" :disabled="submitLoading">提交</n-button>
@@ -263,6 +282,7 @@ import { reactive, ref, watch } from "vue";
 // 组件库
 import type { FormInst, FormRules, FormItemRule, UploadFileInfo } from "naive-ui";
 // 自定义组件
+import CommonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 import { usePhoneLegal, useIDCargLegal, useEmailLegal, useTimeFormat } from "@ultra-man/noa";
 // 自定义工具
@@ -271,6 +291,8 @@ import { useBankAddressCodes, useNowTimeStamp, useInfinityTimeStamp, commonNotif
 import { uploadWCImgUrl } from "@/request/common";
 import { submitMerchantInfo as submitMerchantInfoRequest } from "@/request/auth";
 import type * as RequestParam from "@/request/type/RequestParam";
+import type { FileUpload } from "@/type/Common";
+import { OrganizationTypes } from "@/type/Auth";
 
 const emit = defineEmits<{
   (event: "updateStep"): void;
@@ -284,11 +306,6 @@ const infinity = useInfinityTimeStamp();
 const { bankAddressCodes, getCities } = useBankAddressCodes();
 
 // 主体类型数据依据
-enum OrganizationTypes {
-  ENTERPRISE = 2,
-  INDIVIDUAL = 4,
-  MICRO = 2401,
-}
 const organizationTypes = [
   {
     label: "企业",
@@ -365,6 +382,10 @@ const formData = reactive({
   //
   storeName: "",
   shortName: "",
+  storeDescription: "",
+  storeAddress: "",
+  storeContact: "",
+  storeLicense: [] as FileUpload[],
 });
 type FormDataType = typeof formData;
 // 表单规则
@@ -717,6 +738,54 @@ const formDataRules: FormRules = {
       trigger: ["blur"],
     },
   ],
+  storeDescription: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error("请填写店铺描述！");
+        }
+        return true;
+      },
+      trigger: ["blur"],
+    },
+  ],
+  storeAddress: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error("请填写店铺地址！");
+        }
+        return true;
+      },
+      trigger: ["blur"],
+    },
+  ],
+  storeContact: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: string) {
+        if (!value) {
+          return new Error("请填写店铺联系方式！");
+        }
+        return true;
+      },
+      trigger: ["blur"],
+    },
+  ],
+  storeLicense: [
+    {
+      required: true,
+      validator(rule: FormItemRule, value: FileUpload[]) {
+        if (value.length <= 0 && formData.organizationType !== OrganizationTypes.MICRO) {
+          return new Error("请上传店铺证照！");
+        }
+        return true;
+      },
+      trigger: ["blur"],
+    },
+  ],
 };
 
 // 图片上传结束
@@ -807,6 +876,10 @@ const genRequestData = (formData: FormDataType) => {
     businessAuthorizationLetterFileList,
     storeName,
     shortName,
+    storeDescription,
+    storeAddress,
+    storeContact,
+    storeLicense,
   } = formData;
   const data: RequestParam.SubmitMerchantInfo = {
     organizationType,
@@ -839,6 +912,10 @@ const genRequestData = (formData: FormDataType) => {
     businessAuthorizationLetter: businessAuthorizationLetterFileList[0]?.thumbnailUrl as string,
     storeName,
     shortName,
+    storeDescription,
+    storeAddress,
+    storeContact,
+    storeLicense: storeLicense[0].hashName,
   };
   return data;
 };

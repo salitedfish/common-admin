@@ -1,30 +1,42 @@
 <template>
   <n-modal :show="showUserCenterModal" @update:show="(state: boolean) => emit('update:showUserCenterModal', state)">
-    <n-card style="width: 600px" title="用户中心" :bordered="false" size="huge" role="dialog" aria-modal="true">
-      <n-form label-placement="left" label-width="120px" label-align="left">
-        <n-card style="margin-bottom: 15px">
-          <n-form-item label="上传头像:">
-            <div class="profile-picture-box">
-              <img :src="profileInfo.url || authStore.userInfo?.headUrl" alt="" />
-              <div class="select-box" @click="initChange">选择头像</div>
-            </div>
-          </n-form-item>
-          <n-button type="primary" @click="submitImgHandler" block style="margin: 5px 0" :loading="imgSubmiting" :disabled="imgSubmiting">确认修改头像</n-button>
-        </n-card>
+    <n-card style="width: 600px; max-height: 700px" content-style="height: 1px" title="用户中心" :bordered="false" size="huge" role="dialog" aria-modal="true">
+      <n-scrollbar>
+        <n-form label-placement="left" label-width="120px" label-align="left">
+          <n-card style="margin-bottom: 15px">
+            <n-form-item label="上传头像:">
+              <div class="profile-picture-box">
+                <img :src="profileInfo.url || authStore.userInfo?.headUrl" alt="" />
+                <div class="select-box" @click="initChange">选择头像</div>
+              </div>
+            </n-form-item>
+            <n-button type="primary" @click="submitImgHandler" block style="margin: 5px 0" :loading="imgSubmiting" :disabled="imgSubmiting">确认修改头像</n-button>
+          </n-card>
 
-        <n-card style="margin-bottom: 15px">
-          <n-form-item label="原密码:">
-            <n-input v-model:value="passwordInfo.oldPassword" type="password" show-password-on="mousedown" placeholder="请输入原密码" :maxlength="16"></n-input>
-          </n-form-item>
-          <n-form-item label="新密码:">
-            <n-input v-model:value="passwordInfo.newPassword" type="password" show-password-on="mousedown" placeholder="请输入新密码" :maxlength="16"></n-input>
-          </n-form-item>
-          <n-form-item label="确认新密码:">
-            <n-input v-model:value="passwordInfo.comfirmNewPassword" type="password" show-password-on="mousedown" placeholder="请再次输入新密码" :maxlength="16"></n-input>
-          </n-form-item>
-          <n-button type="primary" @click="submitPasswordHandler" block style="margin: 5px 0" :loading="passwordSubmiting" :disabled="passwordSubmiting">确认修改密码</n-button>
-        </n-card>
-      </n-form>
+          <n-card style="margin-bottom: 15px" v-if="!authStore.isAdmin">
+            <n-form-item label="店铺描述" path="storeDescription">
+              <n-input
+                type="textarea"
+                class="form-input"
+                placeholder="请输入店铺描述，最多2048个字，用于向用户展示"
+                v-model:value="formData.merchantDescription"
+                :disabled="infoUpdateing"
+                :maxlength="21"
+              ></n-input>
+            </n-form-item>
+            <n-form-item label="店铺地址" path="storeAddress">
+              <n-input class="form-input" placeholder="请输入店铺地址，用于向用户展示" v-model:value="formData.merchantAddress" :disabled="infoUpdateing"></n-input>
+            </n-form-item>
+            <n-form-item label="店铺联系方式" path="storeContact">
+              <n-input class="form-input" placeholder="请输入店铺联系方式，用于向用户展示" v-model:value="formData.merchantContact" :disabled="infoUpdateing"></n-input>
+            </n-form-item>
+            <n-form-item label="店铺证照" path="storeLicense" v-if="authStore.userInfo?.merchantType !== OrganizationTypes.MICRO">
+              <common-upload type="img" v-model="formData.merchantLicense" :max="1" :disabled="infoUpdateing" :maxSize="2"></common-upload>
+            </n-form-item>
+            <n-button type="primary" @click="submitUpdateInfo" block style="margin: 5px 0" :loading="infoUpdateing" :disabled="infoUpdateing">确认更新信息</n-button>
+          </n-card>
+        </n-form>
+      </n-scrollbar>
     </n-card>
   </n-modal>
 
@@ -36,16 +48,19 @@
 import { defineComponent, ref, reactive } from "vue";
 // 组件库
 // 自定义组件
+import commonUpload from "../common/commonUpload.vue";
 // 工具库
-import { useBinaryToURL } from "@ultra-man/noa";
+import { useBinaryToURL, useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
 import { commonNotify } from "@/util/common";
 import { getUserInfo } from "@/util/auth";
 // 网络请求
-import { updatePassword, uploadProfilePicture } from "@/request/common";
+import { uploadProfilePicture } from "@/request/common";
+import { updateUserInfer } from "@/request/auth";
 // store
 import { useAuthStore } from "@/store/authStore";
 // 类型
+import { OrganizationTypes } from "@/type/Auth";
 // 组件名
 export default defineComponent({
   name: "userCenterDialog",
@@ -93,24 +108,36 @@ const submitImgHandler = async () => {
   }
 };
 
-// 修改密码
-const passwordInfo = reactive({
-  oldPassword: "",
-  newPassword: "",
-  comfirmNewPassword: "",
+// 修改商户信息
+const userInfo = authStore.userInfo;
+const initLiscense = userInfo?.merchantLicense
+  ? [
+      {
+        fileUrl: userInfo?.merchantLicense,
+        hashName: useFileNameFromURL(userInfo?.merchantLicense)(true),
+      },
+    ]
+  : [];
+const formData = reactive({
+  merchantAddress: userInfo?.merchantAddress,
+  merchantContact: userInfo?.merchantContact,
+  merchantDescription: userInfo?.merchantDescription,
+  merchantLicense: initLiscense,
 });
-const passwordSubmiting = ref(false);
-const submitPasswordHandler = async () => {
-  if (passwordInfo.newPassword !== passwordInfo.comfirmNewPassword) {
-    commonNotify("warning", "两次新密码输入的不一致");
-    return;
-  }
-  passwordSubmiting.value = true;
-  const res = await updatePassword({ oldPassword: passwordInfo.oldPassword, newPassword: passwordInfo.newPassword });
+const infoUpdateing = ref(false);
+const submitUpdateInfo = async () => {
+  infoUpdateing.value = true;
+  const res = await updateUserInfer({
+    merchantAddress: formData.merchantAddress,
+    merchantContact: formData.merchantContact,
+    merchantDescription: formData.merchantDescription,
+    merchantLicense: formData.merchantLicense.length <= 0 ? "" : formData.merchantLicense[0].hashName,
+  });
   if (res) {
-    commonNotify("success", "密码修改成功");
+    await getUserInfo();
+    commonNotify("success", "店铺信息修改成功");
   }
-  passwordSubmiting.value = false;
+  infoUpdateing.value = false;
 };
 </script>
 

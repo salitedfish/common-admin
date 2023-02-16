@@ -22,6 +22,12 @@ export type Register = {
   password: string;
   phone: string;
 };
+export type UpdateUserInferParam = {
+  merchantAddress?: string;
+  merchantContact?: string;
+  merchantDescription?: string;
+  merchantLicense?: string;
+};
 export type SubmitMerchantInfo = {
   organizationType: number;
   //
@@ -59,6 +65,10 @@ export type SubmitMerchantInfo = {
   //
   storeName: string;
   shortName: string;
+  storeDescription: string;
+  storeAddress: string;
+  storeContact: string;
+  storeLicense: string;
 };
 export type GoodsSubmit = GoodsAddParams;
 export type EditCategory = { id: number | null; name: string; order: number | null; parentId: number | null; type: number | null };

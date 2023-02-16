@@ -3,6 +3,7 @@
     <screen-section @submitSearch="() => getList()" :searching="searching" :showDeploy="showDeploy"></screen-section>
   </n-card>
   <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"> </n-data-table>
+  <input ref="inputDom" type="file" hidden @change="handleUpload" />
 </template>
 
 <script lang="ts">
@@ -16,7 +17,7 @@ import commonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
-import { useListNoPage, commonNotify } from "@/util/common";
+import { useListNoPage, commonNotify, useBinaryToBase64 } from "@/util/common";
 // 网络请求
 import { getSystemConfigList, editSystemConfig } from "@/request/system";
 // store
@@ -33,6 +34,8 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
+const inputDom = ref<null | HTMLInputElement>(null);
+const currentRow = ref<null | SystemConfigListItem>(null);
 // 列表项
 const createColumns = () => {
   const list: DataTableColumns<SystemConfigListItem> = [
@@ -48,7 +51,7 @@ const createColumns = () => {
       align: "left",
       width: 160,
       render: (row) => {
-        if (row.valueType === ValueType.TEXT) {
+        if (row.valueType === ValueType.TEXT || row.valueType === ValueType.BASE64) {
           return h(
             NEllipsis,
             {},
@@ -78,7 +81,7 @@ const createColumns = () => {
             },
             placeholder: `请输入${row.description}`,
           });
-        } else {
+        } else if (row.valueType === ValueType.IMG) {
           const fileList = ref<FileUpload[]>([]);
           if (row.newValue) {
             fileList.value.push({
@@ -97,6 +100,29 @@ const createColumns = () => {
             max: 1,
             maxSize: 2,
           });
+        } else if (row.valueType === ValueType.BASE64) {
+          return [
+            h(NInput, {
+              value: row.newValue,
+              disabled: true,
+              placeholder: `请选择${row.description}`,
+            }),
+            h(
+              NButton,
+              {
+                size: "small",
+                type: "primary",
+                secondary: true,
+                onClick: () => {
+                  inputDom.value?.click();
+                  currentRow.value = row;
+                },
+              },
+              {
+                default: () => "选择文件",
+              }
+            ),
+          ];
         }
       },
     },
@@ -120,7 +146,7 @@ const createColumns = () => {
               loading: loading.value,
               onClick: async () => {
                 loading.value = true;
-                const resNewValue = row.valueType === ValueType.TEXT ? row.newValue : useFileNameFromURL(row.newValue)(true);
+                const resNewValue = [ValueType.TEXT, ValueType.BASE64].includes(row.valueType) ? row.newValue : useFileNameFromURL(row.newValue)(true);
                 const res = await editSystemConfig({ key: row.key, newValue: resNewValue });
                 if (res) {
                   commonNotify("success", "系统配置保存成功");
@@ -144,6 +170,16 @@ const createColumns = () => {
 };
 
 const { getList, list, listXWidth, listYHeight, searching } = useListNoPage(getSystemConfigList, createColumns);
+
+// 选择文件并计算base64
+const handleUpload = async (event: any) => {
+  const file = event.target?.files[0];
+  if (file) {
+    const base64 = await useBinaryToBase64(file);
+    currentRow.value ? (currentRow.value.newValue = base64) : null;
+    if (inputDom.value) (inputDom.value as HTMLInputElement).value = "";
+  }
+};
 
 const showDeploy = computed(() => {
   for (const item of list.value) {

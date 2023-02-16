@@ -9,7 +9,7 @@ module.exports = {
   root: true,
   extends: ["plugin:vue/vue3-essential", "eslint:recommended", "@vue/eslint-config-typescript/recommended", "@vue/eslint-config-prettier"],
   rules: {
-    indent: ["error", 2],
+    // indent: ["error", 2],
     "no-var": "error",
     "no-console": "off",
     quotes: ["error", "double"], // 双引号
