@@ -137,3 +137,14 @@ export type GoodsPublishRecordItem = {
   state: number;
   updateTime: string;
 };
+
+// 商品的合成规则
+export type SyntheticRule = {
+  itemId: string;
+  needNum: number;
+  ruleType: number;
+};
+export enum RuleType {
+  CATEGORY = 1,
+  GOODS,
+}

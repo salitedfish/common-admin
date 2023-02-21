@@ -210,3 +210,64 @@ export type SearchKeywordsListItem = {
   keyword: string;
   order: number;
 };
+
+// 抽签
+export type LotteryListParams = Partial<{
+  lotteryTabType: LotteryTabType;
+  merchantUid: string;
+  name: string;
+  state: LotteryState;
+  taskState: LotteryTaskState;
+}>;
+export type LotteryListItem = {
+  acquireDes: string;
+  activeTime: string;
+  adImage: string;
+  auditorNote: string;
+  auditorTime: string;
+  auditorUid: number;
+  blockHash: string;
+  blockHeight: number;
+  createTime: string;
+  distributeTime: string;
+  endTime: string;
+  goodsId: string;
+  hitNum: number;
+  id: number;
+  joinNum: number;
+  lotteryRule: string;
+  lotteryTime: string;
+  merchantName: string;
+  merchantUid: number;
+  name: string;
+  numLen: number;
+  overReduce: number;
+  rate: number;
+  realHitNum: number;
+  siteRepeat: number;
+  startTime: string;
+  state: number;
+  taskState: number;
+  totalNum: number;
+  type: number;
+};
+export enum LotteryTabType {
+  ALL = -1,
+  NORMAL,
+  TEST,
+  APPROVE,
+}
+export enum LotteryState {
+  ALL = -1,
+  DRAFT,
+  TO_BE_APPROVIAL,
+  APPROVIAL_FAILED,
+  TO_BE_SHELVES,
+  ON_THE_SHELF,
+}
+export enum LotteryTaskState {
+  ALL = -1,
+  INIT,
+  ISSUED,
+  AVARDED,
+}

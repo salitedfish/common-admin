@@ -42,6 +42,10 @@ import {
   NEllipsis,
   NPopover,
   NCheckbox,
+  NGrid,
+  NGridItem,
+  NStatistic,
+  NThemeEditor,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -88,5 +92,9 @@ export const naiveUIComponent = create({
     NEllipsis,
     NPopover,
     NCheckbox,
+    NGrid,
+    NGridItem,
+    NStatistic,
+    NThemeEditor,
   ],
 });

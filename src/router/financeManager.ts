@@ -6,7 +6,7 @@ export default <RouteRecordRaw[]>[
     name: "financeListManager",
     component: () => import("@/view/financeManager/financeListManager/financeListManager.vue"),
     meta: {
-      label: "资产流水",
+      label: "资产数据",
       icon: "dingdan",
       keepAlive: true,
       id: 6001,

@@ -78,3 +78,14 @@ export type PointsChainRecordItem = {
   transferId: string;
   updateTime: string;
 };
+
+export type FinanceData = {
+  countExpress: number;
+  countGoods: number;
+  primaryCountOrder: number;
+  primarySumOrderAmount: number;
+  primarySumOrderNum: number;
+  secondaryCountOrder: number;
+  secondarySumOrderAmount: number;
+  secondarySumOrderNum: number;
+};

@@ -12,8 +12,8 @@
       <n-form-item label="商品名称:" required>
         <n-input placeholder="请输入商品名称" v-model:value="goodsInfo.spu.goodsName" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
-      <n-form-item label="商品描述:" required>
-        <n-input placeholder="请输入商品描述" v-model:value="goodsInfo.spu.goodsDes" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
+      <n-form-item label="商品描述:">
+        <n-input placeholder="请输入商品描述，最多1024个字" v-model:value="goodsInfo.spu.goodsDes" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
       <n-form-item label="商品详情:" required>
         <!-- <n-input placeholder="请输入商品详情" v-model:value="goodsInfo.spu.goodsDetail" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input> -->
@@ -308,8 +308,8 @@ import { commonNotify } from "@/util/common";
 // 网络请求
 import {
   goodsSubmit as goodsSubmitRequest,
-  goodsEdit as goodsEditRequest,
   getGoodsDetail as getGoodsDetailRequest,
+  goodsEdit as goodsEditRequest,
   updateGoodsExtend as updateGoodsExtendRequest,
 } from "@/request/goods";
 // store

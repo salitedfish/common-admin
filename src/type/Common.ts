@@ -3,6 +3,10 @@ type GetNumberEnumValue<E extends number> = `${E}` extends `${infer T extends nu
 type GetStringEnumValue<E extends string | number> = `${E}`;
 export type GetEnumValue<E extends number | string> = E extends number ? GetNumberEnumValue<E> : GetStringEnumValue<E>;
 
+export type MergeObject<T, G> = {
+  [J in keyof T | keyof G]: J extends keyof T ? T[J] : J extends keyof G ? G[J] : never;
+};
+
 export type Return<T> = {
   code: number;
   data: T;
@@ -87,3 +91,9 @@ export type WhiteListItem = {
   unitNum: number;
   state?: number;
 };
+
+export enum DetailCheckType {
+  ADD = "ADD",
+  CHECK = "CHECK",
+  EDIT = "EDIT",
+}

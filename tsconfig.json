@@ -4,10 +4,10 @@
   "compilerOptions": {
     "lib": ["ES2022"],
     "baseUrl": ".",
+    "importsNotUsedAsValues": "error",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "importsNotUsedAsValues": "error",
     "types": ["naive-ui/volar"],
   },
 

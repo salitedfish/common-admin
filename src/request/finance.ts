@@ -1,6 +1,6 @@
 import { ultraFetch } from "./init";
 import type { Return, ReturnList, Paging } from "@/type/Common";
-import type { GetProfitShareListParams, ProfitShareListItem, ChainRecordParams, GoodsChainRecordItem, PointsChainRecordItem } from "@/type/Finance";
+import type { GetProfitShareListParams, ProfitShareListItem, ChainRecordParams, GoodsChainRecordItem, PointsChainRecordItem, FinanceData } from "@/type/Finance";
 
 export const getProfitShareList = (params: Paging & GetProfitShareListParams): Promise<Return<ReturnList<ProfitShareListItem>>> => {
   return ultraFetch.post({
@@ -62,5 +62,30 @@ export const exportPointsChainRecord = (params: ChainRecordParams): Promise<Blob
   return ultraFetch.get({
     URL: "/manager/chain-transfer/points/excel",
     params,
+  });
+};
+
+// 资产数据
+export const getFinanceToday = (): Promise<Return<FinanceData>> => {
+  return ultraFetch.get({
+    URL: "/manager/finance/today",
+  });
+};
+
+export const getFinanceYesterday = (): Promise<Return<FinanceData>> => {
+  return ultraFetch.get({
+    URL: "/manager/finance/yesterday",
+  });
+};
+
+export const getWechatBalance = (): Promise<Return<{ availableAmount: number; pendingAmount: number }>> => {
+  return ultraFetch.get({
+    URL: "/manager/finance/wechat-balance ",
+  });
+};
+
+export const getWaitFinance = (): Promise<Return<{ countExpressWait: number; countGoodsAuditWait: number }>> => {
+  return ultraFetch.get({
+    URL: "/manager/finance/wait",
   });
 };

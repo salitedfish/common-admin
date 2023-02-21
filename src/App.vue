@@ -1,19 +1,21 @@
 <template>
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme="themeList[activeTheme].lib" :theme-overrides="themeList[activeTheme].libThemeOverrides">
-    <n-global-style />
-    <n-loading-bar-provider>
-      <n-dialog-provider>
-        <n-notification-provider>
-          <RouterView />
-        </n-notification-provider>
-      </n-dialog-provider>
-    </n-loading-bar-provider>
+    <n-theme-editor>
+      <n-global-style />
+      <n-loading-bar-provider>
+        <n-dialog-provider>
+          <n-notification-provider>
+            <RouterView />
+          </n-notification-provider>
+        </n-dialog-provider>
+      </n-loading-bar-provider>
+    </n-theme-editor>
   </n-config-provider>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { zhCN, dateZhCN } from "naive-ui";
+import { zhCN, dateZhCN, NThemeEditor } from "naive-ui";
 import { useGetLStorage } from "@ultra-man/noa";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store";

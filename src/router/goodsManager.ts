@@ -112,4 +112,14 @@ export default <RouteRecordRaw[]>[
       id: 1011,
     },
   },
+  {
+    path: "goodsListManager/syntheticDetail",
+    name: "syntheticDetail",
+    component: () => import("@/view/goodsManager/syntheticDetail/syntheticDetail.vue"),
+    meta: {
+      label: "合成规则",
+      icon: "tubiaozhizuomoban",
+      keepAlive: true,
+    },
+  },
 ];

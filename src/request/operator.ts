@@ -18,6 +18,8 @@ import type {
   BannerListItem,
   AddBannerParams,
   SearchKeywordsListItem,
+  LotteryListParams,
+  LotteryListItem,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -216,6 +218,40 @@ export const deleteSearchKeywords = (params: { id: number }): Promise<Return<unk
 export const addEditSearchKeywords = (params: { id?: number; keyword: string; order: number | null }): Promise<Return<unknown>> => {
   return ultraFetch.post({
     URL: "/manager/search-keyword/submit",
+    body: JSON.stringify(params),
+  });
+};
+
+// 抽签管理
+export const getLotteryList = (params: Paging & LotteryListParams): Promise<Return<ReturnList<LotteryListItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/page",
+    body: JSON.stringify(params),
+  });
+};
+export const deleteLottery = (params: { id: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/delete",
+    body: JSON.stringify(params),
+  });
+};
+export const updateLotteryState = (params: { id: number; state: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/state",
+    body: JSON.stringify(params),
+  });
+};
+
+export const lotteryApprovial = (params: { id: number; auditNote: string; state: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/audit",
+    body: JSON.stringify(params),
+  });
+};
+
+export const calcLottery = (params: { id: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/calc",
     body: JSON.stringify(params),
   });
 };

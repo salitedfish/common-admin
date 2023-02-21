@@ -95,7 +95,7 @@ import type { CategoryTreeItem } from "@/type/Common";
 import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList, EditType } from "./goodsListManagerStore";
 import { useAuthStore } from "@/store/authStore";
 import { commonNotify, useListPage } from "@/util/common";
-import { WhiteListType } from "@/type/Common";
+import { WhiteListType, DetailCheckType } from "@/type/Common";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "goodsListManager",
@@ -104,7 +104,6 @@ export default defineComponent({
 
 <script lang="ts" setup>
 const authStore = useAuthStore();
-// const authStore.isAdmin = authStore.authStore.isAdmin;
 const router = useRouter();
 const dialog = useDialog();
 
@@ -435,7 +434,7 @@ const createColumns = () => {
             )
           );
         }
-        if (goodsType === GoodsType.SYNTHETIC && !authStore.isAdmin && [GoodsState.DRAFT, GoodsState.TO_BE_SHELVES, GoodsState, GoodsState.ON_THE_SHELF].includes(goodsState)) {
+        if (goodsType === GoodsType.SYNTHETIC && !authStore.isAdmin && [GoodsState.TO_BE_SHELVES].includes(goodsState)) {
           list.push(
             h(
               NButton,
@@ -443,6 +442,15 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "syntheticDetail",
+                    query: {
+                      type: DetailCheckType.EDIT,
+                      id: goods.goodsId,
+                    },
+                  });
+                },
               },
               {
                 default: () => "修改合成规则",
@@ -462,6 +470,15 @@ const createColumns = () => {
                 type: "primary",
                 size,
                 secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "syntheticDetail",
+                    query: {
+                      type: DetailCheckType.CHECK,
+                      id: goods.goodsId,
+                    },
+                  });
+                },
               },
               {
                 default: () => "查看合成规则",

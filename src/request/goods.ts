@@ -1,8 +1,8 @@
 import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
-import type { Return, Paging, ReturnList } from "@/type/Common";
-import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams } from "@/type/GoodsManager";
+import type { Return, Paging, ReturnList, MergeObject } from "@/type/Common";
+import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams, SyntheticRule } from "@/type/GoodsManager";
 
 export const getGoodsList = (params: RequestParam.GetGoodsList): RequestReturn.GetGoodsList => {
   if (typeof params.goodsStates === "string") {
@@ -120,5 +120,20 @@ export const getGoodsPublishRecord = (params: { goodsId: string }): Promise<Retu
   return ultraFetch.get({
     URL: "/manager/goods/issue/record",
     params: params,
+  });
+};
+
+// 合成相关接口
+export const getSyntheticList = async (params: { goodsId: string }): Promise<Return<MergeObject<SyntheticRule, { itemName: string }>[]>> => {
+  return ultraFetch.get({
+    URL: "/manager/goods/synthesis/list",
+    params,
+  });
+};
+
+export const submitSyntheticList = async (params: { goodsId: string; rules: SyntheticRule[] }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/synthesis/submit",
+    body: JSON.stringify(params),
   });
 };

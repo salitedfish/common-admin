@@ -46,12 +46,13 @@ export default defineComponent({
 <script lang="ts" setup>
 const props = withDefaults(
   defineProps<{
-    goodsSelectedList?: { goodsId: string | number; goodsName: string }[];
+    goodsSelectedList: { goodsId: string | number; goodsName: string }[];
     showGoodsSelectModal: boolean;
     multiple?: boolean;
     goodsType?: number;
     goodsStates?: number[];
     funcType?: GetEnumValue<GoodsFuncType>;
+    max?: number;
   }>(),
   {
     multiple: true,
@@ -83,6 +84,16 @@ const createColumns = () => {
     {
       type: "selection",
       multiple: props.multiple,
+      disabled: (item) => {
+        let isSelect = false;
+        for (const i of props.goodsSelectedList) {
+          if (i.goodsId === item.goodsId) {
+            isSelect = true;
+            break;
+          }
+        }
+        return !!props.max && props.goodsSelectedList.length >= props.max && !isSelect;
+      },
     },
     {
       title: "商品编号",
