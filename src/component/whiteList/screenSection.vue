@@ -2,9 +2,24 @@
   <n-space>
     <n-input v-model:value="params.phone" autosize placeholder="请输入手机号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.uid" autosize placeholder="请输入编号" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select v-model:value="params.state" :options="airDropNameStateList" :clearable="true" v-if="whiteListType === WhiteListTypeEnum.AIR_DROP" style="width: 200px"></n-select>
+    <n-select
+      v-model:value="params.state"
+      :options="airDropNameStateList"
+      :clearable="true"
+      v-if="whiteListType === WhiteListTypeEnum.AIR_DROP"
+      style="width: 200px"
+      :disabled="searching"
+    ></n-select>
+    <n-select
+      v-model:value="params.type"
+      :options="lotteryHitTypes"
+      :clearable="true"
+      v-if="whiteListType === WhiteListTypeEnum.DRAW_ALL"
+      style="width: 200px"
+      :disabled="searching"
+    ></n-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索/刷新</n-button>
-    <n-button @click="handleDownloadWhiteList" type="primary" :disabled="downloading" :loading="downloading">导出名单</n-button>
+    <n-button @click="handleDownloadWhiteList" type="primary" :disabled="downloading || searching" :loading="downloading">导出名单</n-button>
   </n-space>
 </template>
 
@@ -20,6 +35,7 @@ import { commonNotify } from "@/util/common";
 
 // store
 import { WhiteListType as WhiteListTypeEnum } from "@/type/Common";
+import { lotteryHitTypes } from "@/view/operactionManager/lotteryWhiteListAll/lotteryWhiteListAllStore";
 import { airDropNameStateList } from "@/view/operactionManager/manualAirdropManager/manualAirdropManagerStore";
 // 类型
 import type { WhiteListSearchParams } from "@/type/Common";
@@ -28,7 +44,7 @@ const props = defineProps<{
   searching: boolean;
   id: string;
   name: string;
-  downLoadRequest: (params: { id: string }, whiteListType: number) => Promise<Blob>;
+  downLoadRequest: (params: { id: string; type?: number }, whiteListType: number) => Promise<Blob>;
   whiteListType: number;
 }>();
 
@@ -39,6 +55,7 @@ const emit = defineEmits<{
 const params = reactive<WhiteListSearchParams>({
   phone: "",
   uid: "",
+  type: -1, // 这个只有在抽签的时候有用到
 });
 
 const searchHandler = () => {
@@ -48,7 +65,7 @@ const searchHandler = () => {
 const downloading = ref(false);
 const handleDownloadWhiteList = async () => {
   downloading.value = true;
-  const res = await props.downLoadRequest({ id: props.id }, props.whiteListType);
+  const res = await props.downLoadRequest({ id: props.id, type: params.type }, props.whiteListType);
   if (res) {
     const url = useBinaryToURL(res);
     if (url) {

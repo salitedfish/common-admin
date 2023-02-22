@@ -34,7 +34,7 @@ import type { WhiteListItem, WhiteListSearchParams } from "@/type/Common";
 const props = defineProps<{
   id: string;
   name: string;
-  downLoadWhiteListRequest: (params: { id: string }, whiteListType: number) => Promise<Blob>;
+  downLoadWhiteListRequest: (params: { id: string; type?: number }, whiteListType: number) => Promise<Blob>;
   getListRequest: (params: RequestParams.GetWhiteList, whiteListType: number) => RequestReturn.GetWhiteList;
   whiteListType: number;
 }>();

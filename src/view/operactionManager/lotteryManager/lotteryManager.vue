@@ -34,20 +34,24 @@
 <script lang="ts">
 // 框架
 import { defineComponent, h, ref, reactive } from "vue";
+import { useRouter } from "vue-router";
 // 组件库
 import { NImage, NSpace, NButton, useDialog } from "naive-ui";
 // 自定义组件
 import screenSection from "./component/screenSection.vue";
 import customIcon from "@/component/common/customIcon.vue";
+import whiteListUploadBtn from "@/component/whiteList/whiteListUploadBtn.vue";
 // 工具库
 // 自定义工具
 import { useListPage, commonNotify } from "@/util/common";
 // 网络请求
+import { deleteWhiteList } from "@/request/common";
 import { getLotteryList, deleteLottery, updateLotteryState, lotteryApprovial, calcLottery } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { lotteryStates, lotteryTabTypes, lotteryTaskStates, lotteryApprovialState } from "./lotteryManagerStore";
 // 类型
+import { WhiteListType } from "@/type/Common";
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import { LotteryState, LotteryTaskState, type LotteryListItem, type LotteryTabType } from "@/type/Operator";
@@ -58,17 +62,18 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
+const router = useRouter();
 const authStore = useAuthStore();
 const dialog = useDialog();
 
 const createColumns = () => {
   const list: DataTableColumns<LotteryListItem> = [
-    {
-      title: "商品编号",
-      key: "goodsId",
-      align: "center",
-      width: 180,
-    },
+    // {
+    //   title: "商品编号",
+    //   key: "goodsId",
+    //   align: "center",
+    //   width: 180,
+    // },
     {
       title: "抽签编号",
       key: "id",
@@ -194,10 +199,10 @@ const createColumns = () => {
       title: "操作",
       key: "operaction",
       align: "center",
-      width: 200,
+      width: 240,
       fixed: "right",
       render(lottery) {
-        const { state, taskState } = lottery;
+        const { state, taskState, id } = lottery;
         const isMy = authStore.isAdmin ? Number(lottery.merchantUid) === 0 : Number(authStore.userInfo?.uid) === Number(lottery.merchantUid);
         const list: VNode[] = [];
         const size = "small";
@@ -212,7 +217,13 @@ const createColumns = () => {
               size,
               secondary: true,
               onClick: () => {
-                null;
+                router.push({
+                  name: "lotteryDetail",
+                  query: {
+                    type: "CHECK",
+                    id,
+                  },
+                });
               },
             },
             {
@@ -244,7 +255,7 @@ const createColumns = () => {
           );
         }
         // 编辑
-        if (isMy && [LotteryState.DRAFT, LotteryState.APPROVIAL_FAILED, LotteryState.TO_BE_APPROVIAL].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
+        if (isMy && [LotteryState.DRAFT, LotteryState.APPROVIAL_FAILED, LotteryState.TO_BE_SHELVES].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
           list.push(
             h(
               NButton,
@@ -253,7 +264,13 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
-                  null;
+                  router.push({
+                    name: "lotteryDetail",
+                    query: {
+                      type: "EDIT",
+                      id,
+                    },
+                  });
                 },
               },
               {
@@ -380,6 +397,94 @@ const createColumns = () => {
             )
           );
         }
+
+        // 删除名单
+        if (isMy && [LotteryState.ON_THE_SHELF].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
+          list.push(
+            h(
+              NButton,
+              {
+                type: "warning",
+                size,
+                secondary: true,
+                onClick: async () => {
+                  const dialogInfo = dialog.warning({
+                    title: "删除白名单",
+                    content: `确认删除${lottery.name}的白名单吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await deleteWhiteList({ id: String(id) }, WhiteListType.DRAW_UPLOAD);
+                      if (res) {
+                        commonNotify("success", "白名单删除成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "删除白名单",
+              }
+            )
+          );
+        }
+        //上传白名单
+        if (isMy && [LotteryState.ON_THE_SHELF].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
+          list.push(
+            h(whiteListUploadBtn, {
+              id: String(id),
+              whiteListType: WhiteListType.DRAW_UPLOAD,
+            })
+          );
+        }
+        //查看白名单
+        list.push(
+          h(
+            NButton,
+            {
+              type,
+              size,
+              secondary: true,
+              onClick: () => {
+                router.push({
+                  name: "lotteryWhiteListUpload",
+                  query: {
+                    id,
+                    name: lottery.name,
+                  },
+                });
+              },
+            },
+            {
+              default: () => "查看白名单",
+            }
+          )
+        );
+
+        //查看参与名单
+        list.push(
+          h(
+            NButton,
+            {
+              type,
+              size,
+              secondary: true,
+              onClick: () => {
+                router.push({
+                  name: "lotteryWhiteListAll",
+                  query: {
+                    id,
+                    name: lottery.name,
+                  },
+                });
+              },
+            },
+            {
+              default: () => "查看参与名单",
+            }
+          )
+        );
 
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => list });

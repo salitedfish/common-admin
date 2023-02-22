@@ -149,7 +149,7 @@ export const uploadWhiteList = (params: { id: string; file: File }, whiteListTyp
 };
 
 // 白名单下载
-export const downLoadWhiteList = (params: { id: string; goodsId?: string }, whiteListType: number): Promise<Blob> => {
+export const downLoadWhiteList = (params: { id: string; goodsId?: string; type?: number }, whiteListType: number): Promise<Blob> => {
   if (whiteListType === WhiteListType.GOODS) {
     params.goodsId = params.id;
   }

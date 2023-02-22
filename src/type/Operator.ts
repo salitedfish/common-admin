@@ -1,4 +1,4 @@
-import type { CategoryTreeItem } from "@/type/Common";
+import type { CategoryTreeItem, DeepPartial } from "@/type/Common";
 
 export type ManualAirDropListSearchParams = {
   itemId?: string;
@@ -271,3 +271,40 @@ export enum LotteryTaskState {
   ISSUED,
   AVARDED,
 }
+
+export type lotteryRule = {
+  endTime?: string;
+  holdNum?: number;
+  itemId?: string;
+  limitNum?: number;
+  startTime?: string;
+  type?: number;
+  unitNum?: number;
+
+  categoryList: CategoryTreeItem[];
+  goodsList: { goodsId: string | number; goodsName: string }[];
+};
+export type LotteryFormDetail = {
+  info: Partial<{
+    acquireDes: string;
+    adImage: string;
+    endTime: string;
+    goodsId: string;
+    hitNum: number;
+    id: number;
+    lotteryRule: string;
+    lotteryTabType: number;
+    name: string;
+    numLen: number;
+    overReduce: number;
+    rate: number;
+    siteRepeat: number;
+    startTime: string;
+    type: number;
+  }>;
+  rules: lotteryRule[];
+};
+export type LotteryDetail = {
+  info: Partial<LotteryListItem>;
+  rules: lotteryRule[];
+};

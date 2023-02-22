@@ -20,6 +20,8 @@ import type {
   SearchKeywordsListItem,
   LotteryListParams,
   LotteryListItem,
+  LotteryDetail,
+  LotteryFormDetail,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -252,6 +254,26 @@ export const lotteryApprovial = (params: { id: number; auditNote: string; state:
 export const calcLottery = (params: { id: number }) => {
   return ultraFetch.post({
     URL: "/manager/lottery/calc",
+    body: JSON.stringify(params),
+  });
+};
+
+// 抽签详情相关
+export const getLotteryDetail = (params: { id: number }): Promise<Return<LotteryDetail>> => {
+  return ultraFetch.get({
+    URL: "/manager/lottery/detail",
+    params,
+  });
+};
+export const addLottery = (params: LotteryFormDetail) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/submit",
+    body: JSON.stringify(params),
+  });
+};
+export const editLottery = (params: LotteryFormDetail) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/update",
     body: JSON.stringify(params),
   });
 };

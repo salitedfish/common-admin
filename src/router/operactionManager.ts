@@ -23,6 +23,36 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "lotteryDetail",
+    name: "lotteryDetail",
+    component: () => import("@/view/operactionManager/lotteryDetail/lotteryDetail.vue"),
+    meta: {
+      label: "抽签详情",
+      icon: "choujiang",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "lotteryWhiteListAll",
+    name: "lotteryWhiteListAll",
+    component: () => import("@/view/operactionManager/lotteryWhiteListAll/lotteryWhiteListAll.vue"),
+    meta: {
+      label: "参与名单",
+      icon: "choujiang",
+      keepAlive: true,
+    },
+  },
+  {
+    path: "lotteryWhiteListUpload",
+    name: "lotteryWhiteListUpload",
+    component: () => import("@/view/operactionManager/lotteryWhiteLIstUpload/lotteryWhiteListUpload.vue"),
+    meta: {
+      label: "白名单",
+      icon: "choujiang",
+      keepAlive: true,
+    },
+  },
+  {
     path: "manualAirdropManager",
     name: "manualAirdropManager",
     component: () => import("@/view/operactionManager/manualAirdropManager/manualAirdropManager.vue"),

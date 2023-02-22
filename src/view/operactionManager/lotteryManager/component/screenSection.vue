@@ -17,13 +17,14 @@
 
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <whiteListTemplateDownload></whiteListTemplateDownload>
-    <n-button type="primary" @click="gotoAddLottery" v-if="!authStore.isAdmin">添加抽签</n-button>
+    <n-button type="primary" @click="gotoAddLottery">添加抽签</n-button>
   </n-space>
 </template>
 
 <script lang="ts">
 // 框架
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
 // 组件库
 // 自定义组件
 import whiteListTemplateDownload from "@/component/whiteList/whiteListTemplateDownload.vue";
@@ -39,6 +40,8 @@ import type { LotteryListParams } from "@/type/Operator";
 </script>
 
 <script lang="ts" setup>
+const router = useRouter();
+
 defineProps<{
   searching: boolean;
 }>();
@@ -56,7 +59,12 @@ const searchHandler = () => {
 };
 
 const gotoAddLottery = () => {
-  null;
+  router.push({
+    name: "lotteryDetail",
+    query: {
+      type: "ADD",
+    },
+  });
 };
 </script>
 

@@ -20,4 +20,22 @@ export const whiteListUrls = [
       getWhiteListUrl: "/manager/airdrop/allow/page",
     },
   },
+
+  {
+    value: WhiteListType.DRAW_UPLOAD,
+    URLS: {
+      uploadWhiteListUrl: "/manager/lottery/allow/submit/",
+      downLoadWhiteListUrl: "/manager/lottery/allow/excel",
+      deleteWhiteListUrl: "/manager/lottery/allow/delete",
+      getWhiteListUrl: "/manager/lottery/allow/page",
+    },
+  },
+
+  {
+    value: WhiteListType.DRAW_ALL,
+    URLS: {
+      downLoadWhiteListUrl: "/manager/lottery/join/excel",
+      getWhiteListUrl: "/manager/lottery/join/page",
+    },
+  },
 ];
