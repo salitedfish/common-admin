@@ -4,6 +4,7 @@
       <n-form-item label="抽签名称:" required>
         <n-input placeholder="请输入抽签名称" clearable v-model:value="lotteryFormData.info.name" :disabled="submiting || isCheck"></n-input>
       </n-form-item>
+
       <n-form-item label="宣传图:" required>
         <common-upload type="img" v-model="lotteryCoverList" :max="1" :disabled="submiting || isCheck" :maxSize="1"></common-upload>
       </n-form-item>
@@ -11,20 +12,30 @@
       <n-form-item label="标签码获取方式:" required>
         <n-input type="textarea" placeholder="请输入标签码获取方式描述" clearable v-model:value="lotteryFormData.info.acquireDes" :disabled="submiting || isCheck"></n-input>
       </n-form-item>
+
       <n-form-item label="中签规则:" required>
         <n-input type="textarea" placeholder="请输入中签规则" clearable v-model:value="lotteryFormData.info.lotteryRule" :disabled="submiting || isCheck"></n-input>
       </n-form-item>
 
-      <n-form-item label="中签数" required>
+      <n-form-item label="中签量规则" required>
+        <n-radio-group v-model:value="lotteryFormData.info.rateType">
+          <n-space>
+            <n-radio :label="item.label" :value="item.value" v-for="(item, index) in rateTypes" :key="index" :disabled="submiting || isCheck" />
+          </n-space>
+        </n-radio-group>
+      </n-form-item>
+
+      <n-form-item label="中签数" required v-if="lotteryFormData.info.rateType === RateType.NUM">
         <n-input-number
           placeholder="请输入中签数"
-          v-model:value="lotteryFormData.info.hitNum"
+          v-model:value="lotteryFormData.info.rate"
           :min="0"
           :style="{ width: inputWidth }"
           :disabled="submiting || isCheck"
         ></n-input-number>
       </n-form-item>
-      <n-form-item label="中奖率" required>
+
+      <n-form-item label="中奖率" required v-if="lotteryFormData.info.rateType === RateType.RATE">
         <n-input-number
           placeholder="请输入中奖率(‱)"
           v-model:value="lotteryFormData.info.rate"
@@ -36,30 +47,6 @@
         >
       </n-form-item>
 
-      <n-form-item label="开始时间" required>
-        <n-date-picker
-          placeholder="请选择结束时间"
-          v-model:formatted-value="lotteryFormData.info.startTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          :style="{ width: inputWidth }"
-          clearable
-          :disabled="submiting || isCheck"
-        />
-      </n-form-item>
-
-      <n-form-item label="结束时间" required>
-        <n-date-picker
-          placeholder="请选择结束时间"
-          v-model:formatted-value="lotteryFormData.info.endTime"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetime"
-          :style="{ width: inputWidth }"
-          clearable
-          :disabled="submiting || isCheck"
-        />
-      </n-form-item>
-
       <n-form-item label="匹配尾号长度" required>
         <n-input-number
           placeholder="请输入匹配尾号长度"
@@ -69,17 +56,6 @@
           :style="{ width: inputWidth }"
           :disabled="submiting || isCheck"
         ></n-input-number>
-      </n-form-item>
-
-      <n-form-item label="标记类型:" required>
-        <n-select
-          v-model:value="lotteryFormData.info.lotteryTabType"
-          :options="lotteryTabTypes"
-          placeholder="请选择标记类型"
-          :style="{ width: inputWidth }"
-          clearable
-          :disabled="submiting || isCheck"
-        />
       </n-form-item>
 
       <n-form-item label="是否取余:" required>
@@ -106,7 +82,7 @@
 
       <n-form-item label="是否标记中签号:" required>
         <n-select
-          v-model:value="lotteryFormData.info.type"
+          v-model:value="lotteryFormData.info.hitType"
           :options="hitNumTabList"
           placeholder="请选择是否标记中签号"
           :style="{ width: inputWidth }"
@@ -114,7 +90,43 @@
           :disabled="submiting || isCheck"
         />
       </n-form-item>
+
+      <n-form-item label="开始时间" required>
+        <n-date-picker
+          placeholder="请选择结束时间"
+          v-model:formatted-value="lotteryFormData.info.startTime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="submiting || isCheck"
+        />
+      </n-form-item>
+
+      <n-form-item label="结束时间" required>
+        <n-date-picker
+          placeholder="请选择结束时间"
+          v-model:formatted-value="lotteryFormData.info.endTime"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="datetime"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="submiting || isCheck"
+        />
+      </n-form-item>
+
+      <n-form-item label="标记类型:" required>
+        <n-select
+          v-model:value="lotteryFormData.info.lotteryTabType"
+          :options="lotteryTabTypes"
+          placeholder="请选择标记类型"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="submiting || isCheck"
+        />
+      </n-form-item>
     </n-card>
+
     <n-card title="规则：">
       <n-card v-for="(item, key) in lotteryFormData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
@@ -157,6 +169,7 @@
             :disabled="submiting || isCheck"
           />
         </n-form-item>
+
         <n-form-item
           label="结束时间"
           required
@@ -174,9 +187,11 @@
             :disabled="submiting || isCheck"
           />
         </n-form-item>
+
         <n-form-item label="持有数量" required>
           <n-input-number placeholder="请输入持有数量" v-model:value="item.holdNum" :min="1" :style="{ width: inputWidth }" :disabled="submiting || isCheck"></n-input-number>
         </n-form-item>
+
         <n-form-item label="奖励数量" required>
           <n-input-number
             placeholder="请输入每持有数量的奖励数量"
@@ -186,6 +201,7 @@
             :disabled="submiting || isCheck"
           ></n-input-number>
         </n-form-item>
+
         <n-form-item label="上限数量" required>
           <n-input-number
             placeholder="请输入上限数量，0表示无上限"
@@ -195,8 +211,10 @@
             :disabled="submiting || isCheck"
           ></n-input-number>
         </n-form-item>
+
         <template #footer> <n-button block @click="deleteRuleHandler(key)" secondary type="warning" :disabled="submiting" v-if="!isCheck">-删除规则</n-button> </template>
       </n-card>
+
       <n-button block @click="addRuleHandler" secondary type="primary" :disabled="submiting" :loading="submiting" v-if="!isCheck">+添加规则</n-button>
     </n-card>
   </n-form>
@@ -206,7 +224,7 @@
 
 <script lang="ts">
 // 框架
-import { defineComponent, reactive, ref, onMounted } from "vue";
+import { defineComponent, reactive, ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 import commonUpload from "@/component/common/commonUpload.vue";
@@ -222,7 +240,7 @@ import { getLotteryDetail, addLottery, editLottery } from "@/request/operator";
 // store
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
-import { overReduceTypes, repeatAbleList, hitNumTabList, lotteryRuleTypes, LotteryRuleType } from "./lotteryDetailStore";
+import { overReduceTypes, repeatAbleList, hitNumTabList, lotteryRuleTypes, LotteryRuleType, rateTypes, RateType } from "./lotteryDetailStore";
 import { lotteryTabTypes } from "../lotteryManager/lotteryManagerStore";
 // 类型
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
@@ -248,7 +266,9 @@ const inputWidth = "100%";
 // 表单数据
 const lotteryCoverList = ref<FileUpload[]>([]);
 const lotteryFormData = reactive<LotteryFormDetail>({
-  info: {},
+  info: {
+    rateType: 0,
+  },
   rules: [
     {
       categoryList: [],
@@ -335,10 +355,17 @@ const initForm = async () => {
   }
   commonStore.pageLoading = false;
 };
-onMounted(() => {
+onMounted(async () => {
   if ([DetailCheckType.CHECK, DetailCheckType.EDIT].includes(detailCheckType)) {
-    initForm();
+    await initForm();
   }
+  // 这个要在初始化之后watch
+  watch(
+    () => lotteryFormData.info.rateType,
+    () => {
+      lotteryFormData.info.rate = undefined;
+    }
+  );
 });
 </script>
 

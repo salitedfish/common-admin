@@ -68,3 +68,19 @@ export const lotteryRuleTypes = [
     label: "推广指定商品",
   },
 ];
+export enum RateType {
+  NUM,
+  RATE,
+}
+
+export const rateTypes = [
+  {
+    label: "中签数",
+    value: RateType.NUM,
+  },
+
+  {
+    label: "中签率",
+    value: RateType.RATE,
+  },
+];

@@ -232,7 +232,6 @@ export type LotteryListItem = {
   distributeTime: string;
   endTime: string;
   goodsId: string;
-  hitNum: number;
   id: number;
   joinNum: number;
   lotteryRule: string;
@@ -243,13 +242,14 @@ export type LotteryListItem = {
   numLen: number;
   overReduce: number;
   rate: number;
+  rateType: number;
   realHitNum: number;
   siteRepeat: number;
   startTime: string;
   state: number;
   taskState: number;
   totalNum: number;
-  type: number;
+  hitType: number;
 };
 export enum LotteryTabType {
   ALL = -1,
@@ -290,7 +290,6 @@ export type LotteryFormDetail = {
     adImage: string;
     endTime: string;
     goodsId: string;
-    hitNum: number;
     id: number;
     lotteryRule: string;
     lotteryTabType: number;
@@ -298,9 +297,10 @@ export type LotteryFormDetail = {
     numLen: number;
     overReduce: number;
     rate: number;
+    rateType: number;
     siteRepeat: number;
     startTime: string;
-    type: number;
+    hitType: number;
   }>;
   rules: lotteryRule[];
 };
