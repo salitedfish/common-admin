@@ -19,6 +19,7 @@ export const useThemeStore = defineStore("themeStore", () => {
     {
       lib: darkTheme,
       libThemeOverrides: {
+        // primary: "#2d8cf0",
         common: {
           // primaryColor: "#2d8cf0",
         },

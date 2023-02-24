@@ -218,6 +218,7 @@ export type LotteryListParams = Partial<{
   name: string;
   state: LotteryState;
   taskState: LotteryTaskState;
+  useType: number;
 }>;
 export type LotteryListItem = {
   acquireDes: string;
@@ -230,8 +231,10 @@ export type LotteryListItem = {
   blockHeight: number;
   createTime: string;
   distributeTime: string;
+  lotteryTabType: number;
   endTime: string;
   goodsId: string;
+  goodsName: string;
   id: number;
   joinNum: number;
   lotteryRule: string;
@@ -250,6 +253,7 @@ export type LotteryListItem = {
   taskState: number;
   totalNum: number;
   hitType: number;
+  useType: number;
 };
 export enum LotteryTabType {
   ALL = -1,
@@ -270,6 +274,11 @@ export enum LotteryTaskState {
   INIT,
   ISSUED,
   AVARDED,
+}
+export enum LotteryUseType {
+  NONE,
+  PRIORIT_PURCHASE,
+  AIR_DROP,
 }
 
 export type lotteryRule = {
@@ -301,6 +310,7 @@ export type LotteryFormDetail = {
     siteRepeat: number;
     startTime: string;
     hitType: number;
+    useType: number;
   }>;
   rules: lotteryRule[];
 };

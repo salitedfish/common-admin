@@ -4,6 +4,7 @@
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select v-model:value="params.goodsType" :options="goodsTypeList" placeholder="请选择商品类型" style="width: 200px" :disabled="searching" clearable />
+    <n-select v-model:value="params.goodsTabType" :options="goodsTabList" placeholder="请选择标记类型" style="width: 200px" :disabled="searching" clearable />
 
     <n-select v-model:value="params.goodsStates" :options="goodsStateSearchList" placeholder="请选择商品状态" style="width: 200px" :disabled="searching" clearable />
 
@@ -28,6 +29,7 @@ import categorySelect from "@/component/common/categorySelect.vue";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { goodsStateSearchList, goodsTypeList } from "../goodsListManagerStore";
+import { goodsTabList } from "../../goodsDetailManager/goodsDetailManagerStore";
 // 类型
 import type { SearchParams } from "@/type/GoodsManager";
 import type { CategoryTreeItem } from "@/type/Common";

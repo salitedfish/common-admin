@@ -49,12 +49,13 @@ import { deleteWhiteList } from "@/request/common";
 import { getLotteryList, deleteLottery, updateLotteryState, lotteryApprovial, calcLottery } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { lotteryStates, lotteryTabTypes, lotteryTaskStates, lotteryApprovialState } from "./lotteryManagerStore";
+import { lotteryStates, lotteryTaskStates, lotteryApprovialState, lotteryUseTypes, lotteryTabTypes } from "./lotteryManagerStore";
 // 类型
+import { RateType } from "@/view/operactionManager/lotteryDetail/lotteryDetailStore";
 import { WhiteListType } from "@/type/Common";
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
-import { LotteryState, LotteryTaskState, type LotteryListItem, type LotteryTabType } from "@/type/Operator";
+import { LotteryState, LotteryTaskState, type LotteryListItem } from "@/type/Operator";
 // 组件名
 export default defineComponent({
   name: "lotteryManager",
@@ -100,28 +101,59 @@ const createColumns = () => {
       },
     },
     {
-      title: "实际签数",
-      key: "realHitNum",
+      title: "预设中签数",
+      key: "hitNum",
+      align: "center",
+      width: 100,
+      render: (row) => {
+        return row.rateType === RateType.NUM ? row.rate : "-";
+      },
+    },
+    {
+      title: "预设中签率(%)",
+      key: "rate",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return row.rateType === RateType.RATE ? Number(((row.rate || 0) / 100).toFixed(2)) : "-";
+      },
+    },
+    {
+      title: "参与人数",
+      key: "joinNum",
       align: "center",
       width: 100,
     },
     {
-      title: "总签数",
+      title: "参与总签数",
       key: "totalNum",
       align: "center",
       width: 100,
     },
     {
-      title: "中签数",
-      key: "hitNum",
+      title: "实际中签数",
+      key: "realHitNum",
       align: "center",
       width: 100,
     },
+
     {
-      title: "中奖率(‱)",
-      key: "rate",
+      title: "抽签作用",
+      key: "state",
       align: "center",
       width: 100,
+      render(row) {
+        return lotteryUseTypes.getItem(row.useType)?.label;
+      },
+    },
+    {
+      title: "标记类型",
+      key: "state",
+      align: "center",
+      width: 100,
+      render(row) {
+        return lotteryTabTypes.getItem(row.lotteryTabType)?.label;
+      },
     },
     {
       title: "抽签状态",
@@ -141,12 +173,7 @@ const createColumns = () => {
         return lotteryTaskStates.getItem(row.taskState)?.label;
       },
     },
-    {
-      title: "参与人数",
-      key: "joinNum",
-      align: "center",
-      width: 100,
-    },
+
     {
       title: "审核备注",
       key: "auditorNote",

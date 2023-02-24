@@ -3,6 +3,8 @@
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品ID" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.merchantUid" autosize placeholder="请输入商户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin" clearable></n-input>
+    <n-select v-model:value="params.goodsTabType" :options="goodsTabList" placeholder="请选择标记类型" style="width: 200px" :disabled="searching" clearable />
+
     <category-select v-model="categoryList" checkType="all" style="width: 200px"></category-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
   </n-space>
@@ -18,6 +20,7 @@ import categorySelect from "@/component/common/categorySelect.vue";
 // 自定义工具
 // 网络请求
 // store
+import { goodsTabList } from "@/view/goodsManager/goodsDetailManager/goodsDetailManagerStore";
 import { useAuthStore } from "@/store/authStore";
 // 类型
 import type { SearchParams } from "@/type/GoodsManager";

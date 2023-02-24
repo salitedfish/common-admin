@@ -1,4 +1,4 @@
-import { LotteryState, LotteryTaskState, LotteryTabType } from "@/type/Operator";
+import { LotteryState, LotteryTaskState, LotteryTabType, LotteryUseType } from "@/type/Operator";
 
 export const lotteryStates = [
   {
@@ -76,5 +76,20 @@ export const lotteryApprovialState = [
   {
     label: "审核通过",
     value: LotteryState.TO_BE_SHELVES,
+  },
+];
+
+export const lotteryUseTypes = [
+  {
+    label: "无作用",
+    value: LotteryUseType.NONE,
+  },
+  {
+    label: "优先购商品",
+    value: LotteryUseType.PRIORIT_PURCHASE,
+  },
+  {
+    label: "空投商品",
+    value: LotteryUseType.AIR_DROP,
   },
 ];

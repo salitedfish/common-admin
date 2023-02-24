@@ -2,6 +2,7 @@ import type { CategoryTreeItem, GetEnumValue } from "@/type/Common";
 export enum GoodsFuncType {
   NONE = -1,
   SELECT_BLIND_BOX = 0,
+  DRAW_PRIORIT_PURCHASE,
 }
 export type SearchParams = Partial<{
   classify: number;
@@ -12,6 +13,7 @@ export type SearchParams = Partial<{
   goodsStates: string | number[];
   goodsType: number;
   merchantUid: string;
+  goodsTabType: number;
   funcType: GetEnumValue<GoodsFuncType>;
 }>;
 
@@ -37,6 +39,7 @@ export type GoodsListItem = {
   merchantUid: number;
   saleType: number;
   classifies: number[];
+  goodsTabType: number;
 };
 
 // 商品详情相关的类型，包括提交产品的参数类型

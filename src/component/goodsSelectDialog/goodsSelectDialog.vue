@@ -32,6 +32,7 @@ import { getGoodsList as getListRequest } from "@/request/goods";
 
 import type { GoodsListItem } from "@/type/GoodsManager";
 import type { DataTableColumns } from "naive-ui";
+import { goodsTabList } from "@/view/goodsManager/goodsDetailManager/goodsDetailManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { useListPage } from "@/util/common";
 import { defineComponent, computed } from "vue";
@@ -115,6 +116,15 @@ const createColumns = () => {
       width: 100,
       render(row) {
         return goodsTypeList.getItem(row.goodsType)?.label;
+      },
+    },
+    {
+      title: "标记类型",
+      key: "goodsType",
+      align: "center",
+      width: 100,
+      render(row) {
+        return goodsTabList.getItem(row.goodsTabType)?.label;
       },
     },
     {

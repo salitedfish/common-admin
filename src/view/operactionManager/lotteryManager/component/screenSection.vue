@@ -12,6 +12,7 @@
     <n-input v-model:value="params.name" autosize placeholder="请输入抽签名称" style="width: 200px" :disabled="searching" clearable></n-input>
 
     <n-select v-model:value="params.lotteryTabType" :options="lotteryTabTypes" placeholder="请选择标记类型" style="width: 200px" :disabled="searching" clearable />
+    <n-select v-model:value="params.useType" :options="lotteryUseTypes" placeholder="请选择抽签作用" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.state" :options="lotteryStates" placeholder="请选择抽签状态" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.taskState" :options="lotteryTaskStates" placeholder="请选择抽签进度" style="width: 200px" :disabled="searching" clearable />
 
@@ -33,7 +34,7 @@ import whiteListTemplateDownload from "@/component/whiteList/whiteListTemplateDo
 // 网络请求
 // store
 import { useAuthStore } from "@/store/authStore";
-import { lotteryStates, lotteryTabTypes, lotteryTaskStates } from "../lotteryManagerStore";
+import { lotteryStates, lotteryTabTypes, lotteryTaskStates, lotteryUseTypes } from "../lotteryManagerStore";
 // 类型
 import type { LotteryListParams } from "@/type/Operator";
 // 组件名

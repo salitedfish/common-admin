@@ -9,6 +9,35 @@
         <common-upload type="img" v-model="lotteryCoverList" :max="1" :disabled="submiting || isCheck" :maxSize="1"></common-upload>
       </n-form-item>
 
+      <n-form-item label="作用类型:" required>
+        <n-radio-group v-model:value="lotteryFormData.info.useType" :disabled="authStore.isAdmin">
+          <n-space>
+            <n-radio :label="item.label" :value="item.value" v-for="(item, index) in lotteryUseTypes" :key="index" :disabled="submiting || isCheck" />
+          </n-space>
+        </n-radio-group>
+      </n-form-item>
+
+      <n-form-item label="商品" v-if="[LotteryUseType.AIR_DROP].includes(lotteryFormData.info.useType || 0)" required>
+        <n-input :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" placeholder="请选择商品" :disabled="true"></n-input>
+        <goodsSelect
+          v-model:goods-selected-list="goodsList"
+          :max="1"
+          :disabled="submiting || isCheck"
+          :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
+        ></goodsSelect
+      ></n-form-item>
+
+      <n-form-item label="商品" v-if="[LotteryUseType.PRIORIT_PURCHASE].includes(lotteryFormData.info.useType || 0)" required>
+        <n-input :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" placeholder="请选择商品" :disabled="true"></n-input>
+        <goodsSelect
+          v-model:goods-selected-list="goodsList"
+          :max="1"
+          :disabled="submiting || isCheck"
+          :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
+          :funcType="lotteryFormData.info.useType === LotteryUseType.PRIORIT_PURCHASE ? GoodsFuncType.DRAW_PRIORIT_PURCHASE : undefined"
+        ></goodsSelect
+      ></n-form-item>
+
       <n-form-item label="标签码获取方式:" required>
         <n-input type="textarea" placeholder="请输入标签码获取方式描述" clearable v-model:value="lotteryFormData.info.acquireDes" :disabled="submiting || isCheck"></n-input>
       </n-form-item>
@@ -30,6 +59,7 @@
           placeholder="请输入中签数"
           v-model:value="lotteryFormData.info.rate"
           :min="0"
+          :precision="0"
           :style="{ width: inputWidth }"
           :disabled="submiting || isCheck"
         ></n-input-number>
@@ -37,13 +67,14 @@
 
       <n-form-item label="中奖率" required v-if="lotteryFormData.info.rateType === RateType.RATE">
         <n-input-number
-          placeholder="请输入中奖率(‱)"
+          placeholder="请输入中奖率(%)"
           v-model:value="lotteryFormData.info.rate"
-          :min="0"
-          :max="10000"
+          :min="0.01"
+          :max="100"
+          :precision="2"
           :style="{ width: inputWidth }"
           :disabled="submiting || isCheck"
-          ><template #suffix> ‱ </template></n-input-number
+          ><template #suffix> % </template></n-input-number
         >
       </n-form-item>
 
@@ -53,6 +84,7 @@
           v-model:value="lotteryFormData.info.numLen"
           :min="1"
           :max="9"
+          :precision="0"
           :style="{ width: inputWidth }"
           :disabled="submiting || isCheck"
         ></n-input-number>
@@ -239,13 +271,16 @@ import { commonNotify } from "@/util/common";
 import { getLotteryDetail, addLottery, editLottery } from "@/request/operator";
 // store
 import { useCommonStore } from "@/store/commonStore";
+import { useAuthStore } from "@/store/authStore";
 import { useRouteStore } from "@/store/routeStore";
 import { overReduceTypes, repeatAbleList, hitNumTabList, lotteryRuleTypes, LotteryRuleType, rateTypes, RateType } from "./lotteryDetailStore";
-import { lotteryTabTypes } from "../lotteryManager/lotteryManagerStore";
+import { lotteryTabTypes, lotteryUseTypes } from "../lotteryManager/lotteryManagerStore";
 // 类型
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { DetailCheckType } from "@/type/Common";
+import { GoodsFuncType } from "@/type/GoodsManager";
 import type { FileUpload } from "@/type/Common";
+import { LotteryUseType } from "@/type/Operator";
 import type { LotteryFormDetail } from "@/type/Operator";
 // 组件名
 export default defineComponent({
@@ -258,16 +293,19 @@ const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
 const commonStore = useCommonStore();
+const authStore = useAuthStore();
 const detailCheckType = route.query.type as DetailCheckType;
 const isCheck = detailCheckType === DetailCheckType.CHECK;
 const isEdit = detailCheckType === DetailCheckType.EDIT;
 const inputWidth = "100%";
 
 // 表单数据
+const goodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
 const lotteryCoverList = ref<FileUpload[]>([]);
 const lotteryFormData = reactive<LotteryFormDetail>({
   info: {
     rateType: 0,
+    useType: 0,
   },
   rules: [
     {
@@ -304,13 +342,22 @@ const submitHandler = async () => {
     }
     return { ...item, itemId };
   });
-  if (lotteryCoverList.value.length >= 1) {
-    lotteryFormData.info.adImage = lotteryCoverList.value[lotteryCoverList.value.length - 1].hashName;
-  }
+
   const params = {
-    info: lotteryFormData.info,
+    info: { ...lotteryFormData.info },
     rules,
   };
+  // 处理抽签封面
+  if (lotteryCoverList.value.length >= 1) {
+    params.info.adImage = lotteryCoverList.value[lotteryCoverList.value.length - 1].hashName;
+  }
+  if (params.info.rateType === RateType.RATE) {
+    params.info.rate = Math.round((params.info.rate || 0) * 100);
+  }
+  if ([LotteryUseType.AIR_DROP, LotteryUseType.PRIORIT_PURCHASE].includes(lotteryFormData.info.useType || 0) && goodsList.value.length >= 1) {
+    params.info.goodsId = String(goodsList.value[0].goodsId);
+  }
+
   submiting.value = true;
   const submitRequest = isEdit ? editLottery : addLottery;
   const res = await submitRequest(params);
@@ -330,6 +377,17 @@ const initForm = async () => {
   const res = await getLotteryDetail({ id: Number(route.query.id) });
   if (res) {
     lotteryFormData.info = res.data.info;
+    if (lotteryFormData.info.rateType === RateType.RATE) {
+      lotteryFormData.info.rate = Number(((lotteryFormData.info.rate || 0) / 100).toFixed(2));
+    }
+    if ([LotteryUseType.AIR_DROP, LotteryUseType.PRIORIT_PURCHASE].includes(lotteryFormData.info.useType || 0)) {
+      goodsList.value = [
+        {
+          goodsId: res.data.info.goodsId || "",
+          goodsName: res.data.info.goodsName || "",
+        },
+      ];
+    }
     lotteryFormData.rules = res.data.rules.map((item) => {
       const itemId = item.itemId || "";
       return {
@@ -364,6 +422,14 @@ onMounted(async () => {
     () => lotteryFormData.info.rateType,
     () => {
       lotteryFormData.info.rate = undefined;
+    }
+  );
+
+  watch(
+    () => lotteryFormData.info.useType,
+    () => {
+      lotteryFormData.info.goodsId = "";
+      goodsList.value = [];
     }
   );
 });

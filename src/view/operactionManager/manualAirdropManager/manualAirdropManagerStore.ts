@@ -5,6 +5,7 @@ export enum AirDropTypeType {
 export const airDropTypeList = [
   { label: "普通空投", value: 0 },
   { label: "定时任务", value: 1 },
+  { label: "抽签空投", value: 2 },
 ];
 
 export enum AirDropItemType {
