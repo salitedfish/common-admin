@@ -15,21 +15,25 @@
           <n-form-item label="商品类目" v-show="item.ruleType === RuleType.CATEGORY" required>
             <category-select
               v-model:model-value="item.categoryList"
-              :default-value="isNaN(Number(item.itemId)) ? undefined : Number(item.itemId)"
+              :default-value="item.categoryList.length > 0 ? item.categoryList[item.categoryList.length - 1].id : 0"
               check-type="all"
               :disabled="!editAble || submiting"
             ></category-select>
           </n-form-item>
 
           <n-form-item label="商品" v-show="item.ruleType === RuleType.GOODS" required>
-            <n-input :value="item.goodsList.length >= 1 ? item.goodsList[0].goodsName : undefined" placeholder="请选择商品" :disabled="true"></n-input>
-            <goodsSelect
-              v-model:goods-selected-list="item.goodsList"
-              :max="1"
-              :disabled="!editAble || submiting"
-              :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
-            ></goodsSelect
-          ></n-form-item>
+            <n-space vertical>
+              <goodsSelect
+                v-model:goods-selected-list="item.goodsList"
+                :disabled="!editAble || submiting"
+                :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
+              ></goodsSelect>
+              <n-space v-for="(i, k) in item.goodsList" :key="k">
+                <n-input :value="String(i.goodsId)" placeholder="请选择商品" :disabled="true"></n-input>
+                <n-input :value="i.goodsName" placeholder="请选择商品" :disabled="true"></n-input>
+              </n-space>
+            </n-space>
+          </n-form-item>
           <n-button block @click="delRule(key)" secondary type="warning" v-if="editAble" :disabled="submiting">-删除规则</n-button>
         </n-card>
         <n-button block @click="addRule" secondary type="primary" v-if="editAble" :disabled="submiting">+添加规则</n-button>
@@ -80,13 +84,13 @@ const editAble = computed(() => {
   return checkType !== DetailCheckType.CHECK;
 });
 // 扩展两个类型用来保存选择的类目列表或商品列表
-type ruleExtend = { categoryList: CategoryTreeItem[]; goodsList: { goodsId: string | number; goodsName: string }[] };
+type ruleExtend = { categoryList: Partial<CategoryTreeItem>[]; goodsList: { goodsId: string | number; goodsName: string }[] };
 const syntheticRules = ref<MergeObject<Partial<SyntheticRule>, ruleExtend>[]>([]);
 
 // 添加和删除规则
 const addRule = () => {
   syntheticRules.value.push({
-    itemId: undefined,
+    items: undefined,
     needNum: undefined,
     ruleType: undefined,
     categoryList: [],
@@ -111,29 +115,29 @@ const initData = async () => {
   if (res) {
     const list = res.data;
     syntheticRules.value = list.map((item) => {
-      let itemId = "";
+      const categoryList: Partial<CategoryTreeItem>[] = [];
+      const goodsList: { goodsId: string | number; goodsName: string }[] = [];
       switch (item.ruleType) {
         case RuleType.CATEGORY:
-          itemId = item.itemId;
+          categoryList.push({
+            id: Number(item.items[0].itemId),
+          });
           break;
         case RuleType.GOODS:
-          itemId = item.itemName;
+          for (const i of item.items) {
+            goodsList.push({
+              goodsId: i.itemId,
+              goodsName: i.itemName,
+            });
+          }
           break;
       }
       return {
         needNum: item.needNum,
         ruleType: item.ruleType,
-        itemId: itemId,
-        categoryList: [],
-        goodsList:
-          item.ruleType === RuleType.GOODS
-            ? [
-                {
-                  goodsId: item.itemId,
-                  goodsName: item.itemName,
-                },
-              ]
-            : [],
+        items: [],
+        categoryList: categoryList,
+        goodsList: goodsList,
       };
     });
   }
@@ -152,17 +156,28 @@ const submit = async () => {
 
   submiting.value = true;
   const params = syntheticRules.value.map((item) => {
-    let itemId = "";
+    const rules: {
+      itemId: string;
+    }[] = [];
     switch (item.ruleType) {
       case RuleType.CATEGORY:
-        itemId = item.categoryList.length >= 1 ? String(item.categoryList[item.categoryList.length - 1].id) : item.itemId || "";
+        if (item.categoryList.length > 0) {
+          rules.push({
+            itemId: String(item.categoryList[item.categoryList.length - 1].id),
+          });
+        }
+
         break;
       case RuleType.GOODS:
-        itemId = item.goodsList[0] ? String(item.goodsList[0].goodsId) : item.itemId || "";
+        for (const i of item.goodsList) {
+          rules.push({
+            itemId: String(i.goodsId),
+          });
+        }
         break;
     }
     return {
-      itemId: itemId,
+      items: rules,
       needNum: item.needNum || 0,
       ruleType: item.ruleType || 0,
     };

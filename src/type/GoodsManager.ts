@@ -143,7 +143,17 @@ export type GoodsPublishRecordItem = {
 
 // 商品的合成规则
 export type SyntheticRule = {
-  itemId: string;
+  items: {
+    itemId: string;
+  }[];
+  needNum: number;
+  ruleType: number;
+};
+export type GetSyntheticRule = {
+  items: {
+    itemId: string;
+    itemName: string;
+  }[];
   needNum: number;
   ruleType: number;
 };

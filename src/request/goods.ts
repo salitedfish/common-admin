@@ -2,7 +2,7 @@ import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Return, Paging, ReturnList, MergeObject } from "@/type/Common";
-import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams, SyntheticRule } from "@/type/GoodsManager";
+import type { BlindBoxPrizeListItem, BlindBoxOpenRecordItem, GoodsPublishRecordItem, ConsignmentParams, SyntheticRule, GetSyntheticRule } from "@/type/GoodsManager";
 
 export const getGoodsList = (params: RequestParam.GetGoodsList): RequestReturn.GetGoodsList => {
   if (typeof params.goodsStates === "string") {
@@ -124,7 +124,7 @@ export const getGoodsPublishRecord = (params: { goodsId: string }): Promise<Retu
 };
 
 // 合成相关接口
-export const getSyntheticList = async (params: { goodsId: string }): Promise<Return<MergeObject<SyntheticRule, { itemName: string }>[]>> => {
+export const getSyntheticList = async (params: { goodsId: string }): Promise<Return<GetSyntheticRule[]>> => {
   return ultraFetch.get({
     URL: "/manager/goods/synthesis/list",
     params,

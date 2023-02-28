@@ -10,6 +10,9 @@
     label-field="name"
     :disabled="disabled || searching"
     :clearable="true"
+    :multiple="multiple"
+    :showPath="showPath"
+    :cascade="cascade"
   />
 </template>
 
@@ -31,9 +34,12 @@ const props = withDefaults(
   defineProps<{
     defaultValue?: number;
     type?: CategoryType;
-    modelValue: CategoryTreeItem[];
+    modelValue: Partial<CategoryTreeItem>[];
     checkType?: "all" | "child";
     disabled?: boolean;
+    multiple?: boolean;
+    showPath?: boolean;
+    cascade?: boolean;
   }>(),
   {
     type: CategoryTypeValue.GOODS,
