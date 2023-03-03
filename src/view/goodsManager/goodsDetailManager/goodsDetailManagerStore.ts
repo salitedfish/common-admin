@@ -1,3 +1,5 @@
+import { AntinomyTypes } from "@/type/Common";
+
 export const ercStandardList = [
   // {
   //   value: "ERC_20",
@@ -108,5 +110,16 @@ export const ruleTypeList = [
   {
     value: RuleType.EXTENSION_GOODS,
     label: "推广指定商品",
+  },
+];
+
+export const ExchangePointsTypeList = [
+  {
+    label: "不可以",
+    value: AntinomyTypes.NOT,
+  },
+  {
+    label: "可以",
+    value: AntinomyTypes.YES,
   },
 ];

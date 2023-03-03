@@ -49,6 +49,7 @@ export enum RecordType {
   SECOND_BUY,
   SECOND_CANCEL,
   REFUND,
+  EXCHANGE,
 }
 export const recordTypeList = [
   {
@@ -90,5 +91,9 @@ export const recordTypeList = [
   {
     label: "退款",
     value: RecordType.REFUND,
+  },
+  {
+    label: "兑换",
+    value: RecordType.EXCHANGE,
   },
 ];

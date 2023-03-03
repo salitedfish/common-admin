@@ -87,6 +87,16 @@
           clearable
         />
       </n-form-item>
+      <n-form-item label="商品积分是否可互换:" required v-if="goodsInfo.extend.goodsType === GoodsType.POINT">
+        <n-select
+          v-model:value="goodsInfo.extend.exchangePointsType"
+          :options="ExchangePointsTypeList"
+          placeholder="请选择是否可以呼唤"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="formDisabled"
+        />
+      </n-form-item>
       <n-form-item label="商品等级:" v-if="goodsInfo.extend.goodsType === GoodsType.BLIND_BOX_PRIZE" required>
         <n-select
           v-model:value="goodsInfo.extend.goodsLevel"
@@ -202,12 +212,48 @@
         />
       </n-form-item>
     </n-card>
-    <n-card title="积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT" style="margin-bottom: 15px">
+    <n-card title="积分商品所需积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT" style="margin-bottom: 15px">
       <n-form-item label="积分编号:" required>
-        <n-input v-model:value="goodsInfo.points.pointsId" placeholder="请输入积分编号" :disabled="formDisabled"></n-input>
+        <n-space vertical>
+          <pointsSelect
+            v-model:points-select-list="pointsSelectList"
+            :max="1"
+            :disabled="formDisabled"
+            :multiple="true"
+            :pointsStates="[PointsState.PUBLISH_SUCCESS]"
+          ></pointsSelect>
+          <n-space v-for="(i, k) in pointsSelectList" :key="k">
+            <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
+            <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
       </n-form-item>
       <n-form-item label="所需数量:" required>
-        <n-input-number v-model:value="goodsInfo.points.needNum" placeholder="请输入所需积分数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+        <n-input-number
+          v-model:value="goodsInfo.points.needNum"
+          placeholder="请输入所需积分数量"
+          :min="1"
+          :style="{ width: inputWidth }"
+          :disabled="formDisabled"
+          :pointsStates="[PointsState.PUBLISH_SUCCESS]"
+        >
+          <template #suffix> 份 </template></n-input-number
+        >
+      </n-form-item>
+    </n-card>
+
+    <n-card title="商品可兑换积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT && goodsInfo.extend.exchangePointsType === AntinomyTypes.YES" style="margin-bottom: 15px">
+      <n-form-item label="积分编号:" required>
+        <n-space vertical>
+          <pointsSelect v-model:points-select-list="pointsExchangeSelectList" :max="1" :disabled="formDisabled" :multiple="true"></pointsSelect>
+          <n-space v-for="(i, k) in pointsExchangeSelectList" :key="k">
+            <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
+            <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+      <n-form-item label="可兑换数量:" required>
+        <n-input-number v-model:value="goodsInfo.exchangePoints.needNum" placeholder="请输入所需积分数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 份 </template></n-input-number
         >
       </n-form-item>
@@ -301,6 +347,7 @@ import { useRoute, useRouter } from "vue-router";
 import categorySelect from "@/component/common/categorySelect.vue";
 import commonUpload from "@/component/common/commonUpload.vue";
 import richTextEditor from "@/component/common/richTextEditor.vue";
+import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
 // 工具库
 import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
@@ -313,14 +360,21 @@ import {
   updateGoodsExtend as updateGoodsExtendRequest,
 } from "@/request/goods";
 // store
-import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpresType, RuleType } from "./goodsDetailManagerStore";
+import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpresType, RuleType, ExchangePointsTypeList } from "./goodsDetailManagerStore";
+import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../goodsListManager/goodsListManagerStore";
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
 // 类型
 import type { GoodsAddParams } from "@/type/GoodsManager";
 import type { CategoryTreeItem, FileUpload } from "@/type/Common";
+import { AntinomyTypes } from "@/type/Common";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
+
+type PointsSelectItem = {
+  pointsId: string;
+  pointsName: string;
+};
 
 const route = useRoute();
 const router = useRouter();
@@ -350,6 +404,72 @@ const editTypeLimit = computed(() => {
   return !!editType.value;
 });
 
+const goodsCategoryInfoList = ref<CategoryTreeItem[]>([]);
+const goodsCoverList = ref<FileUpload[]>([]);
+const goodsImagesList = ref<FileUpload[]>([]);
+const goodsVideoList = ref<FileUpload[]>([]);
+const goodsVideoCoverList = ref<FileUpload[]>([]);
+const pointsSelectList = ref<PointsSelectItem[]>([]);
+const pointsExchangeSelectList = ref<PointsSelectItem[]>([]);
+
+const goodsInfo = reactive<GoodsAddParams>({
+  spu: {
+    classifies: [],
+    ercStandard: null,
+    goodsCover: "",
+    goodsDes: "",
+    goodsDetail: "",
+    goodsId,
+    goodsImages: [],
+    goodsName: "",
+    goodsPrice: null,
+    goodsProps: {},
+    goodsPropsList: [], // 工具属性
+    goodsTotal: null,
+    goodsVideo: "",
+    goodsVideoCover: "",
+  },
+  extend: {
+    expressEndTime: null,
+    expressTime: null,
+    expressType: null,
+    goodsId,
+    goodsLevel: null,
+    goodsSaleTime: null,
+    goodsTabType: null,
+    goodsType: null,
+    normalSaleTime: null,
+    orderLimit: null,
+    priorityPrice: null,
+    ruleCalcTime: null,
+    saleType: null,
+    exchangePointsType: null,
+    traceHash: "",
+  },
+  points: {
+    goodsId,
+    needNum: null,
+    pointsId: null,
+  },
+  exchangePoints: {
+    goodsId,
+    needNum: null,
+    pointsId: null,
+  },
+  rules: [
+    {
+      endTime: null,
+      holdNum: null,
+      itemId: null,
+      limitNum: null,
+      startTime: null,
+      type: null,
+      unitNum: null,
+      categoryList: [], // 工具属性
+    },
+  ],
+});
+
 onMounted(() => {
   if (isCheck.value || isEdit.value) {
     getGoodsDetail();
@@ -366,7 +486,7 @@ const getGoodsDetail = async () => {
 };
 
 const initForm = (goodsDetail: GoodsAddParams) => {
-  const { spu, extend, rules, points } = goodsDetail;
+  const { spu, extend, rules, points, exchangePoints } = goodsDetail;
   // 处理spu
   spu.goodsPrice = Number(spu.goodsPrice);
   spu.goodsPropsList = [];
@@ -416,71 +536,32 @@ const initForm = (goodsDetail: GoodsAddParams) => {
       },
     ];
   }
-
+  // 如果是积分商品
+  if (extend.goodsType === GoodsType.POINT) {
+    pointsSelectList.value = [
+      {
+        pointsId: points.pointsId || "",
+        pointsName: points.pointsName || "",
+      },
+    ];
+    if (extend.exchangePointsType === AntinomyTypes.YES) {
+      pointsExchangeSelectList.value = [
+        {
+          pointsId: exchangePoints.pointsId || "",
+          pointsName: exchangePoints.pointsName || "",
+        },
+      ];
+    }
+  }
   goodsInfo.spu = spu;
   goodsInfo.extend = extend;
   goodsInfo.rules = rules;
   goodsInfo.points = points;
+  goodsInfo.exchangePoints = exchangePoints;
+
   if (goodsInfo.points) goodsInfo.points.needNum = Number(goodsInfo.points?.needNum);
+  if (goodsInfo.exchangePoints) goodsInfo.exchangePoints.needNum = Number(goodsInfo.exchangePoints?.needNum);
 };
-
-const goodsCategoryInfoList = ref<CategoryTreeItem[]>([]);
-const goodsCoverList = ref<FileUpload[]>([]);
-const goodsImagesList = ref<FileUpload[]>([]);
-const goodsVideoList = ref<FileUpload[]>([]);
-const goodsVideoCoverList = ref<FileUpload[]>([]);
-
-const goodsInfo = reactive<GoodsAddParams>({
-  spu: {
-    classifies: [],
-    ercStandard: null,
-    goodsCover: "",
-    goodsDes: "",
-    goodsDetail: "",
-    goodsId,
-    goodsImages: [],
-    goodsName: "",
-    goodsPrice: null,
-    goodsProps: {},
-    goodsPropsList: [], // 工具属性
-    goodsTotal: null,
-    goodsVideo: "",
-    goodsVideoCover: "",
-  },
-  extend: {
-    expressEndTime: null,
-    expressTime: null,
-    expressType: null,
-    goodsId,
-    goodsLevel: null,
-    goodsSaleTime: null,
-    goodsTabType: null,
-    goodsType: null,
-    normalSaleTime: null,
-    orderLimit: null,
-    priorityPrice: null,
-    ruleCalcTime: null,
-    saleType: null,
-    traceHash: "",
-  },
-  points: {
-    goodsId,
-    needNum: null,
-    pointsId: null,
-  },
-  rules: [
-    {
-      endTime: null,
-      holdNum: null,
-      itemId: null,
-      limitNum: null,
-      startTime: null,
-      type: null,
-      unitNum: null,
-      categoryList: [], // 工具属性
-    },
-  ],
-});
 
 watch(
   () => goodsInfo.spu.ercStandard,
@@ -554,6 +635,16 @@ const submitHandler = async () => {
   // 处理商品视频封面
   if (goodsVideoCoverList.value.length >= 1) {
     goodsInfo.spu.goodsVideoCover = goodsVideoCoverList.value[0].hashName;
+  }
+
+  // 如果是积分商品
+  if (goodsInfo.extend.goodsType === GoodsType.POINT) {
+    goodsInfo.points.pointsId = pointsSelectList.value[0]?.pointsId;
+    goodsInfo.points.pointsName = pointsSelectList.value[0]?.pointsName;
+    if (goodsInfo.extend.exchangePointsType === AntinomyTypes.YES) {
+      goodsInfo.exchangePoints.pointsId = pointsExchangeSelectList.value[0]?.pointsId;
+      goodsInfo.exchangePoints.pointsName = pointsExchangeSelectList.value[0]?.pointsName;
+    }
   }
   // 确认提交
   comfirmSubmit();

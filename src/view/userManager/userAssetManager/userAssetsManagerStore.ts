@@ -6,6 +6,7 @@ export enum FreezeType {
   EXPRESS,
   SYNTHESIS,
   REFUND,
+  EXCHANGE,
 }
 export const freezeTypeList = [
   {
@@ -35,6 +36,10 @@ export const freezeTypeList = [
   {
     label: "退款中",
     value: FreezeType.REFUND,
+  },
+  {
+    label: "兑换中",
+    value: FreezeType.EXCHANGE,
   },
 ];
 export const freezeReasonList = [
@@ -66,6 +71,10 @@ export const freezeReasonList = [
     label: "退款中",
     value: FreezeType.REFUND,
   },
+  {
+    label: "兑换中",
+    value: FreezeType.EXCHANGE,
+  },
 ];
 export enum RecordType {
   FIRST_BUY = 1,
@@ -73,8 +82,12 @@ export enum RecordType {
   AIRDROP,
   SYNTHESIS,
   BLINDBOX,
+  EXPRESS,
+  SECOND_SALE,
   SECOND_BUY,
+  SECOND_CANCEL,
   REFUND,
+  EXCHANGE,
 }
 export const recordTypeList = [
   {
@@ -98,11 +111,27 @@ export const recordTypeList = [
     value: RecordType.BLINDBOX,
   },
   {
+    label: "提货",
+    value: RecordType.EXPRESS,
+  },
+  {
+    label: "二级寄售",
+    value: RecordType.SECOND_SALE,
+  },
+  {
     label: "二级购买",
     value: RecordType.SECOND_BUY,
   },
   {
+    label: "二级取消",
+    value: RecordType.SECOND_CANCEL,
+  },
+  {
     label: "退款",
     value: RecordType.REFUND,
+  },
+  {
+    label: "兑换",
+    value: RecordType.EXCHANGE,
   },
 ];

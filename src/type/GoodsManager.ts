@@ -71,6 +71,7 @@ export type GoodsExtend = {
   ruleCalcTime: string | null;
   saleType: number | null;
   traceHash: string | null;
+  exchangePointsType: number | null;
 };
 
 export type GoodsAddParams = {
@@ -93,6 +94,13 @@ export type GoodsAddParams = {
   };
   extend: GoodsExtend;
   points: {
+    goodsId: string | null;
+    needNum: number | null;
+    pointsId: string | null;
+    pointsCover?: string;
+    pointsName?: string;
+  };
+  exchangePoints: {
     goodsId: string | null;
     needNum: number | null;
     pointsId: string | null;

@@ -44,6 +44,7 @@ const props = withDefaults(
   {
     type: CategoryTypeValue.GOODS,
     checkType: "child",
+    showPath: true,
   }
 );
 
