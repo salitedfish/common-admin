@@ -76,6 +76,7 @@
         >
       </n-form-item>
     </n-card>
+
     <n-card title="扩展信息：" style="margin-bottom: 15px">
       <n-form-item label="商品类型:" required>
         <n-select
@@ -176,7 +177,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES" required>
+      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES" required>
         <n-date-picker
           placeholder="请选择提货开始时间"
           v-model:formatted-value="goodsInfo.extend.expressTime"
@@ -187,7 +188,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpresType.YES" required>
+      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES" required>
         <n-date-picker
           placeholder="请选择提货结束时间"
           v-model:formatted-value="goodsInfo.extend.expressEndTime"
@@ -212,6 +213,7 @@
         />
       </n-form-item>
     </n-card>
+
     <n-card title="积分商品所需积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT" style="margin-bottom: 15px">
       <n-form-item label="积分编号:" required>
         <n-space vertical>
@@ -258,6 +260,7 @@
         >
       </n-form-item>
     </n-card>
+
     <n-card title="规则：" v-if="goodsInfo.extend.saleType === SaleType.RULES" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in goodsInfo.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
@@ -360,7 +363,7 @@ import {
   updateGoodsExtend as updateGoodsExtendRequest,
 } from "@/request/goods";
 // store
-import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpresType, RuleType, ExchangePointsTypeList } from "./goodsDetailManagerStore";
+import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpressType, RuleType, ExchangePointsTypeList } from "./goodsDetailManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../goodsListManager/goodsListManagerStore";
 import { useCommonStore } from "@/store/commonStore";

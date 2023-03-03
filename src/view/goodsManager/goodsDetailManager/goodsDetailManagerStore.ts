@@ -44,17 +44,17 @@ export const goodsLevelList = [
   },
 ];
 
-export enum ExpresType {
+export enum ExpressType {
   NO = 0,
   YES,
 }
 export const expresList = [
   {
-    value: ExpresType.NO,
+    value: ExpressType.NO,
     label: "不可提货",
   },
   {
-    value: ExpresType.YES,
+    value: ExpressType.YES,
     label: "可以提货",
   },
 ];
