@@ -102,7 +102,7 @@
         <n-select
           v-model:value="goodsInfo.extend.exchangePointsType"
           :options="ExchangePointsTypeList"
-          placeholder="请选择是否可以呼唤"
+          placeholder="请选择是否可以兑换"
           :style="{ width: inputWidth }"
           clearable
           :disabled="formDisabled"
