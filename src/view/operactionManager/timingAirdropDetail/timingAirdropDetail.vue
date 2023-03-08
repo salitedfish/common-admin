@@ -16,14 +16,14 @@
       <n-form-item label="执行时间类型：" required>
         <n-select :options="airDropTimeTypeList" v-model:value="formData.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
-      <n-form-item label="投放日(每月)：" v-show="formData.info.timeType === AirDropTimeType.MONTH" required>
-        <n-select :options="commonStore.monthMap" v-model:value="formData.info.timeDay" placeholder="请选择投放日"></n-select>
+      <n-form-item label="执行日(每月)：" v-show="formData.info.timeType === AirDropTimeType.MONTH" required>
+        <n-select :options="commonStore.monthMap" v-model:value="formData.info.timeDay" placeholder="请选择执行日"></n-select>
       </n-form-item>
-      <n-form-item label="投放日(每周)：" v-show="formData.info.timeType === AirDropTimeType.WEEK" required>
-        <n-select :options="commonStore.weekMap" v-model:value="formData.info.timeDay" placeholder="请选择投放日"></n-select>
+      <n-form-item label="执行日(每周)：" v-show="formData.info.timeType === AirDropTimeType.WEEK" required>
+        <n-select :options="commonStore.weekMap" v-model:value="formData.info.timeDay" placeholder="请选择执行日"></n-select>
       </n-form-item>
-      <n-form-item label="投放时：" required>
-        <n-select :options="commonStore.hourMap" v-model:value="formData.info.timeHour" placeholder="请选择持投放时"></n-select>
+      <n-form-item label="执行时间：" required>
+        <n-select :options="commonStore.hourMap" v-model:value="formData.info.timeHour" placeholder="请选择执行时间"></n-select>
       </n-form-item>
       <n-form-item label="计算名单距开始空投时间：" required>
         <n-input-number v-model:value="formData.info.expireMinute" placeholder="请输入时间分钟" style="width: 100%"> <template #suffix> 分钟 </template></n-input-number>

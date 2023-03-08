@@ -52,15 +52,12 @@ import { commonNotify, useListPage } from "@/util/common";
 // 网络请求
 import { getInvoiceList, addInvoice } from "@/request/order";
 // store
-import { useCommonStore } from "@/store/commonStore";
 import { invoiceStateList, invoiceTitleTypeList, invoiceTypeList, InvoiceState, approvialInvoiceList, ApprovialInvoice } from "./invoiceListManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
 import type { InvoiceListItem } from "@/type/Order";
 import type { FileUpload } from "@/type/Common";
-
-const commonStore = useCommonStore();
 
 // 列表渲染函数
 const createColumns = () => {

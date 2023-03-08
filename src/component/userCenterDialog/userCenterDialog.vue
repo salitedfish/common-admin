@@ -58,7 +58,6 @@ import { getUserInfo } from "@/util/auth";
 import { uploadProfilePicture } from "@/request/common";
 import { updateUserInfer } from "@/request/auth";
 // store
-import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 // 类型
 import { OrganizationTypes } from "@/type/Auth";
@@ -76,7 +75,6 @@ const emit = defineEmits<{
   (event: "update:showUserCenterModal", value: boolean): void;
 }>();
 
-const commonStore = useCommonStore();
 const authStore = useAuthStore();
 
 // 修改头像

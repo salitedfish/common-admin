@@ -178,7 +178,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES" required>
+      <n-form-item label="提货开始时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES">
         <n-date-picker
           placeholder="请选择提货开始时间"
           v-model:formatted-value="goodsInfo.extend.expressTime"
@@ -189,7 +189,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES" required>
+      <n-form-item label="提货结束时间:" v-if="goodsInfo.extend.expressType === ExpressType.YES">
         <n-date-picker
           placeholder="请选择提货结束时间"
           v-model:formatted-value="goodsInfo.extend.expressEndTime"
@@ -248,7 +248,7 @@
     <n-card title="商品可兑换积分：" v-if="goodsInfo.extend.exchangePointsType === AntinomyTypes.YES" style="margin-bottom: 15px">
       <n-form-item label="积分编号:" required>
         <n-space vertical>
-          <pointsSelect v-model:points-select-list="pointsExchangeSelectList" :max="1" :disabled="formDisabled" :multiple="true"></pointsSelect>
+          <pointsSelect v-if="!isCheck" v-model:points-select-list="pointsExchangeSelectList" :max="1" :disabled="formDisabled" :multiple="true"></pointsSelect>
           <n-space v-for="(i, k) in pointsExchangeSelectList" :key="k">
             <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
             <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
@@ -483,6 +483,7 @@ onMounted(() => {
 const getGoodsDetail = async () => {
   commonStore.pageLoading = true;
   const res = await getGoodsDetailRequest(goodsId as string);
+
   if (res && res.code === 0) {
     initForm(res.data);
   }
@@ -548,20 +549,22 @@ const initForm = (goodsDetail: GoodsAddParams) => {
         pointsName: points.pointsName || "",
       },
     ];
-    if (extend.exchangePointsType === AntinomyTypes.YES) {
-      pointsExchangeSelectList.value = [
-        {
-          pointsId: exchangePoints.pointsId || "",
-          pointsName: exchangePoints.pointsName || "",
-        },
-      ];
-    }
+  }
+
+  // 如果商品可兑换成积分
+  if (extend.exchangePointsType === AntinomyTypes.YES) {
+    pointsExchangeSelectList.value = [
+      {
+        pointsId: exchangePoints.pointsId || "",
+        pointsName: exchangePoints.pointsName || "",
+      },
+    ];
   }
   goodsInfo.spu = spu;
   goodsInfo.extend = extend;
   goodsInfo.rules = rules;
   goodsInfo.points = points;
-  goodsInfo.exchangePoints = exchangePoints;
+  goodsInfo.exchangePoints = exchangePoints || { goodsId, needNum: null, pointsId: null };
 
   if (goodsInfo.points) goodsInfo.points.needNum = Number(goodsInfo.points?.needNum);
   if (goodsInfo.exchangePoints) goodsInfo.exchangePoints.needNum = Number(goodsInfo.exchangePoints?.needNum);
@@ -645,10 +648,12 @@ const submitHandler = async () => {
   if (goodsInfo.extend.goodsType === GoodsType.POINT) {
     goodsInfo.points.pointsId = pointsSelectList.value[0]?.pointsId;
     goodsInfo.points.pointsName = pointsSelectList.value[0]?.pointsName;
-    if (goodsInfo.extend.exchangePointsType === AntinomyTypes.YES) {
-      goodsInfo.exchangePoints.pointsId = pointsExchangeSelectList.value[0]?.pointsId;
-      goodsInfo.exchangePoints.pointsName = pointsExchangeSelectList.value[0]?.pointsName;
-    }
+  }
+
+  // 如果商品可兑换成积分
+  if (goodsInfo.extend.exchangePointsType === AntinomyTypes.YES) {
+    goodsInfo.exchangePoints.pointsId = pointsExchangeSelectList.value[0]?.pointsId;
+    goodsInfo.exchangePoints.pointsName = pointsExchangeSelectList.value[0]?.pointsName;
   }
   // 确认提交
   comfirmSubmit();
