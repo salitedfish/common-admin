@@ -1,6 +1,6 @@
 <template>
   <section>
-    <input ref="inputDom" type="file" :accept="typeMapMethod[type].acceptType" hidden @change="handleUpload" />
+    <input ref="inputDom" type="file" :accept="typeInfo.acceptType" hidden @change="handleUpload" />
     <n-space v-if="type === 'img'">
       <n-dropdown trigger="hover" :options="options" @select="(key: string | number) => handleSelect(key, index)" v-for="(item, index) in fileList" :key="index">
         <n-image :src="item.fileUrl" width="100" height="100"></n-image>
@@ -34,7 +34,8 @@
       <n-button @click="handleClick" v-if="fileList.length < max" :loading="uploading" :disabled="disabled || uploading" style="width: 80px; height: 34px" dashed>上传</n-button>
     </n-space>
     <section class="upload-tip">
-      <span v-if="typeMapMethod[type].tipType">{{ `上传文件类型为：${typeMapMethod[type].tipType}；` }}</span> <span v-if="maxSize">{{ `上传文件最大为：${maxSize}mb` }}</span>
+      <span v-if="typeInfo.tipType">{{ `上传文件类型为：${typeInfo.tipType}；` }}</span>
+      <span v-if="maxSize">{{ `上传文件最大为：${maxSize}mb` }}</span>
     </section>
   </section>
 </template>
@@ -59,7 +60,6 @@ const props = defineProps<{
   type: keyof typeof typeMapMethod;
   max: number;
   disabled?: boolean;
-  maxSize?: number;
 }>();
 
 const typeMapMethod = {
@@ -67,19 +67,24 @@ const typeMapMethod = {
     method: uploadVideo,
     acceptType: "video/mp4",
     tipType: "mp4",
+    maxSize: 0,
   },
   img: {
     method: uploadImg,
-    acceptType: "image/png, image/jpeg",
-    tipType: "png、 jpeg",
+    acceptType: "image/png, image/jpeg, image/jpg, image/gif",
+    tipType: "png、 jpeg、jpg、gif",
+    maxSize: 3,
   },
 
   file: {
     method: uploadApp,
     acceptType: "application/vnd.android.package-archive",
     tipType: "apk",
+    maxSize: 0,
   },
 };
+const typeInfo = typeMapMethod[props.type];
+const maxSize = typeInfo.maxSize;
 
 const emit = defineEmits<{
   (name: "update:modelValue", payload: FileUpload[]): void;
@@ -98,13 +103,13 @@ const handleClick = () => {
 const handleUpload = async (event: any) => {
   const file = event.target?.files[0];
   if (file) {
-    if (props.maxSize && file.size > props.maxSize * 1000000) {
-      commonNotify("warning", `文件不能超过${props.maxSize}mb`);
+    if (maxSize && file.size > maxSize * 1024 * 1024) {
+      commonNotify("warning", `文件不能超过${maxSize}mb`);
       return;
     } else {
       uploading.value = true;
       try {
-        const res = await typeMapMethod[props.type].method(file);
+        const res = await typeInfo.method(file);
         if (res) {
           handleRes(res);
         }

@@ -269,7 +269,7 @@
         <n-input class="form-input" placeholder="请输入店铺联系方式，用于向用户展示" v-model:value="formData.storeContact" :disabled="submitLoading"></n-input>
       </n-form-item>
       <n-form-item label="店铺证照" path="storeLicense" v-if="formData.organizationType !== OrganizationTypes.MICRO">
-        <common-upload type="img" v-model="formData.storeLicense" :max="1" :disabled="submitLoading" :maxSize="2"></common-upload>
+        <common-upload type="img" v-model="formData.storeLicense" :max="1" :disabled="submitLoading" ></common-upload>
       </n-form-item>
     </n-form>
     <n-button @click="submitHandler" type="primary" block :loading="submitLoading" :disabled="submitLoading">提交</n-button>
@@ -285,6 +285,8 @@ import type { FormInst, FormRules, FormItemRule, UploadFileInfo } from "naive-ui
 import CommonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 import { usePhoneLegal, useIDCargLegal, useEmailLegal, useTimeFormat } from "@ultra-man/noa";
+//store
+import { useCommonStore } from "@/store/commonStore";
 // 自定义工具
 import { useBankAddressCodes, useNowTimeStamp, useInfinityTimeStamp, commonNotify } from "@/util";
 // 网络请求
@@ -299,6 +301,7 @@ const emit = defineEmits<{
 }>();
 
 const token = localStorage.getItem("token") || "";
+const commonStore = useCommonStore();
 
 // 获取hook数据
 const now = useNowTimeStamp();

@@ -11,9 +11,8 @@
         :scroll-x="listXWidth"
         :max-height="listYHeight"
         :loading="searching"
-        @update:checked-row-keys="handleCheck"
-        :checked-row-keys="goodsIdSelectedList"
         :row-key="rowKey"
+        v-model:checked-row-keys="goodsIdSelectedList"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">
@@ -27,6 +26,7 @@
 
 <script lang="ts">
 import screenSection from "./screenSection.vue";
+import {} from "@ultra-man/noa";
 
 import { getGoodsList as getListRequest } from "@/request/goods";
 
@@ -35,7 +35,7 @@ import type { DataTableColumns } from "naive-ui";
 import { goodsTabList } from "@/view/goodsManager/goodsDetailManager/goodsDetailManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { useListPage } from "@/util/common";
-import { defineComponent, computed } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import type { DataTableRowKey } from "naive-ui";
 import type { GetEnumValue } from "@/type/Common";
 import type { GoodsFuncType } from "@/type/GoodsManager";
@@ -64,20 +64,28 @@ const emit = defineEmits<{
   (event: "update:goodsSelectedList", value: { goodsId: string | number; goodsName: string }[]): void;
 }>();
 
-const goodsIdSelectedList = computed(() => {
-  return props.goodsSelectedList?.map((item) => item.goodsId);
-});
+// 告诉列表依据哪个数据当作key，这里参照id加name
+const rowKey = (row: GoodsListItem) => row.goodsId + "id-name" + row.goodsName;
 
-const rowKey = (row: GoodsListItem) => row.goodsId;
-const handleCheck = (rowKeys: DataTableRowKey[], rows: unknown[]) => {
-  const list = (rows as GoodsListItem[]).map((item) => {
-    return {
-      goodsId: item.goodsId,
-      goodsName: item.goodsName,
-    };
-  });
-  emit("update:goodsSelectedList", list);
-};
+// 设置列表选择的key，这里的key用id加name, 以便向外部列表提供id和name
+const goodsIdSelectedList = ref<DataTableRowKey[]>([]);
+goodsIdSelectedList.value = props.goodsSelectedList.map((item) => item.goodsId + "id-name" + item.goodsName);
+
+// 当列表选择的改变时，改变外部的列表
+watch(
+  () => goodsIdSelectedList.value.length,
+  () => {
+    const selectList = goodsIdSelectedList.value.map((key) => {
+      // 将key拆成id和name
+      const keyArr = (key as string).split("id-name");
+      return {
+        goodsId: keyArr[0],
+        goodsName: keyArr[1],
+      };
+    });
+    emit("update:goodsSelectedList", selectList);
+  }
+);
 
 // 列表规则项
 const createColumns = () => {

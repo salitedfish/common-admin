@@ -2,7 +2,7 @@
   <n-form label-placement="left" label-width="120px" label-align="left">
     <n-card title="合成规则：">
       <n-space :vertical="true">
-        <n-card :title="'规则' + (key + 1)" v-for="(item, key) in syntheticRules" :key="key">
+        <n-card :title="'材料' + (key + 1)" v-for="(item, key) in syntheticRules" :key="key">
           <n-form-item label="规则类型" required>
             <n-select v-model:value="item.ruleType" placeholder="请选择规则类型" clearable :options="ruleTypes" :disabled="!editAble || submiting"></n-select>
           </n-form-item>

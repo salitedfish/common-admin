@@ -32,16 +32,16 @@
         </n-card>
       </n-form-item>
       <n-form-item label="商品封面:" required>
-        <common-upload type="img" v-model="goodsCoverList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
+        <common-upload type="img" v-model="goodsCoverList" :max="1" :disabled="formDisabled || editTypeLimit"></common-upload>
       </n-form-item>
       <n-form-item label="商品图片:" required>
-        <common-upload type="img" v-model="goodsImagesList" :max="6" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
+        <common-upload type="img" v-model="goodsImagesList" :max="6" :disabled="formDisabled || editTypeLimit"></common-upload>
       </n-form-item>
       <n-form-item label="商品视频:">
         <common-upload type="video" v-model="goodsVideoList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="100"></common-upload>
       </n-form-item>
       <n-form-item label="视频封面:">
-        <common-upload type="img" v-model="goodsVideoCoverList" :max="1" :disabled="formDisabled || editTypeLimit" :maxSize="2"></common-upload>
+        <common-upload type="img" v-model="goodsVideoCoverList" :max="1" :disabled="formDisabled || editTypeLimit"></common-upload>
       </n-form-item>
       <n-form-item label="商品价格:" required>
         <n-input-number
@@ -88,17 +88,7 @@
           clearable
         />
       </n-form-item>
-      <n-form-item label="商品积分是否可互换:" required v-if="goodsInfo.extend.goodsType === GoodsType.POINT">
-        <n-select
-          v-model:value="goodsInfo.extend.exchangePointsType"
-          :options="ExchangePointsTypeList"
-          placeholder="请选择是否可以呼唤"
-          :style="{ width: inputWidth }"
-          clearable
-          :disabled="formDisabled"
-        />
-      </n-form-item>
-      <n-form-item label="商品等级:" v-if="goodsInfo.extend.goodsType === GoodsType.BLIND_BOX_PRIZE" required>
+      <n-form-item label="盲盒奖品等级:" v-if="goodsInfo.extend.goodsType === GoodsType.BLIND_BOX_PRIZE" required>
         <n-select
           v-model:value="goodsInfo.extend.goodsLevel"
           :options="goodsLevelList"
@@ -108,6 +98,17 @@
           :disabled="formDisabled"
         />
       </n-form-item>
+      <n-form-item label="商品是否可兑换成积分:" required>
+        <n-select
+          v-model:value="goodsInfo.extend.exchangePointsType"
+          :options="ExchangePointsTypeList"
+          placeholder="请选择是否可以呼唤"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="formDisabled"
+        />
+      </n-form-item>
+
       <n-form-item label="销售开始时间:" required>
         <n-date-picker
           placeholder="请选择销售开始时间"
@@ -244,7 +245,7 @@
       </n-form-item>
     </n-card>
 
-    <n-card title="商品可兑换积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT && goodsInfo.extend.exchangePointsType === AntinomyTypes.YES" style="margin-bottom: 15px">
+    <n-card title="商品可兑换积分：" v-if="goodsInfo.extend.exchangePointsType === AntinomyTypes.YES" style="margin-bottom: 15px">
       <n-form-item label="积分编号:" required>
         <n-space vertical>
           <pointsSelect v-model:points-select-list="pointsExchangeSelectList" :max="1" :disabled="formDisabled" :multiple="true"></pointsSelect>

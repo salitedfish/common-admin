@@ -31,7 +31,7 @@
               <n-input class="form-input" placeholder="请输入店铺联系方式，用于向用户展示" v-model:value="formData.merchantContact" :disabled="infoUpdateing"></n-input>
             </n-form-item>
             <n-form-item label="店铺证照" path="storeLicense" v-if="authStore.userInfo?.merchantType !== OrganizationTypes.MICRO">
-              <common-upload type="img" v-model="formData.merchantLicense" :max="1" :disabled="infoUpdateing" :maxSize="2"></common-upload>
+              <common-upload type="img" v-model="formData.merchantLicense" :max="1" :disabled="infoUpdateing"></common-upload>
             </n-form-item>
             <n-button type="primary" @click="submitUpdateInfo" block style="margin: 5px 0" :loading="infoUpdateing" :disabled="infoUpdateing">确认更新信息</n-button>
           </n-card>
@@ -58,6 +58,7 @@ import { getUserInfo } from "@/util/auth";
 import { uploadProfilePicture } from "@/request/common";
 import { updateUserInfer } from "@/request/auth";
 // store
+import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 // 类型
 import { OrganizationTypes } from "@/type/Auth";
@@ -75,6 +76,7 @@ const emit = defineEmits<{
   (event: "update:showUserCenterModal", value: boolean): void;
 }>();
 
+const commonStore = useCommonStore();
 const authStore = useAuthStore();
 
 // 修改头像

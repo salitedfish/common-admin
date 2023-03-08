@@ -13,8 +13,7 @@
         :scroll-x="listXWidth"
         :max-height="listYHeight"
         :loading="searching"
-        @update:checked-row-keys="handleCheck"
-        :checked-row-keys="pointsIdSelectedList"
+        v-model:checked-row-keys="pointsIdSelectedList"
         :row-key="rowKey"
       ></n-data-table>
       <n-card>
@@ -29,7 +28,7 @@
 
 <script lang="ts">
 // 框架
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, watch } from "vue";
 // 组件库
 // 自定义组件
 import screenSection from "./screenSection.vue";
@@ -130,20 +129,23 @@ const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searchin
   params: { pointsStates: props.pointsStates },
 });
 
-const pointsIdSelectedList = computed(() => {
-  return props.pointsSelectList?.map((item) => item.pointsId);
-});
+const pointsIdSelectedList = ref<DataTableRowKey[]>([]);
+pointsIdSelectedList.value = props.pointsSelectList.map((item) => item.pointsId + "id-name" + item.pointsName);
 
-const rowKey = (row: PointsItem) => row.pointsId;
-const handleCheck = (rowKeys: DataTableRowKey[], rows: unknown[]) => {
-  const list = (rows as PointsItem[]).map((item) => {
-    return {
-      pointsId: item.pointsId,
-      pointsName: item.pointsName,
-    };
-  });
-  emit("update:pointsSelectList", list);
-};
+const rowKey = (row: PointsSelectItem) => row.pointsId + "id-name" + row.pointsName;
+watch(
+  () => pointsIdSelectedList.value.length,
+  () => {
+    const selectList = pointsIdSelectedList.value.map((key) => {
+      const keyArr = (key as string).split("id-name");
+      return {
+        pointsId: keyArr[0],
+        pointsName: keyArr[1],
+      };
+    });
+    emit("update:pointsSelectList", selectList);
+  }
+);
 
 const comfirmSelect = () => {
   showModel.value = false;

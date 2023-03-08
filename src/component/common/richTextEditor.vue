@@ -58,7 +58,10 @@ const tinymceInit = {
   toolbar_mode: "none",
   object_resizing: false,
   toolbar:
-    " fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough charmap insertdatetime hr alignleft aligncenter alignright alignjustify  table numlist bullist wordcount ",
+    " fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough charmap insertdatetime hr alignleft aligncenter alignright alignjustify  table numlist bullist wordcount image ",
+  // file_picker_callback: (cb, value) => {
+  //   console.log(123);
+  // },
 
   images_upload_handler: async function (blobInfo: any, success: any) {
     const res = await uploadImg(blobInfo.blob());
