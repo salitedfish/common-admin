@@ -11,7 +11,7 @@
             type="password"
             show-password-on="mousedown"
             placeholder="请输入密码"
-            :maxlength="8"
+            :maxlength="16"
             v-model:value="formData.password"
             :disabled="registerState"
           ></n-input>
