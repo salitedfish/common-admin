@@ -916,7 +916,7 @@ const genRequestData = (formData: FormDataType) => {
     storeDescription,
     storeAddress,
     storeContact,
-    storeLicense: storeLicense[0].hashName,
+    storeLicense: storeLicense[0]?.hashName,
   };
   return data;
 };
