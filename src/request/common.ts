@@ -25,7 +25,7 @@ export const getCities = (provinceCode: number): RequestReturn.GetCities => {
 };
 
 // 微信图片上传
-export const uploadWCImg = (file: File) => {
+export const uploadWCImg = (file: File): Promise<Return<string>> => {
   const data = new FormData();
   data.append("file", file);
   return ultraFetch.post(

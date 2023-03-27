@@ -278,7 +278,7 @@
 
 <script lang="ts" setup>
 // 框架
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 // 组件库
 import type { FormInst, FormRules, FormItemRule, UploadFileInfo } from "naive-ui";
 // 自定义组件
@@ -290,7 +290,7 @@ import { usePhoneLegal, useIDCargLegal, useEmailLegal, useTimeFormat } from "@ul
 import { useBankAddressCodes, useNowTimeStamp, useInfinityTimeStamp, commonNotify } from "@/util";
 // 网络请求
 import { uploadWCImgUrl } from "@/request/common";
-import { submitMerchantInfo as submitMerchantInfoRequest } from "@/request/auth";
+import { submitMerchantInfo as submitMerchantInfoRequest, getAllowMicro } from "@/request/auth";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type { FileUpload } from "@/type/Common";
 import { OrganizationTypes } from "@/type/Auth";
@@ -307,7 +307,7 @@ const infinity = useInfinityTimeStamp();
 const { bankAddressCodes, getCities } = useBankAddressCodes();
 
 // 主体类型数据依据
-const organizationTypes = [
+const organizationTypes = ref([
   {
     label: "企业",
     value: OrganizationTypes.ENTERPRISE,
@@ -316,11 +316,7 @@ const organizationTypes = [
     label: "个体工商户",
     value: OrganizationTypes.INDIVIDUAL,
   },
-  {
-    label: "小微商户",
-    value: OrganizationTypes.MICRO,
-  },
-];
+]);
 
 // 账户类型数据依据
 enum BankAccountTypes {
@@ -347,7 +343,7 @@ const formDom = ref<FormInst | null>(null);
 
 // 表单数据
 const formData = reactive({
-  organizationType: organizationTypes[0].value,
+  organizationType: organizationTypes.value[0].value,
   //
   businessLicenseFileList: [] as UploadFileInfo[],
   businessLicenseNumber: "",
@@ -920,6 +916,17 @@ const genRequestData = (formData: FormDataType) => {
   };
   return data;
 };
+
+// 初始化
+onMounted(async () => {
+  const res = await getAllowMicro();
+  if (res && res.data) {
+    organizationTypes.value.push({
+      label: "小微商户",
+      value: OrganizationTypes.MICRO,
+    });
+  }
+});
 </script>
 
 <style scoped lang="less">

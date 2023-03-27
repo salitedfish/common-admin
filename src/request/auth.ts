@@ -1,4 +1,5 @@
 import { ultraFetch } from "./init";
+import type { Return } from "@/type/Common";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type * as RequestParam from "@/request/type/RequestParam";
 
@@ -75,5 +76,12 @@ export const submitMerchantInfo = (data: RequestParam.SubmitMerchantInfo): Reque
 export const getMerchantApplyResult = (): RequestReturn.GetMerchantApplyResult => {
   return ultraFetch.get({
     URL: "/manager/merchant-wechat/apply/query",
+  });
+};
+
+// 获取是否支持小微商户
+export const getAllowMicro = (): Promise<Return<boolean>> => {
+  return ultraFetch.get({
+    URL: "/manager/merchant-wechat/apply/micro-allow",
   });
 };

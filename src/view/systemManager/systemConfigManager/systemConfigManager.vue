@@ -19,6 +19,7 @@ import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
 import { useListNoPage, commonNotify, useBinaryToBase64 } from "@/util/common";
 // 网络请求
+import { uploadWCImg } from "@/request/common";
 import { getSystemConfigList, editSystemConfig } from "@/request/system";
 // store
 import { ValueType } from "./systemConfigManagerStore";
@@ -51,7 +52,7 @@ const createColumns = () => {
       align: "left",
       width: 160,
       render: (row) => {
-        if (row.valueType === ValueType.TEXT || row.valueType === ValueType.BASE64) {
+        if ([ValueType.BASE64, ValueType.TEXT, ValueType.WXIMG].includes(row.valueType)) {
           return h(
             NEllipsis,
             {},
@@ -74,6 +75,7 @@ const createColumns = () => {
       width: 160,
       render: (row) => {
         if (row.valueType === ValueType.TEXT) {
+          // 纯文本
           return h(NInput, {
             value: row.newValue,
             onUpdateValue: (newValue) => {
@@ -82,6 +84,7 @@ const createColumns = () => {
             placeholder: `请输入${row.description}`,
           });
         } else if (row.valueType === ValueType.IMG) {
+          // 上传图片
           const fileList = ref<FileUpload[]>([]);
           if (row.newValue) {
             fileList.value.push({
@@ -101,6 +104,7 @@ const createColumns = () => {
             maxSize: 2,
           });
         } else if (row.valueType === ValueType.BASE64) {
+          // 选择图片上传base64
           return [
             h(NInput, {
               value: row.newValue,
@@ -114,6 +118,32 @@ const createColumns = () => {
                 type: "primary",
                 secondary: true,
                 onClick: () => {
+                  inputDom.value?.click();
+                  currentRow.value = row;
+                },
+              },
+              {
+                default: () => "选择文件",
+              }
+            ),
+          ];
+        } else if (row.valueType === ValueType.WXIMG) {
+          // 选择图片上传到微信，保存返回的值
+          return [
+            h(NInput, {
+              value: row.newValue,
+              disabled: true,
+              placeholder: `请选择${row.description}`,
+            }),
+            h(
+              NButton,
+              {
+                size: "small",
+                type: "primary",
+                secondary: true,
+                onClick: () => {
+                  console.log(1111111);
+
                   inputDom.value?.click();
                   currentRow.value = row;
                 },
@@ -146,7 +176,7 @@ const createColumns = () => {
               loading: loading.value,
               onClick: async () => {
                 loading.value = true;
-                const resNewValue = [ValueType.TEXT, ValueType.BASE64].includes(row.valueType) ? row.newValue : useFileNameFromURL(row.newValue)(true);
+                const resNewValue = [ValueType.TEXT, ValueType.BASE64, ValueType.WXIMG].includes(row.valueType) ? row.newValue : useFileNameFromURL(row.newValue)(true);
                 const res = await editSystemConfig({ key: row.key, newValue: resNewValue });
                 if (res) {
                   commonNotify("success", "系统配置保存成功");
@@ -171,12 +201,18 @@ const createColumns = () => {
 
 const { getList, list, listXWidth, listYHeight, searching } = useListNoPage(getSystemConfigList, createColumns);
 
-// 选择文件并计算base64
+// 选择文件并计算base64或者上传到微信
 const handleUpload = async (event: any) => {
   const file = event.target?.files[0];
   if (file) {
-    const base64 = await useBinaryToBase64(file);
-    currentRow.value ? (currentRow.value.newValue = base64) : null;
+    if (currentRow.value?.valueType === ValueType.BASE64) {
+      const base64 = await useBinaryToBase64(file);
+      console.log(base64);
+      currentRow.value.newValue = base64;
+    } else if (currentRow.value?.valueType === ValueType.WXIMG) {
+      const res = await uploadWCImg(file);
+      res.data ? (currentRow.value.newValue = res.data) : null;
+    }
     if (inputDom.value) (inputDom.value as HTMLInputElement).value = "";
   }
 };
