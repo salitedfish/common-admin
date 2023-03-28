@@ -50,9 +50,7 @@
       {{ handleReason(item.reject_reason, key) }}
     </div>
   </div>
-  <n-button @click="preStepHandler" class="re-apply" block type="primary" v-if="[ApplyState.REJECTED, ApplyState.NEED_APPOINT_ACCOUNT].includes(applyResult.state)"
-    >重新填写信息</n-button
-  >
+  <n-button @click="preStepHandler" class="re-apply" block type="primary" v-if="[ApplyState.REJECTED, ApplyState.CANCELED].includes(applyResult.state)">重新填写信息</n-button>
   <n-button class="success-btn" v-if="applyResult.state === ApplyState.SCUCESS" type="primary" @click="goManagerHandler">跳转管理页面</n-button>
 </template>
 
@@ -96,38 +94,38 @@ enum ApplyState {
   INIT,
 }
 
-const applyStateInfo = reactive([
-  {
-    stateText: "校验中...",
-  },
-  {
-    stateText: "需要使用指定账户汇款",
-  },
-  {
-    stateText: "使用微信扫码法人验证链接",
-  },
-  {
-    stateText: "审核中...",
-  },
-  {
-    stateText: "已驳回",
-  },
-  {
-    stateText: "需要使用微信扫码",
-  },
-  {
-    stateText: "申请成功",
-  },
-  {
-    stateText: "已冻结",
-  },
-  {
-    stateText: "已作废",
-  },
-  {
-    stateText: "信息获取中...",
-  },
-]);
+// const applyStateInfo = reactive([
+//   {
+//     stateText: "校验中...",
+//   },
+//   {
+//     stateText: "需要使用指定账户汇款",
+//   },
+//   {
+//     stateText: "使用微信扫码法人验证链接",
+//   },
+//   {
+//     stateText: "审核中...",
+//   },
+//   {
+//     stateText: "已驳回",
+//   },
+//   {
+//     stateText: "需要使用微信扫码",
+//   },
+//   {
+//     stateText: "申请成功",
+//   },
+//   {
+//     stateText: "已冻结",
+//   },
+//   {
+//     stateText: "已作废",
+//   },
+//   {
+//     stateText: "信息获取中...",
+//   },
+// ]);
 const applyResult = reactive<{
   state: ApplyState;
   result?: any;
