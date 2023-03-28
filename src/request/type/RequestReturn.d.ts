@@ -39,6 +39,7 @@ export type GetCities = Promise<
 export type SubmitMerchantInfo = Promise<Return<Record<string, unknown>>>;
 export type GetMerchantApplyResult = Promise<
   Return<{
+    message: string;
     state: number;
     result: any;
   }>

@@ -123,7 +123,9 @@
         </n-radio-group>
       </n-form-item>
       <n-form-item label="开户银行" path="accountBank">
-        <n-input class="form-input" placeholder="请输入开户银行" v-model:value="formData.accountBank" :disabled="submitLoading"></n-input>
+        <n-select v-model:value="formData.accountBank" :options="accountBankList" placeholder="请选择开户银行" :disabled="submitLoading" clearable />
+
+        <!-- <n-input class="form-input" placeholder="请输入开户银行" v-model:value="formData.accountBank" :disabled="submitLoading"></n-input> -->
       </n-form-item>
       <n-form-item label="开户名称" path="accountName">
         <n-input class="form-input" placeholder="请输入开户名称" v-model:value="formData.accountName" :disabled="submitLoading"></n-input>
@@ -131,8 +133,11 @@
       <n-form-item label="银行账号" path="accountNumber">
         <n-input class="form-input" placeholder="请输入银行账号" v-model:value="formData.accountNumber" :disabled="submitLoading"></n-input>
       </n-form-item>
-      <n-form-item label="开户银行省市" path="bankAddressCode">
-        <n-cascader
+      <n-form-item label="开户银行省市区编号" path="bankAddressCode">
+        <n-input class="form-input" placeholder="请输入开户银行省市区编号" v-model:value="formData.bankAddressCode" :disabled="submitLoading"></n-input>
+        <n-button type="primary" @click="downLoadCityCodeRecord">下载《省市区编号对照表》</n-button>
+
+        <!-- <n-cascader
           v-model:value="formData.bankAddressCode"
           :options="bankAddressCodes"
           check-strategy="child"
@@ -141,10 +146,11 @@
           :show-path="true"
           :disabled="submitLoading"
           placeholder="请选择开户银行省市"
-        ></n-cascader>
+        ></n-cascader> -->
       </n-form-item>
       <n-form-item label="开户银行全称" path="bankName">
         <n-input class="form-input" placeholder="请输入开户银行" v-model:value="formData.bankName" :disabled="submitLoading"></n-input>
+        <n-button type="primary" @click="downloadLoadBankFullNameRecord">下载《开户银行全称（含支行）对照表》</n-button>
       </n-form-item>
 
       <n-divider />
@@ -285,9 +291,11 @@ import type { FormInst, FormRules, FormItemRule, UploadFileInfo } from "naive-ui
 import CommonUpload from "@/component/common/commonUpload.vue";
 // 工具库
 import { usePhoneLegal, useIDCargLegal, useEmailLegal, useTimeFormat } from "@ultra-man/noa";
+// store
+import { accountBankList } from "./settleStore";
 
 // 自定义工具
-import { useBankAddressCodes, useNowTimeStamp, useInfinityTimeStamp, commonNotify } from "@/util";
+import { useBankAddressCodes, useNowTimeStamp, useInfinityTimeStamp, commonNotify, downLoadCityCodeRecord, downloadLoadBankFullNameRecord } from "@/util";
 // 网络请求
 import { uploadWCImgUrl } from "@/request/common";
 import { submitMerchantInfo as submitMerchantInfoRequest, getAllowMicro } from "@/request/auth";
@@ -304,7 +312,7 @@ const token = localStorage.getItem("token") || "";
 // 获取hook数据
 const now = useNowTimeStamp();
 const infinity = useInfinityTimeStamp();
-const { bankAddressCodes, getCities } = useBankAddressCodes();
+// const { bankAddressCodes, getCities } = useBankAddressCodes();
 
 // 主体类型数据依据
 const organizationTypes = ref([
@@ -359,7 +367,7 @@ const formData = reactive({
   idCardAddress: "",
   //
   bankAccountType: bankAccountTypes[0].value,
-  accountBank: "",
+  accountBank: undefined,
   accountName: "",
   accountNumber: "",
   bankAddressCode: "",
@@ -577,7 +585,7 @@ const formDataRules: FormRules = {
       required: true,
       validator(rule: FormItemRule, value: string) {
         if (!value) {
-          return new Error("请选择银行省市编码！");
+          return new Error("请输入银行省市区编号！");
         }
         return true;
       },
@@ -895,7 +903,8 @@ const genRequestData = (formData: FormDataType) => {
     accountBank,
     accountName,
     accountNumber,
-    bankAddressCode: String(Number(bankAddressCode) - 100000),
+    // bankAddressCode: String(Number(bankAddressCode) - 100000),
+    bankAddressCode,
     bankName,
     contactType,
     contactPhone,

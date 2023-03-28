@@ -45,7 +45,7 @@ export type SubmitMerchantInfo = {
   idCardAddress: string;
   //
   bankAccountType: number;
-  accountBank: string;
+  accountBank?: string;
   accountName: string;
   accountNumber: string;
   bankAddressCode: string;

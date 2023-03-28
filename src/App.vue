@@ -1,15 +1,15 @@
 <template>
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" :theme="themeList[activeTheme].lib" :theme-overrides="themeList[activeTheme].libThemeOverrides">
-    <n-theme-editor>
-      <n-global-style />
-      <n-loading-bar-provider>
-        <n-dialog-provider>
-          <n-notification-provider>
-            <RouterView />
-          </n-notification-provider>
-        </n-dialog-provider>
-      </n-loading-bar-provider>
-    </n-theme-editor>
+    <!-- <n-theme-editor> -->
+    <n-global-style />
+    <n-loading-bar-provider>
+      <n-dialog-provider>
+        <n-notification-provider>
+          <RouterView />
+        </n-notification-provider>
+      </n-dialog-provider>
+    </n-loading-bar-provider>
+    <!-- </n-theme-editor> -->
   </n-config-provider>
 </template>
 

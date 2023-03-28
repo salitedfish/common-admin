@@ -142,8 +142,6 @@ const createColumns = () => {
                 type: "primary",
                 secondary: true,
                 onClick: () => {
-                  console.log(1111111);
-
                   inputDom.value?.click();
                   currentRow.value = row;
                 },

@@ -1,5 +1,6 @@
 <template>
-  <div class="apply-state" :class="activeClass">{{ applyStateInfo[applyResult.state].stateText }}</div>
+  <!-- <div class="apply-state" :class="activeClass">{{ applyStateInfo[applyResult.state].stateText }}</div> -->
+  <div class="apply-state" :class="activeClass">{{ applyResult.message }}</div>
   <div class="apply-result-account" v-if="[ApplyState.NEED_APPOINT_ACCOUNT].includes(applyResult.state)">
     <div class="account-item">
       <div class="label">付款户名:</div>
@@ -130,6 +131,7 @@ const applyStateInfo = reactive([
 const applyResult = reactive<{
   state: ApplyState;
   result?: any;
+  message?: string;
 }>({
   state: ApplyState.INIT,
 });
@@ -152,6 +154,7 @@ onMounted(async () => {
   if (res && res.code === 0) {
     applyResult.state = res.data.state;
     applyResult.result = res.data.result;
+    applyResult.message = res.data.message;
   }
   loadingBar.finish();
 });
@@ -193,7 +196,7 @@ const goManagerHandler = () => {
 .apply-result-img {
   img {
     display: block;
-    width: 40%;
+    // width: 40%;
     margin: 0 auto;
   }
 }
