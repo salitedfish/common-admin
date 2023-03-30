@@ -229,24 +229,32 @@
           <n-button @click="formData.contactIdCardEnd = infinity" :disabled="submitLoading">长期有效</n-button>
         </n-form-item>
         <n-form-item label="业务办理授权函" path="businessAuthorizationLetterFileList">
-          <n-upload
-            :disabled="submitLoading"
-            list-type="image-card"
-            accept="image/png, image/jpeg"
-            :max="1"
-            :action="uploadWCImgUrl"
-            v-model:file-list="formData.businessAuthorizationLetterFileList"
-            :onFinish="
-              (options) => {
-                onUploadFinish(options, 'businessAuthorizationLetterFileList');
-              }
-            "
-            :headers="{
-              authentication: token,
-            }"
-            :with-credentials="true"
-          >
-          </n-upload>
+          <div>
+            <div>
+              <n-upload
+                :disabled="submitLoading"
+                list-type="image-card"
+                accept="image/png, image/jpeg"
+                :max="1"
+                :action="uploadWCImgUrl"
+                v-model:file-list="formData.businessAuthorizationLetterFileList"
+                :onFinish="
+                  (options) => {
+                    onUploadFinish(options, 'businessAuthorizationLetterFileList');
+                  }
+                "
+                :headers="{
+                  authentication: token,
+                }"
+                :with-credentials="true"
+              >
+              </n-upload>
+            </div>
+
+            <div class="tip">
+              请参照下载打印 <a href="https://kf.qq.com/faq/220509Y3Yvym220509fQvYR7.html " target="_blank">《业务办理授权函》</a> ，全部信息需打印，并加盖公章，不支持手写商户信息
+            </div>
+          </div>
         </n-form-item>
       </section>
 
@@ -941,5 +949,9 @@ onMounted(async () => {
 <style scoped lang="less">
 .form {
   padding: 16px 0;
+}
+.tip {
+  margin-top: 5px;
+  color: var(--font-color-danger);
 }
 </style>
