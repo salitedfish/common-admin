@@ -70,8 +70,15 @@
         <n-form-item label="奖励数量:" required>
           <n-input-number v-model:value="item.unitNum" placeholder="请输入每单位数量奖励数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
-        <n-form-item label="奖励上限:" required>
-          <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限，0表示无上限" :min="0" style="width: 100%"><template #suffix> 份 </template></n-input-number>
+        <n-form-item label="单次奖励上限:" required>
+          <n-input-number v-model:value="item.limitNum" placeholder="请输入单次奖励上限，0表示无上限" :min="0" style="width: 100%"
+            ><template #suffix> 份 </template></n-input-number
+          >
+        </n-form-item>
+        <n-form-item label="总奖励上限:" required>
+          <n-input-number v-model:value="item.totalUnitNum" placeholder="请输入总奖励上限，0表示无上限" :min="0" style="width: 100%"
+            ><template #suffix> 份 </template></n-input-number
+          >
         </n-form-item>
         <template #footer> <n-button block secondary type="warning" v-if="!isCheck" :disabled="submiting" @click="deleteRule(key)">-删除规则</n-button> </template>
       </n-card>
@@ -145,6 +152,7 @@ const formData = reactive<TimingAirDropAddParams>({
       holdTimeType: null,
       itemId: "",
       limitNum: null,
+      totalUnitNum: null,
       type: null,
       unitNum: null,
       categoryList: [],
@@ -181,6 +189,7 @@ const addRule = () => {
     holdTimeType: null,
     itemId: "",
     limitNum: null,
+    totalUnitNum: null,
     type: null,
     unitNum: null,
     categoryList: [],

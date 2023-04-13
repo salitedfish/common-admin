@@ -131,6 +131,12 @@ const createColumns = () => {
       },
     },
     {
+      title: "vip等级",
+      key: "vipLevel",
+      align: "center",
+      width: 100,
+    },
+    {
       title: "用户昵称",
       key: "nickName",
       align: "center",

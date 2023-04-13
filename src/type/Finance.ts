@@ -89,3 +89,31 @@ export type FinanceData = {
   secondarySumOrderAmount: number;
   secondarySumOrderNum: number;
 };
+
+// 平行链代币记录
+export type ParallelRecordParams = Partial<{
+  chainAddress: string;
+  endTime: string;
+  startTime: string;
+  token: string;
+  transState: number;
+  uid: string;
+  userType: number;
+}>;
+
+export type ParallelRecordItem = {
+  chainHash: string;
+  createTime: string;
+  fromChainAddress: string;
+  fromType: number;
+  fromUid: number;
+  num: number;
+  recordType: number;
+  toChainAddress: string;
+  toType: number;
+  toUid: number;
+  token: string;
+  transState: number;
+  transferId: string;
+  updateTime: string;
+};

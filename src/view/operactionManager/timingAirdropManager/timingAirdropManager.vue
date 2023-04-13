@@ -68,8 +68,8 @@ const createColumns = () => {
       },
     },
     {
-      title: "空投商品/积分编号",
-      key: "itemId",
+      title: "空投物品名称",
+      key: "itemName",
       align: "center",
       width: 160,
     },

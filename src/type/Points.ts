@@ -30,3 +30,25 @@ export type AddPointsParams = {
   pointsName: string;
   pointsTotal: number | null;
 };
+
+// 平行链代币
+export type ParallelCoinListParams = Partial<{
+  coin: string;
+  merchantUid: string;
+}>;
+
+export type ParallelCoinItem = {
+  address: string;
+  coin: string;
+  freezeNum: number;
+  holdNum: number;
+  merchantName: string;
+  merchantUid: number;
+  privateKey: string;
+};
+
+export type ParallelCoinDetail = Partial<{
+  address: string;
+  coin: string;
+  privateKey: string;
+}>;

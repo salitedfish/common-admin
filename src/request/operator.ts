@@ -22,6 +22,9 @@ import type {
   LotteryListItem,
   LotteryDetail,
   LotteryFormDetail,
+  GoodsActivityListParams,
+  GoodsActivityListItem,
+  GoodsActivityDetailAPI,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -274,6 +277,49 @@ export const addLottery = (params: LotteryFormDetail) => {
 export const editLottery = (params: LotteryFormDetail) => {
   return ultraFetch.post({
     URL: "/manager/lottery/update",
+    body: JSON.stringify(params),
+  });
+};
+
+// 商品活动相关
+export const getGoodsActivityList = (params: Paging & GoodsActivityListParams): Promise<Return<ReturnList<GoodsActivityListItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/goods/promo/page",
+    body: JSON.stringify(params),
+  });
+};
+
+export const delGoodsActivity = (params: { id: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/promo/delete",
+    body: JSON.stringify(params),
+  });
+};
+
+export const updateGoodsActivityState = (params: { id: number; state?: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/promo/state",
+    body: JSON.stringify(params),
+  });
+};
+
+export const getGoodsActivityDetail = (params: { id: string }): Promise<Return<GoodsActivityDetailAPI>> => {
+  return ultraFetch.get({
+    URL: "/manager/goods/promo/detail",
+    params,
+  });
+};
+
+export const updateGoodsActivityDetail = (params: GoodsActivityDetailAPI) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/promo/update",
+    body: JSON.stringify(params),
+  });
+};
+
+export const addGoodsActivityDetail = (params: GoodsActivityDetailAPI) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/promo/submit",
     body: JSON.stringify(params),
   });
 };

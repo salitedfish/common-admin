@@ -29,7 +29,8 @@ export default defineConfig({
   server: {
     proxy: {
       "^/api": {
-        target: "https://malltest.8n.cn/",
+        // target: "https://malltest.8n.cn/",/
+        target: "http://101.69.226.142:10010/",
         rewrite: (path) => path.replace(/^\/api/, ""),
         changeOrigin: true,
       },

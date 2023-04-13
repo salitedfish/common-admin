@@ -21,6 +21,7 @@ export type UserListItem = {
   state: number;
   tab: number;
   uid: number;
+  vipLevel: number;
 };
 
 export type AdminMerchantListParam = Partial<{
@@ -97,4 +98,9 @@ export type UserRealInfo = {
   idCardCode: string;
   idCardName: string;
   uid: string;
+};
+
+export type VipLevelItem = {
+  // level: number;
+  amount?: number;
 };

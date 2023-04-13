@@ -1,6 +1,15 @@
 import { ultraFetch } from "./init";
 import type { Return, ReturnList, Paging } from "@/type/Common";
-import type { GetProfitShareListParams, ProfitShareListItem, ChainRecordParams, GoodsChainRecordItem, PointsChainRecordItem, FinanceData } from "@/type/Finance";
+import type {
+  GetProfitShareListParams,
+  ProfitShareListItem,
+  ChainRecordParams,
+  GoodsChainRecordItem,
+  PointsChainRecordItem,
+  FinanceData,
+  ParallelRecordParams,
+  ParallelRecordItem,
+} from "@/type/Finance";
 
 export const getProfitShareList = (params: Paging & GetProfitShareListParams): Promise<Return<ReturnList<ProfitShareListItem>>> => {
   return ultraFetch.post({
@@ -87,5 +96,26 @@ export const getWechatBalance = (): Promise<Return<{ availableAmount: number; pe
 export const getWaitFinance = (): Promise<Return<{ countExpressWait: number; countGoodsAuditWait: number }>> => {
   return ultraFetch.get({
     URL: "/manager/finance/wait",
+  });
+};
+
+export const getParallelRecord = (params: Paging & ParallelRecordParams): Promise<Return<ReturnList<ParallelRecordItem>>> => {
+  return ultraFetch.post({
+    URL: "/manager/chain-transfer/parallel-coin/page",
+    body: JSON.stringify(params),
+  });
+};
+
+export const exportParallelRecord = (params: ParallelRecordParams): Promise<Blob> => {
+  return ultraFetch.get({
+    URL: "/manager/chain-transfer/parallel-coin/excel",
+    params,
+  });
+};
+
+export const syncParallelCoin = (params: { transferId: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/chain-transfer/parallel-coin/sync",
+    body: JSON.stringify(params),
   });
 };

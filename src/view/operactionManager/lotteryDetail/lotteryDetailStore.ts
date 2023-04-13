@@ -59,14 +59,14 @@ export const lotteryRuleTypes = [
     value: LotteryRuleType.NEW_REAL_NAME,
     label: "新用户注册并实名",
   },
-  {
-    value: LotteryRuleType.EXTENSION_CATEGORY,
-    label: "推广类目商品",
-  },
-  {
-    value: LotteryRuleType.EXTENSION_GOODS,
-    label: "推广指定商品",
-  },
+  // {
+  //   value: LotteryRuleType.EXTENSION_CATEGORY,
+  //   label: "推广类目商品",
+  // },
+  // {
+  //   value: LotteryRuleType.EXTENSION_GOODS,
+  //   label: "推广指定商品",
+  // },
 ];
 export enum RateType {
   NUM,

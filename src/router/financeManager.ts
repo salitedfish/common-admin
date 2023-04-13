@@ -45,4 +45,15 @@ export default <RouteRecordRaw[]>[
       id: 6022,
     },
   },
+  {
+    path: "parallelRecordManager",
+    name: "parallelRecordManager",
+    component: () => import("@/view/financeManager/parallelRecordManager/parallelRecordManager.vue"),
+    meta: {
+      label: "平行链代币记录",
+      icon: "qukuailian",
+      keepAlive: true,
+      id: 6023,
+    },
+  },
 ];

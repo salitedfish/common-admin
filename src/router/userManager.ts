@@ -13,6 +13,17 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "vipLevelManager",
+    name: "vipLevelManager",
+    component: () => import("@/view/userManager/vipLevelManager/vipLevelManager.vue"),
+    meta: {
+      label: "vip设置",
+      icon: "yonghu1",
+      keepAlive: true,
+      id: 4002,
+    },
+  },
+  {
     path: "userAssetManager",
     name: "userAssetManager",
     component: () => import("@/view/userManager/userAssetManager/userAssetsManager.vue"),

@@ -14,6 +14,7 @@ export type ManualAirDropListItem = {
   hitUsers: number;
   id: number;
   itemId: string;
+  itemName: string;
   itemType: number;
   merchantName: string;
   merchantUid: string;
@@ -62,6 +63,7 @@ export type TimingAirDropListItem = {
   id: number;
   itemId: string;
   itemType: number;
+  itemName: string;
   merchantName: string;
   merchantUid: string;
   name: string;
@@ -90,11 +92,14 @@ export type TimingAirDropDetail = {
     totalNum: number;
   };
   rules: {
+    id: number;
     holdNum: number;
     holdTime: number;
     holdTimeType: number;
     itemId: string;
     limitNum: number;
+    totalUnitNum: number;
+
     type: number;
     unitNum: number;
   }[];
@@ -112,11 +117,13 @@ export type TimingAirDropAddParams = {
     totalNum: number | null;
   };
   rules: {
+    id?: number;
     holdNum: number | null;
     holdTime: number | null;
     holdTimeType: number | null;
     itemId: string;
     limitNum: number | null;
+    totalUnitNum: number | null;
     type: number | null;
     unitNum: number | null;
     categoryList: CategoryTreeItem[];
@@ -317,4 +324,54 @@ export type LotteryFormDetail = {
 export type LotteryDetail = {
   info: Partial<LotteryListItem>;
   rules: lotteryRule[];
+};
+
+// 商品活动
+export type GoodsActivityListParams = Partial<{
+  goodsId: string;
+  goodsName: string;
+  itemId: string;
+  itemType: number;
+  merchantUid: string;
+  name: string;
+  timeType: number;
+}>;
+export type GoodsActivityListItem = {
+  id: number;
+  name: string;
+  goodsId: string;
+  goodsName: string;
+  itemType: number;
+  itemId: string;
+  itemName: string;
+
+  bindAirdropTaskId: number;
+  createTime: string;
+  merchantName: string;
+  merchantUid: number;
+  state: number;
+  timeDay: number;
+  timeHour: number;
+  timeType: number;
+};
+export type GoodsActivityRule = {
+  id: number;
+  belowOrderNum: number;
+  inviteLevel: number;
+  minVipLevel: number;
+  totalUnitNum: number;
+  type: number;
+  unitNum: number;
+};
+export type GoodsActivityDetailAPI = {
+  info: Partial<GoodsActivityListItem>;
+  rules: Partial<GoodsActivityRule>[];
+};
+export type GoodsActivityDetailViewRule = Partial<{
+  belowOrderNum: number;
+  rule: Partial<GoodsActivityRule>[];
+}>;
+export type GoodsActivityDetailView = {
+  info: Partial<GoodsActivityListItem>;
+  rules: GoodsActivityDetailViewRule[];
 };

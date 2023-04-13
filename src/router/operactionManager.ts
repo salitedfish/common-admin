@@ -12,6 +12,26 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "goodsActivityManager",
+    name: "goodsActivityManager",
+    component: () => import("@/view/operactionManager/goodsActivityManager/goodsActivityManager.vue"),
+    meta: {
+      label: "商品活动",
+      icon: "choujiang",
+      id: 5002,
+    },
+  },
+  {
+    path: "goodsActivityDetail",
+    name: "goodsActivityDetail",
+    component: () => import("@/view/operactionManager/goodsActivityDetail/goodsActivityDetail.vue"),
+    meta: {
+      label: "商品活动详情",
+      icon: "choujiang",
+      keepAlive: true,
+    },
+  },
+  {
     path: "lotteryManager",
     name: "lotteryManager",
     component: () => import("@/view/operactionManager/lotteryManager/lotteryManager.vue"),

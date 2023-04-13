@@ -32,4 +32,25 @@ export default <RouteRecordRaw[]>[
       keepAlive: true,
     },
   },
+  {
+    path: "parallelCoinManager",
+    name: "parallelCoinManager",
+    component: () => import("@/view/pointsManager/parallelCoinManager/parallelCoinManager.vue"),
+    meta: {
+      label: "平行链代币管理",
+      icon: "jifen",
+      keepAlive: true,
+      id: 2002,
+    },
+  },
+  {
+    path: "parallelCoinDetail",
+    name: "parallelCoinDetail",
+    component: () => import("@/view/pointsManager/parallelCoinDetail/parallelCoinDetail.vue"),
+    meta: {
+      label: "平行链代币详情",
+      icon: "jifen",
+      keepAlive: true,
+    },
+  },
 ];

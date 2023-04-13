@@ -8,6 +8,7 @@ import type {
   UserAssetsListItem,
   UserPointsListItem,
   UserRealInfo,
+  VipLevelItem,
 } from "@/type/User";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
@@ -94,5 +95,20 @@ export const exportUserPointsList = (params: GetUserPointsListParams): Promise<B
   return ultraFetch.get({
     URL: "/manager/user-points/excel",
     params,
+  });
+};
+
+//vip设置
+export const getVipLevelList = (): Promise<Return<VipLevelItem[]>> => {
+  return ultraFetch.get({
+    URL: "/manager/vip/level/list",
+  });
+};
+
+export const updateVipLevelList = (params: VipLevelItem[]) => {
+  const amounts = params.map((item) => item.amount);
+  return ultraFetch.post({
+    URL: "/manager/vip/level/submit",
+    body: JSON.stringify(amounts),
   });
 };
