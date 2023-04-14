@@ -11,10 +11,12 @@ export const airDropTypeList = [
 export enum AirDropItemType {
   GOODS,
   POINTS,
+  COIN,
 }
 export const airDropItemTypeList = [
-  { label: "商品", value: 0 },
-  { label: "积分", value: 1 },
+  { label: "商品", value: AirDropItemType.GOODS },
+  { label: "积分", value: AirDropItemType.POINTS },
+  { label: "代币", value: AirDropItemType.COIN },
 ];
 
 export enum AirDropStateType {

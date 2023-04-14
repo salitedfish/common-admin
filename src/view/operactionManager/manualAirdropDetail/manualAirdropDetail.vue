@@ -7,11 +7,25 @@
       <n-form-item label="空投物品类型:" required>
         <n-select :options="airDropItemTypeList" v-model:value="formData.itemType" :disabled="itemTypeChangedisable || submiting"></n-select>
       </n-form-item>
-      <n-form-item label="商品编号:" v-show="formData.itemType === AirDropItemType.GOODS" required>
+      <!-- <n-form-item label="商品编号:" v-show="formData.itemType === AirDropItemType.GOODS" required>
         <n-input v-model:value="formData.itemId" placeholder="请输入商品编号"></n-input>
       </n-form-item>
       <n-form-item label="积分编号:" v-show="formData.itemType === AirDropItemType.POINTS" required>
         <n-input v-model:value="formData.itemId" placeholder="请输入积分编号"></n-input>
+      </n-form-item> -->
+      <n-form-item label="奖励商品:" required v-if="formData.itemType === AirDropItemType.GOODS">
+        <n-input placeholder="请选择奖励商品" :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" disabled></n-input>
+        <goodsSelect v-model:goods-selected-list="goodsList" :max="1" :disabled="submiting" :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"></goodsSelect>
+      </n-form-item>
+
+      <n-form-item label="奖励积分:" required v-if="formData.itemType === AirDropItemType.POINTS">
+        <n-input placeholder="请选择奖励积分" :value="pointsList.length >= 1 ? pointsList[0].pointsName : undefined" disabled></n-input>
+        <pointsSelect v-model:points-select-list="pointsList" :max="1" :disabled="submiting" :multiple="true" :pointsStates="[PointsState.PUBLISH_SUCCESS]"></pointsSelect>
+      </n-form-item>
+
+      <n-form-item label="奖励代币:" required v-if="formData.itemType === AirDropItemType.COIN">
+        <n-input placeholder="请选择奖励代币" :value="coinList.length >= 1 ? coinList[0].coinName : undefined" disabled></n-input>
+        <parallelCoinSelect v-model:parallel-coin-select-list="coinList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
       </n-form-item>
       <n-form-item label="空投时间:" required>
         <n-date-picker
@@ -40,6 +54,9 @@ import { reactive, ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 // 自定义组件
+import goodsSelect from "@/component/common/goodsSelect.vue";
+import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
+import parallelCoinSelect from "@/component/parallelCoinSelect/parallelCoinSelect.vue";
 // 工具库
 // 自定义工具
 import { commonNotify } from "@/util/common";
@@ -50,6 +67,8 @@ import { useRouteStore } from "@/store/routeStore";
 import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 import { airDropItemTypeList, AirDropItemType } from "@/view/operactionManager/manualAirdropManager/manualAirdropManagerStore";
+import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
+import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 // 类型
 import type { ManualAirDropAddParams } from "@/type/Operator";
 
@@ -63,8 +82,14 @@ const isEdit = computed(() => {
   return route.name === "editManualAirdrop";
 });
 
+// 空投物品选择列表
+const goodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
+const pointsList = ref<{ pointsId: string; pointsName: string }[]>([]);
+const coinList = ref<{ coinId: string; coinName: string }[]>([]);
+
 const formData = reactive<ManualAirDropAddParams>({
   itemId: "",
+  itemName: "",
   itemType: 0,
   name: "",
   startTime: null,
@@ -79,6 +104,18 @@ if (authStore.isAdmin) {
 const submiting = ref(false);
 const handleSubmit = async () => {
   submiting.value = true;
+  // 如果是商品
+  if (formData.itemType === AirDropItemType.GOODS) {
+    formData.itemId = String(goodsList.value[0]?.goodsId);
+  }
+  // 如果是积分
+  if (formData.itemType === AirDropItemType.POINTS) {
+    formData.itemId = pointsList.value[0]?.pointsId;
+  }
+  // 如果是代币
+  if (formData.itemType === AirDropItemType.COIN) {
+    formData.itemId = coinList.value[0]?.coinId;
+  }
   let action = "新增";
   if (isEdit.value) {
     action = "编辑";
@@ -100,12 +137,40 @@ const initFormData = async () => {
   const id = Number(route.query.id);
   const res = await getDetailManualAirDrop({ id });
   if (res) {
-    const { id, itemId, itemType, name, startTime } = res.data;
+    const { id, itemId, itemType, itemName, name, startTime } = res.data;
     formData.id = id;
     formData.itemId = itemId;
     formData.itemType = itemType;
     formData.name = name;
     formData.startTime = startTime;
+
+    // 如果是商品
+    if (itemType === AirDropItemType.GOODS) {
+      goodsList.value = [
+        {
+          goodsId: itemId || "",
+          goodsName: itemName || "",
+        },
+      ];
+    }
+    // 如果是积分
+    if (itemType === AirDropItemType.POINTS) {
+      pointsList.value = [
+        {
+          pointsId: itemId || "",
+          pointsName: itemName || "",
+        },
+      ];
+    }
+    // 如果是代币
+    if (itemType === AirDropItemType.COIN) {
+      coinList.value = [
+        {
+          coinId: itemId || "",
+          coinName: itemName || "",
+        },
+      ];
+    }
   }
   commonStore.pageLoading = false;
 };

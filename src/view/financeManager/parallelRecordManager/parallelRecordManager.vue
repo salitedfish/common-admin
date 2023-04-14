@@ -1,6 +1,6 @@
 <script lang="ts">
 // 框架
-import { defineComponent, ref, reactive, createVNode } from "vue";
+import { defineComponent, createVNode } from "vue";
 // 组件库
 import { NSpace, NEllipsis, NButton, useDialog } from "naive-ui";
 // 自定义组件
@@ -32,6 +32,21 @@ const dialog = useDialog();
 const createColumns = () => {
   const list: DataTableColumns<ParallelRecordItem> = [
     {
+      title: "交易编号",
+      key: "transferId",
+      align: "center",
+      width: 180,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.transferId,
+          }
+        );
+      },
+    },
+    {
       title: "token",
       key: "token",
       align: "center",
@@ -42,6 +57,107 @@ const createColumns = () => {
           {},
           {
             default: () => row.token,
+          }
+        );
+      },
+    },
+
+    {
+      title: "数量",
+      key: "num",
+      align: "center",
+      width: 120,
+    },
+
+    {
+      title: "类型",
+      key: "createTime",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return recordTypeList.getItem(row.recordType)?.label;
+      },
+    },
+
+    {
+      title: "来源用户类型",
+      key: "createTime",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return userTypeList.getItem(row.fromType)?.label;
+      },
+    },
+
+    {
+      title: "来源Uid",
+      key: "fromUid",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.fromUid,
+          }
+        );
+      },
+    },
+
+    {
+      title: "来源地址",
+      key: "fromChainAddress",
+      align: "center",
+      width: 180,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.fromChainAddress,
+          }
+        );
+      },
+    },
+
+    {
+      title: "去向用户类型",
+      key: "createTime",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return userTypeList.getItem(row.toType)?.label;
+      },
+    },
+
+    {
+      title: "去向Uid",
+      key: "toUid",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.toUid,
+          }
+        );
+      },
+    },
+
+    {
+      title: "去向地址",
+      key: "toChainAddress",
+      align: "center",
+      width: 180,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.toChainAddress,
           }
         );
       },
@@ -64,22 +180,6 @@ const createColumns = () => {
     },
 
     {
-      title: "交易编号",
-      key: "transferId",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.transferId,
-          }
-        );
-      },
-    },
-
-    {
       title: "状态",
       key: "transState",
       align: "center",
@@ -90,104 +190,7 @@ const createColumns = () => {
     },
 
     {
-      title: "来源地址",
-      key: "fromChainAddress",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.fromChainAddress,
-          }
-        );
-      },
-    },
-    {
-      title: "来源Uid",
-      key: "fromUid",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.fromUid,
-          }
-        );
-      },
-    },
-    {
-      title: "来源用户类型",
-      key: "createTime",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return userTypeList.getItem(row.fromType)?.label;
-      },
-    },
-
-    {
-      title: "去向地址",
-      key: "toChainAddress",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.toChainAddress,
-          }
-        );
-      },
-    },
-    {
-      title: "去向Uid",
-      key: "toUid",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.toUid,
-          }
-        );
-      },
-    },
-    {
-      title: "去向用户类型",
-      key: "createTime",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return userTypeList.getItem(row.toType)?.label;
-      },
-    },
-
-    {
-      title: "数量",
-      key: "num",
-      align: "center",
-      width: 120,
-    },
-
-    {
-      title: "类型",
-      key: "createTime",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return recordTypeList.getItem(row.fromType)?.label;
-      },
-    },
-
-    {
-      title: "记录开始时间",
+      title: "交易时间",
       key: "createTime",
       align: "center",
       width: 180,

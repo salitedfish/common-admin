@@ -1,6 +1,6 @@
 <script lang="ts">
 // 框架
-import { defineComponent, ref, reactive, createVNode } from "vue";
+import { defineComponent, createVNode } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
 import { NSpace, NButton, useDialog } from "naive-ui";
@@ -45,15 +45,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "活动状态",
-      key: "name",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return goodsActivityStateList.getItem(row.state)?.label;
-      },
-    },
+
     {
       title: "活动商品",
       key: "goodsName",
@@ -74,6 +66,15 @@ const createColumns = () => {
       key: "itemName",
       align: "center",
       width: 120,
+    },
+    {
+      title: "活动状态",
+      key: "name",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return goodsActivityStateList.getItem(row.state)?.label;
+      },
     },
 
     {

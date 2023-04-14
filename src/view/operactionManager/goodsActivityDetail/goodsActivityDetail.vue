@@ -7,6 +7,7 @@ import { NButton, NInputNumber } from "naive-ui";
 // 自定义组件
 import goodsSelect from "@/component/common/goodsSelect.vue";
 import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
+import parallelCoinSelect from "@/component/parallelCoinSelect/parallelCoinSelect.vue";
 // 工具库
 // 自定义工具
 import { commonNotify } from "@/util/common";
@@ -41,9 +42,14 @@ const checkType = route.query.type as DetailCheckType;
 const id = route.query.id as string;
 const isCheck = checkType === DetailCheckType.CHECK;
 
+// 商品选择列表
 const goodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
+// 奖励物品选择列表
 const rewardGoodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
 const rewardPointsList = ref<{ pointsId: string; pointsName: string }[]>([]);
+const rewardCoinList = ref<{ coinId: string; coinName: string }[]>([]);
+
+// 列表数据
 const goodsActivityDetail = ref<GoodsActivityDetailView>({
   info: {},
   rules: [],
@@ -102,13 +108,13 @@ const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
     },
 
     {
-      title: "每个总奖励数量",
+      title: "单个总奖励数量",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
         return createVNode(NInputNumber, {
-          placeholder: "请输入每个总奖励数量",
+          placeholder: "请输入单个总奖励数量",
           min: 0,
           value: rule.totalUnitNum,
           onUpdateValue: (newValue: number) => {
@@ -224,6 +230,10 @@ const submit = async () => {
   if (data.info.itemType === RewardType.POINTS) {
     data.info.itemId = rewardPointsList.value[0]?.pointsId;
   }
+  // 如果奖励是代币
+  if (data.info.itemType === RewardType.COINS) {
+    data.info.itemId = rewardCoinList.value[0]?.coinId;
+  }
   // 如果是编辑还需要赋值id
   if ([DetailCheckType.EDIT].includes(checkType)) {
     data.info.id = Number(id);
@@ -267,6 +277,15 @@ const init = async () => {
         {
           pointsId: itemId || "",
           pointsName: itemName || "",
+        },
+      ];
+    }
+    // 如果奖励是代币
+    if (itemType === RewardType.COINS) {
+      rewardCoinList.value = [
+        {
+          coinId: itemId || "",
+          coinName: itemName || "",
         },
       ];
     }
@@ -323,6 +342,11 @@ onMounted(() => {
         ></pointsSelect>
       </n-form-item>
 
+      <n-form-item label="奖励代币:" required v-if="goodsActivityDetail.info.itemType === RewardType.COINS">
+        <n-input placeholder="请选择奖励代币" :value="rewardCoinList.length >= 1 ? rewardCoinList[0].coinName : undefined" disabled></n-input>
+        <parallelCoinSelect v-model:parallel-coin-select-list="rewardCoinList" :max="1" :disabled="submiting || isCheck" :multiple="true"></parallelCoinSelect>
+      </n-form-item>
+
       <n-form-item label="执行时间类型：" required>
         <n-select :options="goodsActivityTimeTypeList" v-model:value="goodsActivityDetail.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
@@ -339,8 +363,8 @@ onMounted(() => {
 
     <n-card title="规则：" style="margin-bottom: 15px">
       <n-card :title="`规则${key + 1}:`" style="margin-bottom: 15px" v-for="(item, key) in goodsActivityDetail.rules" :key="key">
-        <n-form-item label="梯度（不包含）:" required>
-          <n-input-number v-model:value="item.belowOrderNum" placeholder="请输入梯度（不包含）" :min="0" style="width: 100%"></n-input-number>
+        <n-form-item label="单次下单数量（不包含）:" required>
+          <n-input-number v-model:value="item.belowOrderNum" placeholder="请输入单次下单数量（不包含）" :min="0" style="width: 100%"></n-input-number>
         </n-form-item>
 
         <n-data-table :single-line="false" :columns="createColumns(item)" :data="item.rule"></n-data-table>

@@ -47,7 +47,7 @@ export const rewardTypeList = [
   },
   {
     value: RewardType.COINS,
-    label: "平行链代币",
+    label: "代币",
   },
 ];
 

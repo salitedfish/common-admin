@@ -15,7 +15,7 @@
 
 <script lang="ts" setup>
 import { onMounted } from "vue";
-import { zhCN, dateZhCN, NThemeEditor } from "naive-ui";
+import { zhCN, dateZhCN } from "naive-ui";
 import { useGetLStorage } from "@ultra-man/noa";
 import { storeToRefs } from "pinia";
 import { useThemeStore } from "@/store";

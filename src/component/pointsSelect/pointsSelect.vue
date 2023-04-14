@@ -133,7 +133,7 @@ const pointsIdSelectedList = ref<DataTableRowKey[]>([]);
 
 pointsIdSelectedList.value = props.pointsSelectList.map((item) => item.pointsId + "id-name" + item.pointsName);
 
-const rowKey = (row: PointsSelectItem) => row.pointsId + "id-name" + row.pointsName;
+const rowKey = (row: PointsItem) => row.pointsId + "id-name" + row.pointsName;
 watch(
   () => pointsIdSelectedList.value.length,
   () => {

@@ -31,6 +31,7 @@ export type ManualAirDropDetail = {
   hitUsers: number;
   id: number;
   itemId: string;
+  itemName: string;
   itemType: number;
   merchantName: string;
   merchantUid: string;
@@ -45,6 +46,7 @@ export type ManualAirDropDetail = {
 export type ManualAirDropAddParams = {
   id?: number;
   itemId: string;
+  itemName: string;
   itemType: number;
   name: string;
   startTime: string | null;
@@ -80,6 +82,7 @@ export type TimingAirDropDetail = {
     expireMinute: number;
     id: number;
     itemId: string;
+    itemName: string;
     itemType: number;
     merchantName: string;
     merchantUid: number;
@@ -109,6 +112,7 @@ export type TimingAirDropAddParams = {
     expireMinute: number | null;
     id?: number;
     itemId: string;
+    itemName: string;
     itemType: number | null;
     name: string;
     timeDay: number | null;
