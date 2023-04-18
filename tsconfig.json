@@ -5,11 +5,13 @@
    
     "lib": ["ES2022"],
     "baseUrl": ".",
-    "importsNotUsedAsValues": "error",
+    // "importsNotUsedAsValues": "error",
     "paths": {
       "@/*": ["./src/*"]
     },
     "types": ["naive-ui/volar"],
+    // "verbatimModuleSyntax": true,
+
   },
 
   "references": [
