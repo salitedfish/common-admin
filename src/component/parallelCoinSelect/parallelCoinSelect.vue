@@ -76,7 +76,7 @@ const createColumns = () => {
       disabled: (item) => {
         let isSelect = false;
         for (const i of props.parallelCoinSelectList) {
-          if (i.coinId === item.coin) {
+          if (Number(i.coinId) === item.id) {
             isSelect = true;
             break;
           }
@@ -86,7 +86,7 @@ const createColumns = () => {
     },
     {
       title: "代币",
-      key: "coin",
+      key: "token",
       align: "center",
       width: 120,
     },
@@ -130,7 +130,7 @@ const coinIdSelectedList = ref<DataTableRowKey[]>([]);
 
 coinIdSelectedList.value = props.parallelCoinSelectList.map((item) => item.coinId + "id-name" + item.coinName);
 
-const rowKey = (row: ParallelCoinItem) => row.coin + "id-name" + row.coin;
+const rowKey = (row: ParallelCoinItem) => row.id + "id-name" + row.token;
 watch(
   () => coinIdSelectedList.value.length,
   () => {

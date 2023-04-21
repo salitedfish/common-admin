@@ -117,3 +117,24 @@ export type ParallelRecordItem = {
   transferId: string;
   updateTime: string;
 };
+
+// 提币管理
+export type ParallelCoinWithdrawListScreenParams = Partial<{
+  state: number;
+  toAddress: string;
+  token: string;
+  type: string;
+  uid: string;
+}>;
+
+export type ParallelCoinWithdrawListItem = {
+  auditorTime: string;
+  createTime: string;
+  num: number;
+  state: number;
+  toAddress: string;
+  token: string;
+  type: number;
+  uid: string;
+  id: number;
+};

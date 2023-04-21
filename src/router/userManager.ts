@@ -46,6 +46,17 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "userParallelCoinManager",
+    name: "userParallelCoinManager",
+    component: () => import("@/view/userManager/userParallelCoinManager/userParallelCoinManager.vue"),
+    meta: {
+      label: "用户平行链代币管理",
+      icon: "jifen",
+      keepAlive: true,
+      id: 4022,
+    },
+  },
+  {
     path: "adminMerchantManager",
     name: "adminMerchantManager",
     component: () => import("@/view/userManager/adminMerchantManager/adminMerchantManager.vue"),

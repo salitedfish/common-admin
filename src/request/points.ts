@@ -64,7 +64,7 @@ export const getParallelCoinList = (params: Paging & ParallelCoinListParams): Pr
   });
 };
 
-export const delParallelCoin = (params: { coin: string }) => {
+export const delParallelCoin = (params: { id: number }) => {
   return ultraFetch.post({
     URL: "/manager/parallel/coin/delete",
     body: JSON.stringify(params),

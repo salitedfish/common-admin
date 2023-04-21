@@ -80,8 +80,8 @@ export const getMerchantApplyResult = (): RequestReturn.GetMerchantApplyResult =
 };
 
 // 获取是否支持小微商户
-export const getAllowMicro = (): Promise<Return<boolean>> => {
-  return ultraFetch.get({
+export const getAllowMicro = () => {
+  return ultraFetch.get<Return<boolean>>({
     URL: "/manager/merchant-wechat/apply/micro-allow",
   });
 };

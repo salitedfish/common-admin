@@ -68,9 +68,8 @@ import {
 } from "@/request/points";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { pointsStateList } from "./pointsListManagerStore";
-import { PointsState, approvialList, approvialNewList } from "./pointsListManagerStore";
-
+import { PointsState, approvialList, approvialNewList, pointsStateList } from "./pointsListManagerStore";
+import { giftTypeList } from "../pointsDetailManager/pointsDetailManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
@@ -128,6 +127,15 @@ const createColumns = () => {
       width: 120,
       render(row) {
         return pointsStateList.getItem(row.pointsState)?.label;
+      },
+    },
+    {
+      title: "是否可转赠",
+      key: "pointsState",
+      align: "center",
+      width: 120,
+      render(row) {
+        return giftTypeList.getItem(row.giftType)?.label;
       },
     },
     {

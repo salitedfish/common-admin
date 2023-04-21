@@ -72,6 +72,7 @@ export type GoodsExtend = {
   saleType: number | null;
   traceHash: string | null;
   exchangePointsType: number | null;
+  pointsDeductionType: number;
 };
 
 export type GoodsAddParams = {
@@ -99,6 +100,7 @@ export type GoodsAddParams = {
     pointsId: string | null;
     pointsCover?: string;
     pointsName?: string;
+    pointsType: number | null;
   };
   exchangePoints: {
     goodsId: string | null;
@@ -117,6 +119,14 @@ export type GoodsAddParams = {
     type: number | null;
     unitNum: number | null;
   }[];
+  deductionPoints: Partial<{
+    goodsId: string;
+    needNum: number;
+    pointsId: string;
+    pointsName: string;
+    pointsPrice: number;
+    pointsType: number;
+  }>;
 };
 
 export type GoodsDetail = Omit<GoodsAddParams, "extend"> & {

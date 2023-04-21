@@ -123,3 +123,18 @@ export const ExchangePointsTypeList = [
     value: AntinomyTypes.YES,
   },
 ];
+
+export enum PointsType {
+  POINTS,
+  COIN,
+}
+
+export const pointsTypeList = [
+  { label: "积分", value: PointsType.POINTS },
+  { label: "代币", value: PointsType.COIN },
+];
+
+export const pointsDeductionTypeList = [
+  { label: "不可以", value: AntinomyTypes.NOT },
+  { label: "可以", value: AntinomyTypes.YES },
+];

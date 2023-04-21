@@ -11,6 +11,7 @@ import { commonNotify } from "@/util/common";
 import { addParallelCoin, updateParallelCoin } from "@/request/points";
 // store
 import { useRouteStore } from "@/store/routeStore";
+import { giftTypeList, coinTypeList } from "./parallelCoinDetailStore";
 // 类型
 import type { ParallelCoinDetail } from "@/type/Points";
 import { DetailCheckType } from "@/type/Common";
@@ -25,7 +26,7 @@ const route = useRoute();
 const router = useRouter();
 const routeStore = useRouteStore();
 const submiting = ref(false);
-const isEdit = DetailCheckType.EDIT === route.query.type;
+const isEdit = DetailCheckType.EDIT === route.query.detailType;
 
 const parallelCoinDetail = reactive<ParallelCoinDetail>({});
 
@@ -43,10 +44,14 @@ const submit = async () => {
 };
 
 const init = () => {
-  const routeQuery = route.query as { type: string; coin: string; address: string; privateKey: string };
-  parallelCoinDetail.coin = routeQuery.coin;
+  const routeQuery = route.query as { type: string; token: string; address: string; privateKey: string; id: string; label: string; giftType: string; detailType: string };
+  parallelCoinDetail.token = routeQuery.token;
   parallelCoinDetail.address = routeQuery.address;
   parallelCoinDetail.privateKey = routeQuery.privateKey;
+  parallelCoinDetail.id = Number(routeQuery.id);
+  parallelCoinDetail.giftType = Number(routeQuery.giftType);
+  parallelCoinDetail.type = Number(routeQuery.type);
+  parallelCoinDetail.label = routeQuery.label;
 };
 
 onMounted(() => {
@@ -60,13 +65,25 @@ onMounted(() => {
   <n-form label-placement="left" label-width="130px" label-align="left" :disabled="submiting">
     <n-card title="基本信息：" style="margin-bottom: 15px">
       <n-form-item label="代币名称:" required>
-        <n-input placeholder="请输入代币名称" v-model:value="parallelCoinDetail.coin"></n-input>
+        <n-input placeholder="请输入代币名称" v-model:value="parallelCoinDetail.token"></n-input>
+      </n-form-item>
+
+      <n-form-item label="类型:" required>
+        <n-select v-model:value="parallelCoinDetail.type" :options="coinTypeList" placeholder="请选择类型" :style="{ width: '100%' }" clearable />
       </n-form-item>
       <n-form-item label="发行地址:" required>
         <n-input placeholder="请输入发行地址" v-model:value="parallelCoinDetail.address"></n-input>
       </n-form-item>
       <n-form-item label="发行私钥:" required>
         <n-input placeholder="请输入发行私钥" v-model:value="parallelCoinDetail.privateKey"></n-input>
+      </n-form-item>
+
+      <n-form-item label="是否可以转赠:" required>
+        <n-select v-model:value="parallelCoinDetail.giftType" :options="giftTypeList" placeholder="请选择是否可以转赠" :style="{ width: '100%' }" clearable />
+      </n-form-item>
+
+      <n-form-item label="标签:" required>
+        <n-input placeholder="请输入标签，最多32个字" v-model:value="parallelCoinDetail.label" :maxlength="32"></n-input>
       </n-form-item>
     </n-card>
   </n-form>

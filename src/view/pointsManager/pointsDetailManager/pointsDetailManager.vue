@@ -8,7 +8,10 @@
         <n-input v-model:value="params.pointsName" placeholder="请输入积分名称" :disabled="disabled"></n-input>
       </n-form-item>
       <n-form-item label="积分总量:" required>
-        <n-input-number v-model:value="params.pointsTotal" style="width: 100%" :min="1" placeholder="请输入积分总量" :disabled="disabled" :loading="submiting"></n-input-number>
+        <n-input-number v-model:value="params.pointsTotal" style="width: 100%" :min="1" placeholder="请输入积分总量" :disabled="disabled"></n-input-number>
+      </n-form-item>
+      <n-form-item label="是否可以转赠:" required>
+        <n-select v-model:value="params.giftType" :options="giftTypeList" placeholder="请选择是否可以转赠" :style="{ width: '100%' }" clearable :disabled="disabled" />
       </n-form-item>
     </n-form>
   </n-card>
@@ -38,6 +41,7 @@ import { addPoints as addPointsRequest, editPoints as editPointsRequest, getPoin
 // store
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
+import { giftTypeList } from "./pointsDetailManagerStore";
 // 类型
 import type { FileUpload } from "@/type/Common";
 import type { AddPointsParams } from "@/type/Points";
@@ -55,13 +59,14 @@ const initPoints = async (id: string) => {
   commonStore.pageLoading = true;
   const res = await getPointsInfoRequest({ pointsId: id });
   if (res && res.data) {
-    const { pointsCover, pointsName, pointsTotal } = res.data;
+    const { pointsCover, pointsName, pointsTotal, giftType } = res.data;
     fileList.value.push({
       fileUrl: pointsCover,
       hashName: useFileNameFromURL(pointsCover)(true),
     });
     params.pointsName = pointsName;
     params.pointsTotal = Number(pointsTotal);
+    params.giftType = giftType;
   }
   commonStore.pageLoading = false;
 };
@@ -79,6 +84,7 @@ const params = reactive<AddPointsParams>({
   pointsId: "",
   pointsName: "",
   pointsTotal: null,
+  giftType: null,
 });
 
 const disabled = computed(() => {

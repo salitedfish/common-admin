@@ -98,7 +98,7 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="商品是否可兑换成积分:" required>
+      <!-- <n-form-item label="商品是否可兑换成积分:" required>
         <n-select
           v-model:value="goodsInfo.extend.exchangePointsType"
           :options="ExchangePointsTypeList"
@@ -107,7 +107,7 @@
           clearable
           :disabled="formDisabled"
         />
-      </n-form-item>
+      </n-form-item> -->
 
       <n-form-item label="销售开始时间:" required>
         <n-date-picker
@@ -213,10 +213,71 @@
           :disabled="formDisabled"
         />
       </n-form-item>
+      <n-form-item label="是否可抵扣一部分现金:" required v-if="[GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)">
+        <n-select
+          v-model:value="goodsInfo.extend.pointsDeductionType"
+          :options="pointsDeductionTypeList"
+          placeholder="请选择是否可抵扣"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="formDisabled"
+        />
+      </n-form-item>
+    </n-card>
+
+    <n-card
+      title="积分抵扣："
+      v-if="goodsInfo.extend.pointsDeductionType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)"
+      style="margin-bottom: 15px"
+    >
+      <n-form-item label="积分类型:" required>
+        <n-select :options="pointsTypeList" v-model:value="goodsInfo.deductionPoints.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
+      </n-form-item>
+
+      <n-form-item label="积分编号:" required v-if="goodsInfo.deductionPoints.pointsType === PointsType.POINTS">
+        <n-space vertical>
+          <pointsSelect
+            v-model:points-select-list="deductionPointsSelectList"
+            :max="1"
+            :disabled="formDisabled"
+            :multiple="true"
+            :pointsStates="[PointsState.PUBLISH_SUCCESS]"
+          ></pointsSelect>
+          <n-space v-for="(i, k) in deductionPointsSelectList" :key="k">
+            <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
+            <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item label="平行链代币:" required v-if="goodsInfo.deductionPoints.pointsType === PointsType.COIN">
+        <n-space vertical>
+          <parallelCoinSelect v-model:parallel-coin-select-list="deductionCoinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
+          <n-space v-for="(i, k) in deductionCoinSelectList" :key="k">
+            <n-input :value="String(i.coinId)" placeholder="请选择代币" :disabled="true"></n-input>
+            <n-input :value="i.coinName" placeholder="请选择代币" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item label="最多使用积分数量:" required>
+        <n-input-number v-model:value="goodsInfo.deductionPoints.needNum" placeholder="请输入最多使用积分数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+          <template #suffix> 份 </template></n-input-number
+        >
+      </n-form-item>
+      <n-form-item label="单价:" required>
+        <n-input-number v-model:value="goodsInfo.deductionPoints.pointsPrice" placeholder="请输入积分单价" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+          <template #suffix> 元 </template></n-input-number
+        >
+      </n-form-item>
     </n-card>
 
     <n-card title="积分商品所需积分：" v-if="goodsInfo.extend.goodsType === GoodsType.POINT" style="margin-bottom: 15px">
-      <n-form-item label="积分编号:" required>
+      <n-form-item label="积分类型:" required>
+        <n-select :options="pointsTypeList" v-model:value="goodsInfo.points.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
+      </n-form-item>
+
+      <n-form-item label="积分编号:" required v-if="goodsInfo.points.pointsType === PointsType.POINTS">
         <n-space vertical>
           <pointsSelect
             v-model:points-select-list="pointsSelectList"
@@ -228,6 +289,16 @@
           <n-space v-for="(i, k) in pointsSelectList" :key="k">
             <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
             <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item label="平行链代币:" required v-if="goodsInfo.points.pointsType === PointsType.COIN">
+        <n-space vertical>
+          <parallelCoinSelect v-model:parallel-coin-select-list="coinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
+          <n-space v-for="(i, k) in coinSelectList" :key="k">
+            <n-input :value="String(i.coinId)" placeholder="请选择代币" :disabled="true"></n-input>
+            <n-input :value="i.coinName" placeholder="请选择代币" :disabled="true"></n-input>
           </n-space>
         </n-space>
       </n-form-item>
@@ -352,6 +423,8 @@ import categorySelect from "@/component/common/categorySelect.vue";
 import commonUpload from "@/component/common/commonUpload.vue";
 import richTextEditor from "@/component/common/richTextEditor.vue";
 import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
+import parallelCoinSelect from "@/component/parallelCoinSelect/parallelCoinSelect.vue";
+
 // 工具库
 import { useFileNameFromURL } from "@ultra-man/noa";
 // 自定义工具
@@ -364,7 +437,19 @@ import {
   updateGoodsExtend as updateGoodsExtendRequest,
 } from "@/request/goods";
 // store
-import { ercStandardList, goodsLevelList, expresList, goodsTabList, ruleTypeList, ExpressType, RuleType, ExchangePointsTypeList } from "./goodsDetailManagerStore";
+import {
+  ercStandardList,
+  goodsLevelList,
+  expresList,
+  goodsTabList,
+  ruleTypeList,
+  ExpressType,
+  RuleType,
+  ExchangePointsTypeList,
+  pointsTypeList,
+  PointsType,
+  pointsDeductionTypeList,
+} from "./goodsDetailManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../goodsListManager/goodsListManagerStore";
 import { useCommonStore } from "@/store/commonStore";
@@ -415,6 +500,10 @@ const goodsVideoList = ref<FileUpload[]>([]);
 const goodsVideoCoverList = ref<FileUpload[]>([]);
 const pointsSelectList = ref<PointsSelectItem[]>([]);
 const pointsExchangeSelectList = ref<PointsSelectItem[]>([]);
+const coinSelectList = ref<{ coinId: string; coinName: string }[]>([]);
+
+const deductionPointsSelectList = ref<PointsSelectItem[]>([]);
+const deductionCoinSelectList = ref<{ coinId: string; coinName: string }[]>([]);
 
 const goodsInfo = reactive<GoodsAddParams>({
   spu: {
@@ -447,13 +536,15 @@ const goodsInfo = reactive<GoodsAddParams>({
     priorityPrice: null,
     ruleCalcTime: null,
     saleType: null,
-    exchangePointsType: null,
+    exchangePointsType: AntinomyTypes.NOT,
     traceHash: "",
+    pointsDeductionType: AntinomyTypes.NOT,
   },
   points: {
     goodsId,
     needNum: null,
     pointsId: null,
+    pointsType: null,
   },
   exchangePoints: {
     goodsId,
@@ -472,8 +563,10 @@ const goodsInfo = reactive<GoodsAddParams>({
       categoryList: [], // 工具属性
     },
   ],
+  deductionPoints: {},
 });
 
+// 编辑和查看初始化数据
 onMounted(() => {
   if (isCheck.value || isEdit.value) {
     getGoodsDetail();
@@ -491,7 +584,7 @@ const getGoodsDetail = async () => {
 };
 
 const initForm = (goodsDetail: GoodsAddParams) => {
-  const { spu, extend, rules, points, exchangePoints } = goodsDetail;
+  const { spu, extend, rules, points, exchangePoints, deductionPoints } = goodsDetail;
   // 处理spu
   spu.goodsPrice = Number(spu.goodsPrice);
   spu.goodsPropsList = [];
@@ -523,7 +616,6 @@ const initForm = (goodsDetail: GoodsAddParams) => {
     });
   }
   // 处理视频
-
   if (spu.goodsVideo) {
     goodsVideoList.value = [
       {
@@ -543,12 +635,45 @@ const initForm = (goodsDetail: GoodsAddParams) => {
   }
   // 如果是积分商品
   if (extend.goodsType === GoodsType.POINT) {
-    pointsSelectList.value = [
-      {
-        pointsId: points.pointsId || "",
-        pointsName: points.pointsName || "",
-      },
-    ];
+    if (points.pointsType === PointsType.POINTS) {
+      pointsSelectList.value = [
+        {
+          pointsId: points.pointsId || "",
+          pointsName: points.pointsName || "",
+        },
+      ];
+    }
+
+    if (points.pointsType === PointsType.COIN) {
+      coinSelectList.value = [
+        {
+          coinId: points.pointsId || "",
+          coinName: points.pointsName || "",
+        },
+      ];
+    }
+  }
+
+  // 如果可用积分抵扣
+  if (extend.pointsDeductionType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(extend.goodsType || GoodsType.COMMON)) {
+    if (deductionPoints.pointsType === PointsType.POINTS) {
+      deductionPointsSelectList.value = [
+        {
+          pointsId: deductionPoints.pointsId || "",
+          pointsName: deductionPoints.pointsName || "",
+        },
+      ];
+    }
+
+    if (deductionPoints.pointsType === PointsType.COIN) {
+      deductionCoinSelectList.value = [
+        {
+          coinId: deductionPoints.pointsId || "",
+          coinName: deductionPoints.pointsName || "",
+        },
+      ];
+    }
+    goodsInfo.deductionPoints = { ...deductionPoints, needNum: Number(deductionPoints.needNum) };
   }
 
   // 如果商品可兑换成积分
@@ -644,10 +769,30 @@ const submitHandler = async () => {
     goodsInfo.spu.goodsVideoCover = goodsVideoCoverList.value[0].hashName;
   }
 
+  // 如果可用积分抵扣
+  if (goodsInfo.extend.pointsDeductionType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)) {
+    if (goodsInfo.deductionPoints.pointsType === PointsType.POINTS) {
+      goodsInfo.deductionPoints.pointsId = deductionPointsSelectList.value[0]?.pointsId;
+      goodsInfo.deductionPoints.pointsName = deductionPointsSelectList.value[0]?.pointsName;
+    }
+
+    if (goodsInfo.deductionPoints.pointsType === PointsType.COIN) {
+      goodsInfo.deductionPoints.pointsId = deductionCoinSelectList.value[0]?.coinId;
+      goodsInfo.deductionPoints.pointsName = deductionCoinSelectList.value[0]?.coinName;
+    }
+  }
+
   // 如果是积分商品
   if (goodsInfo.extend.goodsType === GoodsType.POINT) {
-    goodsInfo.points.pointsId = pointsSelectList.value[0]?.pointsId;
-    goodsInfo.points.pointsName = pointsSelectList.value[0]?.pointsName;
+    if (goodsInfo.points.pointsType === PointsType.POINTS) {
+      goodsInfo.points.pointsId = pointsSelectList.value[0]?.pointsId;
+      goodsInfo.points.pointsName = pointsSelectList.value[0]?.pointsName;
+    }
+
+    if (goodsInfo.points.pointsType === PointsType.COIN) {
+      goodsInfo.points.pointsId = coinSelectList.value[0]?.coinId;
+      goodsInfo.points.pointsName = coinSelectList.value[0]?.coinName;
+    }
   }
 
   // 如果商品可兑换成积分

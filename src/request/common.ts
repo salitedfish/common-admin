@@ -25,10 +25,10 @@ export const getCities = (provinceCode: number): RequestReturn.GetCities => {
 };
 
 // 微信图片上传
-export const uploadWCImg = (file: File): Promise<Return<string>> => {
+export const uploadWCImg = (file: File) => {
   const data = new FormData();
   data.append("file", file);
-  return ultraFetch.post(
+  return ultraFetch.post<Return<string>>(
     {
       URL: "/manager/merchant-wechat/apply/upload/image",
       body: data,
@@ -126,8 +126,8 @@ export const updateCategoryState = (params: { id: number; state: number }) => {
 };
 
 // 白名单模板下载
-export const downLoadWhiteListTemplate = (): Promise<Blob> => {
-  return ultraFetch.get({
+export const downLoadWhiteListTemplate = () => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/file/excel/allow/template",
   });
 };
@@ -149,11 +149,11 @@ export const uploadWhiteList = (params: { id: string; file: File }, whiteListTyp
 };
 
 // 白名单下载
-export const downLoadWhiteList = (params: { id: string; goodsId?: string; type?: number }, whiteListType: number): Promise<Blob> => {
+export const downLoadWhiteList = (params: { id: string; goodsId?: string; type?: number }, whiteListType: number) => {
   if (whiteListType === WhiteListType.GOODS) {
     params.goodsId = params.id;
   }
-  return ultraFetch.get({
+  return ultraFetch.get<Blob>({
     URL: whiteListUrls.getItem(whiteListType)?.URLS.downLoadWhiteListUrl,
     params: params,
   });
@@ -182,8 +182,8 @@ export const getWhiteList = (params: RequestParam.GetWhiteList, whiteListType: n
 };
 
 // 修改密码
-export const updatePassword = (params: { newPassword: string; oldPassword: string }): Promise<Return<unknown>> => {
-  return ultraFetch.post({
+export const updatePassword = (params: { newPassword: string; oldPassword: string }) => {
+  return ultraFetch.post<Return<unknown>>({
     URL: "/manager/account/login-password/update",
     body: JSON.stringify(params),
   });

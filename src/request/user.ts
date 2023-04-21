@@ -9,6 +9,8 @@ import type {
   UserPointsListItem,
   UserRealInfo,
   VipLevelItem,
+  UserParallelCoinListScreenParams,
+  UserParallelCoinListItem,
 } from "@/type/User";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
@@ -110,5 +112,13 @@ export const updateVipLevelList = (params: VipLevelItem[]) => {
   return ultraFetch.post({
     URL: "/manager/vip/level/submit",
     body: JSON.stringify(amounts),
+  });
+};
+
+// 用户平行链代币管理
+export const getUserParallelCoinList = (params: Paging & UserParallelCoinListScreenParams) => {
+  return ultraFetch.post<Return<ReturnList<UserParallelCoinListItem>>>({
+    URL: "/manager/user-parallel-coin/page",
+    body: JSON.stringify(params),
   });
 };

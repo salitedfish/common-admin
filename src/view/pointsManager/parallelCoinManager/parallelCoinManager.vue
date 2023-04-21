@@ -13,6 +13,8 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getParallelCoinList, delParallelCoin } from "@/request/points";
 // store
 import { useAuthStore } from "@/store/authStore";
+import { giftTypeList, coinTypeList } from "../parallelCoinDetail/parallelCoinDetailStore";
+
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
@@ -33,9 +35,27 @@ const createColumns = () => {
   const list: DataTableColumns<ParallelCoinItem> = [
     {
       title: "代币",
-      key: "coin",
+      key: "token",
       align: "center",
       width: 120,
+    },
+    {
+      title: "类型",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return coinTypeList.getItem(row.type)?.label;
+      },
+    },
+    {
+      title: "是否可转赠",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return giftTypeList.getItem(row.giftType)?.label;
+      },
     },
     {
       title: "发行地址",
@@ -79,6 +99,21 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
+    {
+      title: "标签",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.label,
+          }
+        );
+      },
+    },
 
     {
       title: "操作",
@@ -103,11 +138,11 @@ const createColumns = () => {
                 onClick: () => {
                   const dialogInfo = dialog.warning({
                     title: "删除代币",
-                    content: `确认删除${row.coin}吗？`,
+                    content: `确认删除${row.token}吗？`,
                     positiveText: "确认",
                     onPositiveClick: async () => {
                       dialogInfo.loading = true;
-                      const res = await delParallelCoin({ coin: row.coin });
+                      const res = await delParallelCoin({ id: row.id });
                       if (res) {
                         await getList();
                         commonNotify("success", "代币删除成功");
@@ -130,7 +165,19 @@ const createColumns = () => {
                 secondary: true,
                 size,
                 onClick: () => {
-                  router.push({ name: "parallelCoinDetail", query: { type: "EDIT", coin: row.coin, address: row.address, privateKey: row.privateKey } });
+                  router.push({
+                    name: "parallelCoinDetail",
+                    query: {
+                      detailType: "EDIT",
+                      token: row.token,
+                      address: row.address,
+                      privateKey: row.privateKey,
+                      id: row.id,
+                      label: row.label,
+                      giftType: row.giftType,
+                      type: row.type,
+                    },
+                  });
                 },
               },
               {

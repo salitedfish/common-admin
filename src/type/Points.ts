@@ -22,6 +22,7 @@ export type PointsItem = {
   pointsState: number;
   pointsStock: number;
   pointsTotal: number;
+  giftType: number;
 };
 
 export type AddPointsParams = {
@@ -29,26 +30,37 @@ export type AddPointsParams = {
   pointsId: string;
   pointsName: string;
   pointsTotal: number | null;
+  giftType: number | null;
 };
 
 // 平行链代币
 export type ParallelCoinListParams = Partial<{
-  coin: string;
+  token: string;
   merchantUid: string;
 }>;
 
 export type ParallelCoinItem = {
   address: string;
-  coin: string;
+  token: string;
   freezeNum: number;
   holdNum: number;
   merchantName: string;
   merchantUid: number;
   privateKey: string;
+
+  id: number;
+  label: string;
+  giftType: number;
+  type: number;
 };
 
 export type ParallelCoinDetail = Partial<{
   address: string;
-  coin: string;
+  token: string;
   privateKey: string;
+
+  giftType: number;
+  id: number;
+  label: string;
+  type: number;
 }>;

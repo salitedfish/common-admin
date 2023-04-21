@@ -24,6 +24,17 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "parallelCoinWithdrawManager",
+    name: "parallelCoinWithdrawManager",
+    component: () => import("@/view/financeManager/parallelCoinWithdrawManager/parallelCoinWithdrawManager.vue"),
+    meta: {
+      label: "提币管理",
+      icon: "fenzhangguanli",
+      keepAlive: true,
+      id: 6013,
+    },
+  },
+  {
     path: "goodsBlockChainRecordManager",
     name: "goodsBlockChainRecordManager",
     component: () => import("@/view/financeManager/goodsBlockChainRecordManager/goodsBlockChainRecordManager.vue"),

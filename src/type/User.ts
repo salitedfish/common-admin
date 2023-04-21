@@ -104,3 +104,19 @@ export type VipLevelItem = {
   // level: number;
   amount?: number;
 };
+
+// 用户平行链代币管理
+export type UserParallelCoinListScreenParams = Partial<{
+  token: string;
+  type: number;
+  uid: string;
+}>;
+
+export type UserParallelCoinListItem = {
+  freezeNum: number;
+  giftType: number;
+  holdNum: number;
+  token: string;
+  type: number;
+  uid: string;
+};

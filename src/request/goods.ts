@@ -88,15 +88,15 @@ export const updateGoodsExtend = (params: RequestParam.GoodsSubmit) => {
   });
 };
 
-export const getBlindBoxPrizeList = (params: { goodsId: string }): Promise<Return<BlindBoxPrizeListItem[]>> => {
-  return ultraFetch.get({
+export const getBlindBoxPrizeList = (params: { goodsId: string }) => {
+  return ultraFetch.get<Return<BlindBoxPrizeListItem[]>>({
     URL: "/manager/goods/mystery-box/list",
     params: params,
   });
 };
 
-export const submitBlindBoxPrize = (params: { boxGoodsIds: string[]; goodsId: string }): Promise<Return<unknown>> => {
-  return ultraFetch.post({
+export const submitBlindBoxPrize = (params: { boxGoodsIds: string[]; goodsId: string }) => {
+  return ultraFetch.post<Return<unknown>>({
     URL: "/manager/goods/mystery-box/submit",
     body: JSON.stringify(params),
   });
@@ -109,23 +109,23 @@ export const clearBlindBoxPrize = (params: { goodsId: string }) => {
   });
 };
 
-export const getBlindBoxOpenRecord = (params: Paging & { goodsId?: string; uid?: string }): Promise<Return<ReturnList<BlindBoxOpenRecordItem>>> => {
-  return ultraFetch.post({
+export const getBlindBoxOpenRecord = (params: Paging & { goodsId?: string; uid?: string }) => {
+  return ultraFetch.post<Return<ReturnList<BlindBoxOpenRecordItem>>>({
     URL: "/manager/goods/mystery-box/open-record/page",
     body: JSON.stringify(params),
   });
 };
 
-export const getGoodsPublishRecord = (params: { goodsId: string }): Promise<Return<GoodsPublishRecordItem[]>> => {
-  return ultraFetch.get({
+export const getGoodsPublishRecord = (params: { goodsId: string }) => {
+  return ultraFetch.get<Return<GoodsPublishRecordItem[]>>({
     URL: "/manager/goods/issue/record",
     params: params,
   });
 };
 
 // 合成相关接口
-export const getSyntheticList = async (params: { goodsId: string }): Promise<Return<GetSyntheticRule[]>> => {
-  return ultraFetch.get({
+export const getSyntheticList = async (params: { goodsId: string }) => {
+  return ultraFetch.get<Return<GetSyntheticRule[]>>({
     URL: "/manager/goods/synthesis/list",
     params,
   });
