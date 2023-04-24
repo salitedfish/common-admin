@@ -162,10 +162,17 @@
     <n-card title="规则：">
       <n-card v-for="(item, key) in lotteryFormData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
-          <n-select v-model:value="item.type" :options="lotteryRuleTypes" placeholder="请选择规则类型" :style="{ width: inputWidth }" clearable :disabled="submiting || isCheck" />
+          <n-select
+            v-model:value="item.itemType"
+            :options="lotteryRuleTypes"
+            placeholder="请选择规则类型"
+            :style="{ width: inputWidth }"
+            clearable
+            :disabled="submiting || isCheck"
+          />
         </n-form-item>
 
-        <n-form-item label="类目编号:" required v-show="[LotteryRuleType.HOLD_CATEGORY, LotteryRuleType.EXTENSION_CATEGORY].includes(Number(item.type))">
+        <n-form-item label="类目编号:" required v-show="[LotteryRuleType.HOLD_CATEGORY, LotteryRuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))">
           <category-select
             v-model:model-value="item.categoryList"
             :default-value="isNaN(Number(item.itemId)) ? undefined : Number(item.itemId)"
@@ -174,7 +181,7 @@
           ></category-select>
         </n-form-item>
 
-        <n-form-item label="商品" v-show="[LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.type))" required>
+        <n-form-item label="商品" v-show="[LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.itemType))" required>
           <n-input :value="item.goodsList.length >= 1 ? item.goodsList[0].goodsName : undefined" placeholder="请选择商品" :disabled="true"></n-input>
           <goodsSelect
             v-model:goods-selected-list="item.goodsList"
@@ -188,7 +195,9 @@
           label="开始时间"
           required
           v-if="
-            [LotteryRuleType.EXTENSION_REAL_NAME, LotteryRuleType.NEW_REAL_NAME, LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.type))
+            [LotteryRuleType.EXTENSION_REAL_NAME, LotteryRuleType.NEW_REAL_NAME, LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.EXTENSION_GOODS].includes(
+              Number(item.itemType)
+            )
           "
         >
           <n-date-picker
@@ -206,7 +215,9 @@
           label="结束时间"
           required
           v-if="
-            [LotteryRuleType.EXTENSION_REAL_NAME, LotteryRuleType.NEW_REAL_NAME, LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.type))
+            [LotteryRuleType.EXTENSION_REAL_NAME, LotteryRuleType.NEW_REAL_NAME, LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.EXTENSION_GOODS].includes(
+              Number(item.itemType)
+            )
           "
         >
           <n-date-picker
@@ -335,9 +346,9 @@ const submiting = ref(false);
 const submitHandler = async () => {
   const rules = lotteryFormData.rules.map((item) => {
     let itemId = "";
-    if ([LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.type))) {
+    if ([LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.itemType))) {
       itemId = item.goodsList[0] ? String(item.goodsList[0].goodsId) : item.itemId || "";
-    } else if ([LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.type))) {
+    } else if ([LotteryRuleType.EXTENSION_CATEGORY, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType))) {
       itemId = item.categoryList.length >= 1 ? String(item.categoryList[item.categoryList.length - 1].id) : item.itemId || "";
     }
     return { ...item, itemId };
@@ -393,7 +404,7 @@ const initForm = async () => {
       return {
         ...item,
         categoryList: [],
-        goodsList: [LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.type))
+        goodsList: [LotteryRuleType.HOLD_GOODS, LotteryRuleType.EXTENSION_GOODS].includes(Number(item.itemType))
           ? [
               {
                 goodsId: itemId,

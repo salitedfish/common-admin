@@ -13,9 +13,9 @@ export type ManualAirDropListItem = {
   createTime: string;
   hitUsers: number;
   id: number;
-  itemId: string;
-  itemName: string;
-  itemType: number;
+  rewardId: string;
+  rewardName: string;
+  rewardType: number;
   merchantName: string;
   merchantUid: string;
   name: string;
@@ -30,9 +30,9 @@ export type ManualAirDropDetail = {
   createTime: string;
   hitUsers: number;
   id: number;
-  itemId: string;
-  itemName: string;
-  itemType: number;
+  rewardId: string;
+  rewardName: string;
+  rewardType: number;
   merchantName: string;
   merchantUid: string;
   name: string;
@@ -45,9 +45,9 @@ export type ManualAirDropDetail = {
 };
 export type ManualAirDropAddParams = {
   id?: number;
-  itemId: string;
-  itemName: string;
-  itemType: number;
+  rewardId: string;
+  rewardName: string;
+  rewardType: number;
   name: string;
   startTime: string | null;
 };
@@ -63,9 +63,9 @@ export type TimingAirDropListItem = {
   createTime: string;
   expireMinute: number;
   id: number;
-  itemId: string;
-  itemType: number;
-  itemName: string;
+  // itemId: string;
+  // itemType: number;
+  // itemName: string;
   merchantName: string;
   merchantUid: string;
   name: string;
@@ -99,21 +99,23 @@ export type TimingAirDropDetail = {
     holdNum: number;
     holdTime: number;
     holdTimeType: number;
-    itemId: string;
     limitNum: number;
     totalUnitNum: number;
-
-    type: number;
     unitNum: number;
+
+    itemId: string;
+    itemType: number;
+    itemName: string;
+    rewardId: string;
+    rewardType: number;
+    rewardName: string;
   }[];
 };
 export type TimingAirDropAddParams = {
   info: {
     expireMinute: number | null;
     id?: number;
-    itemId: string;
-    itemName: string;
-    itemType: number | null;
+
     name: string;
     timeDay: number | null;
     timeHour: number | null;
@@ -125,12 +127,21 @@ export type TimingAirDropAddParams = {
     holdNum: number | null;
     holdTime: number | null;
     holdTimeType: number | null;
-    itemId: string;
     limitNum: number | null;
     totalUnitNum: number | null;
-    type: number | null;
     unitNum: number | null;
     categoryList: CategoryTreeItem[];
+
+    itemId: string | null;
+    itemType: number | null;
+    itemName: string | null;
+    rewardId: string | null;
+    rewardType: number | null;
+    rewardName: string | null;
+
+    rewardGoods: { goodsId: string; goodsName: string }[];
+    rewardPoints: { pointsId: string; pointsName: string }[];
+    rewardCoin: { coinId: string; coinName: string }[];
   }[];
 };
 
@@ -298,7 +309,7 @@ export type lotteryRule = {
   itemId?: string;
   limitNum?: number;
   startTime?: string;
-  type?: number;
+  itemType?: number;
   unitNum?: number;
 
   categoryList: CategoryTreeItem[];
@@ -345,9 +356,9 @@ export type GoodsActivityListItem = {
   name: string;
   goodsId: string;
   goodsName: string;
-  itemType: number;
-  itemId: string;
-  itemName: string;
+  // itemType: number;
+  // itemId: string;
+  // itemName: string;
 
   bindAirdropTaskId: number;
   createTime: string;
@@ -363,9 +374,25 @@ export type GoodsActivityRule = {
   belowOrderNum: number;
   inviteLevel: number;
   minVipLevel: number;
-  totalUnitNum: number;
-  type: number;
-  unitNum: number;
+  // totalUnitNum: number;
+  // type: number;
+  // unitNum: number;
+
+  provideType: number;
+  rewardId: string;
+  rewardName: string;
+  rewardPrice: number;
+  rewardType: number;
+  totalUnitAmount: number;
+  tradeType: number;
+  unitAmount: number;
+  unitType: number;
+  userType: number;
+  vipType: number;
+
+  rewardGoods: { goodsId: string; goodsName: string }[];
+  rewardPoints: { pointsId: string; pointsName: string }[];
+  rewardCoin: { coinId: string; coinName: string }[];
 };
 export type GoodsActivityDetailAPI = {
   info: Partial<GoodsActivityListItem>;

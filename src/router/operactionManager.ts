@@ -117,7 +117,7 @@ export default <RouteRecordRaw[]>[
     name: "timingAirdropManager",
     component: () => import("@/view/operactionManager/timingAirdropManager/timingAirdropManager.vue"),
     meta: {
-      label: "定时空投任务",
+      label: "定时空投",
       icon: "kongtou",
       keepAlive: true,
       id: 5022,

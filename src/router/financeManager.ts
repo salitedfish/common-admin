@@ -61,7 +61,7 @@ export default <RouteRecordRaw[]>[
     name: "parallelRecordManager",
     component: () => import("@/view/financeManager/parallelRecordManager/parallelRecordManager.vue"),
     meta: {
-      label: "平行链代币记录",
+      label: "代币区块链记录",
       icon: "qukuailian",
       keepAlive: true,
       id: 6023,

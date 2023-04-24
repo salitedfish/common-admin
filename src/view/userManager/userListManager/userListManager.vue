@@ -76,12 +76,13 @@ import {
   getUserRealInfo as getUserRealInfoRequest,
 } from "@/request/user";
 // store
+import { useAuthStore } from "@/store/authStore";
 import { UserState, userStateList, accountTabList } from "./userListManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
 import type { UserListItem, UserRealInfo } from "@/type/User";
 const dialog = useDialog();
-
+const authStore = useAuthStore();
 // 争对用户的不同操作类型
 enum SetInfoType {
   TAB,
@@ -107,55 +108,6 @@ const createColumns = () => {
       fixed: "left",
     },
     {
-      title: "手机号",
-      key: "phone",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "状态",
-      key: "state",
-      align: "center",
-      width: 100,
-      render(user) {
-        return userStateList.getItem(user.state)?.label;
-      },
-    },
-    {
-      title: "类型",
-      key: "tab",
-      align: "center",
-      width: 100,
-      render(user) {
-        return accountTabList.getItem(user.tab)?.label;
-      },
-    },
-    {
-      title: "vip等级",
-      key: "vipLevel",
-      align: "center",
-      width: 100,
-    },
-    {
-      title: "用户昵称",
-      key: "nickName",
-      align: "center",
-      width: 120,
-    },
-
-    {
-      title: "用户头像",
-      key: "headUrl",
-      align: "center",
-      width: 100,
-      render(user) {
-        return h(NImage, {
-          width: 30,
-          src: user.headUrl,
-        });
-      },
-    },
-    {
       title: "区块链地址",
       key: "chainAddress",
       align: "center",
@@ -170,111 +122,183 @@ const createColumns = () => {
         );
       },
     },
-    {
-      title: "邀请码",
-      key: "inviteCode",
-      align: "center",
-      width: 100,
-    },
-    {
-      title: "已邀请人数",
-      key: "inviteNum",
-      align: "center",
-      width: 100,
-    },
-    {
-      title: "注册码",
-      key: "registerCode",
-      align: "center",
-      width: 100,
-      render(user) {
-        return user.registerCode || "-";
-      },
-    },
-    {
-      title: "注册时间",
-      key: "registerTime",
-      align: "center",
-      width: 180,
-      render(user) {
-        return user.registerTime || "-";
-      },
-    },
-    {
-      title: "最近登录时间",
-      key: "lastLoginTime",
-      align: "center",
-      width: 180,
-      render(user) {
-        return user.lastLoginTime || "-";
-      },
-    },
-
-    {
-      title: "操作",
-      key: "operaction",
-      align: "center",
-      width: 340,
-      fixed: "right",
-      render(user) {
-        const btnList = [
-          h(
-            NButton,
-            { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(user) },
-            { default: () => (user.state === UserState.FROZEN ? "解冻" : "冻结") }
-          ),
-          h(
-            NButton,
-            {
-              type: "primary",
-              size: "small",
-              secondary: true,
-              onClick: () => {
-                userInfo.setType = SetInfoType.TAB;
-                userInfo.tab = user.tab;
-                userInfo.title = user.nickName;
-                userInfo.uid = user.uid;
-                showUserTabModal.value = true;
-              },
-            },
-            { default: () => "标签" }
-          ),
-          h(
-            NButton,
-            {
-              type: "primary",
-              size: "small",
-              secondary: true,
-              onClick: () => {
-                getUserRealInfoHandler(user.uid);
-                showUserRealInfoModal.value = true;
-              },
-            },
-            { default: () => "实名信息" }
-          ),
-          h(
-            NButton,
-            {
-              type: "primary",
-              size: "small",
-              secondary: true,
-              onClick: () => {
-                userInfo.setType = SetInfoType.PHONE;
-                userInfo.phone = user.phone;
-                userInfo.title = user.nickName;
-                userInfo.uid = user.uid;
-                showUserTabModal.value = true;
-              },
-            },
-            { default: () => "修改手机号" }
-          ),
-        ];
-        // 用来放按钮的容器
-        const btnBox = h(NSpace, {}, { default: () => btnList });
-        return btnBox;
-      },
-    },
   ];
+  // 管理员
+  if (authStore.isAdmin) {
+    list.splice(
+      1,
+      0,
+      ...([
+        {
+          title: "手机号",
+          key: "phone",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "状态",
+          key: "state",
+          align: "center",
+          width: 100,
+          render(user) {
+            return userStateList.getItem(user.state)?.label;
+          },
+        },
+        {
+          title: "类型",
+          key: "tab",
+          align: "center",
+          width: 100,
+          render(user) {
+            return accountTabList.getItem(user.tab)?.label;
+          },
+        },
+        {
+          title: "用户昵称",
+          key: "nickName",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "用户头像",
+          key: "headUrl",
+          align: "center",
+          width: 100,
+          render(user) {
+            return h(NImage, {
+              width: 30,
+              src: user.headUrl,
+            });
+          },
+        },
+      ] as DataTableColumns<UserListItem>)
+    );
+    list.push(
+      ...([
+        {
+          title: "邀请码",
+          key: "inviteCode",
+          align: "center",
+          width: 100,
+        },
+        {
+          title: "已邀请人数",
+          key: "inviteNum",
+          align: "center",
+          width: 100,
+        },
+        {
+          title: "注册码",
+          key: "registerCode",
+          align: "center",
+          width: 100,
+          render(user) {
+            return user.registerCode || "-";
+          },
+        },
+        {
+          title: "注册时间",
+          key: "registerTime",
+          align: "center",
+          width: 180,
+          render(user) {
+            return user.registerTime || "-";
+          },
+        },
+        {
+          title: "最近登录时间",
+          key: "lastLoginTime",
+          align: "center",
+          width: 180,
+          render(user) {
+            return user.lastLoginTime || "-";
+          },
+        },
+        {
+          title: "操作",
+          key: "operaction",
+          align: "center",
+          width: 340,
+          fixed: "right",
+          render(user) {
+            const btnList = [
+              h(
+                NButton,
+                { type: "warning", size: "small", secondary: true, onClick: () => handleFrozen(user) },
+                { default: () => (user.state === UserState.FROZEN ? "解冻" : "冻结") }
+              ),
+              h(
+                NButton,
+                {
+                  type: "primary",
+                  size: "small",
+                  secondary: true,
+                  onClick: () => {
+                    userInfo.setType = SetInfoType.TAB;
+                    userInfo.tab = user.tab;
+                    userInfo.title = user.nickName;
+                    userInfo.uid = user.uid;
+                    showUserTabModal.value = true;
+                  },
+                },
+                { default: () => "标签" }
+              ),
+              h(
+                NButton,
+                {
+                  type: "primary",
+                  size: "small",
+                  secondary: true,
+                  onClick: () => {
+                    getUserRealInfoHandler(user.uid);
+                    showUserRealInfoModal.value = true;
+                  },
+                },
+                { default: () => "实名信息" }
+              ),
+              h(
+                NButton,
+                {
+                  type: "primary",
+                  size: "small",
+                  secondary: true,
+                  onClick: () => {
+                    userInfo.setType = SetInfoType.PHONE;
+                    userInfo.phone = user.phone;
+                    userInfo.title = user.nickName;
+                    userInfo.uid = user.uid;
+                    showUserTabModal.value = true;
+                  },
+                },
+                { default: () => "修改手机号" }
+              ),
+            ];
+            // 用来放按钮的容器
+            const btnBox = h(NSpace, {}, { default: () => btnList });
+            return btnBox;
+          },
+        },
+      ] as DataTableColumns<UserListItem>)
+    );
+  } else {
+    // 商户
+    list.push(
+      ...([
+        {
+          title: "会员等级",
+          key: "memberLevel",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "节点等级",
+          key: "nodeLevel",
+          align: "center",
+          width: 120,
+        },
+      ] as DataTableColumns<UserListItem>)
+    );
+  }
   return list;
 };
 

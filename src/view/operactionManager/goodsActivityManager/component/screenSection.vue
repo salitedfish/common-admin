@@ -12,8 +12,8 @@
     <n-input v-model:value="params.name" autosize placeholder="请输入活动名称" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-input v-model:value="params.itemId" autosize placeholder="请输入奖品编号" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select v-model:value="params.itemType" :options="rewardTypeList" placeholder="请选择奖品类型" style="width: 200px" :disabled="searching" clearable />
+    <!-- <n-input v-model:value="params.itemId" autosize placeholder="请输入奖品编号" style="width: 200px" :disabled="searching" clearable></n-input>
+    <n-select v-model:value="params.itemType" :options="rewardTypeList" placeholder="请选择奖品类型" style="width: 200px" :disabled="searching" clearable /> -->
     <n-select v-model:value="params.timeType" :options="goodsActivityTimeTypeList" placeholder="请选择执行时间类型" style="width: 200px" :disabled="searching" clearable />
 
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>

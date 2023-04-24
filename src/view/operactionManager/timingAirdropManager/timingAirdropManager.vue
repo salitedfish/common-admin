@@ -58,21 +58,21 @@ const createColumns = () => {
       fixed: "left",
     },
 
-    {
-      title: "空投物品类型",
-      key: "itemType",
-      align: "center",
-      width: 120,
-      render(row) {
-        return airDropItemTypeList.getItem(row.itemType)?.label;
-      },
-    },
-    {
-      title: "空投物品名称",
-      key: "itemName",
-      align: "center",
-      width: 160,
-    },
+    // {
+    //   title: "空投物品类型",
+    //   key: "itemType",
+    //   align: "center",
+    //   width: 120,
+    //   render(row) {
+    //     return airDropItemTypeList.getItem(row.itemType)?.label;
+    //   },
+    // },
+    // {
+    //   title: "空投物品名称",
+    //   key: "itemName",
+    //   align: "center",
+    //   width: 160,
+    // },
     {
       title: "执行类型",
       key: "timeType",

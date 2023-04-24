@@ -50,7 +50,7 @@ export default <RouteRecordRaw[]>[
     name: "userParallelCoinManager",
     component: () => import("@/view/userManager/userParallelCoinManager/userParallelCoinManager.vue"),
     meta: {
-      label: "用户平行链代币管理",
+      label: "用户代币",
       icon: "jifen",
       keepAlive: true,
       id: 4022,
@@ -61,7 +61,7 @@ export default <RouteRecordRaw[]>[
     name: "adminMerchantManager",
     component: () => import("@/view/userManager/adminMerchantManager/adminMerchantManager.vue"),
     meta: {
-      label: "后台用户管理",
+      label: "后台用户",
       icon: "shanghuguanli",
       keepAlive: true,
       id: 4031,

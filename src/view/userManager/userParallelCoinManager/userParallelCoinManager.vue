@@ -39,15 +39,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "是否可转赠",
-      key: "fromChainAddress",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return giftTypeList.getItem(row.giftType)?.label;
-      },
-    },
+
     {
       title: "持有数量",
       key: "holdNum",
@@ -59,6 +51,15 @@ const createColumns = () => {
       key: "freezeNum",
       align: "center",
       width: 120,
+    },
+    {
+      title: "是否可转赠",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return giftTypeList.getItem(row.giftType)?.label;
+      },
     },
 
     // {

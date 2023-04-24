@@ -108,10 +108,9 @@ export const getVipLevelList = (): Promise<Return<VipLevelItem[]>> => {
 };
 
 export const updateVipLevelList = (params: VipLevelItem[]) => {
-  const amounts = params.map((item) => item.amount);
   return ultraFetch.post({
     URL: "/manager/vip/level/submit",
-    body: JSON.stringify(amounts),
+    body: JSON.stringify(params),
   });
 };
 

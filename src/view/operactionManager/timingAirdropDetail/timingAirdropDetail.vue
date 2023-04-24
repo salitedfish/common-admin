@@ -4,41 +4,6 @@
       <n-form-item label="空投名称:" required>
         <n-input v-model:value="formData.info.name" placeholder="请输入空投名称"></n-input>
       </n-form-item>
-      <n-form-item label="空投物品类型：" required>
-        <n-select :options="airDropItemTypeList" v-model:value="formData.info.itemType" placeholder="请选择空投物品类型" :disabled="isAdmin || submiting || isCheck"></n-select>
-      </n-form-item>
-      <!-- <n-form-item label="商品编号：" v-show="formData.info.itemType === AirDropItemType.GOODS && !isAdmin" required>
-        <n-input v-model:value="formData.info.itemId" placeholder="请输入商品编号,必须为空投商品"></n-input>
-      </n-form-item>
-      <n-form-item label="积分编号：" v-show="formData.info.itemType === AirDropItemType.POINTS" required>
-        <n-input v-model:value="formData.info.itemId" placeholder="请输入积分编号"></n-input>
-      </n-form-item> -->
-
-      <n-form-item label="奖励商品:" required v-if="formData.info.itemType === AirDropItemType.GOODS">
-        <n-input placeholder="请选择奖励商品" :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" disabled></n-input>
-        <goodsSelect
-          v-model:goods-selected-list="goodsList"
-          :max="1"
-          :disabled="submiting || isCheck"
-          :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
-        ></goodsSelect>
-      </n-form-item>
-
-      <n-form-item label="奖励积分:" required v-if="formData.info.itemType === AirDropItemType.POINTS">
-        <n-input placeholder="请选择奖励积分" :value="pointsList.length >= 1 ? pointsList[0].pointsName : undefined" disabled></n-input>
-        <pointsSelect
-          v-model:points-select-list="pointsList"
-          :max="1"
-          :disabled="submiting || isCheck"
-          :multiple="true"
-          :pointsStates="[PointsState.PUBLISH_SUCCESS]"
-        ></pointsSelect>
-      </n-form-item>
-
-      <n-form-item label="奖励代币:" required v-if="formData.info.itemType === AirDropItemType.COIN">
-        <n-input placeholder="请选择奖励代币" :value="coinList.length >= 1 ? coinList[0].coinName : undefined" disabled></n-input>
-        <parallelCoinSelect v-model:parallel-coin-select-list="coinList" :max="1" :disabled="submiting || isCheck" :multiple="true"></parallelCoinSelect>
-      </n-form-item>
 
       <n-form-item label="执行时间类型：" required>
         <n-select :options="airDropTimeTypeList" v-model:value="formData.info.timeType" placeholder="请选择执行时间类型"></n-select>
@@ -63,9 +28,9 @@
     <n-card title="规则：" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in formData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
-          <n-select v-model:value="item.type" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
+          <n-select v-model:value="item.itemType" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
         </n-form-item>
-        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))" required>
+        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))" required>
           <category-select
             @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
             placeholder="请选择商品类目"
@@ -75,13 +40,50 @@
             :disabled="isCheck || submiting"
           ></category-select>
         </n-form-item>
-        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))" required>
+        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.itemType))" required>
           <n-input placeholder="请输入商品编号" v-model:value="item.itemId"></n-input>
         </n-form-item>
+
+        <n-form-item label="空投物品类型：" required>
+          <n-select :options="airDropItemTypeList" v-model:value="item.rewardType" placeholder="请选择空投物品类型" :disabled="isAdmin || submiting || isCheck"></n-select>
+        </n-form-item>
+        <!-- <n-form-item label="商品编号：" v-show="formData.info.itemType === AirDropItemType.GOODS && !isAdmin" required>
+        <n-input v-model:value="formData.info.itemId" placeholder="请输入商品编号,必须为空投商品"></n-input>
+      </n-form-item>
+      <n-form-item label="积分编号：" v-show="formData.info.itemType === AirDropItemType.POINTS" required>
+        <n-input v-model:value="formData.info.itemId" placeholder="请输入积分编号"></n-input>
+      </n-form-item> -->
+
+        <n-form-item label="奖励商品:" required v-if="item.rewardType === AirDropItemType.GOODS">
+          <n-input placeholder="请选择奖励商品" :value="item.rewardGoods.length >= 1 ? item.rewardGoods[0].goodsName : undefined" disabled></n-input>
+          <goodsSelect
+            v-model:goods-selected-list="item.rewardGoods"
+            :max="1"
+            :disabled="submiting || isCheck"
+            :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
+          ></goodsSelect>
+        </n-form-item>
+
+        <n-form-item label="奖励积分:" required v-if="item.rewardType === AirDropItemType.POINTS">
+          <n-input placeholder="请选择奖励积分" :value="item.rewardPoints.length >= 1 ? item.rewardPoints[0].pointsName : undefined" disabled></n-input>
+          <pointsSelect
+            v-model:points-select-list="item.rewardPoints"
+            :max="1"
+            :disabled="submiting || isCheck"
+            :multiple="true"
+            :pointsStates="[PointsState.PUBLISH_SUCCESS]"
+          ></pointsSelect>
+        </n-form-item>
+
+        <n-form-item label="奖励代币:" required v-if="item.rewardType === AirDropItemType.COIN">
+          <n-input placeholder="请选择奖励代币" :value="item.rewardCoin.length >= 1 ? item.rewardCoin[0].coinName : undefined" disabled></n-input>
+          <parallelCoinSelect v-model:parallel-coin-select-list="item.rewardCoin" :max="1" :disabled="submiting || isCheck" :multiple="true"></parallelCoinSelect>
+        </n-form-item>
+
         <n-form-item label="单位数量:" required>
           <n-input-number v-model:value="item.holdNum" placeholder="请输入奖励所需的单位数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
-        <n-form-item label="持有天数:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))" required>
+        <n-form-item label="持有天数:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
           <n-input-number
             v-model:value="item.holdTime"
             @update:value="(value) => ruleHoldTimeChange(value, item)"
@@ -91,9 +93,10 @@
             ><template #suffix> 天 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.type))" required>
+        <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
           <n-select :options="holdTimeTypeList" v-model:value="item.holdTimeType" placeholder="请选择持有天数类型"></n-select>
         </n-form-item>
+
         <n-form-item label="奖励数量:" required>
           <n-input-number v-model:value="item.unitNum" placeholder="请输入每单位数量奖励数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
@@ -102,7 +105,7 @@
             ><template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="总奖励上限:" required>
+        <n-form-item label="总奖励上限:" required v-if="isCheck">
           <n-input-number v-model:value="item.totalUnitNum" placeholder="请输入总奖励上限，0表示无上限" :min="0" style="width: 100%"
             ><template #suffix> 份 </template></n-input-number
           >
@@ -166,17 +169,9 @@ const timingAirdropId = computed(() => {
 });
 const isAdmin = authStore.isAdmin;
 
-// 空投物品选择列表
-const goodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
-const pointsList = ref<{ pointsId: string; pointsName: string }[]>([]);
-const coinList = ref<{ coinId: string; coinName: string }[]>([]);
-
 const formData = reactive<TimingAirDropAddParams>({
   info: {
     expireMinute: null,
-    itemId: "",
-    itemName: "",
-    itemType: null,
     name: "",
     timeDay: null,
     timeHour: null,
@@ -191,15 +186,24 @@ const formData = reactive<TimingAirDropAddParams>({
       itemId: "",
       limitNum: null,
       totalUnitNum: null,
-      type: null,
       unitNum: null,
       categoryList: [],
+      itemType: null,
+      itemName: null,
+      rewardId: null,
+      rewardType: null,
+      rewardName: null,
+      rewardGoods: [],
+      rewardPoints: [],
+      rewardCoin: [],
     },
   ],
 });
 
 if (isAdmin) {
-  formData.info.itemType = AirDropItemType.POINTS;
+  for (const item of formData.rules) {
+    item.rewardType = AirDropItemType.POINTS;
+  }
 }
 
 watch(
@@ -228,26 +232,39 @@ const addRule = () => {
     itemId: "",
     limitNum: null,
     totalUnitNum: null,
-    type: null,
     unitNum: null,
     categoryList: [],
+    itemType: null,
+    itemName: null,
+    rewardId: null,
+    rewardType: null,
+    rewardName: null,
+    rewardGoods: [],
+    rewardPoints: [],
+    rewardCoin: [],
   });
 };
 
 const submiting = ref(false);
 const handleSubmit = async () => {
   submiting.value = true;
-  // 如果是商品
-  if (formData.info.itemType === AirDropItemType.GOODS) {
-    formData.info.itemId = String(goodsList.value[0]?.goodsId);
-  }
-  // 如果是积分
-  if (formData.info.itemType === AirDropItemType.POINTS) {
-    formData.info.itemId = pointsList.value[0]?.pointsId;
-  }
-  // 如果是代币
-  if (formData.info.itemType === AirDropItemType.COIN) {
-    formData.info.itemId = coinList.value[0]?.coinId;
+
+  for (const item of formData.rules) {
+    // 如果是商品
+    if (item.rewardType === AirDropItemType.GOODS) {
+      item.rewardId = String(item.rewardGoods[0]?.goodsId);
+      item.rewardName = String(item.rewardGoods[0]?.goodsId);
+    }
+    // 如果是积分
+    if (item.rewardType === AirDropItemType.POINTS) {
+      item.rewardId = String(item.rewardPoints[0]?.pointsId);
+      item.rewardName = String(item.rewardPoints[0]?.pointsName);
+    }
+    // 如果是代币
+    if (item.rewardType === AirDropItemType.COIN) {
+      item.rewardId = String(item.rewardCoin[0]?.coinId);
+      item.rewardName = String(item.rewardCoin[0]?.coinName);
+    }
   }
 
   let tip = "空投任务添加成功";
@@ -272,36 +289,17 @@ const initForm = async () => {
   if (res) {
     const { info, rules } = res.data;
     formData.info = info;
-    formData.rules = rules.map((item) => {
-      return { ...item, categoryList: [] };
-    });
-    const { itemType, itemId, itemName } = info;
-    // 如果是商品
-    if (itemType === AirDropItemType.GOODS) {
-      goodsList.value = [
-        {
-          goodsId: itemId || "",
-          goodsName: itemName || "",
-        },
-      ];
-    }
-    // 如果是积分
-    if (itemType === AirDropItemType.POINTS) {
-      pointsList.value = [
-        {
-          pointsId: itemId || "",
-          pointsName: itemName || "",
-        },
-      ];
-    }
-    // 如果是代币
-    if (itemType === AirDropItemType.COIN) {
-      coinList.value = [
-        {
-          coinId: itemId || "",
-          coinName: itemName || "",
-        },
-      ];
+    formData.rules = [];
+
+    for (const item of rules) {
+      const { rewardType, rewardId, rewardName } = item;
+      formData.rules.push({
+        ...item,
+        categoryList: [],
+        rewardGoods: rewardType === AirDropItemType.GOODS ? [{ goodsId: rewardId, goodsName: rewardName }] : [],
+        rewardPoints: rewardType === AirDropItemType.POINTS ? [{ pointsId: rewardId, pointsName: rewardName }] : [],
+        rewardCoin: rewardType === AirDropItemType.COIN ? [{ coinId: rewardId, coinName: rewardName }] : [],
+      });
     }
   }
   commonStore.pageLoading = false;

@@ -13,7 +13,10 @@ export type UserListItem = {
   headUrl: string;
   inviteCode: string;
   inviteNum: number;
+  lastLoginIp: string;
   lastLoginTime: string;
+  memberLevel: number;
+  nodeLevel: number;
   nickName: string;
   phone: string;
   registerCode: string;
@@ -21,7 +24,6 @@ export type UserListItem = {
   state: number;
   tab: number;
   uid: number;
-  vipLevel: number;
 };
 
 export type AdminMerchantListParam = Partial<{
@@ -100,9 +102,17 @@ export type UserRealInfo = {
   uid: string;
 };
 
-export type VipLevelItem = {
+export type VipLevelItem = Partial<{
   // level: number;
-  amount?: number;
+  amount: number | null;
+  goodsId: string;
+  goodsName: string;
+  level: number;
+  name: string;
+  type: number;
+  vipType: number;
+}> & {
+  goodsSelectList: { goodsId: string; goodsName: string }[];
 };
 
 // 用户平行链代币管理

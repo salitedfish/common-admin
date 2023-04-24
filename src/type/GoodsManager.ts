@@ -116,7 +116,7 @@ export type GoodsAddParams = {
     categoryList: CategoryTreeItem[];
     limitNum: number | null;
     startTime: string | null;
-    type: number | null;
+    itemType: number | null;
     unitNum: number | null;
   }[];
   deductionPoints: Partial<{

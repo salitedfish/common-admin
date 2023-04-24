@@ -3,7 +3,7 @@
 import { defineComponent, ref, onMounted, createVNode } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
-import { NButton, NInputNumber } from "naive-ui";
+import { NButton, NInputNumber, NSelect, NSpace, NInput } from "naive-ui";
 // 自定义组件
 import goodsSelect from "@/component/common/goodsSelect.vue";
 import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
@@ -16,8 +16,21 @@ import { getGoodsActivityDetail, addGoodsActivityDetail, updateGoodsActivityDeta
 // store
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
-import { goodsActivityIdentityList } from "@/view/operactionManager/goodsActivityManager/goodsActivityManagerStore";
-import { switchToView, switchToAPI, rewardTypeList, RewardType, goodsActivityTimeTypeList, GoodsActivityTimeType } from "./goodsActivityDetailStore";
+import {
+  // switchToView,
+  // switchToAPI,
+  rewardTypeList,
+  RewardType,
+  goodsActivityTimeTypeList,
+  GoodsActivityTimeType,
+  provideTypes,
+  tradeTypes,
+  UserTypes,
+  unitTypes,
+  vipTypes,
+  TradeType,
+  UnitType,
+} from "./goodsActivityDetailStore";
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
@@ -25,7 +38,7 @@ import { DetailCheckType } from "@/type/Common";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsActivityIdentity } from "@/view/operactionManager/goodsActivityManager/goodsActivityManagerStore";
-import type { GoodsActivityDetailView, GoodsActivityRule, GoodsActivityDetailViewRule } from "@/type/Operator";
+import type { GoodsActivityRule, GoodsActivityDetailAPI } from "@/type/Operator";
 // 组件名
 export default defineComponent({
   name: "goodsActivityDetail",
@@ -44,38 +57,247 @@ const isCheck = checkType === DetailCheckType.CHECK;
 
 // 商品选择列表
 const goodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
-// 奖励物品选择列表
-const rewardGoodsList = ref<{ goodsId: string | number; goodsName: string }[]>([]);
-const rewardPointsList = ref<{ pointsId: string; pointsName: string }[]>([]);
-const rewardCoinList = ref<{ coinId: string; coinName: string }[]>([]);
-
 // 列表数据
-const goodsActivityDetail = ref<GoodsActivityDetailView>({
+const goodsActivityDetail = ref<GoodsActivityDetailAPI>({
   info: {},
   rules: [],
 });
 
 // 规则的角色表格
-const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
+const createColumns = () => {
   const list: DataTableColumns<GoodsActivityRule> = [
     {
       title: "角色",
       key: "type",
       align: "center",
-      width: 80,
+      width: 120,
       render: (rule) => {
-        return goodsActivityIdentityList.getItem(rule.type)?.label;
+        return createVNode(NSelect, {
+          placeholder: "请选择角色类型",
+          options: UserTypes,
+          value: rule.userType,
+          onUpdateValue: (newValue: number) => {
+            rule.userType = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
       },
     },
     {
-      title: "邀请层级",
+      title: "交易类型",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
-        return rule.type === GoodsActivityIdentity.SHARE
+        return createVNode(NSelect, {
+          placeholder: "请选择交易类型",
+          options: tradeTypes,
+          value: rule.tradeType,
+          onUpdateValue: (newValue: number) => {
+            rule.tradeType = newValue;
+            if (newValue === TradeType.NUM) {
+              rule.unitType = UnitType.FIXED;
+            }
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+    {
+      title: "释放类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NSelect, {
+          placeholder: "请选择释放类型",
+          options: provideTypes,
+          value: rule.provideType,
+          onUpdateValue: (newValue: number) => {
+            rule.provideType = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+    {
+      title: "奖励类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NSelect, {
+          placeholder: "请选择奖励类型",
+          options: rewardTypeList,
+          value: rule.rewardType,
+          onUpdateValue: (newValue: number) => {
+            rule.rewardType = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+    {
+      title: "奖励物品",
+      key: "type",
+      align: "center",
+      width: 180,
+      render: (rule) => {
+        const { rewardType } = rule;
+        if (rewardType === RewardType.GOODS) {
+          return createVNode(NSpace, { justify: "center" }, () => [
+            createVNode(NInput, { disabled: true, value: rule.rewardGoods.length > 0 ? rule.rewardGoods[0].goodsName : null, placeholder: "请选择商品" }),
+            createVNode(goodsSelect, {
+              goodsSelectedList: rule.rewardGoods,
+              "onUpdate:goodsSelectedList": (newValue: { goodsId: string; goodsName: string }[]) => {
+                rule.rewardGoods = newValue;
+              },
+              max: 1,
+              goodsStates: [GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF],
+              disabled: submiting.value || isCheck,
+            }),
+          ]);
+        } else if (rewardType === RewardType.POINTS) {
+          return createVNode(NSpace, { justify: "center" }, () => [
+            createVNode(NInput, { disabled: true, value: rule.rewardPoints.length > 0 ? rule.rewardPoints[0].pointsName : null, placeholder: "请选择积分" }),
+            createVNode(pointsSelect, {
+              pointsSelectList: rule.rewardPoints,
+              "onUpdate:pointsSelectList": (newValue: { pointsId: string; pointsName: string }[]) => {
+                rule.rewardPoints = newValue;
+              },
+              max: 1,
+              pointsStates: [PointsState.PUBLISH_SUCCESS],
+              disabled: submiting.value || isCheck,
+            }),
+          ]);
+        } else if (rewardType === RewardType.COINS) {
+          return createVNode(NSpace, { justify: "center" }, () => [
+            createVNode(NInput, { disabled: true, value: rule.rewardCoin.length > 0 ? rule.rewardCoin[0].coinName : null, placeholder: "请选择代币" }),
+            createVNode(parallelCoinSelect, {
+              parallelCoinSelectList: rule.rewardCoin,
+              "onUpdate:parallelCoinSelectList": (newValue: { coinId: string; coinName: string }[]) => {
+                rule.rewardCoin = newValue;
+              },
+              max: 1,
+              disabled: submiting.value || isCheck,
+            }),
+          ]);
+        } else {
+          return "-";
+        }
+      },
+    },
+
+    {
+      title: "积分/代币的单价",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        if ([RewardType.COINS, RewardType.POINTS].includes(rule.rewardType)) {
+          return createVNode(NInputNumber, {
+            placeholder: `请输入${rewardTypeList.getItem(rule.rewardType)?.label}的单价`,
+            min: 0,
+            value: rule.rewardPrice,
+            onUpdateValue: (newValue: number) => {
+              rule.rewardPrice = newValue;
+            },
+            disabled: submiting.value || isCheck,
+          });
+        } else {
+          return "-";
+        }
+      },
+    },
+
+    {
+      title: "梯度金额/数量（小于）",
+      key: "type",
+      align: "center",
+      width: 180,
+      render: (rule) => {
+        return createVNode(NInputNumber, {
+          placeholder: "请输入梯度金额/数量",
+          min: 0,
+          value: rule.belowOrderNum,
+          onUpdateValue: (newValue: number) => {
+            rule.belowOrderNum = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+
+    {
+      title: "奖励数量类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NSelect, {
+          placeholder: "请选择奖励数量类型",
+          options: unitTypes,
+          value: rule.unitType,
+          onUpdateValue: (newValue: number) => {
+            rule.unitType = newValue;
+          },
+          disabled: submiting.value || isCheck || rule.tradeType === TradeType.NUM,
+        });
+      },
+    },
+
+    {
+      title: "每买一个的总奖励数量/比例",
+      key: "type",
+      align: "center",
+      width: 140,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: `请输入每买一个的${rule.unitType === UnitType.FIXED ? "数量" : "比例"}`,
+            min: 0,
+            max: rule.unitType === UnitType.FIXED ? null : 100,
+            value: rule.totalUnitAmount,
+            onUpdateValue: (newValue: number) => {
+              rule.totalUnitAmount = newValue;
+            },
+
+            disabled: submiting.value || isCheck,
+          },
+          { default: () => "333" }
+        );
+      },
+    },
+
+    {
+      title: "每次释放数量/比例",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NInputNumber, {
+          placeholder: `请输入每次释放${rule.unitType === UnitType.FIXED ? "数量" : "比例"}`,
+          min: 0,
+          max: rule.unitType === UnitType.FIXED ? null : 100,
+          value: rule.unitAmount,
+          onUpdateValue: (newValue: number) => {
+            rule.unitAmount = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+
+    {
+      title: "推广人邀请层级",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return rule.userType === GoodsActivityIdentity.SHARE
           ? createVNode(NInputNumber, {
-              placeholder: "请输入邀请层级",
+              placeholder: "请输入推广人邀请层级",
               min: 0,
               value: rule.inviteLevel,
               onUpdateValue: (newValue: number) => {
@@ -86,39 +308,18 @@ const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
           : "-";
       },
     },
-
     {
-      title: "最低vip等级",
+      title: "vip类型",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
-        return rule.type === GoodsActivityIdentity.SHARE
-          ? createVNode(NInputNumber, {
-              placeholder: "请输入最低vip等级",
-              min: 0,
-              value: rule.minVipLevel,
-              onUpdateValue: (newValue: number) => {
-                rule.minVipLevel = newValue;
-              },
-              disabled: submiting.value || isCheck,
-            })
-          : "-";
-      },
-    },
-
-    {
-      title: "单个总奖励数量",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return createVNode(NInputNumber, {
-          placeholder: "请输入单个总奖励数量",
-          min: 0,
-          value: rule.totalUnitNum,
+        return createVNode(NSelect, {
+          placeholder: "请选择vip类型",
+          options: vipTypes,
+          value: rule.vipType,
           onUpdateValue: (newValue: number) => {
-            rule.totalUnitNum = newValue;
+            rule.vipType = newValue;
           },
           disabled: submiting.value || isCheck,
         });
@@ -126,17 +327,17 @@ const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
     },
 
     {
-      title: "单次释放数量",
+      title: "最低vip等级",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
         return createVNode(NInputNumber, {
-          placeholder: "请输入单次释放数量",
+          placeholder: "请输入最低vip等级",
           min: 0,
-          value: rule.unitNum,
+          value: rule.minVipLevel,
           onUpdateValue: (newValue: number) => {
-            rule.unitNum = newValue;
+            rule.minVipLevel = newValue;
           },
           disabled: submiting.value || isCheck,
         });
@@ -156,25 +357,23 @@ const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
         const type = "warning";
 
         //删除角色按钮
-        if (rule.type === GoodsActivityIdentity.SHARE) {
-          list.push(
-            createVNode(
-              NButton,
-              {
-                type,
-                size,
-                secondary: true,
-                onClick: () => {
-                  delRuleMan(viewRule, index);
-                },
-                disabled: submiting.value,
+        list.push(
+          createVNode(
+            NButton,
+            {
+              type,
+              size,
+              secondary: true,
+              onClick: () => {
+                delRuleMan(index);
               },
-              {
-                default: () => "-删除规则角色",
-              }
-            )
-          );
-        }
+              disabled: submiting.value,
+            },
+            {
+              default: () => "-删除规则角色",
+            }
+          )
+        );
 
         return list;
       },
@@ -183,35 +382,17 @@ const createColumns = (viewRule: GoodsActivityDetailViewRule) => {
   return list;
 };
 
-// 新增规则
-const addRule = () => {
+// 新增规则角色
+const addRuleMan = () => {
   goodsActivityDetail.value.rules.push({
-    belowOrderNum: undefined,
-    rule: [
-      {
-        type: GoodsActivityIdentity.BUY,
-      },
-    ],
+    rewardGoods: [],
+    rewardPoints: [],
+    rewardCoin: [],
   });
 };
-// 删除规则
-const delRule = (index: number) => {
-  goodsActivityDetail.value.rules.splice(index, 1);
-};
-
-// 新增规则角色
-const addRuleMan = (rule: GoodsActivityDetailViewRule) => {
-  if (rule.rule) {
-    rule.rule.push({
-      type: GoodsActivityIdentity.SHARE,
-    });
-  }
-};
 // 删除规则角色
-const delRuleMan = (rule: GoodsActivityDetailViewRule, index: number) => {
-  if (rule.rule) {
-    rule.rule.splice(index, 1);
-  }
+const delRuleMan = (index: number) => {
+  goodsActivityDetail.value.rules.splice(index, 1);
 };
 
 // 提交数据
@@ -220,25 +401,28 @@ const submit = async () => {
   const submitRequest = checkType === DetailCheckType.EDIT ? updateGoodsActivityDetail : addGoodsActivityDetail;
   const tip = checkType === DetailCheckType.EDIT ? "编辑" : "新增";
   submiting.value = true;
-  const data = switchToAPI(goodsActivityDetail.value);
-  data.info.goodsId = String(goodsList.value[0]?.goodsId);
-  // 如果奖励是商品
-  if (data.info.itemType === RewardType.GOODS) {
-    data.info.itemId = String(rewardGoodsList.value[0]?.goodsId);
+  goodsActivityDetail.value.info.goodsId = String(goodsList.value[0]?.goodsId);
+  for (const item of goodsActivityDetail.value.rules) {
+    const { rewardType } = item;
+    // 如果奖励是商品
+    if (rewardType === RewardType.GOODS) {
+      item.rewardId = String(item.rewardGoods ? item.rewardGoods[0]?.goodsId : "");
+    }
+    // 如果奖励是积分
+    if (rewardType === RewardType.POINTS) {
+      item.rewardId = String(item.rewardPoints ? item.rewardPoints[0]?.pointsId : "");
+    }
+    // 如果奖励是代币
+    if (rewardType === RewardType.COINS) {
+      item.rewardId = String(item.rewardCoin ? item.rewardCoin[0]?.coinId : "");
+    }
   }
-  // 如果奖励是积分
-  if (data.info.itemType === RewardType.POINTS) {
-    data.info.itemId = rewardPointsList.value[0]?.pointsId;
-  }
-  // 如果奖励是代币
-  if (data.info.itemType === RewardType.COINS) {
-    data.info.itemId = rewardCoinList.value[0]?.coinId;
-  }
+
   // 如果是编辑还需要赋值id
   if ([DetailCheckType.EDIT].includes(checkType)) {
-    data.info.id = Number(id);
+    goodsActivityDetail.value.info.id = Number(id);
   }
-  const res = await submitRequest(data);
+  const res = await submitRequest(goodsActivityDetail.value);
   if (res) {
     commonNotify("success", `${tip}商品活动成功！`);
     routeStore.deleteCurrentRoute();
@@ -254,41 +438,48 @@ const init = async () => {
   commonStore.pageLoading = true;
   const res = await getGoodsActivityDetail({ id });
   if (res) {
-    goodsActivityDetail.value = switchToView(res.data);
-    const { goodsId, goodsName, itemType, itemId, itemName } = goodsActivityDetail.value.info;
+    goodsActivityDetail.value = res.data;
+    const { goodsId, goodsName } = goodsActivityDetail.value.info;
     goodsList.value = [
       {
         goodsId: goodsId || "",
         goodsName: goodsName || "",
       },
     ];
-    // 如果奖励是商品
-    if (itemType === RewardType.GOODS) {
-      rewardGoodsList.value = [
-        {
-          goodsId: itemId || "",
-          goodsName: itemName || "",
-        },
-      ];
+    for (const item of goodsActivityDetail.value.rules) {
+      const { rewardType, rewardId, rewardName } = item;
+      item.rewardGoods = [];
+      item.rewardPoints = [];
+      item.rewardCoin = [];
+      // 如果奖励是商品
+      if (rewardType === RewardType.GOODS) {
+        item.rewardGoods = [
+          {
+            goodsId: rewardId || "",
+            goodsName: rewardName || "",
+          },
+        ];
+      }
+      // 如果奖励是积分
+      if (rewardType === RewardType.POINTS) {
+        item.rewardPoints = [
+          {
+            pointsId: rewardId || "",
+            pointsName: rewardName || "",
+          },
+        ];
+      }
+      // 如果奖励是代币
+      if (rewardType === RewardType.COINS) {
+        item.rewardCoin = [
+          {
+            coinId: rewardId || "",
+            coinName: rewardName || "",
+          },
+        ];
+      }
     }
-    // 如果奖励是积分
-    if (itemType === RewardType.POINTS) {
-      rewardPointsList.value = [
-        {
-          pointsId: itemId || "",
-          pointsName: itemName || "",
-        },
-      ];
-    }
-    // 如果奖励是代币
-    if (itemType === RewardType.COINS) {
-      rewardCoinList.value = [
-        {
-          coinId: itemId || "",
-          coinName: itemName || "",
-        },
-      ];
-    }
+
     commonStore.pageLoading = false;
   }
 };
@@ -317,36 +508,6 @@ onMounted(() => {
         ></goodsSelect>
       </n-form-item>
 
-      <n-form-item label="奖励类型:" required>
-        <n-select v-model:value="goodsActivityDetail.info.itemType" placeholder="请选择奖励类型" :options="rewardTypeList" />
-      </n-form-item>
-
-      <n-form-item label="奖励商品:" required v-if="goodsActivityDetail.info.itemType === RewardType.GOODS">
-        <n-input placeholder="请选择奖励商品" :value="rewardGoodsList.length >= 1 ? rewardGoodsList[0].goodsName : undefined" disabled></n-input>
-        <goodsSelect
-          v-model:goods-selected-list="rewardGoodsList"
-          :max="1"
-          :disabled="submiting || isCheck"
-          :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
-        ></goodsSelect>
-      </n-form-item>
-
-      <n-form-item label="奖励积分:" required v-if="goodsActivityDetail.info.itemType === RewardType.POINTS">
-        <n-input placeholder="请选择奖励积分" :value="rewardPointsList.length >= 1 ? rewardPointsList[0].pointsName : undefined" disabled></n-input>
-        <pointsSelect
-          v-model:points-select-list="rewardPointsList"
-          :max="1"
-          :disabled="submiting || isCheck"
-          :multiple="true"
-          :pointsStates="[PointsState.PUBLISH_SUCCESS]"
-        ></pointsSelect>
-      </n-form-item>
-
-      <n-form-item label="奖励代币:" required v-if="goodsActivityDetail.info.itemType === RewardType.COINS">
-        <n-input placeholder="请选择奖励代币" :value="rewardCoinList.length >= 1 ? rewardCoinList[0].coinName : undefined" disabled></n-input>
-        <parallelCoinSelect v-model:parallel-coin-select-list="rewardCoinList" :max="1" :disabled="submiting || isCheck" :multiple="true"></parallelCoinSelect>
-      </n-form-item>
-
       <n-form-item label="执行时间类型：" required>
         <n-select :options="goodsActivityTimeTypeList" v-model:value="goodsActivityDetail.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
@@ -362,18 +523,9 @@ onMounted(() => {
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
-      <n-card :title="`规则${key + 1}:`" style="margin-bottom: 15px" v-for="(item, key) in goodsActivityDetail.rules" :key="key">
-        <n-form-item label="单次下单数量（不包含）:" required>
-          <n-input-number v-model:value="item.belowOrderNum" placeholder="请输入单次下单数量（不包含）" :min="0" style="width: 100%"></n-input-number>
-        </n-form-item>
+      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="3600"></n-data-table>
 
-        <n-data-table :single-line="false" :columns="createColumns(item)" :data="item.rule"></n-data-table>
-
-        <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan(item)">+添加规则角色</n-button>
-
-        <n-button style="margin-top: 15px" block secondary type="warning" v-if="!isCheck" :disabled="submiting" @click="delRule(key)">-删除规则</n-button>
-      </n-card>
-      <n-button block secondary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRule">+添加规则</n-button>
+      <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">+添加规则角色</n-button>
     </n-card>
   </n-form>
   <n-button style="margin-top: 15px" block type="primary" @click="submit" :loading="submiting" :disabled="submiting" v-if="!isCheck && !commonStore.pageLoading">确认提交</n-button>

@@ -13,7 +13,7 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getGoodsActivityList, delGoodsActivity, updateGoodsActivityState } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { rewardTypeList } from "@/view/operactionManager/goodsActivityDetail/goodsActivityDetailStore";
+// import { rewardTypeList } from "@/view/operactionManager/goodsActivityDetail/goodsActivityDetailStore";
 import { goodsActivityStateList, GoodsActivityState } from "./goodsActivityManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -52,21 +52,21 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "奖励物品类型",
-      key: "itemName",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return rewardTypeList.getItem(row.itemType)?.label;
-      },
-    },
-    {
-      title: "奖励物品",
-      key: "itemName",
-      align: "center",
-      width: 120,
-    },
+    // {
+    //   title: "奖励物品类型",
+    //   key: "itemName",
+    //   align: "center",
+    //   width: 120,
+    //   render: (row) => {
+    //     return rewardTypeList.getItem(row.itemType)?.label;
+    //   },
+    // },
+    // {
+    //   title: "奖励物品",
+    //   key: "itemName",
+    //   align: "center",
+    //   width: 120,
+    // },
     {
       title: "活动状态",
       key: "name",

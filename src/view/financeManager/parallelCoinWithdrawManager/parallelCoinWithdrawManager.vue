@@ -41,30 +41,14 @@ const createColumns = () => {
       width: 120,
     },
     {
-      title: "提币地址",
-      key: "toAddress",
-      align: "center",
-      width: 180,
-    },
-    {
-      title: "状态",
-      key: "state",
-      align: "center",
-      render: (row) => {
-        return parallelCoinWithdrawStates.getItem(row.state)?.label;
-      },
-    },
-
-    {
       title: "数量",
       key: "num",
       align: "center",
       width: 120,
     },
-
     {
-      title: "审核时间",
-      key: "auditorTime",
+      title: "提币地址",
+      key: "toAddress",
       align: "center",
       width: 180,
     },
@@ -73,6 +57,21 @@ const createColumns = () => {
       key: "createTime",
       align: "center",
       width: 180,
+    },
+    {
+      title: "审核时间",
+      key: "auditorTime",
+      align: "center",
+      width: 180,
+    },
+
+    {
+      title: "状态",
+      key: "state",
+      align: "center",
+      render: (row) => {
+        return parallelCoinWithdrawStates.getItem(row.state)?.label;
+      },
     },
 
     {

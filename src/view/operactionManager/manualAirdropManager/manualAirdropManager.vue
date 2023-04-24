@@ -75,12 +75,12 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render(row) {
-        return airDropItemTypeList.getItem(row.itemType)?.label;
+        return airDropItemTypeList.getItem(row.rewardType)?.label;
       },
     },
     {
       title: "空投物品名称",
-      key: "itemName",
+      key: "rewardName",
       align: "center",
       width: 160,
     },

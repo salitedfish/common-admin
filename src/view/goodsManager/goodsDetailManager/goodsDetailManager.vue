@@ -336,9 +336,9 @@
     <n-card title="规则：" v-if="goodsInfo.extend.saleType === SaleType.RULES" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in goodsInfo.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
-          <n-select v-model:value="item.type" :options="ruleTypeList" placeholder="请选择规则类型" :style="{ width: inputWidth }" clearable :disabled="formDisabled" />
+          <n-select v-model:value="item.itemType" :options="ruleTypeList" placeholder="请选择规则类型" :style="{ width: inputWidth }" clearable :disabled="formDisabled" />
         </n-form-item>
-        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.type))" required>
+        <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))" required>
           <category-select
             @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
             placeholder="请选择商品类目"
@@ -348,7 +348,7 @@
             :disabled="formDisabled"
           ></category-select>
         </n-form-item>
-        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.type))" required>
+        <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.itemType))" required>
           <n-input placeholder="请输入商品编号" v-model:value="item.itemId" :disabled="formDisabled"></n-input>
         </n-form-item>
         <n-form-item label="单位数量:" required>
@@ -368,7 +368,7 @@
         </n-form-item>
         <n-form-item
           label="开始时间:"
-          v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.type || 0)"
+          v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.itemType || 0)"
           required
         >
           <n-date-picker
@@ -383,7 +383,7 @@
         </n-form-item>
         <n-form-item
           label="结束时间:"
-          v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.type || 0)"
+          v-if="[RuleType.EXTENSION_REAL_NAME, RuleType.NEW_REAL_NAME, RuleType.EXTENSION_CATEGORY, RuleType.EXTENSION_GOODS].includes(item.itemType || 0)"
           required
         >
           <n-date-picker
@@ -558,7 +558,7 @@ const goodsInfo = reactive<GoodsAddParams>({
       itemId: null,
       limitNum: null,
       startTime: null,
-      type: null,
+      itemType: null,
       unitNum: null,
       categoryList: [], // 工具属性
     },
@@ -723,7 +723,7 @@ const addRuleHandler = () => {
     itemId: null,
     limitNum: null,
     startTime: null,
-    type: null,
+    itemType: null,
     unitNum: null,
     categoryList: [],
   });
