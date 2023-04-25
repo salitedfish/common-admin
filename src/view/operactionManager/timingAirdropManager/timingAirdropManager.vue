@@ -29,7 +29,7 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getListTimingAirDrop, deleteTimingAirDrop, updateTimingAirDropState } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { airDropTimeTypeList } from "./timingAirdropManagerStore";
+import { airDropTimeTypeList, AirDropTaskType, airDropTaskTypes } from "./timingAirdropManagerStore";
 import { airDropItemTypeList, airDropStateList, AirDropStateType } from "../manualAirdropManager/manualAirdropManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -57,22 +57,15 @@ const createColumns = () => {
       align: "center",
       fixed: "left",
     },
-
-    // {
-    //   title: "空投物品类型",
-    //   key: "itemType",
-    //   align: "center",
-    //   width: 120,
-    //   render(row) {
-    //     return airDropItemTypeList.getItem(row.itemType)?.label;
-    //   },
-    // },
-    // {
-    //   title: "空投物品名称",
-    //   key: "itemName",
-    //   align: "center",
-    //   width: 160,
-    // },
+    {
+      title: "任务类型",
+      key: "timeType",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return airDropTaskTypes.getItem(row.type)?.label;
+      },
+    },
     {
       title: "执行类型",
       key: "timeType",
@@ -170,7 +163,7 @@ const createColumns = () => {
               }
             )
           );
-          if (isMy) {
+          if (isMy && row.type === AirDropTaskType.COMMON) {
             // 编辑空投
             list.push(
               h(

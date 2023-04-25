@@ -154,6 +154,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "timingAirdropManager/ruleWhiteListManager",
+    name: "ruleWhiteListManager",
+    component: () => import("@/view/operactionManager/ruleWhiteListManager/ruleWhiteListManager.vue"),
+    meta: {
+      label: "规则白名单",
+      icon: "kongtou",
+      keepAlive: true,
+    },
+  },
+  {
     path: "searchManager",
     name: "searchManager",
     component: () => import("@/view/operactionManager/searchManager/searchManager.vue"),

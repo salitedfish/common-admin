@@ -7,12 +7,7 @@
       <n-form-item label="空投物品类型:" required>
         <n-select :options="airDropItemTypeList" v-model:value="formData.rewardType" :disabled="itemTypeChangedisable || submiting"></n-select>
       </n-form-item>
-      <!-- <n-form-item label="商品编号:" v-show="formData.itemType === AirDropItemType.GOODS" required>
-        <n-input v-model:value="formData.itemId" placeholder="请输入商品编号"></n-input>
-      </n-form-item>
-      <n-form-item label="积分编号:" v-show="formData.itemType === AirDropItemType.POINTS" required>
-        <n-input v-model:value="formData.itemId" placeholder="请输入积分编号"></n-input>
-      </n-form-item> -->
+
       <n-form-item label="奖励商品:" required v-if="formData.rewardType === AirDropItemType.GOODS">
         <n-input placeholder="请选择奖励商品" :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" disabled></n-input>
         <goodsSelect v-model:goods-selected-list="goodsList" :max="1" :disabled="submiting" :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"></goodsSelect>

@@ -52,21 +52,7 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    // {
-    //   title: "奖励物品类型",
-    //   key: "itemName",
-    //   align: "center",
-    //   width: 120,
-    //   render: (row) => {
-    //     return rewardTypeList.getItem(row.itemType)?.label;
-    //   },
-    // },
-    // {
-    //   title: "奖励物品",
-    //   key: "itemName",
-    //   align: "center",
-    //   width: 120,
-    // },
+
     {
       title: "活动状态",
       key: "name",

@@ -1,11 +1,14 @@
 export enum AirDropTypeType {
   MANUAL,
   TIMING,
+  LOTTERY,
+  MARKET,
 }
 export const airDropTypeList = [
-  { label: "普通空投", value: 0 },
-  { label: "定时任务", value: 1 },
-  { label: "抽签空投", value: 2 },
+  { label: "普通空投", value: AirDropTypeType.MANUAL },
+  { label: "定时任务", value: AirDropTypeType.TIMING },
+  { label: "抽签空投", value: AirDropTypeType.LOTTERY },
+  { label: "营销空投", value: AirDropTypeType.MARKET },
 ];
 
 export enum AirDropItemType {
@@ -26,17 +29,17 @@ export enum AirDropStateType {
 export const airDropStateList = [
   {
     label: "待上线",
-    value: 0,
+    value: AirDropStateType.OFFLINE,
     action: {
-      value: 1,
+      value: AirDropStateType.ONLINE,
       label: "上线",
     },
   },
   {
     label: "已上线",
-    value: 1,
+    value: AirDropStateType.ONLINE,
     action: {
-      value: 0,
+      value: AirDropStateType.OFFLINE,
       label: "下线",
     },
   },

@@ -25,6 +25,8 @@ import type {
   GoodsActivityListParams,
   GoodsActivityListItem,
   GoodsActivityDetailAPI,
+  GetRuleWhiteListParams,
+  RuleWhiteListItem,
 } from "@/type/Operator";
 
 // 以下是空投管理相关
@@ -257,6 +259,13 @@ export const lotteryApprovial = (params: { id: number; auditNote: string; state:
 export const calcLottery = (params: { id: number }) => {
   return ultraFetch.post({
     URL: "/manager/lottery/calc",
+    body: JSON.stringify(params),
+  });
+};
+
+export const getRuleWhiteList = (params: Paging & GetRuleWhiteListParams) => {
+  return ultraFetch.post<Return<ReturnList<RuleWhiteListItem>>>({
+    URL: "/manager/rule/allow/page",
     body: JSON.stringify(params),
   });
 };

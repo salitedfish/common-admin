@@ -69,12 +69,6 @@ const dialog = useDialog();
 
 const createColumns = () => {
   const list: DataTableColumns<LotteryListItem> = [
-    // {
-    //   title: "商品编号",
-    //   key: "goodsId",
-    //   align: "center",
-    //   width: 180,
-    // },
     {
       title: "抽签编号",
       key: "id",

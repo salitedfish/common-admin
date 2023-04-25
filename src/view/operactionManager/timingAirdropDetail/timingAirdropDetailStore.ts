@@ -24,17 +24,10 @@ export const ruleTypeList = [
     value: RuleType.NEW_REAL_NAME,
     label: "新用户注册并实名",
   },
-  // {
-  //   value: RuleType.EXTENSION_CATEGORY,
-  //   label: "推广类目商品",
-  // },
-  // {
-  //   value: RuleType.EXTENSION_GOODS,
-  //   label: "推广指定商品",
-  // },
   {
     value: RuleType.WHITE_NAME,
     label: "白名单",
+    disabled: true,
   },
 ];
 export enum HoldTimeType {

@@ -30,6 +30,7 @@ import {
   vipTypes,
   TradeType,
   UnitType,
+  ProvideType,
 } from "./goodsActivityDetailStore";
 // 类型
 import type { VNode } from "vue";
@@ -73,7 +74,7 @@ const createColumns = () => {
       width: 120,
       render: (rule) => {
         return createVNode(NSelect, {
-          placeholder: "请选择角色类型",
+          placeholder: "请选择",
           options: UserTypes,
           value: rule.userType,
           onUpdateValue: (newValue: number) => {
@@ -84,13 +85,75 @@ const createColumns = () => {
       },
     },
     {
+      title: "邀请层级",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return rule.userType === GoodsActivityIdentity.SHARE
+          ? createVNode(NInputNumber, {
+              placeholder: "请输入",
+              min: 0,
+              value: rule.inviteLevel,
+              onUpdateValue: (newValue: number) => {
+                rule.inviteLevel = newValue;
+              },
+              showButton: false,
+              disabled: submiting.value || isCheck,
+            })
+          : "-";
+      },
+    },
+    {
+      title: "vip类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NSelect, {
+          placeholder: "请选择",
+          options: vipTypes,
+          value: rule.vipType,
+          onUpdateValue: (newValue: number) => {
+            rule.vipType = newValue;
+          },
+          disabled: submiting.value || isCheck,
+        });
+      },
+    },
+
+    {
+      title: "vip等级",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入",
+            min: 0,
+            value: rule.minVipLevel,
+            onUpdateValue: (newValue: number) => {
+              rule.minVipLevel = newValue;
+            },
+            showButton: false,
+            disabled: submiting.value || isCheck,
+          },
+          {
+            prefix: () => ">=",
+          }
+        );
+      },
+    },
+    {
       title: "交易类型",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
         return createVNode(NSelect, {
-          placeholder: "请选择交易类型",
+          placeholder: "请选择",
           options: tradeTypes,
           value: rule.tradeType,
           onUpdateValue: (newValue: number) => {
@@ -104,20 +167,120 @@ const createColumns = () => {
       },
     },
     {
+      title: "梯度金额/数量",
+      key: "type",
+      align: "center",
+      width: 180,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入",
+            min: 0,
+            value: rule.orderAmount,
+            onUpdateValue: (newValue: number) => {
+              rule.orderAmount = newValue;
+            },
+            showButton: false,
+            disabled: submiting.value || isCheck,
+          },
+          {
+            prefix: () => ">=",
+          }
+        );
+      },
+    },
+
+    {
       title: "释放类型",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
         return createVNode(NSelect, {
-          placeholder: "请选择释放类型",
+          placeholder: "请选择",
           options: provideTypes,
           value: rule.provideType,
           onUpdateValue: (newValue: number) => {
             rule.provideType = newValue;
+            if (rule.provideType === ProvideType.COMMON) {
+              rule.unitAmount = rule.totalUnitAmount;
+            }
           },
           disabled: submiting.value || isCheck,
         });
+      },
+    },
+    {
+      title: "奖励数量类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(NSelect, {
+          placeholder: "请选择",
+          options: unitTypes,
+          value: rule.unitType,
+          onUpdateValue: (newValue: number) => {
+            rule.unitType = newValue;
+          },
+          disabled: submiting.value || isCheck || rule.tradeType === TradeType.NUM,
+        });
+      },
+    },
+
+    {
+      title: "总奖励数量",
+      key: "type",
+      align: "center",
+      width: 140,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入",
+            min: 0,
+            max: rule.unitType === UnitType.RADIO ? 100 : null,
+            value: rule.totalUnitAmount,
+            onUpdateValue: (newValue: number) => {
+              rule.totalUnitAmount = newValue;
+              if (rule.provideType === ProvideType.COMMON) {
+                rule.unitAmount = rule.totalUnitAmount;
+              }
+            },
+            showButton: false,
+            disabled: submiting.value || isCheck,
+          },
+          {
+            suffix: () => {
+              return (rule.unitType === UnitType.RADIO ? "%" : "") + `/${rule.tradeType === TradeType.MONEY ? "单" : "个"}`;
+            },
+          }
+        );
+      },
+    },
+
+    {
+      title: "释放数量/次",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入",
+            min: 0,
+            max: rule.totalUnitAmount,
+            value: rule.unitAmount,
+            onUpdateValue: (newValue: number) => {
+              rule.unitAmount = newValue;
+            },
+            showButton: false,
+            disabled: submiting.value || isCheck || rule.provideType === ProvideType.COMMON,
+          },
+          { suffix: () => (rule.unitType === UnitType.RADIO ? "%" : "") }
+        );
       },
     },
     {
@@ -127,7 +290,7 @@ const createColumns = () => {
       width: 120,
       render: (rule) => {
         return createVNode(NSelect, {
-          placeholder: "请选择奖励类型",
+          placeholder: "请选择",
           options: rewardTypeList,
           value: rule.rewardType,
           onUpdateValue: (newValue: number) => {
@@ -168,6 +331,7 @@ const createColumns = () => {
               max: 1,
               pointsStates: [PointsState.PUBLISH_SUCCESS],
               disabled: submiting.value || isCheck,
+              multiple: true,
             }),
           ]);
         } else if (rewardType === RewardType.COINS) {
@@ -180,6 +344,7 @@ const createColumns = () => {
               },
               max: 1,
               disabled: submiting.value || isCheck,
+              multiple: true,
             }),
           ]);
         } else {
@@ -189,158 +354,29 @@ const createColumns = () => {
     },
 
     {
-      title: "积分/代币的单价",
+      title: "奖励单价",
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
-        if ([RewardType.COINS, RewardType.POINTS].includes(rule.rewardType)) {
-          return createVNode(NInputNumber, {
-            placeholder: `请输入${rewardTypeList.getItem(rule.rewardType)?.label}的单价`,
-            min: 0,
-            value: rule.rewardPrice,
-            onUpdateValue: (newValue: number) => {
-              rule.rewardPrice = newValue;
+        if ([RewardType.COINS, RewardType.POINTS].includes(rule.rewardType) && rule.unitType === UnitType.RADIO) {
+          return createVNode(
+            NInputNumber,
+            {
+              placeholder: "请输入",
+              min: 0,
+              value: rule.rewardPrice,
+              onUpdateValue: (newValue: number) => {
+                rule.rewardPrice = newValue;
+              },
+              showButton: false,
+              disabled: submiting.value || isCheck,
             },
-            disabled: submiting.value || isCheck,
-          });
+            { suffix: () => "元" }
+          );
         } else {
           return "-";
         }
-      },
-    },
-
-    {
-      title: "梯度金额/数量（小于）",
-      key: "type",
-      align: "center",
-      width: 180,
-      render: (rule) => {
-        return createVNode(NInputNumber, {
-          placeholder: "请输入梯度金额/数量",
-          min: 0,
-          value: rule.belowOrderNum,
-          onUpdateValue: (newValue: number) => {
-            rule.belowOrderNum = newValue;
-          },
-          disabled: submiting.value || isCheck,
-        });
-      },
-    },
-
-    {
-      title: "奖励数量类型",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return createVNode(NSelect, {
-          placeholder: "请选择奖励数量类型",
-          options: unitTypes,
-          value: rule.unitType,
-          onUpdateValue: (newValue: number) => {
-            rule.unitType = newValue;
-          },
-          disabled: submiting.value || isCheck || rule.tradeType === TradeType.NUM,
-        });
-      },
-    },
-
-    {
-      title: "每买一个的总奖励数量/比例",
-      key: "type",
-      align: "center",
-      width: 140,
-      render: (rule) => {
-        return createVNode(
-          NInputNumber,
-          {
-            placeholder: `请输入每买一个的${rule.unitType === UnitType.FIXED ? "数量" : "比例"}`,
-            min: 0,
-            max: rule.unitType === UnitType.FIXED ? null : 100,
-            value: rule.totalUnitAmount,
-            onUpdateValue: (newValue: number) => {
-              rule.totalUnitAmount = newValue;
-            },
-
-            disabled: submiting.value || isCheck,
-          },
-          { default: () => "333" }
-        );
-      },
-    },
-
-    {
-      title: "每次释放数量/比例",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return createVNode(NInputNumber, {
-          placeholder: `请输入每次释放${rule.unitType === UnitType.FIXED ? "数量" : "比例"}`,
-          min: 0,
-          max: rule.unitType === UnitType.FIXED ? null : 100,
-          value: rule.unitAmount,
-          onUpdateValue: (newValue: number) => {
-            rule.unitAmount = newValue;
-          },
-          disabled: submiting.value || isCheck,
-        });
-      },
-    },
-
-    {
-      title: "推广人邀请层级",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return rule.userType === GoodsActivityIdentity.SHARE
-          ? createVNode(NInputNumber, {
-              placeholder: "请输入推广人邀请层级",
-              min: 0,
-              value: rule.inviteLevel,
-              onUpdateValue: (newValue: number) => {
-                rule.inviteLevel = newValue;
-              },
-              disabled: submiting.value || isCheck,
-            })
-          : "-";
-      },
-    },
-    {
-      title: "vip类型",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return createVNode(NSelect, {
-          placeholder: "请选择vip类型",
-          options: vipTypes,
-          value: rule.vipType,
-          onUpdateValue: (newValue: number) => {
-            rule.vipType = newValue;
-          },
-          disabled: submiting.value || isCheck,
-        });
-      },
-    },
-
-    {
-      title: "最低vip等级",
-      key: "type",
-      align: "center",
-      width: 120,
-      render: (rule) => {
-        return createVNode(NInputNumber, {
-          placeholder: "请输入最低vip等级",
-          min: 0,
-          value: rule.minVipLevel,
-          onUpdateValue: (newValue: number) => {
-            rule.minVipLevel = newValue;
-          },
-          disabled: submiting.value || isCheck,
-        });
       },
     },
   ];
@@ -523,7 +559,7 @@ onMounted(() => {
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
-      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="3600"></n-data-table>
+      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400"></n-data-table>
 
       <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">+添加规则角色</n-button>
     </n-card>

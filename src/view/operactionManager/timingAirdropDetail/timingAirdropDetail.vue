@@ -23,12 +23,17 @@
       <n-form-item label="总执行次数：" required>
         <n-input-number v-model:value="formData.info.totalNum" placeholder="请输入总执行次数，0表示一直执行" style="width: 100%"></n-input-number>
       </n-form-item>
+
+      <n-form-item label="任务类型：" required>
+        <n-select :options="airDropTaskTypes" v-model:value="formData.info.type" placeholder="请选择任务类型" disabled></n-select>
+      </n-form-item>
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
       <n-card v-for="(item, key) in formData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
           <n-select v-model:value="item.itemType" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
+          <n-button type="primary" @click="() => goRuleWhiteList(item.id)" v-if="item.itemType === RuleType.WHITE_NAME">查看白名单</n-button>
         </n-form-item>
         <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))" required>
           <category-select
@@ -47,12 +52,6 @@
         <n-form-item label="空投物品类型：" required>
           <n-select :options="airDropItemTypeList" v-model:value="item.rewardType" placeholder="请选择空投物品类型" :disabled="isAdmin || submiting || isCheck"></n-select>
         </n-form-item>
-        <!-- <n-form-item label="商品编号：" v-show="formData.info.itemType === AirDropItemType.GOODS && !isAdmin" required>
-        <n-input v-model:value="formData.info.itemId" placeholder="请输入商品编号,必须为空投商品"></n-input>
-      </n-form-item>
-      <n-form-item label="积分编号：" v-show="formData.info.itemType === AirDropItemType.POINTS" required>
-        <n-input v-model:value="formData.info.itemId" placeholder="请输入积分编号"></n-input>
-      </n-form-item> -->
 
         <n-form-item label="奖励商品:" required v-if="item.rewardType === AirDropItemType.GOODS">
           <n-input placeholder="请选择奖励商品" :value="item.rewardGoods.length >= 1 ? item.rewardGoods[0].goodsName : undefined" disabled></n-input>
@@ -105,11 +104,6 @@
             ><template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="总奖励上限:" required v-if="isCheck">
-          <n-input-number v-model:value="item.totalUnitNum" placeholder="请输入总奖励上限，0表示无上限" :min="0" style="width: 100%"
-            ><template #suffix> 份 </template></n-input-number
-          >
-        </n-form-item>
         <template #footer> <n-button block secondary type="warning" v-if="!isCheck" :disabled="submiting" @click="deleteRule(key)">-删除规则</n-button> </template>
       </n-card>
       <n-button block secondary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRule">+添加规则</n-button>
@@ -143,14 +137,13 @@ import { addTimingAirDrop, editTimingAirDrop, getDetailTimingAirDrop } from "@/r
 import { useRouteStore } from "@/store/routeStore";
 import { useAuthStore } from "@/store/authStore";
 import { useCommonStore } from "@/store/commonStore";
-import { airDropTimeTypeList, AirDropTimeType } from "../timingAirdropManager/timingAirdropManagerStore";
+import { airDropTimeTypeList, AirDropTimeType, airDropTaskTypes, AirDropTaskType } from "../timingAirdropManager/timingAirdropManagerStore";
 import { airDropItemTypeList, AirDropItemType } from "../manualAirdropManager/manualAirdropManagerStore";
 import { ruleTypeList, RuleType, holdTimeTypeList } from "./timingAirdropDetailStore";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 // 类型
 import type { TimingAirDropAddParams } from "@/type/Operator";
-// import type { CategoryTreeItem } from "@/type/Common";
 
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
@@ -177,6 +170,7 @@ const formData = reactive<TimingAirDropAddParams>({
     timeHour: null,
     timeType: null,
     totalNum: null,
+    type: AirDropTaskType.COMMON,
   },
   rules: [
     {
@@ -185,7 +179,6 @@ const formData = reactive<TimingAirDropAddParams>({
       holdTimeType: null,
       itemId: "",
       limitNum: null,
-      totalUnitNum: null,
       unitNum: null,
       categoryList: [],
       itemType: null,
@@ -231,7 +224,7 @@ const addRule = () => {
     holdTimeType: null,
     itemId: "",
     limitNum: null,
-    totalUnitNum: null,
+    // totalUnitNum: null,
     unitNum: null,
     categoryList: [],
     itemType: null,
@@ -242,6 +235,14 @@ const addRule = () => {
     rewardGoods: [],
     rewardPoints: [],
     rewardCoin: [],
+  });
+};
+const goRuleWhiteList = (id?: number) => {
+  router.push({
+    name: "ruleWhiteListManager",
+    query: {
+      id,
+    },
   });
 };
 

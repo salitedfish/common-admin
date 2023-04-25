@@ -63,9 +63,6 @@ export type TimingAirDropListItem = {
   createTime: string;
   expireMinute: number;
   id: number;
-  // itemId: string;
-  // itemType: number;
-  // itemName: string;
   merchantName: string;
   merchantUid: string;
   name: string;
@@ -75,6 +72,7 @@ export type TimingAirDropListItem = {
   timeHour: number;
   timeType: number;
   totalNum: number;
+  type: number;
 };
 export type TimingAirDropDetail = {
   info: {
@@ -93,6 +91,7 @@ export type TimingAirDropDetail = {
     timeHour: number;
     timeType: number;
     totalNum: number;
+    type: number;
   };
   rules: {
     id: number;
@@ -121,6 +120,7 @@ export type TimingAirDropAddParams = {
     timeHour: number | null;
     timeType: number | null;
     totalNum: number | null;
+    type: number | null;
   };
   rules: {
     id?: number;
@@ -128,10 +128,8 @@ export type TimingAirDropAddParams = {
     holdTime: number | null;
     holdTimeType: number | null;
     limitNum: number | null;
-    totalUnitNum: number | null;
     unitNum: number | null;
     categoryList: CategoryTreeItem[];
-
     itemId: string | null;
     itemType: number | null;
     itemName: string | null;
@@ -356,9 +354,6 @@ export type GoodsActivityListItem = {
   name: string;
   goodsId: string;
   goodsName: string;
-  // itemType: number;
-  // itemId: string;
-  // itemName: string;
 
   bindAirdropTaskId: number;
   createTime: string;
@@ -371,12 +366,9 @@ export type GoodsActivityListItem = {
 };
 export type GoodsActivityRule = {
   id: number;
-  belowOrderNum: number;
+  orderAmount: number;
   inviteLevel: number;
   minVipLevel: number;
-  // totalUnitNum: number;
-  // type: number;
-  // unitNum: number;
 
   provideType: number;
   rewardId: string;
@@ -405,4 +397,20 @@ export type GoodsActivityDetailViewRule = Partial<{
 export type GoodsActivityDetailView = {
   info: Partial<GoodsActivityListItem>;
   rules: GoodsActivityDetailViewRule[];
+};
+
+// 规则白名单
+export type GetRuleWhiteListParams = Partial<{
+  orderId: string;
+  ruleId: number;
+  token: string;
+  uid: string;
+}>;
+export type RuleWhiteListItem = {
+  orderId: string;
+  token: string;
+  totalNum: number;
+  uid: number;
+  unitNum: number;
+  unusedNum: number;
 };

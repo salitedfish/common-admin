@@ -114,15 +114,21 @@ const createColumns = (levelList: VipLevelItem[]) => {
       width: 160,
       align: "center",
       render: (row) => {
-        return createVNode(NInputNumber, {
-          placeholder: "请输入所需额度或单次下单数量",
-          min: 1,
-          value: row.amount,
-          onUpdateValue: (newValue: number) => {
-            row.amount = newValue;
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入所需额度或单次下单数量",
+            min: 1,
+            value: row.amount,
+            onUpdateValue: (newValue: number) => {
+              row.amount = newValue;
+            },
+            disabled: submiting.value,
           },
-          disabled: submiting.value,
-        });
+          {
+            prefix: () => ">=",
+          }
+        );
       },
     },
     {

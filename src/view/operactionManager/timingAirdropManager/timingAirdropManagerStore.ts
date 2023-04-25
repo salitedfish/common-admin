@@ -17,3 +17,18 @@ export const airDropTimeTypeList = [
     value: AirDropTimeType.MONTH,
   },
 ];
+
+export enum AirDropTaskType {
+  COMMON,
+  MARKEYT,
+}
+export const airDropTaskTypes = [
+  {
+    value: AirDropTaskType.COMMON,
+    label: "普通任务",
+  },
+  {
+    value: AirDropTaskType.MARKEYT,
+    label: "营销任务",
+  },
+];
