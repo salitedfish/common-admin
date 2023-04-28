@@ -53,6 +53,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import router from "@/router";
 export default defineComponent({
   name: "orderListManager",
 });
@@ -78,7 +79,17 @@ import {
 } from "@/request/order";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { orderStateList, orderTypeList, payChannelList, OrderState, PayChannel, orderRefundStateList, OrderRefundState, refundExamStateList } from "./orderListManagerStore";
+import {
+  orderStateList,
+  orderTypeList,
+  payChannelList,
+  OrderState,
+  PayChannel,
+  orderRefundStateList,
+  OrderRefundState,
+  refundExamStateList,
+  OrderType,
+} from "./orderListManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -271,6 +282,29 @@ const createColumns = () => {
                   },
                 },
                 { default: () => "差错同步确认" }
+              )
+            );
+          }
+        }
+        if (order.orderState === OrderState.PAY_SUCCESS) {
+          if (order.orderType === OrderType.FIRST) {
+            btnList.push(
+              h(
+                NButton,
+                {
+                  type: "warning",
+                  size: "small",
+                  secondary: true,
+                  onClick: () => {
+                    router.push({
+                      name: "orderPromoDetail",
+                      query: {
+                        orderId: order.orderId,
+                      },
+                    });
+                  },
+                },
+                { default: () => "查看订单营销信息" }
               )
             );
           }

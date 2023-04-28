@@ -352,8 +352,7 @@ export type GoodsActivityListParams = Partial<{
 export type GoodsActivityListItem = {
   id: number;
   name: string;
-  goodsId: string;
-  goodsName: string;
+  goodsIds: string[];
 
   bindAirdropTaskId: number;
   createTime: string;
@@ -381,6 +380,8 @@ export type GoodsActivityRule = {
   unitType: number;
   userType: number;
   vipType: number;
+  regionType: number;
+  regionAmount: number;
 
   rewardGoods: { goodsId: string; goodsName: string }[];
   rewardPoints: { pointsId: string; pointsName: string }[];
@@ -413,4 +414,5 @@ export type RuleWhiteListItem = {
   uid: number;
   unitNum: number;
   unusedNum: number;
+  userType: number;
 };

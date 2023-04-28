@@ -12,6 +12,7 @@ export const useThemeStore = defineStore("themeStore", () => {
       libThemeOverrides: {
         common: {
           // primaryColor: "#2d8cf0",
+          textColorDisabled: "rgba(120,120,120, 1)",
         },
       },
       custom: "custom-light",

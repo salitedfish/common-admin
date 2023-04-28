@@ -31,6 +31,8 @@ import {
   TradeType,
   UnitType,
   ProvideType,
+  regionTypes,
+  UserType,
 } from "./goodsActivityDetailStore";
 // 类型
 import type { VNode } from "vue";
@@ -84,6 +86,27 @@ const createColumns = () => {
         });
       },
     },
+
+    {
+      title: "大区类型",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return rule.userType === UserType.LEADER
+          ? createVNode(NSelect, {
+              placeholder: "请选择",
+              options: regionTypes,
+              value: rule.regionType,
+              onUpdateValue: (newValue: number) => {
+                rule.regionType = newValue;
+              },
+              disabled: submiting.value || isCheck,
+            })
+          : "-";
+      },
+    },
+
     {
       title: "邀请层级",
       key: "type",
@@ -284,6 +307,29 @@ const createColumns = () => {
       },
     },
     {
+      title: "同级育成奖励",
+      key: "type",
+      align: "center",
+      width: 120,
+      render: (rule) => {
+        return createVNode(
+          NInputNumber,
+          {
+            placeholder: "请输入",
+            min: 0,
+            value: rule.regionAmount,
+            onUpdateValue: (newValue: number) => {
+              rule.regionAmount = newValue;
+            },
+            max: rule.unitType === UnitType.RADIO ? 100 : null,
+            showButton: false,
+            disabled: submiting.value || isCheck,
+          },
+          { suffix: () => (rule.unitType === UnitType.RADIO ? "%" : "") }
+        );
+      },
+    },
+    {
       title: "奖励类型",
       key: "type",
       align: "center",
@@ -406,7 +452,7 @@ const createColumns = () => {
               disabled: submiting.value,
             },
             {
-              default: () => "-删除规则角色",
+              default: () => "删除",
             }
           )
         );
@@ -437,7 +483,7 @@ const submit = async () => {
   const submitRequest = checkType === DetailCheckType.EDIT ? updateGoodsActivityDetail : addGoodsActivityDetail;
   const tip = checkType === DetailCheckType.EDIT ? "编辑" : "新增";
   submiting.value = true;
-  goodsActivityDetail.value.info.goodsId = String(goodsList.value[0]?.goodsId);
+  goodsActivityDetail.value.info.goodsIds = goodsList.value.map((item) => String(item.goodsId));
   for (const item of goodsActivityDetail.value.rules) {
     const { rewardType } = item;
     // 如果奖励是商品
@@ -475,13 +521,16 @@ const init = async () => {
   const res = await getGoodsActivityDetail({ id });
   if (res) {
     goodsActivityDetail.value = res.data;
-    const { goodsId, goodsName } = goodsActivityDetail.value.info;
-    goodsList.value = [
-      {
-        goodsId: goodsId || "",
-        goodsName: goodsName || "",
-      },
-    ];
+    const { goodsIds } = goodsActivityDetail.value.info;
+
+    goodsList.value = goodsIds
+      ? goodsIds.map((item) => {
+          return {
+            goodsId: item,
+            goodsName: "商品",
+          };
+        })
+      : [];
     for (const item of goodsActivityDetail.value.rules) {
       const { rewardType, rewardId, rewardName } = item;
       item.rewardGoods = [];
@@ -534,14 +583,9 @@ onMounted(() => {
         <n-input placeholder="请输入活动名称" v-model:value="goodsActivityDetail.info.name"></n-input>
       </n-form-item>
 
-      <n-form-item label="活动商品:" required>
-        <n-input placeholder="请选择活动商品" :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" disabled></n-input>
-        <goodsSelect
-          v-model:goods-selected-list="goodsList"
-          :max="1"
-          :disabled="submiting || isCheck"
-          :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
-        ></goodsSelect>
+      <n-form-item label="活动商品:">
+        <!-- <n-input placeholder="请选择活动商品" :value="goodsList.length >= 1 ? goodsList[0].goodsName : undefined" disabled></n-input> -->
+        <goodsSelect v-model:goods-selected-list="goodsList" :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]" :selectDisabled="isCheck"></goodsSelect>
       </n-form-item>
 
       <n-form-item label="执行时间类型：" required>
@@ -561,7 +605,7 @@ onMounted(() => {
     <n-card title="规则：" style="margin-bottom: 15px">
       <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400"></n-data-table>
 
-      <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">+添加规则角色</n-button>
+      <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">添加</n-button>
     </n-card>
   </n-form>
   <n-button style="margin-top: 15px" block type="primary" @click="submit" :loading="submiting" :disabled="submiting" v-if="!isCheck && !commonStore.pageLoading">确认提交</n-button>

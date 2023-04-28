@@ -12,7 +12,8 @@
         :max-height="listYHeight"
         :loading="searching"
         :row-key="rowKey"
-        v-model:checked-row-keys="goodsIdSelectedList"
+        :checked-row-keys="goodsIdSelectedList"
+        @update:checked-row-keys="changeGoodsSelectList"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">
@@ -26,7 +27,7 @@
 
 <script lang="ts">
 import screenSection from "./screenSection.vue";
-import {} from "@ultra-man/noa";
+import { useDeepInclude } from "@ultra-man/noa";
 
 import { getGoodsList as getListRequest } from "@/request/goods";
 
@@ -54,6 +55,7 @@ const props = withDefaults(
     goodsStates?: number[];
     funcType?: GetEnumValue<GoodsFuncType>;
     max?: number;
+    selectDisabled?: boolean;
   }>(),
   {
     multiple: true,
@@ -64,26 +66,68 @@ const emit = defineEmits<{
   (event: "update:goodsSelectedList", value: { goodsId: string | number; goodsName: string }[]): void;
 }>();
 
+let inited = false;
+
 // 告诉列表依据哪个数据当作key，这里参照id加name
-const rowKey = (row: GoodsListItem) => row.goodsId + "id-name" + row.goodsName;
+const rowKey = (row: GoodsListItem) => row.goodsId;
 
 // 设置列表选择的key，这里的key用id加name, 以便向外部列表提供id和name
 const goodsIdSelectedList = ref<DataTableRowKey[]>([]);
-goodsIdSelectedList.value = props.goodsSelectedList.map((item) => item.goodsId + "id-name" + item.goodsName);
+goodsIdSelectedList.value = props.goodsSelectedList.map((item) => item.goodsId);
 
-// 当列表选择的改变时，改变外部的列表
-watch(
-  () => goodsIdSelectedList.value.length,
-  () => {
-    const selectList = goodsIdSelectedList.value.map((key) => {
-      // 将key拆成id和name
-      const keyArr = (key as string).split("id-name");
-      return {
-        goodsId: keyArr[0],
-        goodsName: keyArr[1],
-      };
+const uncheck = (selectIdList: (string | number)[], selectList: { goodsId: string | number; goodsName: string }[], id: string | number) => {
+  for (const key in selectList) {
+    if (id === selectList[key].goodsId) {
+      selectList.splice(Number(key), 1);
+    }
+  }
+  for (const key in selectIdList) {
+    if (id === selectIdList[key]) {
+      selectIdList.splice(Number(key), 1);
+    }
+  }
+};
+const check = (selectIdList: (string | number)[], selectList: { goodsId: string | number; goodsName: string }[], rows: GoodsListItem) => {
+  if (
+    useDeepInclude(selectList, {
+      condition: (item) => item.goodsId === rows.goodsId,
+    }) === false
+  ) {
+    selectList.push({
+      goodsId: rows.goodsId,
+      goodsName: rows.goodsName,
     });
-    emit("update:goodsSelectedList", selectList);
+  }
+  if (!selectIdList.includes(rows.goodsId)) {
+    selectIdList.push(rows.goodsId);
+  }
+};
+// 当列表选择的改变时，改变外部的列表
+const changeGoodsSelectList: any = (keys: Array<string | number>, rows: GoodsListItem[], meta: { row: GoodsListItem; action: "check" | "uncheck" | "checkAll" | "uncheckAll" }) => {
+  const selectList = props.goodsSelectedList;
+  if (meta.action === "check") {
+    check(goodsIdSelectedList.value, selectList, meta.row);
+  } else if (meta.action === "uncheck") {
+    uncheck(goodsIdSelectedList.value, selectList, meta.row.goodsId);
+  } else if (meta.action === "uncheckAll" && !props.max) {
+    for (const item of list.value) {
+      uncheck(goodsIdSelectedList.value, selectList, item.goodsId);
+    }
+  } else if (meta.action === "checkAll" && !props.max) {
+    for (const item of list.value) {
+      check(goodsIdSelectedList.value, selectList, item);
+    }
+  }
+
+  emit("update:goodsSelectedList", selectList);
+};
+watch(
+  () => props.showGoodsSelectModal,
+  (newValue) => {
+    if (newValue && !inited) {
+      getList();
+    }
+    inited = true;
   }
 );
 
@@ -94,6 +138,7 @@ const createColumns = () => {
       type: "selection",
       multiple: props.multiple,
       disabled: (item) => {
+        if (props.selectDisabled) return true;
         let isSelect = false;
         for (const i of props.goodsSelectedList) {
           if (i.goodsId === item.goodsId) {
@@ -153,6 +198,7 @@ const createColumns = () => {
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, {
   heightLevel: 1,
   params: { goodsType: props.goodsType, goodsStates: props.goodsStates, funcType: props.funcType },
+  lazy: true,
 });
 </script>
 

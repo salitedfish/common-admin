@@ -213,11 +213,22 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <n-form-item label="是否可抵扣一部分现金:" required v-if="[GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)">
+      <n-form-item label="积分抵扣:" required v-if="[GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)">
         <n-select
           v-model:value="goodsInfo.extend.pointsDeductionType"
           :options="pointsDeductionTypeList"
           placeholder="请选择是否可抵扣"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="formDisabled"
+        />
+      </n-form-item>
+
+      <n-form-item label="优惠券:" required v-if="[GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)">
+        <n-select
+          v-model:value="goodsInfo.extend.pointsCouponType"
+          :options="pointsDeductionTypeList"
+          placeholder="请选择是否可使用"
           :style="{ width: inputWidth }"
           clearable
           :disabled="formDisabled"
@@ -260,13 +271,60 @@
         </n-space>
       </n-form-item>
 
-      <n-form-item label="最多使用积分数量:" required>
-        <n-input-number v-model:value="goodsInfo.deductionPoints.needNum" placeholder="请输入最多使用积分数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+      <n-form-item label="最多使用数量:" required>
+        <n-input-number v-model:value="goodsInfo.deductionPoints.needNum" placeholder="请输入最多使用数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 份 </template></n-input-number
         >
       </n-form-item>
       <n-form-item label="单价:" required>
         <n-input-number v-model:value="goodsInfo.deductionPoints.pointsPrice" placeholder="请输入积分单价" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+          <template #suffix> 元 </template></n-input-number
+        >
+      </n-form-item>
+    </n-card>
+
+    <n-card
+      title="优惠券抵扣："
+      v-if="goodsInfo.extend.pointsCouponType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)"
+      style="margin-bottom: 15px"
+    >
+      <n-form-item label="积分类型:" required>
+        <n-select :options="pointsTypeList" v-model:value="goodsInfo.couponPoints.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
+      </n-form-item>
+
+      <n-form-item label="积分编号:" required v-if="goodsInfo.couponPoints.pointsType === PointsType.POINTS">
+        <n-space vertical>
+          <pointsSelect
+            v-model:points-select-list="couponPointsSelectList"
+            :max="1"
+            :disabled="formDisabled"
+            :multiple="true"
+            :pointsStates="[PointsState.PUBLISH_SUCCESS]"
+          ></pointsSelect>
+          <n-space v-for="(i, k) in couponPointsSelectList" :key="k">
+            <n-input :value="String(i.pointsId)" placeholder="请选择积分" :disabled="true"></n-input>
+            <n-input :value="i.pointsName" placeholder="请选择积分" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item label="平行链代币:" required v-if="goodsInfo.couponPoints.pointsType === PointsType.COIN">
+        <n-space vertical>
+          <parallelCoinSelect v-model:parallel-coin-select-list="couponCoinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
+          <n-space v-for="(i, k) in couponCoinSelectList" :key="k">
+            <n-input :value="String(i.coinId)" placeholder="请选择代币" :disabled="true"></n-input>
+            <n-input :value="i.coinName" placeholder="请选择代币" :disabled="true"></n-input>
+          </n-space>
+        </n-space>
+      </n-form-item>
+
+      <n-form-item label="最多使用数量:" required>
+        <n-input-number v-model:value="goodsInfo.couponPoints.needNum" placeholder="请输入最多使用数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+          <template #suffix> 份 </template></n-input-number
+        >
+      </n-form-item>
+      <n-form-item label="单价:" required>
+        <n-input-number v-model:value="goodsInfo.couponPoints.pointsPrice" placeholder="请输入积分单价" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 元 </template></n-input-number
         >
       </n-form-item>
@@ -505,6 +563,9 @@ const coinSelectList = ref<{ coinId: string; coinName: string }[]>([]);
 const deductionPointsSelectList = ref<PointsSelectItem[]>([]);
 const deductionCoinSelectList = ref<{ coinId: string; coinName: string }[]>([]);
 
+const couponPointsSelectList = ref<PointsSelectItem[]>([]);
+const couponCoinSelectList = ref<{ coinId: string; coinName: string }[]>([]);
+
 const goodsInfo = reactive<GoodsAddParams>({
   spu: {
     classifies: [],
@@ -539,6 +600,7 @@ const goodsInfo = reactive<GoodsAddParams>({
     exchangePointsType: AntinomyTypes.NOT,
     traceHash: "",
     pointsDeductionType: AntinomyTypes.NOT,
+    pointsCouponType: AntinomyTypes.NOT,
   },
   points: {
     goodsId,
@@ -551,6 +613,7 @@ const goodsInfo = reactive<GoodsAddParams>({
     needNum: null,
     pointsId: null,
   },
+
   rules: [
     {
       endTime: null,
@@ -564,6 +627,7 @@ const goodsInfo = reactive<GoodsAddParams>({
     },
   ],
   deductionPoints: {},
+  couponPoints: {},
 });
 
 // 编辑和查看初始化数据
@@ -584,7 +648,7 @@ const getGoodsDetail = async () => {
 };
 
 const initForm = (goodsDetail: GoodsAddParams) => {
-  const { spu, extend, rules, points, exchangePoints, deductionPoints } = goodsDetail;
+  const { spu, extend, rules, points, exchangePoints, deductionPoints, couponPoints } = goodsDetail;
   // 处理spu
   spu.goodsPrice = Number(spu.goodsPrice);
   spu.goodsPropsList = [];
@@ -674,6 +738,28 @@ const initForm = (goodsDetail: GoodsAddParams) => {
       ];
     }
     goodsInfo.deductionPoints = { ...deductionPoints, needNum: Number(deductionPoints.needNum) };
+  }
+
+  // 如果可用优惠券
+  if (extend.pointsCouponType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(extend.goodsType || GoodsType.COMMON)) {
+    if (couponPoints.pointsType === PointsType.POINTS) {
+      couponPointsSelectList.value = [
+        {
+          pointsId: couponPoints.pointsId || "",
+          pointsName: couponPoints.pointsName || "",
+        },
+      ];
+    }
+
+    if (couponPoints.pointsType === PointsType.COIN) {
+      couponCoinSelectList.value = [
+        {
+          coinId: couponPoints.pointsId || "",
+          coinName: couponPoints.pointsName || "",
+        },
+      ];
+    }
+    goodsInfo.couponPoints = { ...couponPoints, needNum: Number(couponPoints.needNum) };
   }
 
   // 如果商品可兑换成积分
@@ -779,6 +865,19 @@ const submitHandler = async () => {
     if (goodsInfo.deductionPoints.pointsType === PointsType.COIN) {
       goodsInfo.deductionPoints.pointsId = deductionCoinSelectList.value[0]?.coinId;
       goodsInfo.deductionPoints.pointsName = deductionCoinSelectList.value[0]?.coinName;
+    }
+  }
+
+  // 如果可用优惠券
+  if (goodsInfo.extend.pointsCouponType === AntinomyTypes.YES && [GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)) {
+    if (goodsInfo.couponPoints.pointsType === PointsType.POINTS) {
+      goodsInfo.couponPoints.pointsId = couponPointsSelectList.value[0]?.pointsId;
+      goodsInfo.couponPoints.pointsName = couponPointsSelectList.value[0]?.pointsName;
+    }
+
+    if (goodsInfo.couponPoints.pointsType === PointsType.COIN) {
+      goodsInfo.couponPoints.pointsId = couponCoinSelectList.value[0]?.coinId;
+      goodsInfo.couponPoints.pointsName = couponCoinSelectList.value[0]?.coinName;
     }
   }
 

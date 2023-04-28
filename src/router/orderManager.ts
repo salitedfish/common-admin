@@ -13,6 +13,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "orderPromoDetail",
+    name: "orderPromoDetail",
+    component: () => import("@/view/orderManager/orderPromoDetail/orderPromoDetail.vue"),
+    meta: {
+      label: "订单营销信息",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
     path: "invoiceListManager",
     name: "invoiceListManager",
     component: () => import("@/view/orderManager/invoiceListManager/invoiceListManager.vue"),

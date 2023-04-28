@@ -138,3 +138,24 @@ export type InvoiceListItem = {
   uid: number;
   updateTime: string;
 };
+
+export type OrderPromoDetail = {
+  inviteLevel: number;
+  promoId: number;
+  promoName: number;
+  provideType: number;
+  rewardId: string;
+  rewardName: string;
+  rewardType: number;
+  ruleId: number;
+  startTime: string;
+  timeDay: number;
+  timeHour: number;
+  timeType: number;
+  totalUnitNum: number;
+  uid: number;
+  unitNum: number;
+  userType: number;
+  vipLevel: number;
+  vipType: number;
+};

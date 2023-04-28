@@ -8,6 +8,7 @@
     :goodsStates="goodsStates"
     :funcType="funcType"
     :max="max"
+    :selectDisabled="selectDisabled"
   ></goodsSelectModal>
 </template>
 
@@ -40,6 +41,7 @@ defineProps<{
   funcType?: GoodsFuncType;
   max?: number;
   disabled?: boolean;
+  selectDisabled?: boolean;
 }>();
 
 const emit = defineEmits<{

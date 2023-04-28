@@ -47,13 +47,6 @@ const createColumns = () => {
     },
 
     {
-      title: "活动商品",
-      key: "goodsName",
-      align: "center",
-      width: 120,
-    },
-
-    {
       title: "活动状态",
       key: "name",
       align: "center",

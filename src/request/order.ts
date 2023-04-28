@@ -2,7 +2,7 @@ import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { OrderListParam, ExpressOrderListParam, InvoiceListParam, InvoiceListItem, ExpressCompanyByCode } from "@/type/Order";
+import type { OrderListParam, ExpressOrderListParam, InvoiceListParam, InvoiceListItem, ExpressCompanyByCode, OrderPromoDetail } from "@/type/Order";
 
 export const getOrderList = (params: RequestParam.GetOrderList): RequestReturn.GetOrderList => {
   return ultraFetch.post({
@@ -99,5 +99,11 @@ export const addInvoice = (params: { electronicImage: string; orderId: string; s
   return ultraFetch.post({
     URL: "/manager/order/invoice/make",
     body: JSON.stringify(params),
+  });
+};
+export const getOrderPromoDetail = (params: { orderId: string | number }) => {
+  return ultraFetch.get<Return<OrderPromoDetail[]>>({
+    URL: "/manager/order/promo/detail",
+    params,
   });
 };

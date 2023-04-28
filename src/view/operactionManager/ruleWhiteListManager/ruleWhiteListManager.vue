@@ -12,6 +12,7 @@ import { useListPage } from "@/util/common";
 // 网络请求
 import { getRuleWhiteList } from "@/request/operator";
 // store
+import { userTypes } from "./ruleWhiteListManagerStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
 import type { RuleWhiteListItem } from "@/type/Operator";
@@ -32,6 +33,15 @@ const createColumns = () => {
       key: "orderId",
       align: "center",
       width: 120,
+    },
+    {
+      title: "类型",
+      key: "orderId",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return userTypes.getItem(row.userType)?.label;
+      },
     },
     {
       title: "用户编号",

@@ -106,6 +106,7 @@ export const tradeTypes = [
 export enum UserType {
   BUYER,
   SHARER,
+  LEADER,
 }
 
 export const UserTypes = [
@@ -116,6 +117,10 @@ export const UserTypes = [
   {
     value: UserType.SHARER,
     label: "推广人",
+  },
+  {
+    value: UserType.LEADER,
+    label: "领导者",
   },
 ];
 
@@ -147,5 +152,21 @@ export const vipTypes = [
   {
     label: "节点",
     value: VipType.NODE,
+  },
+];
+
+export enum RegionType {
+  EXCLUDE_MAX,
+  INCLUDE_MAX,
+}
+
+export const regionTypes = [
+  {
+    label: "去除最大分区",
+    value: RegionType.EXCLUDE_MAX,
+  },
+  {
+    label: "允许最大分区",
+    value: RegionType.INCLUDE_MAX,
   },
 ];

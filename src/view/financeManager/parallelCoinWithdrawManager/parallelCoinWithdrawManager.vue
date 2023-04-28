@@ -50,7 +50,7 @@ const createColumns = () => {
       title: "提币地址",
       key: "toAddress",
       align: "center",
-      width: 180,
+      width: 200,
     },
     {
       title: "申请时间",
@@ -69,6 +69,8 @@ const createColumns = () => {
       title: "状态",
       key: "state",
       align: "center",
+      width: 120,
+
       render: (row) => {
         return parallelCoinWithdrawStates.getItem(row.state)?.label;
       },

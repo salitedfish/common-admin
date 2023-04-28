@@ -67,6 +67,7 @@ const emit = defineEmits<{
 }>();
 
 const showModel = ref(false);
+let inited = false;
 
 const createColumns = () => {
   const list: DataTableColumns<ParallelCoinItem> = [
@@ -124,6 +125,7 @@ const createColumns = () => {
 
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getParallelCoinList, createColumns, {
   heightLevel: 1,
+  lazy: true,
 });
 
 const coinIdSelectedList = ref<DataTableRowKey[]>([]);
@@ -144,6 +146,13 @@ watch(
     emit("update:parallelCoinSelectList", selectList);
   }
 );
+
+watch(showModel, (newValue) => {
+  if (newValue && !inited) {
+    getList();
+  }
+  inited = true;
+});
 
 const comfirmSelect = () => {
   showModel.value = false;

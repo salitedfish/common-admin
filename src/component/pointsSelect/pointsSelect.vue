@@ -68,6 +68,7 @@ const emit = defineEmits<{
 }>();
 
 const showModel = ref(false);
+let inited = false;
 
 const createColumns = () => {
   const list: DataTableColumns<PointsItem> = [
@@ -127,6 +128,7 @@ const createColumns = () => {
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, {
   heightLevel: 1,
   params: { pointsStates: props.pointsStates },
+  lazy: true,
 });
 
 const pointsIdSelectedList = ref<DataTableRowKey[]>([]);
@@ -147,6 +149,12 @@ watch(
     emit("update:pointsSelectList", selectList);
   }
 );
+watch(showModel, (newValue) => {
+  if (newValue && !inited) {
+    getList();
+  }
+  inited = true;
+});
 
 const comfirmSelect = () => {
   showModel.value = false;
