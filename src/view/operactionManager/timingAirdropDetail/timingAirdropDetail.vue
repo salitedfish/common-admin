@@ -30,14 +30,18 @@
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
-      <n-card v-for="(item, key) in formData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
+      <n-card v-for="(item, key) in formData.rules" :key="key" :title="`规则${key + 1}${ruleFormula(item).value}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
-          <n-select v-model:value="item.itemType" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
+          <n-select v-model:value="item.itemType" @update:value="ruleItemTypeChange(item)" :options="ruleTypeList" placeholder="请选择规则类型" style="width: 100%" clearable />
           <n-button type="primary" @click="() => goRuleWhiteList(item.id)" v-if="item.itemType === RuleType.WHITE_NAME">查看白名单</n-button>
         </n-form-item>
         <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))" required>
           <category-select
-            @update:model-value="(categoryList) => (item.itemId = String(categoryList[categoryList.length - 1].id))"
+            @update:model-value="
+              (categoryList) => {
+                item.itemId = String(categoryList[categoryList.length - 1].id);
+              }
+            "
             placeholder="请选择商品类目"
             v-model="item.categoryList"
             check-type="all"
@@ -79,30 +83,81 @@
           <parallelCoinSelect v-model:parallel-coin-select-list="item.rewardCoin" :max="1" :disabled="submiting || isCheck" :multiple="true"></parallelCoinSelect>
         </n-form-item>
 
-        <n-form-item label="单位数量:" required>
-          <n-input-number v-model:value="item.holdNum" placeholder="请输入奖励所需的单位数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
-        </n-form-item>
-        <n-form-item label="持有天数:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
-          <n-input-number
-            v-model:value="item.holdTime"
-            @update:value="(value) => ruleHoldTimeChange(value, item)"
-            :min="0"
-            placeholder="请输入持有天数，0表示不限制，大于0则单位数量只能为1"
-            style="width: 100%"
-            ><template #suffix> 天 </template></n-input-number
-          >
-        </n-form-item>
         <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
-          <n-select :options="holdTimeTypeList" v-model:value="item.holdTimeType" placeholder="请选择持有天数类型"></n-select>
+          <n-select
+            :options="holdTypes"
+            v-model:value="item.holdType"
+            @update:value="(value) => ruleHoldTypeChange(value, item)"
+            placeholder="请选择持有天数类型"
+            :disabled="isAdmin || submiting || isCheck"
+            clearable
+          ></n-select>
+        </n-form-item>
+
+        <n-form-item label="单位数量:" required v-if="item.itemType !== RuleType.NEW_REAL_NAME">
+          <n-input-number
+            v-model:value="item.holdNum"
+            placeholder="请输入奖励所需的单位数量"
+            :min="1"
+            style="width: 100%"
+            :disabled="[HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType)) && [RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))"
+            ><template #suffix> 份 </template></n-input-number
+          >
         </n-form-item>
 
         <n-form-item label="奖励数量:" required>
           <n-input-number v-model:value="item.unitNum" placeholder="请输入每单位数量奖励数量" :min="1" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
-        <n-form-item label="单次奖励上限:" required>
-          <n-input-number v-model:value="item.limitNum" placeholder="请输入单次奖励上限，0表示无上限" :min="0" style="width: 100%"
-            ><template #suffix> 份 </template></n-input-number
-          >
+
+        <n-form-item
+          label="持有天数:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-input-number v-model:value="item.holdDay" placeholder="请输入持有天数" :min="1" style="width: 100%"><template #suffix> 天 </template></n-input-number>
+        </n-form-item>
+
+        <n-form-item
+          label="持有天数计算类型:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-select :options="holdDayTypes" v-model:value="item.holdDayType" placeholder="请选择持有天数计算类型" :disabled="isAdmin || submiting || isCheck" clearable></n-select>
+        </n-form-item>
+
+        <n-form-item
+          label="总发放数量:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-input-number v-model:value="item.holdProvideTotalNum" placeholder="请输入总发放数量, 0表示无上限" :min="0" style="width: 100%"></n-input-number>
+        </n-form-item>
+
+        <n-form-item
+          label="持有天数周期内是否可重复:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-select
+            :options="holdRepeatTypes"
+            v-model:value="item.holdRepeatType"
+            placeholder="请选择持有天数周期内是否可重复"
+            :disabled="isAdmin || submiting || isCheck"
+            clearable
+          ></n-select>
+        </n-form-item>
+
+        <n-form-item
+          label="上限数量:"
+          required
+          v-if="
+            !(
+              ([RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))) ||
+              item.itemType === RuleType.NEW_REAL_NAME
+            )
+          "
+        >
+          <n-input-number v-model:value="item.limitNum" placeholder="请输入上限数量，0表示无上限" :min="0" style="width: 100%"><template #suffix> 份 </template></n-input-number>
         </n-form-item>
         <template #footer> <n-button block secondary type="warning" v-if="!isCheck" :disabled="submiting" @click="deleteRule(key)">-删除规则</n-button> </template>
       </n-card>
@@ -113,14 +168,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from "vue";
-export default defineComponent({
-  name: "addTimingAirdrop",
-});
-</script>
-<script lang="ts" setup>
 // 框架
-import { ref, reactive, computed, onMounted } from "vue";
+import { defineComponent, watch, ref, reactive, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 // 组件库
 // 自定义组件
@@ -139,12 +188,17 @@ import { useAuthStore } from "@/store/authStore";
 import { useCommonStore } from "@/store/commonStore";
 import { airDropTimeTypeList, AirDropTimeType, airDropTaskTypes, AirDropTaskType } from "../timingAirdropManager/timingAirdropManagerStore";
 import { airDropItemTypeList, AirDropItemType } from "../manualAirdropManager/manualAirdropManagerStore";
-import { ruleTypeList, RuleType, holdTimeTypeList } from "./timingAirdropDetailStore";
+import { ruleTypeList, RuleType, holdTypes, HoldType, holdDayTypes, holdRepeatTypes } from "./timingAirdropDetailStore";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 // 类型
+import { AntinomyTypes } from "@/type/Common";
 import type { TimingAirDropAddParams } from "@/type/Operator";
-
+export default defineComponent({
+  name: "addTimingAirdrop",
+});
+</script>
+<script lang="ts" setup>
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
 const authStore = useAuthStore();
@@ -174,9 +228,7 @@ const formData = reactive<TimingAirDropAddParams>({
   },
   rules: [
     {
-      holdNum: null,
-      holdTime: null,
-      holdTimeType: null,
+      holdNum: 1,
       itemId: "",
       limitNum: null,
       unitNum: null,
@@ -189,6 +241,12 @@ const formData = reactive<TimingAirDropAddParams>({
       rewardGoods: [],
       rewardPoints: [],
       rewardCoin: [],
+
+      holdType: null,
+      holdDay: null,
+      holdDayType: null,
+      holdProvideTotalNum: null,
+      holdRepeatType: null,
     },
   ],
 });
@@ -205,7 +263,48 @@ watch(
     formData.info.timeDay = newValue === AirDropTimeType.DAY ? 0 : 1;
   }
 );
-const ruleHoldTimeChange = (value: number | null, rule: TimingAirDropAddParams["rules"][number]) => {
+const ruleFormula = (rule: TimingAirDropAddParams["rules"][number]) => {
+  return computed(() => {
+    let message = "计算公式：";
+    if ([RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(rule.itemType))) {
+      if (rule.holdType === HoldType.NONE) {
+        message = message + `商品实际持有数量 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+        if (rule.limitNum && rule.limitNum > 0) {
+          message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+        }
+      }
+      if ([HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(rule.holdType))) {
+        if (rule.holdDayType === AntinomyTypes.NOT) {
+          message = message + `商品token实际持有天数 / 持有天数(${rule.holdDay || 0}) * 奖励数量(${rule.unitNum || 0})`;
+          if (rule.holdProvideTotalNum && rule.holdProvideTotalNum > 0) {
+            message = message + `，单个商品token最多发放数量(${rule.holdProvideTotalNum})`;
+          }
+        }
+        if (rule.holdDayType === AntinomyTypes.YES) {
+          message = message + `如果商品token实际持有天数 >= 持有天数(${rule.holdDay || 0})，则奖励数量(${rule.unitNum || 0})，否则不奖励`;
+          if (rule.holdProvideTotalNum && rule.holdProvideTotalNum > 0) {
+            message = message + `，当有奖励时单个商品token最多发放数量(${rule.holdProvideTotalNum})`;
+          }
+        }
+      }
+    }
+    if ([RuleType.EXTENSION_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `推广且实名人数 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+      if (rule.limitNum && rule.limitNum > 0) {
+        message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+      }
+    }
+    if ([RuleType.NEW_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `新用户注册且实名，则奖励数量(${rule.unitNum || 0})`;
+    }
+
+    return message;
+  });
+};
+const ruleItemTypeChange = (rule: TimingAirDropAddParams["rules"][number]) => {
+  rule.holdNum = 1;
+};
+const ruleHoldTypeChange = (value: number | null, rule: TimingAirDropAddParams["rules"][number]) => {
   if (value && value > 0) {
     rule.holdNum = 1;
   }
@@ -219,12 +318,9 @@ const deleteRule = (key: number) => {
 };
 const addRule = () => {
   formData.rules.push({
-    holdNum: null,
-    holdTime: null,
-    holdTimeType: null,
+    holdNum: 1,
     itemId: "",
     limitNum: null,
-    // totalUnitNum: null,
     unitNum: null,
     categoryList: [],
     itemType: null,
@@ -232,6 +328,12 @@ const addRule = () => {
     rewardId: null,
     rewardType: null,
     rewardName: null,
+
+    holdType: null,
+    holdDay: null,
+    holdDayType: null,
+    holdProvideTotalNum: null,
+    holdRepeatType: null,
     rewardGoods: [],
     rewardPoints: [],
     rewardCoin: [],

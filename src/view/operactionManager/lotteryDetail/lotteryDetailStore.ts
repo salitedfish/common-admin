@@ -84,3 +84,33 @@ export const rateTypes = [
     value: RateType.RATE,
   },
 ];
+
+export enum HoldType {
+  NONE,
+  BUY_TIME,
+  GET_TIME,
+}
+export const holdTypes = [
+  {
+    label: "无",
+    value: HoldType.NONE,
+  },
+  {
+    label: "按一级市场下单时间",
+    value: HoldType.BUY_TIME,
+  },
+  {
+    label: "按获取时间",
+    value: HoldType.GET_TIME,
+  },
+];
+export const holdDayTypes = [
+  {
+    value: AntinomyTypes.NOT,
+    label: "不满足给部分",
+  },
+  {
+    value: AntinomyTypes.YES,
+    label: "必须满足天数才给",
+  },
+];

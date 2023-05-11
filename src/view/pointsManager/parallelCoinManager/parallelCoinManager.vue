@@ -1,9 +1,9 @@
 <script lang="ts">
 // 框架
-import { defineComponent, createVNode } from "vue";
+import { defineComponent, createVNode, h } from "vue";
 import { useRouter } from "vue-router";
 // 组件库
-import { NSpace, NButton, useDialog, NEllipsis } from "naive-ui";
+import { NSpace, NButton, useDialog, NEllipsis, NImage } from "naive-ui";
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
 // 工具库
@@ -14,6 +14,7 @@ import { getParallelCoinList, delParallelCoin } from "@/request/points";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { giftTypeList, coinTypeList } from "../parallelCoinDetail/parallelCoinDetailStore";
+import { auditTypes } from "./parallelCoinManagerStore";
 
 // 类型
 import type { VNode } from "vue";
@@ -34,12 +35,6 @@ const authStore = useAuthStore();
 const createColumns = () => {
   const list: DataTableColumns<ParallelCoinItem> = [
     {
-      title: "代币",
-      key: "token",
-      align: "center",
-      width: 120,
-    },
-    {
       title: "类型",
       key: "fromChainAddress",
       align: "center",
@@ -49,12 +44,67 @@ const createColumns = () => {
       },
     },
     {
+      title: "代币",
+      key: "token",
+      align: "center",
+      width: 120,
+    },
+    {
+      title: "标签",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.label,
+          }
+        );
+      },
+    },
+    {
+      title: "代币icon",
+      key: "pointsCover",
+      align: "center",
+      width: 100,
+      render(row) {
+        return h(NImage, {
+          width: 30,
+          src: row.icon,
+        });
+      },
+    },
+    {
+      title: "持有数量",
+      key: "holdNum",
+      align: "center",
+      width: 120,
+    },
+    {
+      title: "冻结数量",
+      key: "freezeNum",
+      align: "center",
+      width: 120,
+    },
+
+    {
       title: "是否可转赠",
       key: "fromChainAddress",
       align: "center",
       width: 120,
       render: (row) => {
         return giftTypeList.getItem(row.giftType)?.label;
+      },
+    },
+    {
+      title: "提币是否需要审核",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return auditTypes.getItem(row.auditType)?.label;
       },
     },
     {
@@ -87,35 +137,26 @@ const createColumns = () => {
         );
       },
     },
-    {
-      title: "持有数量",
-      key: "holdNum",
+  ];
+  if (authStore.isAdmin) {
+    list.splice(0, 0, {
+      title: "商铺名称",
+      key: "merchantName",
       align: "center",
       width: 120,
-    },
-    {
-      title: "冻结数量",
-      key: "freezeNum",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "标签",
-      key: "fromChainAddress",
-      align: "center",
-      width: 120,
-      render: (row) => {
-        return createVNode(
-          NEllipsis,
-          {},
-          {
-            default: () => row.label,
-          }
-        );
+      render: (points) => {
+        return points.merchantUid === 0 ? "平台" : points.merchantName;
       },
-    },
+    });
 
-    {
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
+      align: "center",
+      width: 100,
+    });
+  } else {
+    list.push({
       title: "操作",
       key: "operaction",
       align: "center",
@@ -176,6 +217,7 @@ const createColumns = () => {
                       label: row.label,
                       giftType: row.giftType,
                       type: row.type,
+                      icon: row.icon,
                     },
                   });
                 },
@@ -191,24 +233,6 @@ const createColumns = () => {
         const btnBox = createVNode(NSpace, {}, { default: () => btnList });
         return btnBox;
       },
-    },
-  ];
-  if (authStore.isAdmin) {
-    list.splice(0, 0, {
-      title: "商铺名称",
-      key: "merchantName",
-      align: "center",
-      width: 120,
-      render: (points) => {
-        return points.merchantUid === 0 ? "平台" : points.merchantName;
-      },
-    });
-
-    list.splice(0, 0, {
-      title: "商户编号",
-      key: "merchantUid",
-      align: "center",
-      width: 100,
     });
   }
   return list;

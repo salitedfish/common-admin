@@ -38,6 +38,33 @@ export type OrderListItem = {
   payChannel: number;
   payTime: string;
   sellerUid: number;
+  orderPayAmount: number;
+};
+export type OrderPayDetail = {
+  payChannel: number;
+  channelType: number;
+  orderPayAmount: string;
+  coupon: {
+    token: string;
+    pointsId: string;
+    pointsNum: number;
+    pointsType: number;
+    pointsName: string;
+  } | null;
+  deduction: {
+    token: string;
+    pointsId: string;
+    pointsNum: number;
+    pointsType: number;
+    pointsName: string;
+  } | null;
+  points: {
+    token: string;
+    pointsId: string;
+    pointsNum: number;
+    pointsType: number;
+    pointsName: string;
+  } | null;
 };
 
 export type ExpressOrderListParam = Partial<{

@@ -52,3 +52,16 @@ export type AdminLogRecordListItem = {
   responseJson: string;
   userAgent: string;
 };
+
+export type AdminLogRecordDetail = {
+  adminUid: number;
+  clientIp: string;
+  createTime: string;
+  id: number;
+  nickName: string;
+  requestJson: string;
+  requestMethod: string;
+  requestUri: string;
+  responseJson: string;
+  userAgent: string;
+};

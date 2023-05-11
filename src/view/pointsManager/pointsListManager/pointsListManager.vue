@@ -120,15 +120,7 @@ const createColumns = () => {
       align: "center",
       width: 100,
     },
-    {
-      title: "积分状态",
-      key: "pointsState",
-      align: "center",
-      width: 120,
-      render(row) {
-        return pointsStateList.getItem(row.pointsState)?.label;
-      },
-    },
+
     {
       title: "是否可转赠",
       key: "pointsState",
@@ -136,6 +128,15 @@ const createColumns = () => {
       width: 120,
       render(row) {
         return giftTypeList.getItem(row.giftType)?.label;
+      },
+    },
+    {
+      title: "积分状态",
+      key: "pointsState",
+      align: "center",
+      width: 120,
+      render(row) {
+        return pointsStateList.getItem(row.pointsState)?.label;
       },
     },
     {

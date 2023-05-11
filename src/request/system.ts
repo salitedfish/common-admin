@@ -1,6 +1,6 @@
 import { ultraFetch } from "./init";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { SystemVersionListItem, SystemVersionListParams, AddSystemVersionParams, AdminLogRecordListItem, AdminLogRecordListParams } from "@/type/System";
+import type { SystemVersionListItem, SystemVersionListParams, AddSystemVersionParams, AdminLogRecordListItem, AdminLogRecordListParams, AdminLogRecordDetail } from "@/type/System";
 
 // 系统版本相关
 export const getSystemVersionList = (params: Paging & SystemVersionListParams): Promise<Return<ReturnList<SystemVersionListItem>>> => {
@@ -75,9 +75,16 @@ export const deployContract = () => {
 };
 
 // 平台日志
-export const getAdminLogRecordList = (params: Paging & AdminLogRecordListParams): Promise<Return<ReturnList<AdminLogRecordListItem>>> => {
-  return ultraFetch.post({
+export const getAdminLogRecordList = (params: Paging & AdminLogRecordListParams) => {
+  return ultraFetch.post<Return<ReturnList<AdminLogRecordListItem>>>({
     URL: "/manager/platform/log/page",
     body: JSON.stringify(params),
+  });
+};
+
+export const getAdminLogRecordDetail = (params: { id: number }) => {
+  return ultraFetch.get<Return<AdminLogRecordDetail>>({
+    URL: "/manager/platform/log/detail",
+    params,
   });
 };

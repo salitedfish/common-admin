@@ -12,6 +12,7 @@ import { useListPage, commonNotify } from "@/util/common";
 // 网络请求
 import { getParallelCoinWithdrawList, approvialParallelCoinWithdraw } from "@/request/finance";
 // store
+import { useAuthStore } from "@/store/authStore";
 import { parallelCoinWithdrawStates, ParallelCoinWithdrawState } from "./parallelCoinWithdrawManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -24,6 +25,7 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
+const isAdmin = useAuthStore().isAdmin;
 // 列表渲染函数
 const createColumns = () => {
   const list: DataTableColumns<ParallelCoinWithdrawListItem> = [
@@ -112,6 +114,21 @@ const createColumns = () => {
       },
     },
   ];
+
+  if (isAdmin) {
+    list.splice(0, 0, {
+      title: "商户名称",
+      key: "merchantName",
+      align: "center",
+      width: 100,
+    });
+    list.splice(0, 0, {
+      title: "商户编号",
+      key: "merchantUid",
+      align: "center",
+      width: 100,
+    });
+  }
   return list;
 };
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getParallelCoinWithdrawList, createColumns, { heightLevel: 1 });
@@ -120,7 +137,7 @@ const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searchin
 const showModal = ref(false);
 const currentInfo = ref({
   id: NaN,
-  state: ParallelCoinWithdrawState.APPROVIAL_FAILED,
+  state: null,
 });
 const approvialIng = ref(false);
 const comfirmApprovial = async () => {
@@ -133,6 +150,7 @@ const comfirmApprovial = async () => {
   if (res) {
     commonNotify("success", "提币审核完成");
     getList();
+    showModal.value = false;
   }
   approvialIng.value = false;
 };

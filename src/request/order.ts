@@ -2,12 +2,18 @@ import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { OrderListParam, ExpressOrderListParam, InvoiceListParam, InvoiceListItem, ExpressCompanyByCode, OrderPromoDetail } from "@/type/Order";
+import type { OrderListParam, ExpressOrderListParam, InvoiceListParam, InvoiceListItem, ExpressCompanyByCode, OrderPromoDetail, OrderPayDetail } from "@/type/Order";
 
 export const getOrderList = (params: RequestParam.GetOrderList): RequestReturn.GetOrderList => {
   return ultraFetch.post({
     URL: "/manager/order/page",
     body: JSON.stringify(params),
+  });
+};
+export const getOrderPayDetail = (params: { orderId: string }) => {
+  return ultraFetch.get<Return<OrderPayDetail>>({
+    URL: "/manager/order/pay/detail",
+    params,
   });
 };
 export const exportOrderList = (params: OrderListParam): Promise<Blob> => {
@@ -19,25 +25,25 @@ export const exportOrderList = (params: OrderListParam): Promise<Blob> => {
 
 export const orderRefundComfirm = (params: { orderId: string; note: string; state: number | null }) => {
   return ultraFetch.post({
-    URL: "/manager/order/refund-confirm",
-    body: JSON.stringify(params),
-  });
-};
-export const orderOffLineComfirm = (params: { orderId: string; state: number | null }) => {
-  return ultraFetch.post({
-    URL: "/manager/order/offline-confirm",
-    body: JSON.stringify(params),
-  });
-};
-export const orderSyncComfirm = (params: { orderId: string }) => {
-  return ultraFetch.post({
-    URL: "/manager/order/sync",
+    URL: "/manager/order/refund/confirm",
     body: JSON.stringify(params),
   });
 };
 export const orderRefundSyncComfirm = (params: { orderId: string }) => {
   return ultraFetch.post({
-    URL: "/manager/order/sync-refund",
+    URL: "/manager/order/refund/sync",
+    body: JSON.stringify(params),
+  });
+};
+export const orderOffLineComfirm = (params: { orderId: string; state: number | null }) => {
+  return ultraFetch.post({
+    URL: "/manager/order/pay/offline-confirm",
+    body: JSON.stringify(params),
+  });
+};
+export const orderSyncComfirm = (params: { orderId: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/order/pay/sync",
     body: JSON.stringify(params),
   });
 };

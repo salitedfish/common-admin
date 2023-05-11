@@ -10,7 +10,7 @@
 // 框架
 import { h, ref, defineComponent, computed } from "vue";
 // 组件库
-import { NEllipsis, NInput, NButton, NSpace, NImage } from "naive-ui";
+import { NEllipsis, NInput, NButton, NSpace, NImage, NCheckboxGroup, NCheckbox } from "naive-ui";
 // 自定义组件
 import screenSection from "./screenSection.vue";
 import commonUpload from "@/component/common/commonUpload.vue";
@@ -58,6 +58,25 @@ const createColumns = () => {
             {},
             {
               default: () => row.value || "-",
+            }
+          );
+        } else if ([ValueType.SELECT_JSON].includes(row.valueType)) {
+          const list = JSON.parse(row.value) as { key: number; value: string; checked: boolean; order: number }[];
+
+          return h(
+            NSpace,
+            {},
+            {
+              default: () => {
+                return list.map((item) => {
+                  return h(NCheckbox, {
+                    label: item.value,
+                    value: item.key,
+                    checked: item.checked,
+                    disabled: true,
+                  });
+                });
+              },
             }
           );
         } else {
@@ -151,6 +170,28 @@ const createColumns = () => {
               }
             ),
           ];
+        } else if ([ValueType.SELECT_JSON].includes(row.valueType)) {
+          // JSON格式的列表
+          const list = ref(JSON.parse(row.newValue || row.value) as { key: number; value: string; checked: boolean; order: number }[]);
+          return h(
+            NSpace,
+            {},
+            {
+              default: () => {
+                return list.value.map((item) => {
+                  return h(NCheckbox, {
+                    label: item.value,
+                    value: item.key,
+                    checked: item.checked,
+                    "onUpdate:checked": (checked) => {
+                      item.checked = checked;
+                      row.newValue = JSON.stringify(list.value);
+                    },
+                  });
+                });
+              },
+            }
+          );
         }
       },
     },

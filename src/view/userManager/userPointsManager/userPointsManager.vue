@@ -53,18 +53,18 @@ const createColumns = () => {
       width: 120,
       align: "center",
     },
-    {
-      title: "积分封面",
-      key: "pointsCover",
-      align: "center",
-      width: 100,
-      render(row) {
-        return h(NImage, {
-          width: 30,
-          src: row.pointsCover,
-        });
-      },
-    },
+    // {
+    //   title: "积分封面",
+    //   key: "pointsCover",
+    //   align: "center",
+    //   width: 100,
+    //   render(row) {
+    //     return h(NImage, {
+    //       width: 30,
+    //       src: row.pointsCover,
+    //     });
+    //   },
+    // },
     {
       title: "持有数量",
       key: "holdNum",

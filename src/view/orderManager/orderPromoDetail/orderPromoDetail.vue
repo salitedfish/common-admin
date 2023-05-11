@@ -1,6 +1,6 @@
 <script lang="ts">
 // 框架
-import { defineComponent, ref, reactive, onMounted } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 // 组件库
 // 自定义组件
@@ -17,6 +17,7 @@ import {
   GoodsActivityTimeType,
   UserTypes,
   vipTypes,
+  ProvideType,
 } from "@/view/operactionManager/goodsActivityDetail/goodsActivityDetailStore";
 // 类型
 import type { DataTableColumns } from "naive-ui";
@@ -132,6 +133,9 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render: (rule) => {
+        if (rule.provideType === ProvideType.COMMON) {
+          return "-";
+        }
         return goodsActivityTimeTypeList.getItem(rule.timeType)?.label;
       },
     },
@@ -141,6 +145,9 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render: (rule) => {
+        if (rule.provideType === ProvideType.COMMON) {
+          return "-";
+        }
         if (rule.timeType === GoodsActivityTimeType.DAY) {
           return "每天";
         } else if (rule.timeType === GoodsActivityTimeType.WEEK) {
@@ -156,6 +163,9 @@ const createColumns = () => {
       align: "center",
       width: 120,
       render: (rule) => {
+        if (rule.provideType === ProvideType.COMMON) {
+          return "-";
+        }
         return `${rule.timeHour}时`;
       },
     },

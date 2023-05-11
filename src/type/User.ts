@@ -129,4 +129,5 @@ export type UserParallelCoinListItem = {
   token: string;
   type: number;
   uid: string;
+  auditType: number;
 };

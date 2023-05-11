@@ -160,10 +160,11 @@
     </n-card>
 
     <n-card title="规则：">
-      <n-card v-for="(item, key) in lotteryFormData.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
+      <n-card v-for="(item, key) in lotteryFormData.rules" :key="key" :title="`规则${key + 1}${ruleFormula(item).value}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
           <n-select
             v-model:value="item.itemType"
+            @update:value="ruleItemTypeChange(item)"
             :options="lotteryRuleTypes"
             placeholder="请选择规则类型"
             :style="{ width: inputWidth }"
@@ -190,6 +191,82 @@
             :goodsStates="[GoodsState.TO_BE_SHELVES, GoodsState.ON_THE_SHELF]"
           ></goodsSelect
         ></n-form-item>
+
+        <n-form-item label="持有天数类型:" v-if="[LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
+          <n-select
+            :options="holdTypes"
+            v-model:value="item.holdType"
+            @update:value="(value) => ruleHoldTypeChange(value, item)"
+            placeholder="请选择持有天数类型"
+            :disabled="submiting || isCheck"
+            clearable
+          ></n-select>
+        </n-form-item>
+
+        <n-form-item label="持有数量" required v-if="item.itemType !== LotteryRuleType.NEW_REAL_NAME">
+          <n-input-number
+            placeholder="请输入持有数量"
+            v-model:value="item.holdNum"
+            :min="1"
+            :style="{ width: inputWidth }"
+            :disabled="
+              submiting ||
+              isCheck ||
+              ([HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType)) &&
+                [LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType)))
+            "
+          ></n-input-number>
+        </n-form-item>
+
+        <n-form-item label="奖励数量" required>
+          <n-input-number
+            placeholder="请输入每持有数量的奖励数量"
+            v-model:value="item.unitNum"
+            :min="1"
+            :style="{ width: inputWidth }"
+            :disabled="submiting || isCheck"
+          ></n-input-number>
+        </n-form-item>
+
+        <n-form-item
+          label="持有天数:"
+          v-if="
+            [LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))
+          "
+          required
+        >
+          <n-input-number v-model:value="item.holdDay" placeholder="请输入持有天数" :min="1" style="width: 100%"><template #suffix> 天 </template></n-input-number>
+        </n-form-item>
+
+        <n-form-item
+          label="持有天数计算类型:"
+          v-if="
+            [LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))
+          "
+          required
+        >
+          <n-select :options="holdDayTypes" v-model:value="item.holdDayType" placeholder="请选择持有天数计算类型" :disabled="submiting || isCheck" clearable></n-select>
+        </n-form-item>
+
+        <n-form-item
+          label="上限数量"
+          required
+          v-if="
+            !(
+              ([LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(item.itemType)) &&
+                [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))) ||
+              item.itemType === LotteryRuleType.NEW_REAL_NAME
+            )
+          "
+        >
+          <n-input-number
+            placeholder="请输入上限数量，0表示无上限"
+            v-model:value="item.limitNum"
+            :min="0"
+            :style="{ width: inputWidth }"
+            :disabled="submiting || isCheck"
+          ></n-input-number>
+        </n-form-item>
 
         <n-form-item
           label="开始时间"
@@ -231,30 +308,6 @@
           />
         </n-form-item>
 
-        <n-form-item label="持有数量" required>
-          <n-input-number placeholder="请输入持有数量" v-model:value="item.holdNum" :min="1" :style="{ width: inputWidth }" :disabled="submiting || isCheck"></n-input-number>
-        </n-form-item>
-
-        <n-form-item label="奖励数量" required>
-          <n-input-number
-            placeholder="请输入每持有数量的奖励数量"
-            v-model:value="item.unitNum"
-            :min="1"
-            :style="{ width: inputWidth }"
-            :disabled="submiting || isCheck"
-          ></n-input-number>
-        </n-form-item>
-
-        <n-form-item label="上限数量" required>
-          <n-input-number
-            placeholder="请输入上限数量，0表示无上限"
-            v-model:value="item.limitNum"
-            :min="0"
-            :style="{ width: inputWidth }"
-            :disabled="submiting || isCheck"
-          ></n-input-number>
-        </n-form-item>
-
         <template #footer> <n-button block @click="deleteRuleHandler(key)" secondary type="warning" :disabled="submiting" v-if="!isCheck">-删除规则</n-button> </template>
       </n-card>
 
@@ -267,7 +320,7 @@
 
 <script lang="ts">
 // 框架
-import { defineComponent, reactive, ref, onMounted, watch } from "vue";
+import { defineComponent, reactive, ref, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
 import commonUpload from "@/component/common/commonUpload.vue";
@@ -284,11 +337,11 @@ import { getLotteryDetail, addLottery, editLottery } from "@/request/operator";
 import { useCommonStore } from "@/store/commonStore";
 import { useAuthStore } from "@/store/authStore";
 import { useRouteStore } from "@/store/routeStore";
-import { overReduceTypes, repeatAbleList, hitNumTabList, lotteryRuleTypes, LotteryRuleType, rateTypes, RateType } from "./lotteryDetailStore";
+import { overReduceTypes, repeatAbleList, hitNumTabList, lotteryRuleTypes, LotteryRuleType, rateTypes, RateType, holdTypes, holdDayTypes, HoldType } from "./lotteryDetailStore";
 import { lotteryTabTypes, lotteryUseTypes } from "../lotteryManager/lotteryManagerStore";
 // 类型
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
-import { DetailCheckType } from "@/type/Common";
+import { DetailCheckType, AntinomyTypes } from "@/type/Common";
 import { GoodsFuncType } from "@/type/GoodsManager";
 import type { FileUpload } from "@/type/Common";
 import { LotteryUseType } from "@/type/Operator";
@@ -327,6 +380,38 @@ const lotteryFormData = reactive<LotteryFormDetail>({
 });
 
 // 操作规则
+const ruleFormula = (rule: LotteryFormDetail["rules"][number]) => {
+  return computed(() => {
+    let message = "计算公式：";
+    if ([LotteryRuleType.HOLD_GOODS, LotteryRuleType.HOLD_CATEGORY].includes(Number(rule.itemType))) {
+      if (rule.holdType === HoldType.NONE) {
+        message = message + `商品实际持有数量 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+        if (rule.limitNum && rule.limitNum > 0) {
+          message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+        }
+      }
+      if ([HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(rule.holdType))) {
+        if (rule.holdDayType === AntinomyTypes.NOT) {
+          message = message + `商品token实际持有天数 / 持有天数(${rule.holdDay || 0}) * 奖励数量(${rule.unitNum || 0})`;
+        }
+        if (rule.holdDayType === AntinomyTypes.YES) {
+          message = message + `如果商品token实际持有天数 >= 持有天数(${rule.holdDay || 0})，则奖励数量(${rule.unitNum || 0})，否则不奖励`;
+        }
+      }
+    }
+    if ([LotteryRuleType.EXTENSION_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `推广且实名人数 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+      if (rule.limitNum && rule.limitNum > 0) {
+        message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+      }
+    }
+    if ([LotteryRuleType.NEW_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `新用户注册且实名，则奖励数量(${rule.unitNum || 0})`;
+    }
+
+    return message;
+  });
+};
 const deleteRuleHandler = (index: number) => {
   if (lotteryFormData.rules.length <= 1) {
     commonNotify("warning", "不能少于一条规则！");
@@ -339,6 +424,14 @@ const addRuleHandler = () => {
     categoryList: [],
     goodsList: [],
   });
+};
+const ruleHoldTypeChange = (value: number | null, rule: LotteryFormDetail["rules"][number]) => {
+  if (value && value > 0) {
+    rule.holdNum = 1;
+  }
+};
+const ruleItemTypeChange = (rule: LotteryFormDetail["rules"][number]) => {
+  rule.holdNum = 1;
 };
 
 //提交

@@ -3,4 +3,5 @@ export enum ValueType {
   IMG,
   BASE64,
   WXIMG,
+  SELECT_JSON,
 }

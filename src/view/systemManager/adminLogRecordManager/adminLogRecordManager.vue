@@ -8,12 +8,18 @@
   </n-card>
 
   <n-modal :show="showDialog" @update:show="(state: boolean) => (showDialog = state)">
-    <n-card style="width: 600px" :title="currentInfo.title" :bordered="false" size="huge" role="dialog" aria-modal="true">
+    <n-card style="width: 1000px" :title="currentInfo.title" :bordered="false" size="huge" role="dialog" aria-modal="true">
       <template #header-extra>
         <custom-icon name="guanbi" :size="16" @click="showDialog = false"></custom-icon>
       </template>
-
-      <JsonViewer :value="currentInfo.content" boxed sort theme="jv-light" :expanded="true" :expand-depth="10" />
+      <div style="display: flex">
+        <div style="width: 50%; height: 600px; overflow-y: scroll">
+          <JsonViewer :value="currentInfo.detail?.requestJson" boxed sort theme="jv-light" :expanded="true" :expand-depth="10" />
+        </div>
+        <div style="width: 50%; height: 600px; overflow-y: scroll">
+          <JsonViewer :value="currentInfo.detail?.responseJson" boxed sort theme="jv-light" :expanded="true" :expand-depth="10" />
+        </div>
+      </div>
 
       <template #footer>
         <div style="display: flex; justify-content: end">
@@ -36,12 +42,12 @@ import customIcon from "@/component/common/customIcon.vue";
 // 自定义工具
 import { useListPage } from "@/util/common";
 // 网络请求
-import { getAdminLogRecordList } from "@/request/system";
+import { getAdminLogRecordList, getAdminLogRecordDetail } from "@/request/system";
 // store
 // 类型
 import type { VNode } from "vue";
 import type { DataTableColumns } from "naive-ui";
-import type { AdminLogRecordListItem } from "@/type/System";
+import type { AdminLogRecordListItem, AdminLogRecordDetail } from "@/type/System";
 
 import { defineComponent } from "vue";
 export default defineComponent({
@@ -122,6 +128,44 @@ const createColumns = () => {
       render(row) {
         const list: VNode[] = [];
         const size = "small";
+        // list.push(
+        //   h(
+        //     NButton,
+        //     {
+        //       size,
+        //       type: "primary",
+        //       secondary: true,
+        //       onClick: () => {
+        //         showDialog.value = true;
+        //         currentInfo.value.title = "请求参数";
+        //         currentInfo.value.content = row.requestJson;
+        //       },
+        //     },
+        //     {
+        //       default: () => "请求参数",
+        //     }
+        //   )
+        // );
+        // list.push(
+        //   h(
+        //     NButton,
+        //     {
+        //       size,
+        //       type: "primary",
+        //       secondary: true,
+        //       onClick: () => {
+        //         showDialog.value = true;
+        //         currentInfo.value.title = "请求结果";
+        //         currentInfo.value.content = row.responseJson;
+        //       },
+        //     },
+        //     {
+        //       default: () => "请求结果",
+        //     }
+        //   )
+        // );
+        const btnLoading = ref(false);
+
         list.push(
           h(
             NButton,
@@ -129,32 +173,20 @@ const createColumns = () => {
               size,
               type: "primary",
               secondary: true,
-              onClick: () => {
-                showDialog.value = true;
-                currentInfo.value.title = "请求参数";
-                currentInfo.value.content = row.requestJson;
+              loading: btnLoading.value,
+              onClick: async () => {
+                btnLoading.value = true;
+                const res = await getAdminLogRecordDetail({ id: row.id });
+                if (res) {
+                  showDialog.value = true;
+                  currentInfo.value.title = "请求详情";
+                  currentInfo.value.detail = res.data;
+                }
+                btnLoading.value = false;
               },
             },
             {
-              default: () => "请求参数",
-            }
-          )
-        );
-        list.push(
-          h(
-            NButton,
-            {
-              size,
-              type: "primary",
-              secondary: true,
-              onClick: () => {
-                showDialog.value = true;
-                currentInfo.value.title = "请求结果";
-                currentInfo.value.content = row.responseJson;
-              },
-            },
-            {
-              default: () => "请求结果",
+              default: () => "查看详情",
             }
           )
         );
@@ -173,10 +205,10 @@ const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searchin
 const showDialog = ref(false);
 const currentInfo = ref<{
   title: string;
-  content: string;
+  detail: AdminLogRecordDetail | null;
 }>({
   title: "",
-  content: "",
+  detail: null,
 });
 </script>
 

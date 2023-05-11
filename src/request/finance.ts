@@ -129,7 +129,7 @@ export const getParallelCoinWithdrawList = (params: Paging & ParallelCoinWithdra
   });
 };
 
-export const approvialParallelCoinWithdraw = (params: { id: number; state: number }) => {
+export const approvialParallelCoinWithdraw = (params: { id: number; state: number | null }) => {
   return ultraFetch.post({
     URL: "/manager/user-parallel-coin/record/audit",
     body: JSON.stringify(params),

@@ -180,6 +180,12 @@ const createColumns = () => {
       align: "center",
       width: 100,
     },
+    {
+      title: "实付金额",
+      key: "orderPayAmount",
+      align: "center",
+      width: 100,
+    },
 
     {
       title: "付款渠道",
@@ -287,12 +293,12 @@ const createColumns = () => {
           }
         }
         if (order.orderState === OrderState.PAY_SUCCESS) {
-          if (order.orderType === OrderType.FIRST) {
+          if (order.orderType === OrderType.FIRST && ![OrderRefundState.REFUND_ING, OrderRefundState.REFUND_SUCCESS].includes(order.refundState)) {
             btnList.push(
               h(
                 NButton,
                 {
-                  type: "warning",
+                  type: "success",
                   size: "small",
                   secondary: true,
                   onClick: () => {
@@ -308,6 +314,25 @@ const createColumns = () => {
               )
             );
           }
+          btnList.push(
+            h(
+              NButton,
+              {
+                type: "success",
+                size: "small",
+                secondary: true,
+                onClick: () => {
+                  router.push({
+                    name: "orderPayDetail",
+                    query: {
+                      orderId: order.orderId,
+                    },
+                  });
+                },
+              },
+              { default: () => "查看支付信息" }
+            )
+          );
         }
         if (order.refundState === OrderRefundState.REFUND_APPLY) {
           btnList.push(

@@ -96,25 +96,26 @@ export type TimingAirDropDetail = {
   rules: {
     id: number;
     holdNum: number;
-    holdTime: number;
-    holdTimeType: number;
     limitNum: number;
     totalUnitNum: number;
     unitNum: number;
-
     itemId: string;
     itemType: number;
     itemName: string;
     rewardId: string;
     rewardType: number;
     rewardName: string;
+    holdType: number;
+    holdDay: number;
+    holdDayType: number;
+    holdProvideTotalNum: number;
+    holdRepeatType: number;
   }[];
 };
 export type TimingAirDropAddParams = {
   info: {
     expireMinute: number | null;
     id?: number;
-
     name: string;
     timeDay: number | null;
     timeHour: number | null;
@@ -125,8 +126,6 @@ export type TimingAirDropAddParams = {
   rules: {
     id?: number;
     holdNum: number | null;
-    holdTime: number | null;
-    holdTimeType: number | null;
     limitNum: number | null;
     unitNum: number | null;
     categoryList: CategoryTreeItem[];
@@ -136,6 +135,11 @@ export type TimingAirDropAddParams = {
     rewardId: string | null;
     rewardType: number | null;
     rewardName: string | null;
+    holdType: number | null;
+    holdDay: number | null;
+    holdDayType: number | null;
+    holdProvideTotalNum: number | null;
+    holdRepeatType: number | null;
 
     rewardGoods: { goodsId: string; goodsName: string }[];
     rewardPoints: { pointsId: string; pointsName: string }[];
@@ -302,13 +306,19 @@ export enum LotteryUseType {
 }
 
 export type lotteryRule = {
-  endTime?: string;
   holdNum?: number;
   itemId?: string;
   limitNum?: number;
-  startTime?: string;
   itemType?: number;
   unitNum?: number;
+
+  holdDay?: number;
+  holdDayType?: number;
+  holdType?: number;
+  id?: number;
+
+  startTime?: string;
+  endTime?: string;
 
   categoryList: CategoryTreeItem[];
   goodsList: { goodsId: string | number; goodsName: string }[];

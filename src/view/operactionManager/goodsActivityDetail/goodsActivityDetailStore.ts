@@ -94,7 +94,7 @@ export enum TradeType {
 
 export const tradeTypes = [
   {
-    label: "支付金额",
+    label: "订单金额",
     value: TradeType.MONEY,
   },
   {

@@ -16,7 +16,6 @@
         <n-input placeholder="请输入商品描述，最多1024个字" v-model:value="goodsInfo.spu.goodsDes" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input>
       </n-form-item>
       <n-form-item label="商品详情:" required>
-        <!-- <n-input placeholder="请输入商品详情" v-model:value="goodsInfo.spu.goodsDetail" type="textarea" :disabled="formDisabled || editTypeLimit"></n-input> -->
         <rich-text-editor v-model="goodsInfo.spu.goodsDetail" :disabled="formDisabled || editTypeLimit"></rich-text-editor>
       </n-form-item>
       <n-form-item label="商品属性:">
@@ -98,17 +97,6 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-      <!-- <n-form-item label="商品是否可兑换成积分:" required>
-        <n-select
-          v-model:value="goodsInfo.extend.exchangePointsType"
-          :options="ExchangePointsTypeList"
-          placeholder="请选择是否可以兑换"
-          :style="{ width: inputWidth }"
-          clearable
-          :disabled="formDisabled"
-        />
-      </n-form-item> -->
-
       <n-form-item label="销售开始时间:" required>
         <n-date-picker
           placeholder="请选择销售开始时间"
@@ -223,7 +211,6 @@
           :disabled="formDisabled"
         />
       </n-form-item>
-
       <n-form-item label="优惠券:" required v-if="[GoodsType.COMMON, GoodsType.BLIND_BOX].includes(goodsInfo.extend.goodsType || GoodsType.COMMON)">
         <n-select
           v-model:value="goodsInfo.extend.pointsCouponType"
@@ -244,7 +231,6 @@
       <n-form-item label="积分类型:" required>
         <n-select :options="pointsTypeList" v-model:value="goodsInfo.deductionPoints.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
       </n-form-item>
-
       <n-form-item label="积分编号:" required v-if="goodsInfo.deductionPoints.pointsType === PointsType.POINTS">
         <n-space vertical>
           <pointsSelect
@@ -260,7 +246,6 @@
           </n-space>
         </n-space>
       </n-form-item>
-
       <n-form-item label="平行链代币:" required v-if="goodsInfo.deductionPoints.pointsType === PointsType.COIN">
         <n-space vertical>
           <parallelCoinSelect v-model:parallel-coin-select-list="deductionCoinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
@@ -270,7 +255,6 @@
           </n-space>
         </n-space>
       </n-form-item>
-
       <n-form-item label="最多使用数量:" required>
         <n-input-number v-model:value="goodsInfo.deductionPoints.needNum" placeholder="请输入最多使用数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 份 </template></n-input-number
@@ -291,7 +275,6 @@
       <n-form-item label="积分类型:" required>
         <n-select :options="pointsTypeList" v-model:value="goodsInfo.couponPoints.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
       </n-form-item>
-
       <n-form-item label="积分编号:" required v-if="goodsInfo.couponPoints.pointsType === PointsType.POINTS">
         <n-space vertical>
           <pointsSelect
@@ -307,7 +290,6 @@
           </n-space>
         </n-space>
       </n-form-item>
-
       <n-form-item label="平行链代币:" required v-if="goodsInfo.couponPoints.pointsType === PointsType.COIN">
         <n-space vertical>
           <parallelCoinSelect v-model:parallel-coin-select-list="couponCoinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
@@ -317,7 +299,6 @@
           </n-space>
         </n-space>
       </n-form-item>
-
       <n-form-item label="最多使用数量:" required>
         <n-input-number v-model:value="goodsInfo.couponPoints.needNum" placeholder="请输入最多使用数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
           <template #suffix> 份 </template></n-input-number
@@ -334,7 +315,6 @@
       <n-form-item label="积分类型:" required>
         <n-select :options="pointsTypeList" v-model:value="goodsInfo.points.pointsType" :disabled="formDisabled" placeholder="请选择积分类型"></n-select>
       </n-form-item>
-
       <n-form-item label="积分编号:" required v-if="goodsInfo.points.pointsType === PointsType.POINTS">
         <n-space vertical>
           <pointsSelect
@@ -350,7 +330,6 @@
           </n-space>
         </n-space>
       </n-form-item>
-
       <n-form-item label="平行链代币:" required v-if="goodsInfo.points.pointsType === PointsType.COIN">
         <n-space vertical>
           <parallelCoinSelect v-model:parallel-coin-select-list="coinSelectList" :max="1" :disabled="submiting" :multiple="true"></parallelCoinSelect>
@@ -392,9 +371,17 @@
     </n-card>
 
     <n-card title="规则：" v-if="goodsInfo.extend.saleType === SaleType.RULES" style="margin-bottom: 15px">
-      <n-card v-for="(item, key) in goodsInfo.rules" :key="key" :title="`规则${key + 1}`" style="margin-bottom: 15px">
+      <n-card v-for="(item, key) in goodsInfo.rules" :key="key" :title="`规则${key + 1}${ruleFormula(item).value}`" style="margin-bottom: 15px">
         <n-form-item label="规则类型:" required>
-          <n-select v-model:value="item.itemType" :options="ruleTypeList" placeholder="请选择规则类型" :style="{ width: inputWidth }" clearable :disabled="formDisabled" />
+          <n-select
+            @update:value="ruleItemTypeChange(item)"
+            v-model:value="item.itemType"
+            :options="ruleTypeList"
+            placeholder="请选择规则类型"
+            :style="{ width: inputWidth }"
+            clearable
+            :disabled="formDisabled"
+          />
         </n-form-item>
         <n-form-item label="商品类目:" v-if="[RuleType.HOLD_CATEGORY, RuleType.EXTENSION_CATEGORY].includes(Number(item.itemType))" required>
           <category-select
@@ -409,8 +396,27 @@
         <n-form-item label="商品编号:" v-if="[RuleType.HOLD_GOODS, RuleType.EXTENSION_GOODS].includes(Number(item.itemType))" required>
           <n-input placeholder="请输入商品编号" v-model:value="item.itemId" :disabled="formDisabled"></n-input>
         </n-form-item>
-        <n-form-item label="单位数量:" required>
-          <n-input-number v-model:value="item.holdNum" placeholder="请输入奖励所需的单位数量" :min="1" :style="{ width: inputWidth }" :disabled="formDisabled">
+        <n-form-item label="持有天数类型:" v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType))" required>
+          <n-select
+            :options="holdTypes"
+            v-model:value="item.holdType"
+            @update:value="(value) => ruleHoldTypeChange(value, item)"
+            placeholder="请选择持有天数类型"
+            :disabled="formDisabled"
+            clearable
+          ></n-select>
+        </n-form-item>
+        <n-form-item label="单位数量:" required v-if="item.itemType !== RuleType.NEW_REAL_NAME">
+          <n-input-number
+            v-model:value="item.holdNum"
+            placeholder="请输入奖励所需的单位数量"
+            :min="1"
+            :style="{ width: inputWidth }"
+            :disabled="
+              formDisabled ||
+              ([HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType)) && [RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)))
+            "
+          >
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
@@ -419,8 +425,33 @@
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
-        <n-form-item label="奖励上限:" required>
-          <n-input-number v-model:value="item.limitNum" placeholder="请输入奖励上限，0表示无上限" :min="0" :style="{ width: inputWidth }" :disabled="formDisabled">
+
+        <n-form-item
+          label="持有天数:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-input-number v-model:value="item.holdDay" placeholder="请输入持有天数" :min="1" style="width: 100%"><template #suffix> 天 </template></n-input-number>
+        </n-form-item>
+
+        <n-form-item
+          label="持有天数计算类型:"
+          v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+          required
+        >
+          <n-select :options="holdDayTypes" v-model:value="item.holdDayType" placeholder="请选择持有天数计算类型" :disabled="formDisabled" clearable></n-select>
+        </n-form-item>
+        <n-form-item
+          label="上限数量:"
+          required
+          v-if="
+            !(
+              ([RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))) ||
+              item.itemType === RuleType.NEW_REAL_NAME
+            )
+          "
+        >
+          <n-input-number v-model:value="item.limitNum" placeholder="请输入上限数量，0表示无上限" :min="0" :style="{ width: inputWidth }" :disabled="formDisabled">
             <template #suffix> 份 </template></n-input-number
           >
         </n-form-item>
@@ -507,6 +538,9 @@ import {
   pointsTypeList,
   PointsType,
   pointsDeductionTypeList,
+  holdTypes,
+  holdDayTypes,
+  HoldType,
 } from "./goodsDetailManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../goodsListManager/goodsListManagerStore";
@@ -617,13 +651,16 @@ const goodsInfo = reactive<GoodsAddParams>({
   rules: [
     {
       endTime: null,
-      holdNum: null,
       itemId: null,
       limitNum: null,
       startTime: null,
       itemType: null,
       unitNum: null,
       categoryList: [], // 工具属性
+      holdDay: null,
+      holdDayType: null,
+      holdNum: 1,
+      holdType: null,
     },
   ],
   deductionPoints: {},
@@ -805,13 +842,16 @@ const deleteGoodsProps = (index: number) => {
 const addRuleHandler = () => {
   goodsInfo.rules.push({
     endTime: null,
-    holdNum: null,
     itemId: null,
     limitNum: null,
     startTime: null,
     itemType: null,
     unitNum: null,
     categoryList: [],
+    holdDay: null,
+    holdDayType: null,
+    holdNum: 1,
+    holdType: null,
   });
 };
 const deleteRuleHandler = (index: number) => {
@@ -819,6 +859,46 @@ const deleteRuleHandler = (index: number) => {
     commonNotify("warning", "不能少于一条规则！");
   } else {
     goodsInfo.rules.splice(index, 1);
+  }
+};
+const ruleFormula = (rule: GoodsAddParams["rules"][number]) => {
+  return computed(() => {
+    let message = "计算公式：";
+    if ([RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(rule.itemType))) {
+      if (rule.holdType === HoldType.NONE) {
+        message = message + `商品实际持有数量 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+        if (rule.limitNum && rule.limitNum > 0) {
+          message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+        }
+      }
+      if ([HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(rule.holdType))) {
+        if (rule.holdDayType === AntinomyTypes.NOT) {
+          message = message + `商品token实际持有天数 / 持有天数(${rule.holdDay || 0}) * 奖励数量(${rule.unitNum || 0})`;
+        }
+        if (rule.holdDayType === AntinomyTypes.YES) {
+          message = message + `如果商品token实际持有天数 >= 持有天数(${rule.holdDay || 0})，则奖励数量(${rule.unitNum || 0})，否则不奖励`;
+        }
+      }
+    }
+    if ([RuleType.EXTENSION_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `推广且实名人数 / 单位数量(${rule.holdNum || 0}) * 奖励数量(${rule.unitNum || 0})`;
+      if (rule.limitNum && rule.limitNum > 0) {
+        message = message + `，最多不超过奖励上限数量(${rule.limitNum})`;
+      }
+    }
+    if ([RuleType.NEW_REAL_NAME].includes(Number(rule.itemType))) {
+      message = message + `新用户注册且实名，则奖励数量(${rule.unitNum || 0})`;
+    }
+
+    return message;
+  });
+};
+const ruleItemTypeChange = (rule: GoodsAddParams["rules"][number]) => {
+  rule.holdNum = 1;
+};
+const ruleHoldTypeChange = (value: number | null, rule: GoodsAddParams["rules"][number]) => {
+  if (value && value > 0) {
+    rule.holdNum = 1;
   }
 };
 

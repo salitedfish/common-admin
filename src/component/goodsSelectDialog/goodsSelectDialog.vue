@@ -109,11 +109,11 @@ const changeGoodsSelectList: any = (keys: Array<string | number>, rows: GoodsLis
     check(goodsIdSelectedList.value, selectList, meta.row);
   } else if (meta.action === "uncheck") {
     uncheck(goodsIdSelectedList.value, selectList, meta.row.goodsId);
-  } else if (meta.action === "uncheckAll" && !props.max) {
+  } else if (meta.action === "uncheckAll" && !props.max && !props.selectDisabled) {
     for (const item of list.value) {
       uncheck(goodsIdSelectedList.value, selectList, item.goodsId);
     }
-  } else if (meta.action === "checkAll" && !props.max) {
+  } else if (meta.action === "checkAll" && !props.max && !props.selectDisabled) {
     for (const item of list.value) {
       check(goodsIdSelectedList.value, selectList, item);
     }

@@ -52,6 +52,8 @@ export type ParallelCoinItem = {
   label: string;
   giftType: number;
   type: number;
+  icon: string;
+  auditType: number;
 };
 
 export type ParallelCoinDetail = Partial<{
@@ -63,4 +65,6 @@ export type ParallelCoinDetail = Partial<{
   id: number;
   label: string;
   type: number;
+  icon: string;
+  auditType: number;
 }>;

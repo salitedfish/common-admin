@@ -23,6 +23,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "orderPayDetail",
+    name: "orderPayDetail",
+    component: () => import("@/view/orderManager/orderPayDetail/orderPayDetail.vue"),
+    meta: {
+      label: "订单支付信息",
+      icon: "dingdan",
+      keepAlive: true,
+    },
+  },
+  {
     path: "invoiceListManager",
     name: "invoiceListManager",
     component: () => import("@/view/orderManager/invoiceListManager/invoiceListManager.vue"),

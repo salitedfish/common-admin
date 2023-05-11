@@ -120,6 +120,9 @@ export type GoodsAddParams = {
     startTime: string | null;
     itemType: number | null;
     unitNum: number | null;
+    holdDay: number | null;
+    holdDayType: number | null;
+    holdType: number | null;
   }[];
   deductionPoints: Partial<{
     goodsId: string;

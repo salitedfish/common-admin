@@ -12,6 +12,7 @@ import { useListPage } from "@/util/common";
 import { getUserParallelCoinList } from "@/request/user";
 // store
 import { giftTypeList, coinTypeList } from "@/view/pointsManager/parallelCoinDetail/parallelCoinDetailStore";
+import { auditTypes } from "@/view/pointsManager/parallelCoinManager/parallelCoinManagerStore";
 
 // 类型
 import type { UserParallelCoinListItem } from "@/type/User";
@@ -34,7 +35,7 @@ const createColumns = () => {
       fixed: "left",
     },
     {
-      title: "token",
+      title: "代币",
       key: "token",
       align: "center",
       width: 120,
@@ -59,6 +60,15 @@ const createColumns = () => {
       width: 120,
       render: (row) => {
         return giftTypeList.getItem(row.giftType)?.label;
+      },
+    },
+    {
+      title: "提币是否需要审核",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return auditTypes.getItem(row.auditType)?.label;
       },
     },
 
