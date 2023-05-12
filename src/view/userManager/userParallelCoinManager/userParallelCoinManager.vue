@@ -89,7 +89,10 @@ const createColumns = () => {
   return list;
 };
 
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getUserParallelCoinList, createColumns, { heightLevel: 1 });
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getUserParallelCoinList, createColumns, {
+  heightLevel: 1,
+  lazy: true,
+});
 </script>
 
 <template>

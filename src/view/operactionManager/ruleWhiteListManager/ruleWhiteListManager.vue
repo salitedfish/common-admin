@@ -73,6 +73,12 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
+    {
+      title: "开始释放时间",
+      key: "startTime",
+      align: "center",
+      width: 120,
+    },
   ];
   return list;
 };

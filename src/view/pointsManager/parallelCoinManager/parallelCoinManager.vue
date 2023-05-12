@@ -218,6 +218,7 @@ const createColumns = () => {
                       giftType: row.giftType,
                       type: row.type,
                       icon: row.icon,
+                      auditType: row.auditType,
                     },
                   });
                 },

@@ -1,6 +1,6 @@
 <template>
   <n-space>
-    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" v-if="authStore.isAdmin" clearable></n-input>
+    <n-input v-model:value="params.uid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.token" autosize placeholder="请输入token" style="width: 200px" :disabled="searching" clearable></n-input>
     <!-- <n-select v-model:value="params.tab" :options="accountTabList" placeholder="请选择用户类型" style="width: 200px" :disabled="searching" clearable /> -->
 

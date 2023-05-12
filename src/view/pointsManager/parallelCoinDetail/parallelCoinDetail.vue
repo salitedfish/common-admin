@@ -61,6 +61,7 @@ const init = () => {
     giftType: string;
     detailType: string;
     icon: string;
+    auditType: string;
   };
   parallelCoinDetail.token = routeQuery.token;
   parallelCoinDetail.address = routeQuery.address;
@@ -70,6 +71,7 @@ const init = () => {
   parallelCoinDetail.type = Number(routeQuery.type);
   parallelCoinDetail.label = routeQuery.label;
   parallelCoinDetail.icon = routeQuery.icon;
+  parallelCoinDetail.auditType = Number(routeQuery.auditType);
   parallelCoinIconList.value = routeQuery.icon
     ? [
         {
@@ -109,7 +111,7 @@ onMounted(() => {
       </n-form-item>
 
       <n-form-item label="提币是否需要审核:" required>
-        <n-select v-model:value="parallelCoinDetail.auditType" :options="auditTypes" placeholder="请选择提币是否需要审核" :style="{ width: '100%' }" clearable />
+        <n-select v-model:value="parallelCoinDetail.auditType" :options="auditTypes" placeholder="请选择" :style="{ width: '100%' }" clearable />
       </n-form-item>
 
       <n-form-item label="标签:" required>

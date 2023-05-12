@@ -213,7 +213,7 @@ export const useListPage = <P extends Paging, R>(
     init = false;
   });
   onActivated(() => {
-    if (!init) getList();
+    if (!init && !options.lazy) getList();
   });
   return {
     listXWidth,

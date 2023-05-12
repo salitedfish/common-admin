@@ -92,6 +92,21 @@ const createColumns = () => {
       width: 120,
     },
     {
+      title: "标签",
+      key: "fromChainAddress",
+      align: "center",
+      width: 120,
+      render: (row) => {
+        return createVNode(
+          NEllipsis,
+          {},
+          {
+            default: () => row.label,
+          }
+        );
+      },
+    },
+    {
       title: "发行地址",
       key: "fromChainAddress",
       align: "center",
