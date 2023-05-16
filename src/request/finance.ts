@@ -77,14 +77,14 @@ export const exportPointsChainRecord = (params: ChainRecordParams) => {
 };
 
 // 资产数据
-export const getFinanceToday = (): Promise<Return<FinanceData>> => {
-  return ultraFetch.get({
+export const getFinanceToday = () => {
+  return ultraFetch.get<Return<FinanceData>>({
     URL: "/manager/finance/today",
   });
 };
 
-export const getFinanceYesterday = (): Promise<Return<FinanceData>> => {
-  return ultraFetch.get({
+export const getFinanceYesterday = () => {
+  return ultraFetch.get<Return<FinanceData>>({
     URL: "/manager/finance/yesterday",
   });
 };

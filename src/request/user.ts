@@ -44,16 +44,16 @@ export const updateUserPhone = (params: { tab: number; uid?: number; phone: stri
   });
 };
 
-export const getUserRealInfo = (params: { uid: number }): Promise<Return<UserRealInfo>> => {
-  return ultraFetch.get({
+export const getUserRealInfo = (params: { uid: number }) => {
+  return ultraFetch.get<Return<UserRealInfo>>({
     URL: "/manager/user/identity-verification",
     params,
   });
 };
 
 // 系统用户（管理员、商户）
-export const getAdminMerchantList = (params: Paging & AdminMerchantListParam): Promise<Return<ReturnList<AdminMerchantListItem>>> => {
-  return ultraFetch.post({
+export const getAdminMerchantList = (params: Paging & AdminMerchantListParam) => {
+  return ultraFetch.post<Return<ReturnList<AdminMerchantListItem>>>({
     URL: "/manager/admin-merchant/page",
     body: JSON.stringify(params),
   });
@@ -66,43 +66,43 @@ export const updateAdminMerchantState = (params: { uid: number; state: number })
   });
 };
 
-export const resetAdminMerchantPassword = (params: { uid: number }): Promise<Return<{ password: string }>> => {
-  return ultraFetch.post({
+export const resetAdminMerchantPassword = (params: { uid: number }) => {
+  return ultraFetch.post<Return<{ password: string }>>({
     URL: "/manager/admin-merchant/reset-password",
     body: JSON.stringify(params),
   });
 };
 
 // 用户资产
-export const getUserAssetsList = (params: Paging & GetUserAssetsListParams): Promise<Return<ReturnList<UserAssetsListItem>>> => {
-  return ultraFetch.post({
+export const getUserAssetsList = (params: Paging & GetUserAssetsListParams) => {
+  return ultraFetch.post<Return<ReturnList<UserAssetsListItem>>>({
     URL: "/manager/user-asset/page",
     body: JSON.stringify(params),
   });
 };
-export const exportUserAssestList = (params: GetUserAssetsListParams): Promise<Blob> => {
-  return ultraFetch.get({
+export const exportUserAssestList = (params: GetUserAssetsListParams) => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/user-asset/excel",
     params,
   });
 };
 // 用户积分
-export const getUserPointsList = (params: Paging & GetUserPointsListParams): Promise<Return<ReturnList<UserPointsListItem>>> => {
-  return ultraFetch.post({
+export const getUserPointsList = (params: Paging & GetUserPointsListParams) => {
+  return ultraFetch.post<Return<ReturnList<UserPointsListItem>>>({
     URL: "/manager/user-points/page",
     body: JSON.stringify(params),
   });
 };
-export const exportUserPointsList = (params: GetUserPointsListParams): Promise<Blob> => {
-  return ultraFetch.get({
+export const exportUserPointsList = (params: GetUserPointsListParams) => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/user-points/excel",
     params,
   });
 };
 
 //vip设置
-export const getVipLevelList = (): Promise<Return<VipLevelItem[]>> => {
-  return ultraFetch.get({
+export const getVipLevelList = () => {
+  return ultraFetch.get<Return<VipLevelItem[]>>({
     URL: "/manager/vip/level/list",
   });
 };

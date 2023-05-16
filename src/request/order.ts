@@ -16,8 +16,8 @@ export const getOrderPayDetail = (params: { orderId: string }) => {
     params,
   });
 };
-export const exportOrderList = (params: OrderListParam): Promise<Blob> => {
-  return ultraFetch.get({
+export const exportOrderList = (params: OrderListParam) => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/order/excel",
     params,
   });
@@ -54,8 +54,8 @@ export const getExpressOrderList = (params: RequestParam.GetExpressOrderList): R
     body: JSON.stringify(params),
   });
 };
-export const exportExpressOrderList = (params: ExpressOrderListParam): Promise<Blob> => {
-  return ultraFetch.get({
+export const exportExpressOrderList = (params: ExpressOrderListParam) => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/order/express/excel",
     params,
   });
@@ -68,8 +68,8 @@ export const getExpressLogistics = (params: { orderId: string }): RequestReturn.
   });
 };
 
-export const getExpressCompanyListByCode = (params: { expressCode: string }): Promise<Return<ExpressCompanyByCode>> => {
-  return ultraFetch.get({
+export const getExpressCompanyListByCode = (params: { expressCode: string }) => {
+  return ultraFetch.get<Return<ExpressCompanyByCode>>({
     URL: "/manager/order/express/express-com",
     params,
   });
@@ -89,14 +89,14 @@ export const expressDelivery = (params: { expressCode?: string | null; expressNa
   });
 };
 
-export const getInvoiceList = (params: Paging & InvoiceListParam): Promise<Return<ReturnList<InvoiceListItem>>> => {
-  return ultraFetch.post({
+export const getInvoiceList = (params: Paging & InvoiceListParam) => {
+  return ultraFetch.post<Return<ReturnList<InvoiceListItem>>>({
     URL: "/manager/order/invoice/page",
     body: JSON.stringify(params),
   });
 };
-export const exportInvoiceList = (params: InvoiceListParam): Promise<Blob> => {
-  return ultraFetch.get({
+export const exportInvoiceList = (params: InvoiceListParam) => {
+  return ultraFetch.get<Blob>({
     URL: "/manager/order/invoice/excel",
     params,
   });

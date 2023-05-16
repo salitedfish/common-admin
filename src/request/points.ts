@@ -57,8 +57,8 @@ export const getPointsInfo = (params: { pointsId: string }): RequestReturn.GetPo
 };
 
 // 平行链代币
-export const getParallelCoinList = (params: Paging & ParallelCoinListParams): Promise<Return<ReturnList<ParallelCoinItem>>> => {
-  return ultraFetch.post({
+export const getParallelCoinList = (params: Paging & ParallelCoinListParams) => {
+  return ultraFetch.post<Return<ReturnList<ParallelCoinItem>>>({
     URL: "/manager/parallel/coin/page",
     body: JSON.stringify(params),
   });

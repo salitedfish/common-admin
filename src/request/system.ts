@@ -3,15 +3,15 @@ import type { Paging, Return, ReturnList } from "@/type/Common";
 import type { SystemVersionListItem, SystemVersionListParams, AddSystemVersionParams, AdminLogRecordListItem, AdminLogRecordListParams, AdminLogRecordDetail } from "@/type/System";
 
 // 系统版本相关
-export const getSystemVersionList = (params: Paging & SystemVersionListParams): Promise<Return<ReturnList<SystemVersionListItem>>> => {
-  return ultraFetch.post({
+export const getSystemVersionList = (params: Paging & SystemVersionListParams) => {
+  return ultraFetch.post<Return<ReturnList<SystemVersionListItem>>>({
     URL: "/manager/channel-version/page",
     body: JSON.stringify(params),
   });
 };
 
-export const getSystemVersionDetail = (params: { id: number }): Promise<Return<SystemVersionListItem>> => {
-  return ultraFetch.get({
+export const getSystemVersionDetail = (params: { id: number }) => {
+  return ultraFetch.get<Return<SystemVersionListItem>>({
     URL: "/manager/channel-version/detail",
     params,
   });
