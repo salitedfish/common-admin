@@ -13,7 +13,8 @@
     "dev": "vite --host",
     "build_production_fxsp": "vite build --mode production_fxsp",
     "build_production_slg": "vite build --mode production_slg",
-    "deploy_test": "vite build --mode test && bash deploy_test.sh"
+    "deploy_test": "vite build --mode test && bash deploy_test.sh",
+    "deploy_test_fxsp": "vite build --mode test_fxsp && bash deploy_test_fxsp.sh"
   },
   
   "dependencies": {
