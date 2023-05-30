@@ -12,7 +12,7 @@ import { commonNotify } from "@/util/common";
 import { getVipLevelList, updateVipLevelList } from "@/request/user";
 // store
 import { useCommonStore } from "@/store/commonStore";
-import { vipTypes, useApiToView, useViewToApi, vipGetTypes, VipGetType } from "./vipLevelManagerStore";
+import { vipTypes, useApiToView, useViewToApi, vipGetTypes, VipGetType, regionTypes } from "./vipLevelManagerStore";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 
 // 类型
@@ -86,6 +86,25 @@ const createColumns = (levelList: VipLevelItem[]) => {
           },
           disabled: submiting.value,
         });
+      },
+    },
+    {
+      title: "大区类型",
+      key: "type",
+      align: "center",
+      width: 100,
+      render: (row) => {
+        return row.type === VipGetType.SHARE
+          ? createVNode(NSelect, {
+              placeholder: "请选择",
+              options: regionTypes,
+              value: row.regionType,
+              onUpdateValue: (newValue: number) => {
+                row.regionType = newValue;
+              },
+              disabled: submiting.value,
+            })
+          : "-";
       },
     },
     {

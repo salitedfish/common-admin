@@ -55,19 +55,24 @@ export enum GoodsActivityTimeType {
   DAY,
   WEEK,
   MONTH,
+  YEAR,
 }
 export const goodsActivityTimeTypeList = [
   {
     label: "每日",
     value: GoodsActivityTimeType.DAY,
   },
-  {
-    label: "每周",
-    value: GoodsActivityTimeType.WEEK,
-  },
+  // {
+  //   label: "每周",
+  //   value: GoodsActivityTimeType.WEEK,
+  // },
   {
     label: "每月",
     value: GoodsActivityTimeType.MONTH,
+  },
+  {
+    label: "每年",
+    value: GoodsActivityTimeType.YEAR,
   },
 ];
 

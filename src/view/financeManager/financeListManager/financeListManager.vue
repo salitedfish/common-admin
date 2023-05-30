@@ -49,7 +49,7 @@
             <n-statistic label="一级销量"> {{ numberHandler(financeYesterday.primarySumOrderNum) }}</n-statistic>
           </n-gi>
         </n-grid>
-        <n-grid x-gap="12" :cols="3">
+        <!-- <n-grid x-gap="12" :cols="3">
           <n-gi>
             <n-statistic label="二级订单数"> {{ numberHandler(financeYesterday.secondaryCountOrder) }} </n-statistic>
           </n-gi>
@@ -59,7 +59,7 @@
           <n-gi>
             <n-statistic label="二级销量"> {{ numberHandler(financeYesterday.secondarySumOrderNum) }}</n-statistic>
           </n-gi>
-        </n-grid>
+        </n-grid> -->
       </n-card>
       <n-card title="今日数据">
         <n-grid x-gap="12" :cols="3">
@@ -81,7 +81,7 @@
             <n-statistic label="一级销量"> {{ numberHandler(financeToday.primarySumOrderNum) }} </n-statistic>
           </n-gi>
         </n-grid>
-        <n-grid x-gap="12" :cols="3">
+        <!-- <n-grid x-gap="12" :cols="3">
           <n-gi>
             <n-statistic label="二级订单数">{{ numberHandler(financeToday.secondaryCountOrder) }} </n-statistic>
           </n-gi>
@@ -91,7 +91,7 @@
           <n-gi>
             <n-statistic label="二级销量"> {{ numberHandler(financeToday.secondarySumOrderNum) }} </n-statistic>
           </n-gi>
-        </n-grid>
+        </n-grid> -->
       </n-card>
     </div>
   </n-card>

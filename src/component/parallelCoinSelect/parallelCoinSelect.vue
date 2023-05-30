@@ -92,7 +92,7 @@ const createColumns = () => {
       width: 120,
     },
     {
-      title: "标签",
+      title: "备注",
       key: "fromChainAddress",
       align: "center",
       width: 120,

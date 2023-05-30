@@ -78,15 +78,15 @@ const createColumns = () => {
         return goodsTypeList.getItem(row.goodsType)?.label;
       },
     },
-    {
-      title: "商品品级",
-      key: "goodsLevel",
-      width: 80,
-      align: "center",
-      render: (row) => {
-        return goodsLevelList.getItem(row.goodsLevel)?.label;
-      },
-    },
+    // {
+    //   title: "商品品级",
+    //   key: "goodsLevel",
+    //   width: 80,
+    //   align: "center",
+    //   render: (row) => {
+    //     return goodsLevelList.getItem(row.goodsLevel)?.label;
+    //   },
+    // },
     {
       title: "持有数量",
       key: "holdNum",

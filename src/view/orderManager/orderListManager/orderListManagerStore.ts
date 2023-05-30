@@ -96,26 +96,22 @@ export enum PayChannel {
   OFF_LINE,
 }
 export const payChannelList = [
-  // {
-  //   label: "-",
-  //   value: PayChannel.NONE,
-  // },
   {
     label: "微信",
     value: PayChannel.WX,
   },
-  {
-    label: "杉德",
-    value: PayChannel.SD,
-  },
+  // {
+  //   label: "杉德",
+  //   value: PayChannel.SD,
+  // },
   {
     label: "积分",
     value: PayChannel.POINT,
   },
-  {
-    label: "线下",
-    value: PayChannel.OFF_LINE,
-  },
+  // {
+  //   label: "线下",
+  //   value: PayChannel.OFF_LINE,
+  // },
 ];
 
 export enum OrderExchangeType {

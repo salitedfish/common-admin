@@ -369,6 +369,7 @@ export type GoodsActivityListItem = {
   merchantName: string;
   merchantUid: number;
   state: number;
+  timeMonth: number;
   timeDay: number;
   timeHour: number;
   timeType: number;

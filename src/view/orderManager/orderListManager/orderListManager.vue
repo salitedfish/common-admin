@@ -153,15 +153,15 @@ const createColumns = () => {
       width: 100,
       align: "center",
     },
-    {
-      title: "订单类型",
-      key: "orderType",
-      align: "center",
-      width: 100,
-      render(order) {
-        return orderTypeList.getItem(order.orderType)?.label;
-      },
-    },
+    // {
+    //   title: "订单类型",
+    //   key: "orderType",
+    //   align: "center",
+    //   width: 100,
+    //   render(order) {
+    //     return orderTypeList.getItem(order.orderType)?.label;
+    //   },
+    // },
     {
       title: "购买数量",
       key: "orderNum",

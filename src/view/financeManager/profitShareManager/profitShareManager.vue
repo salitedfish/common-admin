@@ -76,16 +76,16 @@ const createColumns = () => {
       width: 180,
       align: "center",
     },
-    {
-      title: "订单类型",
-      key: "orderType",
-      width: 120,
-      align: "center",
+    // {
+    //   title: "订单类型",
+    //   key: "orderType",
+    //   width: 120,
+    //   align: "center",
 
-      render: (row) => {
-        return orderTypeList.getItem(row.orderType)?.label;
-      },
-    },
+    //   render: (row) => {
+    //     return orderTypeList.getItem(row.orderType)?.label;
+    //   },
+    // },
     {
       title: "订单总价",
       key: "orderTotalAmount",
@@ -117,16 +117,16 @@ const createColumns = () => {
       width: 120,
       align: "center",
     },
-    {
-      title: "分账渠道",
-      key: "channelType",
-      width: 100,
-      align: "center",
+    // {
+    //   title: "分账渠道",
+    //   key: "channelType",
+    //   width: 100,
+    //   align: "center",
 
-      render: (row) => {
-        return payChannelList.getItem(row.channelType)?.label;
-      },
-    },
+    //   render: (row) => {
+    //     return payChannelList.getItem(row.channelType)?.label;
+    //   },
+    // },
     {
       title: "第三方分账编号",
       key: "outOrderId",

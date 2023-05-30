@@ -1,6 +1,6 @@
 <template>
   <n-space>
-    <n-input
+    <!-- <n-input
       v-model:value="params.merchantUid"
       autosize
       placeholder="请输入商户编号, 0表示平台"
@@ -8,7 +8,7 @@
       style="width: 220px"
       :disabled="searching"
       clearable
-    ></n-input>
+    ></n-input> -->
     <n-select v-model:value="params.type" :options="bulletinBoardTypeList" placeholder="请选择公告类型" style="width: 200px" :disabled="searching" clearable />
     <n-input v-model:value="params.title" autosize placeholder="请输入公告标题" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select v-model:value="params.state" :options="bulletinBoardStateList" placeholder="请选择公告状态" style="width: 200px" :disabled="searching" clearable />

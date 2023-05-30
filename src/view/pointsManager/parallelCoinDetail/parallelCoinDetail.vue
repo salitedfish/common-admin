@@ -114,8 +114,8 @@ onMounted(() => {
         <n-select v-model:value="parallelCoinDetail.auditType" :options="auditTypes" placeholder="请选择" :style="{ width: '100%' }" clearable />
       </n-form-item>
 
-      <n-form-item label="标签:" required>
-        <n-input placeholder="请输入标签，最多32个字" v-model:value="parallelCoinDetail.label" :maxlength="32"></n-input>
+      <n-form-item label="备注:" required>
+        <n-input placeholder="请输入备注，最多32个字" v-model:value="parallelCoinDetail.label" :maxlength="32"></n-input>
       </n-form-item>
 
       <n-form-item label="代币图标:" required>

@@ -122,18 +122,6 @@ const createColumns = () => {
         );
       },
     },
-    {
-      title: "会员等级",
-      key: "memberLevel",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "节点等级",
-      key: "nodeLevel",
-      align: "center",
-      width: 120,
-    },
   ];
   // 管理员
   if (authStore.isAdmin) {
@@ -292,26 +280,25 @@ const createColumns = () => {
         },
       ] as DataTableColumns<UserListItem>)
     );
+  } else {
+    // 商户
+    list.push(
+      ...([
+        {
+          title: "会员等级",
+          key: "memberLevel",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "节点等级",
+          key: "nodeLevel",
+          align: "center",
+          width: 120,
+        },
+      ] as DataTableColumns<UserListItem>)
+    );
   }
-  // else {
-  //   // 商户
-  //   list.push(
-  //     ...([
-  //       {
-  //         title: "会员等级",
-  //         key: "memberLevel",
-  //         align: "center",
-  //         width: 120,
-  //       },
-  //       {
-  //         title: "节点等级",
-  //         key: "nodeLevel",
-  //         align: "center",
-  //         width: 120,
-  //       },
-  //     ] as DataTableColumns<UserListItem>)
-  //   );
-  // }
   return list;
 };
 

@@ -106,18 +106,18 @@ export const goodsTypeList = [
     value: GoodsType.COMMON,
     label: "普通商品",
   },
-  {
-    value: GoodsType.BLIND_BOX,
-    label: "盲盒商品",
-  },
-  {
-    value: GoodsType.BLIND_BOX_PRIZE,
-    label: "盲盒奖品",
-  },
-  {
-    value: GoodsType.SYNTHETIC,
-    label: "合成商品",
-  },
+  // {
+  //   value: GoodsType.BLIND_BOX,
+  //   label: "盲盒商品",
+  // },
+  // {
+  //   value: GoodsType.BLIND_BOX_PRIZE,
+  //   label: "盲盒奖品",
+  // },
+  // {
+  //   value: GoodsType.SYNTHETIC,
+  //   label: "合成商品",
+  // },
   {
     value: GoodsType.AIR_DROP,
     label: "空投商品",

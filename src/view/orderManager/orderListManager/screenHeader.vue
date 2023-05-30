@@ -5,9 +5,9 @@
     <n-input v-model:value="params.orderId" autosize placeholder="请输入订单编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsId" autosize placeholder="请输入商品编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.goodsName" autosize placeholder="请输入商品名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select v-model:value="params.type" :options="orderExchangeTypeList" placeholder="请选择交易类型" style="width: 200px" :disabled="searching" clearable />
+    <!-- <n-select v-model:value="params.type" :options="orderExchangeTypeList" placeholder="请选择交易类型" style="width: 200px" :disabled="searching" clearable /> -->
     <n-select v-model:value="params.payChannel" :options="payChannelList" placeholder="请选择付款渠道" style="width: 200px" :disabled="searching" clearable />
-    <n-select v-model:value="params.orderType" :options="orderTypeList" placeholder="请选择订单类型" style="width: 200px" :disabled="searching" clearable />
+    <!-- <n-select v-model:value="params.orderType" :options="orderTypeList" placeholder="请选择订单类型" style="width: 200px" :disabled="searching" clearable /> -->
     <n-select v-model:value="params.orderState" :options="orderStateList" placeholder="请选择订单状态" style="width: 200px" :disabled="searching" clearable />
     <n-select v-model:value="params.refundState" :options="orderRefundStateList" placeholder="请选择退款状态" style="width: 200px" :disabled="searching" clearable />
     <category-select v-model="categoryList" checkType="all" style="width: 200px"></category-select>
