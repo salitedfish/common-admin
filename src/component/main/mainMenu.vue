@@ -108,9 +108,10 @@ const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[])
 onMounted(async () => {
   const res = await getAuthRoutesRequest();
   if (res) {
-    authRouteHandler(menuOptions, res.data);
+    const { data } = res;
+    authRouteHandler(menuOptions, data);
     // 每个账号都有不同的权限，权限依据远程路由里面
-    authStore.setAuthIds(res.data);
+    authStore.setAuthIds(data);
   }
 });
 
