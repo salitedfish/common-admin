@@ -47,12 +47,12 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "冻结数量",
-      key: "freezeNum",
-      align: "center",
-      width: 120,
-    },
+    // {
+    //   title: "冻结数量",
+    //   key: "freezeNum",
+    //   align: "center",
+    //   width: 120,
+    // },
     {
       title: "是否可转赠",
       key: "fromChainAddress",
