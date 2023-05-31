@@ -26,4 +26,6 @@ export type UserInfo = {
   uid: number;
 };
 
-export enum AuthType {}
+export enum AuthType {
+  GET_GOODS_MANAGER_LIST = 10001,
+}

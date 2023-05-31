@@ -20,7 +20,7 @@ export const useAuthStore = defineStore("authStore", () => {
     return userInfo.value?.role === UserRole.ADMIN;
   });
 
-  // 每个账号涉及到的具体权限
+  // 收集每个账号涉及到的具体权限id
   const authIds = ref<number[]>([]);
   const setAuthIds = (remoteRote: RemoteRoute[]) => {
     for (const item of remoteRote) {
@@ -31,6 +31,7 @@ export const useAuthStore = defineStore("authStore", () => {
       }
     }
   };
+
   return {
     userInfo,
     setUserInfo,
