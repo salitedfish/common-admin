@@ -25,3 +25,5 @@ export type UserInfo = {
   subMchid: string;
   uid: number;
 };
+
+export enum AuthType {}

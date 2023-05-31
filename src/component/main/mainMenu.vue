@@ -31,10 +31,12 @@ import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
+import { useAuthStore } from "@/store/authStore";
 import type { RemoteRoute } from "@/type/Common";
 
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
+const authStore = useAuthStore();
 
 // 展开状态
 const collapsed = ref(false);
@@ -92,6 +94,7 @@ const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[])
     for (const i of remoteRoute) {
       if (item.routeId === i.id) {
         item.show = true;
+        // 如果有子路由则递归判断是否显示
         if (item.children && i.menu) {
           authRouteHandler(item.children, i.menu);
         }
@@ -106,6 +109,8 @@ onMounted(async () => {
   const res = await getAuthRoutesRequest();
   if (res) {
     authRouteHandler(menuOptions, res.data);
+    // 每个账号都有不同的权限，权限依据远程路由里面
+    authStore.setAuthList(res.data);
   }
 });
 

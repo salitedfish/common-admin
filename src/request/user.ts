@@ -30,17 +30,33 @@ export const updateUserState = (params: { state: number; uid: number }) => {
   });
 };
 
-export const updateUserTab = (params: { tab: number; uid: number; phone?: string }) => {
+export const updateUserTab = (params: { tab: number; uid: number }) => {
   return ultraFetch.post({
     URL: "/manager/user/tab",
-    body: JSON.stringify(params),
+    body: JSON.stringify({
+      uid: params.uid,
+      tab: params.tab,
+    }),
   });
 };
 
-export const updateUserPhone = (params: { tab: number; uid?: number; phone: string }) => {
+export const updateUserPhone = (params: { uid: number; phone: string }) => {
   return ultraFetch.post({
     URL: "/manager/user/phone",
-    body: JSON.stringify(params),
+    body: JSON.stringify({
+      uid: params.uid,
+      phone: params.phone,
+    }),
+  });
+};
+
+export const updateUserRegisterCode = (params: { uid: number; registerCode: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/user/register-code",
+    body: JSON.stringify({
+      uid: params.uid,
+      registerCode: params.registerCode,
+    }),
   });
 };
 

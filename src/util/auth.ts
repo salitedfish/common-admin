@@ -64,11 +64,14 @@ export const useLogout = () => {
 // 检查本地token和用户信息是否全，少一个就需要重新登录
 export const useNeedLogin = () => {
   const token = useGetLStorage("token")(null);
-  const userInfo = useGetLStorage("userInfo")(null);
-  if (!token || !userInfo) {
+  if (!token) {
     commonNotify("warning", "未找到登录信息，请重新登录!");
     router.push({
       name: "login",
     });
+  }
+  const userInfo = useGetLStorage("userInfo")(null);
+  if (!userInfo) {
+    getUserInfo();
   }
 };

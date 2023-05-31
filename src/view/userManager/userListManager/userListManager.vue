@@ -21,6 +21,9 @@
         <n-form-item label="手机号:" v-if="userInfo.setType === SetInfoType.PHONE">
           <n-input v-model:value="userInfo.phone" :disabled="updateTabLoading"></n-input>
         </n-form-item>
+        <n-form-item label="邀请码:" v-if="userInfo.setType === SetInfoType.REGISTERCODE">
+          <n-input v-model:value="userInfo.registerCode" :disabled="updateTabLoading"></n-input>
+        </n-form-item>
       </n-form>
 
       <template #footer>
@@ -74,6 +77,7 @@ import {
   updateUserTab as updateUserTabRequest,
   updateUserPhone as updateUserPhoneRequest,
   getUserRealInfo as getUserRealInfoRequest,
+  updateUserRegisterCode as updateUserRegisterCodeRequest,
 } from "@/request/user";
 // store
 import { useAuthStore } from "@/store/authStore";
@@ -87,6 +91,7 @@ const authStore = useAuthStore();
 enum SetInfoType {
   TAB,
   PHONE,
+  REGISTERCODE,
 }
 const setInfoTypeAction = {
   [SetInfoType.TAB]: {
@@ -94,6 +99,9 @@ const setInfoTypeAction = {
   },
   [SetInfoType.PHONE]: {
     method: updateUserPhoneRequest,
+  },
+  [SetInfoType.REGISTERCODE]: {
+    method: updateUserRegisterCodeRequest,
   },
 };
 
@@ -273,6 +281,26 @@ const createColumns = () => {
                 { default: () => "修改手机号" }
               ),
             ];
+            if (!user.registerCode) {
+              btnList.push(
+                h(
+                  NButton,
+                  {
+                    type: "primary",
+                    size: "small",
+                    secondary: true,
+                    onClick: () => {
+                      userInfo.setType = SetInfoType.REGISTERCODE;
+                      userInfo.registerCode = user.registerCode;
+                      userInfo.title = user.nickName;
+                      userInfo.uid = user.uid;
+                      showUserTabModal.value = true;
+                    },
+                  },
+                  { default: () => "填写注册码" }
+                )
+              );
+            }
             // 用来放按钮的容器
             const btnBox = h(NSpace, {}, { default: () => btnList });
             return btnBox;
@@ -330,13 +358,14 @@ const updateTabLoading = ref(false);
 const userInfo = reactive({
   setType: SetInfoType.TAB,
   title: "",
-  tab: 0,
   uid: 0,
+  tab: 0,
   phone: "",
+  registerCode: "",
 });
 const comfirmUpdateUserTab = async () => {
   updateTabLoading.value = true;
-  const res = await setInfoTypeAction[userInfo.setType].method({ uid: userInfo.uid, tab: userInfo.tab, phone: userInfo.phone });
+  const res = await setInfoTypeAction[userInfo.setType].method({ uid: userInfo.uid, tab: userInfo.tab, phone: userInfo.phone, registerCode: userInfo.registerCode });
   if (res) {
     await getList();
     commonNotify("success", `用户${userInfo.title}设置成功`);

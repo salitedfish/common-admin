@@ -1,6 +1,17 @@
 import type { RouteRecordRaw } from "vue-router";
 
 export default <RouteRecordRaw[]>[
+  // {
+  //   path: "authManager",
+  //   name: "authManager",
+  //   component: () => import("@/view/userManager/authManager/authManager.vue"),
+  //   meta: {
+  //     label: "权限管理",
+  //     icon: "quanxian",
+  //     keepAlive: true,
+  //     id: 4001,
+  //   },
+  // },
   {
     path: "userListManager",
     name: "userListManager",
@@ -18,7 +29,7 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/userManager/vipLevelManager/vipLevelManager.vue"),
     meta: {
       label: "vip设置",
-      icon: "yonghu1",
+      icon: "vip",
       keepAlive: true,
       id: 4002,
     },
@@ -51,7 +62,7 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/userManager/userParallelCoinManager/userParallelCoinManager.vue"),
     meta: {
       label: "用户代币",
-      icon: "jifen",
+      icon: "taojinbi",
       keepAlive: true,
       id: 4022,
     },
