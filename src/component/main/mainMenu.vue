@@ -110,7 +110,7 @@ onMounted(async () => {
   if (res) {
     authRouteHandler(menuOptions, res.data);
     // 每个账号都有不同的权限，权限依据远程路由里面
-    authStore.setAuthList(res.data);
+    authStore.setAuthIds(res.data);
   }
 });
 
