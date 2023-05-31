@@ -22,12 +22,14 @@ export const useAuthStore = defineStore("authStore", () => {
 
   // 每个账号涉及到的具体权限
   const authIds = ref<number[]>([]);
-  const setAuthList = (remoteRote: RemoteRoute[]) => {
-    // for(const item of remoteRote) {
-    //   for() {
-    //   }
-    // }
-    // authIds.value = remoteRote;
+  const setAuthIds = (remoteRote: RemoteRoute[]) => {
+    for (const item of remoteRote) {
+      if (item.menu) {
+        for (const i of item.menu) {
+          authIds.value.push(i.id);
+        }
+      }
+    }
   };
   return {
     userInfo,
@@ -35,6 +37,6 @@ export const useAuthStore = defineStore("authStore", () => {
     isAdmin,
 
     authIds,
-    setAuthList,
+    setAuthIds,
   };
 });
