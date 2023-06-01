@@ -210,7 +210,14 @@ onMounted(() => {
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left" :disabled="submiting" v-if="!commonStore.pageLoading">
     <n-card :title="vipTitle(key)" style="margin-bottom: 15px" v-for="(item, key) in vipLevelList" :key="key">
-      <n-data-table :single-line="false" :columns="createColumns(item)" :data="item" :loading="commonStore.pageLoading" :scroll-x="800"></n-data-table>
+      <n-data-table
+        :single-line="false"
+        :columns="createColumns(item)"
+        :data="item"
+        :loading="commonStore.pageLoading"
+        :scroll-x="800"
+        :scrollbar-props="{ trigger: 'none' }"
+      ></n-data-table>
 
       <n-button block secondary type="primary" :disabled="submiting" @click="() => addLevel(item)">+添加等级</n-button>
     </n-card>

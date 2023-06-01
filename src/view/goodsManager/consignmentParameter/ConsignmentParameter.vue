@@ -29,9 +29,9 @@
         />
       </n-form-item>
 
-      <n-form-item label="是否可以上架二级市场:">
+      <!-- <n-form-item label="是否可以上架二级市场:">
         <n-select v-model:value="consignmentParams.secondaryType" :options="consignmentTypeList" placeholder="请选择是否可以上架二级市场" :style="{ width: '100%' }" clearable />
-      </n-form-item>
+      </n-form-item> -->
 
       <n-form-item label="二级市场平台分账比例:" v-if="consignmentParams.secondaryType === ConsignmentType.YES">
         <n-input-number

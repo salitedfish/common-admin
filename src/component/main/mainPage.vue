@@ -13,7 +13,7 @@
     </template>
 
     <template v-slot:page>
-      <page-layout>
+      <page-layout v-if="authStore.authInited">
         <RouterView></RouterView>
       </page-layout>
     </template>
@@ -32,9 +32,10 @@ import mainHead from "./mainHead.vue";
 import mainTabs from "./mainTabs.vue";
 import pageLayout from "@/component/page/pageLayout.vue";
 
-import { useRouteStore } from "@/store";
+import { useRouteStore, useAuthStore } from "@/store";
 import { useNeedLogin } from "@/util";
 
+const authStore = useAuthStore();
 const routeStore = useRouteStore();
 const route = useRoute();
 const loadingBar = useLoadingBar();
@@ -64,16 +65,17 @@ const updateHistoryRoutes = (to: RouteLocationNormalized) => {
 
 // 初始化和每次路由更新时都检查一次，是否有token，没有则需要重新登录
 // 初始化和每次路由更新时都监听，更新路由路径和历史路由
-onMounted(() => {
+const routeHandler = (route: RouteLocationNormalized) => {
   useNeedLogin();
   updateHistoryRoutes(route);
   updateRoutePath(route.matched);
-});
+};
 
-onBeforeRouteUpdate((to) => {
-  useNeedLogin();
-  updateHistoryRoutes(to);
-  updateRoutePath(to.matched);
+onMounted(() => {
+  routeHandler(route);
+});
+onBeforeRouteUpdate((toRoute) => {
+  routeHandler(toRoute);
 });
 </script>
 

@@ -99,7 +99,15 @@ const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searchin
   <n-card>
     <screen-header @submitSearch="submitSearch" :searching="searching"></screen-header>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>

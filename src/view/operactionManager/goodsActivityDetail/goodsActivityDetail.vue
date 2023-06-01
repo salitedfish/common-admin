@@ -667,7 +667,7 @@ onMounted(() => {
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
-      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400"></n-data-table>
+      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400" :scrollbar-props="{ trigger: 'none' }"></n-data-table>
 
       <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">添加</n-button>
     </n-card>

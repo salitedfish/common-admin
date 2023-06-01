@@ -1,7 +1,7 @@
 <template>
   <section class="page-layout-container" ref="pageDom">
     <!-- <layout-scroll-card :loading="commonStore.pageLoading"> -->
-    <n-scrollbar>
+    <n-scrollbar trigger="none">
       <slot></slot>
     </n-scrollbar>
     <!-- </layout-scroll-card> -->

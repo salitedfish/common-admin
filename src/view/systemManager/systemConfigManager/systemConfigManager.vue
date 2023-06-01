@@ -2,7 +2,16 @@
   <n-card>
     <screen-section @submitSearch="() => getList()" :searching="searching" :showDeploy="showDeploy"></screen-section>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"> </n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  >
+  </n-data-table>
   <input ref="inputDom" type="file" hidden @change="handleUpload" />
 </template>
 

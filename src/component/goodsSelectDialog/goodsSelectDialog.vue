@@ -14,6 +14,7 @@
         :row-key="rowKey"
         :checked-row-keys="goodsIdSelectedList"
         @update:checked-row-keys="changeGoodsSelectList"
+        :scrollbar-props="{ trigger: 'none' }"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">

@@ -20,6 +20,8 @@ export const useAuthStore = defineStore("authStore", () => {
     return userInfo.value?.role === UserRole.ADMIN;
   });
 
+  // 权限是否初始化完成，要等到权限初始化完成后才能进行页面的初始化
+  const authInited = ref(false);
   // 收集每个账号涉及到的具体权限id
   const authIds = ref<number[]>([]);
   const setAuthIds = (remoteRote: RemoteRoute[]) => {
@@ -30,6 +32,7 @@ export const useAuthStore = defineStore("authStore", () => {
         }
       }
     }
+    authInited.value = true;
   };
 
   return {
@@ -39,5 +42,6 @@ export const useAuthStore = defineStore("authStore", () => {
 
     authIds,
     setAuthIds,
+    authInited,
   };
 });

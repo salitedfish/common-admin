@@ -7,6 +7,7 @@ import { uiComponent } from "@/component/uiComponent";
 
 import "@/util/extendsProto";
 import "@/assets/css/index.less";
+import "@/assets/css/custom.less";
 import "vue3-json-viewer/dist/index.css";
 
 const app = createApp(App);
