@@ -188,6 +188,16 @@
           :disabled="formDisabled"
         />
       </n-form-item>
+      <n-form-item label="交易推广是否统计:" required>
+        <n-select
+          v-model:value="goodsInfo.extend.tradeAmountType"
+          :options="tradeAmountTypes"
+          placeholder="请选择交易推广是否统计"
+          :style="{ width: inputWidth }"
+          clearable
+          :disabled="formDisabled"
+        />
+      </n-form-item>
       <n-form-item label="溯源哈希:">
         <n-input v-model:value="goodsInfo.extend.traceHash" placeholder="请输入溯源哈希" :disabled="formDisabled"></n-input>
       </n-form-item>
@@ -541,6 +551,7 @@ import {
   holdTypes,
   holdDayTypes,
   HoldType,
+  tradeAmountTypes,
 } from "./goodsDetailManagerStore";
 import { PointsState } from "@/view/pointsManager/pointsListManager/pointsListManagerStore";
 import { GoodsType, goodsTypeList, SaleType, saleTypeList, EditType } from "../goodsListManager/goodsListManagerStore";
@@ -633,6 +644,7 @@ const goodsInfo = reactive<GoodsAddParams>({
     saleType: null,
     exchangePointsType: AntinomyTypes.NOT,
     traceHash: "",
+    tradeAmountType: null,
     pointsDeductionType: AntinomyTypes.NOT,
     pointsCouponType: AntinomyTypes.NOT,
   },

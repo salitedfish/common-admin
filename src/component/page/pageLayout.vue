@@ -31,7 +31,6 @@ onMounted(() => {
 .page-layout-container {
   height: 100%;
   padding: 15px 18px 15px;
-  overflow-y: scroll;
   position: relative;
   .totast {
     position: absolute;

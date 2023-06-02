@@ -71,6 +71,7 @@ export type GoodsExtend = {
   ruleCalcTime: string | null;
   saleType: number | null;
   traceHash: string | null;
+  tradeAmountType: number | null;
   exchangePointsType: number | null;
   pointsDeductionType: number;
   pointsCouponType: number;

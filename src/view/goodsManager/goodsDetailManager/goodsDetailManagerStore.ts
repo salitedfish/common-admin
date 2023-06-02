@@ -167,3 +167,8 @@ export const holdDayTypes = [
     label: "必须满足天数才给",
   },
 ];
+
+export const tradeAmountTypes = [
+  { label: "不统计", value: AntinomyTypes.NOT },
+  { label: "统计", value: AntinomyTypes.YES },
+];

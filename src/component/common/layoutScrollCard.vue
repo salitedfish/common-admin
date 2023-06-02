@@ -1,6 +1,6 @@
 <template>
   <n-card content-style="height: 100%;">
-    <n-scrollbar>
+    <n-scrollbar trigger="none">
       <slot></slot>
     </n-scrollbar>
     <div class="totast" v-if="loading">
