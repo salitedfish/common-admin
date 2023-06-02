@@ -35,8 +35,6 @@ export type ReturnList<T> = {
   totalSize: number;
 };
 
-export type RemoteRoute = { menu?: { name: string; route: string; id: number }[]; name: string; route: string; id: number };
-
 export type Step = {
   title: string;
   description: string;

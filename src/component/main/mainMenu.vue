@@ -32,7 +32,7 @@ import { routes } from "@/router/index";
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
 import { useAuthStore } from "@/store/authStore";
-import type { RemoteRoute } from "@/type/Common";
+import type { Auths } from "@/type/Auth";
 
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
@@ -89,7 +89,7 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
 const menuOptions = reactive<MenuOption[]>([...mapMenuHandler(routes)]);
 
 // 根据远程的的路由来判断显示或不显示
-const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[]) => {
+const authRouteHandler = (originRoute: MenuOption[], remoteRoute: Auths) => {
   for (const item of originRoute) {
     for (const i of remoteRoute) {
       if (item.routeId === i.id) {

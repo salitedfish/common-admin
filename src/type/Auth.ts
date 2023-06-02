@@ -29,3 +29,11 @@ export type UserInfo = {
 export enum AuthType {
   GET_GOODS_MANAGER_LIST = 10001,
 }
+
+export type Auths = {
+  id: number;
+  name: string;
+  parentId: number;
+  checked: boolean;
+  menu: Auths;
+}[];

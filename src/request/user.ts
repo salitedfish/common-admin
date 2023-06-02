@@ -137,3 +137,19 @@ export const getUserParallelCoinList = (params: Paging & UserParallelCoinListScr
     body: JSON.stringify(params),
   });
 };
+
+// 添加子用户
+export const addChildUser = (params: { childRole: number | null; nickName: string; password: string; phone: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/admin-merchant/add-child",
+    body: JSON.stringify(params),
+  });
+};
+
+// 修改自用户角色
+export const editChildRole = (params: { childRole: number; uid: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/admin-merchant/update-child",
+    body: JSON.stringify(params),
+  });
+};

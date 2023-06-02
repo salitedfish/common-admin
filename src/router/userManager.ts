@@ -1,17 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 
 export default <RouteRecordRaw[]>[
-  // {
-  //   path: "authManager",
-  //   name: "authManager",
-  //   component: () => import("@/view/userManager/authManager/authManager.vue"),
-  //   meta: {
-  //     label: "权限管理",
-  //     icon: "quanxian",
-  //     keepAlive: true,
-  //     id: 4001,
-  //   },
-  // },
   {
     path: "userListManager",
     name: "userListManager",
@@ -76,6 +65,17 @@ export default <RouteRecordRaw[]>[
       icon: "shanghuguanli",
       keepAlive: true,
       id: 4031,
+    },
+  },
+  {
+    path: "authManager",
+    name: "authManager",
+    component: () => import("@/view/userManager/authManager/authManager.vue"),
+    meta: {
+      label: "角色权限",
+      icon: "quanxian",
+      keepAlive: true,
+      id: 4032,
     },
   },
 ];

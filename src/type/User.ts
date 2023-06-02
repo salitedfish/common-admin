@@ -47,6 +47,8 @@ export type AdminMerchantListItem = {
   state: number;
   subMchid: string;
   uid: number;
+  childRoleName: string;
+  childRole: number;
 };
 
 export type GetUserAssetsListParams = Partial<{

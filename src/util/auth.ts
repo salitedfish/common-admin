@@ -5,6 +5,7 @@ import { commonNotify } from "@/util/common";
 import { login as loginRequest, logout as logoutRequest, getUserInfo as getUserInfoRequest } from "@/request";
 import { useAuthStore } from "@/store/authStore";
 import type * as RequestParam from "@/request/type/RequestParam";
+import type { Auths } from "@/type/Auth";
 
 // 登录hook
 export const useLogin = () => {
@@ -74,4 +75,27 @@ export const useNeedLogin = () => {
   if (!userInfo) {
     getUserInfo();
   }
+};
+
+// 获取权限id列表
+export const mapAuthIds = (remoteRote: Auths) => {
+  const ids: number[] = [];
+
+  const handler = (_remoteRote: Auths, i: number) => {
+    const index = i + 1;
+    if (index === 3) {
+      for (const item of _remoteRote) {
+        if (item.checked) ids.push(item.id);
+      }
+    } else {
+      for (const item of _remoteRote) {
+        if (item.menu) {
+          handler(item.menu, index);
+        }
+      }
+    }
+  };
+  handler(remoteRote, 0);
+
+  return ids;
 };
