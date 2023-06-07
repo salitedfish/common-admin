@@ -4,7 +4,14 @@
     <n-input v-model:value="params.token" autosize placeholder="请输入token" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.uid" autosize placeholder="请输入用户uid" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-select :options="userTypeList" v-model:value="params.userType" placeholder="请选择用户类型" clearable :disabled="searching" style="width: 200px"></n-select>
-    <n-select :options="parallelRecordStateList" v-model:value="params.userType" placeholder="请选择平行链代币状态" clearable :disabled="searching" style="width: 200px"></n-select>
+    <n-select
+      :options="parallelRecordStateList"
+      v-model:value="params.transState"
+      placeholder="请选择平行链代币状态"
+      clearable
+      :disabled="searching"
+      style="width: 200px"
+    ></n-select>
 
     <n-date-picker
       placeholder="请选择开始时间"
