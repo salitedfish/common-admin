@@ -32,3 +32,24 @@ export const payStates = [
     value: PayState.PAY_FAIL,
   },
 ];
+
+export enum PayStateTwo {
+  PAY_ING,
+  PAY_SUCCESS,
+  PAY_FAIL,
+}
+
+export const payStatesTwo = [
+  {
+    label: "进行中",
+    value: PayStateTwo.PAY_ING,
+  },
+  {
+    label: "成功",
+    value: PayStateTwo.PAY_SUCCESS,
+  },
+  {
+    label: "失败",
+    value: PayStateTwo.PAY_FAIL,
+  },
+];
