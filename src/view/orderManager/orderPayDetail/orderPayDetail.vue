@@ -8,7 +8,7 @@ import { useRoute } from "vue-router";
 import { getOrderPayDetail } from "@/request/order";
 // 数据
 import { payChannelList, PayChannel } from "../orderListManager/orderListManagerStore";
-import { pointsTypeList, payStates } from "./orderPayDetailStore";
+import { pointsTypeList, payStates, payStatesTwo } from "./orderPayDetailStore";
 // 类型
 import type { OrderPayDetail } from "@/type/Order";
 export default defineComponent({
@@ -71,7 +71,7 @@ onMounted(() => {
           <n-input placeholder="" :value="String(orderPayDetail?.points.transferId)" disabled></n-input>
         </n-form-item>
         <n-form-item label="支付状态:">
-          <n-select :value="String(orderPayDetail?.points.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
+          <n-select :value="orderPayDetail.points.transferState" :options="payStatesTwo" placeholder="" :style="{ width: '100%' }" clearable disabled />
         </n-form-item>
       </n-card>
 
@@ -96,7 +96,7 @@ onMounted(() => {
           <n-input placeholder="" :value="String(orderPayDetail?.coupon.transferId)" disabled></n-input>
         </n-form-item>
         <n-form-item label="支付状态:">
-          <n-select :value="String(orderPayDetail?.coupon.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
+          <n-select :value="orderPayDetail.coupon.transferState" :options="payStatesTwo" placeholder="" :style="{ width: '100%' }" clearable disabled />
         </n-form-item>
       </n-card>
 
@@ -121,7 +121,7 @@ onMounted(() => {
           <n-input placeholder="" :value="String(orderPayDetail?.deduction.transferId)" disabled></n-input>
         </n-form-item>
         <n-form-item label="支付状态:">
-          <n-select :value="String(orderPayDetail?.deduction.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
+          <n-select :value="orderPayDetail.deduction.transferState" :options="payStatesTwo" placeholder="" :style="{ width: '100%' }" clearable disabled />
         </n-form-item>
       </n-card>
     </n-form>
