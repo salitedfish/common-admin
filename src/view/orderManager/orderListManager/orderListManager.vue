@@ -263,6 +263,25 @@ const createColumns = () => {
       fixed: "right",
       render(order) {
         const btnList: VNode[] = [];
+        btnList.push(
+          h(
+            NButton,
+            {
+              type: "success",
+              size: "small",
+              secondary: true,
+              onClick: () => {
+                router.push({
+                  name: "orderPayDetail",
+                  query: {
+                    orderId: order.orderId,
+                  },
+                });
+              },
+            },
+            { default: () => "查看支付信息" }
+          )
+        );
         if (order.orderState === OrderState.IN_PAY) {
           if (order.payChannel === PayChannel.OFF_LINE) {
             btnList.push(
@@ -322,25 +341,6 @@ const createColumns = () => {
               )
             );
           }
-          btnList.push(
-            h(
-              NButton,
-              {
-                type: "success",
-                size: "small",
-                secondary: true,
-                onClick: () => {
-                  router.push({
-                    name: "orderPayDetail",
-                    query: {
-                      orderId: order.orderId,
-                    },
-                  });
-                },
-              },
-              { default: () => "查看支付信息" }
-            )
-          );
         }
         if (order.refundState === OrderRefundState.REFUND_APPLY) {
           btnList.push(

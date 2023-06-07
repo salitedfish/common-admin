@@ -8,7 +8,7 @@ import { useRoute } from "vue-router";
 import { getOrderPayDetail } from "@/request/order";
 // 数据
 import { payChannelList, PayChannel } from "../orderListManager/orderListManagerStore";
-import { pointsTypeList } from "./orderPayDetailStore";
+import { pointsTypeList, payStates } from "./orderPayDetailStore";
 // 类型
 import type { OrderPayDetail } from "@/type/Order";
 export default defineComponent({
@@ -37,12 +37,16 @@ onMounted(() => {
 <template>
   <div class="orderPayDetail">
     <n-form label-placement="left" label-width="120px" label-align="left">
-      <n-card title="基本信息">
+      <n-card title="基本信息" v-if="orderPayDetail">
         <n-form-item label="付款渠道:">
           <n-input placeholder="" :value="payChannelList.getItem(orderPayDetail?.payChannel)?.label" disabled></n-input>
         </n-form-item>
         <n-form-item :label="`实际支付${orderPayDetail?.payChannel === PayChannel.POINT ? '数量' : '金额'}:`">
           <n-input placeholder="" :value="orderPayDetail?.orderPayAmount" disabled></n-input>
+        </n-form-item>
+
+        <n-form-item label="支付状态:">
+          <n-select :value="orderPayDetail?.payState" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
         </n-form-item>
       </n-card>
 
@@ -62,6 +66,13 @@ onMounted(() => {
         <n-form-item label="积分数量:">
           <n-input placeholder="" :value="String(orderPayDetail?.points.pointsNum)" disabled></n-input>
         </n-form-item>
+
+        <n-form-item label="交易编号:">
+          <n-input placeholder="" :value="String(orderPayDetail?.points.transferId)" disabled></n-input>
+        </n-form-item>
+        <n-form-item label="支付状态:">
+          <n-select :value="String(orderPayDetail?.points.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
+        </n-form-item>
       </n-card>
 
       <n-card title="积分抵扣信息" v-if="orderPayDetail?.coupon">
@@ -80,6 +91,13 @@ onMounted(() => {
         <n-form-item label="积分数量:">
           <n-input placeholder="" :value="String(orderPayDetail?.coupon.pointsNum)" disabled></n-input>
         </n-form-item>
+
+        <n-form-item label="交易编号:">
+          <n-input placeholder="" :value="String(orderPayDetail?.coupon.transferId)" disabled></n-input>
+        </n-form-item>
+        <n-form-item label="支付状态:">
+          <n-select :value="String(orderPayDetail?.coupon.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
+        </n-form-item>
       </n-card>
 
       <n-card title="优惠券信息" v-if="orderPayDetail?.deduction">
@@ -97,6 +115,13 @@ onMounted(() => {
         </n-form-item>
         <n-form-item label="积分数量:">
           <n-input placeholder="" :value="String(orderPayDetail?.deduction.pointsNum)" disabled></n-input>
+        </n-form-item>
+
+        <n-form-item label="交易编号:">
+          <n-input placeholder="" :value="String(orderPayDetail?.deduction.transferId)" disabled></n-input>
+        </n-form-item>
+        <n-form-item label="支付状态:">
+          <n-select :value="String(orderPayDetail?.deduction.transferState)" :options="payStates" placeholder="" :style="{ width: '100%' }" clearable disabled />
         </n-form-item>
       </n-card>
     </n-form>
