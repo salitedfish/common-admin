@@ -30,6 +30,7 @@ import { useListPage, commonNotify } from "@/util/common";
 // 网络请求
 import { getPointsChainRecord, syncPointsChainRecord } from "@/request/finance";
 // store
+import { RecordType } from "../parallelRecordManager/parallelRecordManagerStore";
 import { userTypeList, transferStateList, recordTypeList, TransferState } from "../goodsBlockChainRecordManager/goodsBlockChainRecordManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -214,7 +215,7 @@ const createColumns = () => {
       render(row) {
         const list: VNode[] = [];
         const size = "small";
-        if (TransferState.FAIL === row.transState) {
+        if (TransferState.FAIL === row.transState && row.recordType !== RecordType.FIRST_BUY) {
           list.push(
             h(
               NButton,

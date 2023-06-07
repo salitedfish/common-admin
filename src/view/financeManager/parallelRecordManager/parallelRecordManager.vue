@@ -13,7 +13,7 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getParallelRecord, syncParallelCoin } from "@/request/finance";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { parallelRecordStateList, recordTypeList, userTypeList, ParallelRecordState } from "./parallelRecordManagerStore";
+import { parallelRecordStateList, recordTypeList, userTypeList, ParallelRecordState, RecordType } from "./parallelRecordManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { ParallelRecordItem } from "@/type/Finance";
@@ -213,7 +213,7 @@ const createColumns = () => {
         const list: VNode[] = [];
         const size = "small";
 
-        if (row.transState === ParallelRecordState.FAIL && isAdmin) {
+        if (row.transState === ParallelRecordState.FAIL && isAdmin && row.recordType !== RecordType.FIRST_BUY) {
           list.push(
             createVNode(
               NButton,
