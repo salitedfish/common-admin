@@ -44,12 +44,16 @@ export type OrderPayDetail = {
   payChannel: number;
   channelType: number;
   orderPayAmount: string;
+  payState: number;
   coupon: {
     token: string;
     pointsId: string;
     pointsNum: number;
     pointsType: number;
     pointsName: string;
+
+    transferId: string;
+    transferState: number;
   } | null;
   deduction: {
     token: string;
@@ -57,6 +61,9 @@ export type OrderPayDetail = {
     pointsNum: number;
     pointsType: number;
     pointsName: string;
+
+    transferId: string;
+    transferState: number;
   } | null;
   points: {
     token: string;
@@ -64,6 +71,9 @@ export type OrderPayDetail = {
     pointsNum: number;
     pointsType: number;
     pointsName: string;
+
+    transferId: string;
+    transferState: number;
   } | null;
 };
 
