@@ -27,7 +27,10 @@ export type UserInfo = {
 };
 
 export enum AuthType {
-  GET_GOODS_MANAGER_LIST = 10001,
+  GET_GOODS_LIST = 100101,
+  GET_GOODS_DETAIL = 100102,
+  GET_GOODS_PUBLISH_RECORD = 100114,
+  GOODS_APPROVIAL = 100111,
 }
 
 export type Auths = {

@@ -15,6 +15,8 @@ export type SearchParams = Partial<{
   merchantUid: string;
   goodsTabType: number;
   funcType: GetEnumValue<GoodsFuncType>;
+
+  goodsRecycleState: number;
 }>;
 
 export type GoodsListItem = {

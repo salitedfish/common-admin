@@ -94,6 +94,7 @@ import {
   updateGoodsAudit as updateGoodsAuditRequest,
   updateGoodsCategory as updateGoodsCategoryRequest,
   clearBlindBoxPrize,
+  updateGoodsRecycleState,
 } from "@/request/goods";
 import { deleteWhiteList as deleteWhiteListRequest } from "@/request/common";
 import { goodsTabList } from "../goodsDetailManager/goodsDetailManagerStore";
@@ -104,7 +105,7 @@ import type { CategoryTreeItem } from "@/type/Common";
 import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList, EditType } from "./goodsListManagerStore";
 import { useAuthStore } from "@/store/authStore";
 import { commonNotify, useListPage } from "@/util/common";
-import { WhiteListType, DetailCheckType } from "@/type/Common";
+import { WhiteListType, DetailCheckType, AntinomyTypes } from "@/type/Common";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "goodsListManager",
@@ -274,6 +275,7 @@ const createColumns = () => {
             }
           )
         );
+
         // 删除
         if ([GoodsState.DRAFT, GoodsState.APPROVIAL_FAILED].includes(goodsState)) {
           list.push(
@@ -875,6 +877,38 @@ const createColumns = () => {
             )
           );
         }
+        // 移入回收站
+        if ([GoodsState.TO_BE_SHELVES, GoodsState.NEED_APPROVIAL, GoodsState.APPROVIAL_FAILED_NEW].includes(goodsState) && !authStore.isAdmin) {
+          list.push(
+            h(
+              NButton,
+              {
+                type: "warning",
+                size,
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "移入回收站",
+                    content: `确认将${goods.goodsName}移入回收站吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await updateGoodsRecycleState({ goodsId: goods.goodsId, goodsRecycleState: AntinomyTypes.YES });
+                      if (res) {
+                        await getList();
+                        commonNotify("success", "商品回收成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "移入回收站",
+              }
+            )
+          );
+        }
 
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => list });
@@ -901,7 +935,11 @@ const createColumns = () => {
   }
   return list;
 };
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, {
+  params: {
+    goodsRecycleState: AntinomyTypes.NOT,
+  },
+});
 
 // 更改商品状态modal框的状态和数据
 const showAuditModal = ref(false);
