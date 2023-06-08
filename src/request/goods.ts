@@ -137,3 +137,10 @@ export const submitSyntheticList = async (params: { goodsId: string; rules: Synt
     body: JSON.stringify(params),
   });
 };
+
+export const updateGoodsRecycleState = async (params: { goodsId: string; goodsRecycleState: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/recycle",
+    body: JSON.stringify(params),
+  });
+};
