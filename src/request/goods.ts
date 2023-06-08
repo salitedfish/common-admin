@@ -52,17 +52,31 @@ export const updateGoodsConsignmentParams = (params: ConsignmentParams) => {
   });
 };
 
-// 改变商品状态，商户专用
+// 改变商品状态，商户专用 0撤销审核，1提交审核，7重新提交审核撤销审核，8重新提交审核
+export const updateGoodsApply = (params: { auditNote?: string; goodsId: string; goodsState: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/apply",
+    body: JSON.stringify(params),
+  });
+};
+// 5下架商品，6上架商品
 export const updateGoodsState = (params: { auditNote?: string; goodsId: string; goodsState: number }) => {
   return ultraFetch.post({
     URL: "/manager/goods/state",
     body: JSON.stringify(params),
   });
 };
-// 改变商品状态，管理员专用
+// 改变商品状态，管理员专用 2审核不通过，3审核通过，4发行失败重新发行，9重新提交审核未通过，10重新提交审核通过，11增发失败重新增发
 export const updateGoodsAudit = (params: { auditNote?: string; goodsId: string; goodsState: number }) => {
   return ultraFetch.post({
     URL: "/manager/goods/audit",
+    body: JSON.stringify(params),
+  });
+};
+// 5下架商品
+export const updateGoodsStateAdmin = (params: { auditNote?: string; goodsId: string; goodsState: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/goods/state-admin",
     body: JSON.stringify(params),
   });
 };

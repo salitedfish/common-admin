@@ -90,8 +90,10 @@ import whiteListUploadBtn from "@/component/whiteList/whiteListUploadBtn.vue";
 import {
   getGoodsList as getListRequest,
   goodsDelete as goodsDeleteRequest,
+  updateGoodsApply as updateGoodsApplyRequest,
   updateGoodsState as updateGoodsStateRequest,
   updateGoodsAudit as updateGoodsAuditRequest,
+  updateGoodsStateAdmin as updateGoodsStateAdminRequest,
   updateGoodsCategory as updateGoodsCategoryRequest,
   clearBlindBoxPrize,
   updateGoodsRecycleState,
@@ -344,6 +346,8 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
+
                   auditInfo.auditTitle = "提交审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认将${goods.goodsName}提交审核吗？`;
@@ -367,6 +371,8 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
+
                   auditInfo.auditTitle = "撤销审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认撤销审核${goods.goodsName}吗？`;
@@ -564,6 +570,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_AUDIT_FAIL : AuditAction.AUDIT_FAIL;
@@ -626,6 +633,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = true;
                   auditInfo.auditTitle = "上架";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认上架${goods.goodsName}吗？`;
@@ -649,6 +657,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = true;
                   auditInfo.auditTitle = "下架";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认下架${goods.goodsName}吗？`;
@@ -673,6 +682,7 @@ const createColumns = () => {
                 secondary: true,
 
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "重新发行";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认重新发行${goods.goodsName}吗？`;
@@ -864,6 +874,7 @@ const createColumns = () => {
                 secondary: true,
 
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "重新增发";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认重新增发${goods.goodsName}吗？`;
@@ -950,15 +961,21 @@ const auditInfo = reactive({
   goodsId: "",
   auditNote: "",
   goodsState: 0,
+  shelves: false,
 });
 
 // 提交商品状态信息
 const comfirmAudit = async () => {
   auditLoading.value = true;
-  const { auditNote, goodsId, goodsState } = auditInfo;
+  const { auditNote, goodsId, goodsState, shelves } = auditInfo;
   const params = { auditNote, goodsId, goodsState };
   // 管理员和商户用的审核接口不一样
-  const res = authStore.isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
+  let res;
+  if (shelves) {
+    res = authStore.isAdmin ? await updateGoodsStateAdminRequest(params) : await updateGoodsStateRequest(params);
+  } else {
+    res = authStore.isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsApplyRequest(params);
+  }
   if (res && res.code === 0) {
     await getList();
     commonNotify("success", `${auditInfo.auditTitle}成功`);

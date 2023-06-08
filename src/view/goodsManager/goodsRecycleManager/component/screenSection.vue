@@ -10,8 +10,8 @@
 
     <category-select v-model="categoryList" checkType="all" style="width: 200px"></category-select>
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
-    <whiteListTemplateDownload></whiteListTemplateDownload>
-    <n-button type="primary" @click="gotoAddGoods" v-if="!authStore.isAdmin">添加商品</n-button>
+    <!-- <whiteListTemplateDownload></whiteListTemplateDownload> -->
+    <!-- <n-button type="primary" @click="gotoAddGoods" v-if="!authStore.isAdmin">添加商品</n-button> -->
   </n-space>
 </template>
 

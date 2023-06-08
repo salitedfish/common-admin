@@ -54,7 +54,7 @@ import whiteListUploadBtn from "@/component/whiteList/whiteListUploadBtn.vue";
 import { useListPage, commonNotify } from "@/util/common";
 // 网络请求
 import { deleteWhiteList } from "@/request/common";
-import { getLotteryList, deleteLottery, updateLotteryState, lotteryApprovial, calcLottery } from "@/request/operator";
+import { getLotteryList, deleteLottery, updateLotteryApply, updateLotteryState, lotteryApprovial, updateLotteryStateAdmin, calcLottery } from "@/request/operator";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { lotteryStates, lotteryTaskStates, lotteryApprovialState, lotteryUseTypes, lotteryTabTypes } from "./lotteryManagerStore";
@@ -366,7 +366,7 @@ const createColumns = () => {
           );
         }
         // 下架
-        if (isMy && [LotteryState.ON_THE_SHELF].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
+        if ((isMy || authStore.isAdmin) && [LotteryState.ON_THE_SHELF].includes(state) && [LotteryTaskState.INIT].includes(taskState)) {
           list.push(
             h(
               NButton,
@@ -375,7 +375,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
-                  updateLotteryStateHandler(lottery, LotteryState.TO_BE_SHELVES, "下架");
+                  updateLotteryStateHandler(lottery, LotteryState.TO_BE_SHELVES, "下架", true);
                 },
               },
               {
@@ -394,7 +394,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
-                  updateLotteryStateHandler(lottery, LotteryState.ON_THE_SHELF, "上架");
+                  updateLotteryStateHandler(lottery, LotteryState.ON_THE_SHELF, "上架", true);
                 },
               },
               {
@@ -403,6 +403,7 @@ const createColumns = () => {
             )
           );
         }
+
         // 审核
         if (authStore.isAdmin && [LotteryState.TO_BE_APPROVIAL].includes(state)) {
           list.push(
@@ -570,18 +571,25 @@ const lotteryApprovialHandler = async () => {
 };
 
 // 更改抽签的状态
-const updateLotteryStateHandler = async (lottery: LotteryListItem, state: LotteryState, text: string) => {
+const updateLotteryStateHandler = async (lottery: LotteryListItem, state: LotteryState, text: string, shelves?: boolean) => {
   const dialogInfo = dialog.success({
     title: text,
     content: `确认${text}${lottery.name}吗？`,
     positiveText: "确认",
     onPositiveClick: async () => {
       dialogInfo.loading = true;
-      const res = await updateLotteryState({ id: lottery.id, state });
+      let res;
+      if (shelves) {
+        res =
+          authStore.isAdmin && state === LotteryState.TO_BE_SHELVES
+            ? await updateLotteryStateAdmin({ id: lottery.id, state })
+            : await updateLotteryState({ id: lottery.id, state });
+      } else {
+        res = await updateLotteryApply({ id: lottery.id, state });
+      }
       if (res) {
         await getList();
         commonNotify("success", `${text}${lottery.name}成功！`);
-        getList();
       }
       dialogInfo.loading = false;
     },
