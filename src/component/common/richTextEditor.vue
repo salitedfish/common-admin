@@ -69,7 +69,7 @@ const tinymceInit = {
       success(res.data.fileUrl);
     }
   },
-  content_style: "body, p {margin: 0; padding: 0} img {width: 100%; display: block}",
+  content_style: "body, p {margin: 0; padding: 0} img {width: 100% !important; display: block; height: auto !important}",
   resize: false, // 禁止改变大小
 };
 
