@@ -52,6 +52,7 @@ export enum RecordType {
   REFUND,
   EXCHANGE_GOODS,
   EXCHANGE_POINTS,
+  COIN_WITHDRAW,
 }
 export const recordTypeList = [
   {
@@ -101,5 +102,9 @@ export const recordTypeList = [
   {
     label: "兑换积分",
     value: RecordType.EXCHANGE_POINTS,
+  },
+  {
+    label: "提币",
+    value: RecordType.COIN_WITHDRAW,
   },
 ];
