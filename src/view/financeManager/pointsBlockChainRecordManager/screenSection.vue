@@ -25,36 +25,64 @@
     />
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <custom-export-btn :export-params="params" :export-request="exportPointsChainRecord" file-name="积分区块链记录"></custom-export-btn>
+    <n-button type="warning" @click="multipleSync">批量同步</n-button>
   </n-space>
 </template>
 
 <script lang="ts" setup>
 // 框架
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 // 组件库
 // 自定义组件
 import customExportBtn from "@/component/common/customExportBtn.vue";
+import { useDialog } from "naive-ui";
+
 // 工具库
 // 自定义工具
+import { commonNotify } from "@/util/common";
+
 // 网络请求
-import { exportPointsChainRecord } from "@/request/finance";
+
+import { exportPointsChainRecord, syncPointsChainRecord } from "@/request/finance";
 // store
 import { userTypeList, transferStateList } from "../goodsBlockChainRecordManager/goodsBlockChainRecordManagerStore";
 // 类型
 import type { ChainRecordParams } from "@/type/Finance";
 
-defineProps<{
+const dialog = useDialog();
+
+const props = defineProps<{
   searching: boolean;
+  checkedRowKeys: (string | number)[];
 }>();
 
 const emit = defineEmits<{
   (event: "submitSearch", params: ChainRecordParams): void;
+  (event: "clearSelected"): void;
 }>();
 
 const params = reactive<ChainRecordParams>({});
 
 const searchHandler = () => {
   emit("submitSearch", params);
+};
+
+const multipleSync = async () => {
+  const dialogInfo = dialog.warning({
+    title: "补发",
+    content: "确认同步吗？",
+    positiveText: "确认",
+    onPositiveClick: async () => {
+      dialogInfo.loading = true;
+      const res = await syncPointsChainRecord({ transferIds: props.checkedRowKeys });
+      if (res) {
+        commonNotify("success", "同步成功");
+        emit("clearSelected");
+      }
+      searchHandler();
+      dialogInfo.loading = false;
+    },
+  });
 };
 </script>
 

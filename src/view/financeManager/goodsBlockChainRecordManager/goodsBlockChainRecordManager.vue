@@ -1,6 +1,6 @@
 <template>
   <n-card>
-    <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
+    <screen-section @submitSearch="submitSearch" :searching="searching" @clearSelected="clearSelected" :checkedRowKeys="checkedRowKeysRef"></screen-section>
   </n-card>
   <n-data-table
     :single-line="false"
@@ -10,6 +10,10 @@
     :max-height="listYHeight"
     :loading="searching"
     :scrollbar-props="{ trigger: 'none' }"
+    @update:checked-row-keys="changeSelectList"
+    :row-key="(item: GoodsChainRecordItem) => item.transferId"
+    v-model:checked-row-keys="checkedRowKeysRef"
+    :row-class-name="rowClassName"
   ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
@@ -18,7 +22,7 @@
 
 <script lang="ts">
 // 框架
-import { h } from "vue";
+import { h, ref } from "vue";
 import { defineComponent } from "vue";
 // 组件库
 import { NSpace, NButton, useDialog, NEllipsis } from "naive-ui";
@@ -33,7 +37,7 @@ import { getGoodsChainRecord, syncGoodsChainRecord } from "@/request/finance";
 import { userTypeList, transferStateList, recordTypeList, TransferState } from "./goodsBlockChainRecordManagerStore";
 // 类型
 import type { VNode } from "vue";
-import type { DataTableColumns } from "naive-ui";
+import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import type { GoodsChainRecordItem } from "@/type/Finance";
 export default defineComponent({
   name: "goodsBlockChainRecordManager",
@@ -45,6 +49,13 @@ const dialog = useDialog();
 // 列表项
 const createColumns = () => {
   const list: DataTableColumns<GoodsChainRecordItem> = [
+    {
+      type: "selection",
+      multiple: true,
+      disabled: (item) => {
+        return TransferState.FAIL !== item.transState;
+      },
+    },
     {
       title: "交易编号",
       key: "transferId",
@@ -198,58 +209,31 @@ const createColumns = () => {
       align: "center",
       width: 180,
     },
-
-    {
-      title: "操作",
-      key: "operaction",
-      align: "center",
-      width: 100,
-      fixed: "right",
-      render(row) {
-        const list: VNode[] = [];
-        const size = "small";
-        if (TransferState.FAIL === row.transState) {
-          list.push(
-            h(
-              NButton,
-              {
-                size,
-                type: "warning",
-                secondary: true,
-                onClick: () => {
-                  const dialogInfo = dialog.warning({
-                    title: "补发",
-                    content: "确认同步吗？",
-                    positiveText: "确认",
-                    onPositiveClick: async () => {
-                      dialogInfo.loading = true;
-                      const res = await syncGoodsChainRecord({ transferId: row.transferId });
-                      if (res) {
-                        await getList();
-                        commonNotify("success", "同步成功");
-                      }
-                      dialogInfo.loading = false;
-                    },
-                  });
-                },
-              },
-              {
-                default: () => "差错同步",
-              }
-            )
-          );
-        }
-
-        // 用来放按钮的容器
-        const btnBox = h(NSpace, {}, { default: () => list });
-        return btnBox;
-      },
-    },
   ];
   return list;
+};
+
+const rowClassName = (row: GoodsChainRecordItem) => {
+  if (TransferState.FAIL === row.transState) {
+    return "fail";
+  }
+};
+
+const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
+const clearSelected = () => {
+  checkedRowKeysRef.value = [];
+};
+const changeSelectList = (rowKeys: DataTableRowKey[]) => {
+  checkedRowKeysRef.value = rowKeys;
 };
 
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getGoodsChainRecord, createColumns);
 </script>
 
-<style scoped lang="less"></style>
+<style lang="less">
+.fail {
+  td {
+    background: var(--tabel-fail-bg-color) !important;
+  }
+}
+</style>
