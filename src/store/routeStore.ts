@@ -43,6 +43,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       currentRoute.value = historyRoutes[index];
     }
   };
+
   // tab删除路由
   const deleteHistoryRoutes = (key: string) => {
     const index = historyRoutes.findIndex((item) => {
@@ -65,6 +66,7 @@ export const useRouteStore = defineStore("routeStore", () => {
     }
     historyRoutes.splice(index, 1);
   };
+
   // tab选择路由
   const selectHistoryRoutes = (key: string) => {
     const index = historyRoutes.findIndex((item) => {
@@ -76,6 +78,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       query: currentRoute.value.query,
     });
   };
+
   // 重置历史路由
   const resetHistoryRoutes = () => {
     historyRoutes.length = 0;
@@ -87,6 +90,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       meta: {},
     };
   };
+
   // 删除当前的路由
   const deleteCurrentRoute = () => {
     for (const i in historyRoutes) {
@@ -96,6 +100,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       }
     }
   };
+
   // 清除当前路由外的其他路由
   const clearHistoryRoute = () => {
     historyRoutes.length = 0;

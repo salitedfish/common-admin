@@ -62,7 +62,7 @@ export const getPointsChainRecord = (params: Paging & ChainRecordParams) => {
   });
 };
 
-export const syncPointsChainRecord = (params: { transferId: string }) => {
+export const syncPointsChainRecord = (params: { transferIds: (string | number)[] }) => {
   return ultraFetch.post<Return<unknown>>({
     URL: "/manager/chain-transfer/points/sync",
     body: JSON.stringify(params),

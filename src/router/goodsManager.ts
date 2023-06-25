@@ -122,4 +122,16 @@ export default <RouteRecordRaw[]>[
       keepAlive: true,
     },
   },
+
+  {
+    path: "goodsRecycleManager",
+    name: "goodsRecycleManager",
+    component: () => import("@/view/goodsManager/goodsRecycleManager/goodsRecycleManager.vue"),
+    meta: {
+      label: "商品回收站",
+      icon: "huishouzhan",
+      keepAlive: true,
+      id: 1002,
+    },
+  },
 ];

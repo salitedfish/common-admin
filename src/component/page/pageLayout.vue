@@ -1,7 +1,7 @@
 <template>
   <section class="page-layout-container" ref="pageDom">
     <!-- <layout-scroll-card :loading="commonStore.pageLoading"> -->
-    <n-scrollbar>
+    <n-scrollbar trigger="none">
       <slot></slot>
     </n-scrollbar>
     <!-- </layout-scroll-card> -->
@@ -31,7 +31,6 @@ onMounted(() => {
 .page-layout-container {
   height: 100%;
   padding: 15px 18px 15px;
-  overflow-y: scroll;
   position: relative;
   .totast {
     position: absolute;

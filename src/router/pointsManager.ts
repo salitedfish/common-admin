@@ -38,7 +38,7 @@ export default <RouteRecordRaw[]>[
     component: () => import("@/view/pointsManager/parallelCoinManager/parallelCoinManager.vue"),
     meta: {
       label: "代币管理",
-      icon: "jifen",
+      icon: "taojinbi",
       keepAlive: true,
       id: 2002,
     },

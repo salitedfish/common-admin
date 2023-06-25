@@ -15,6 +15,7 @@
         :loading="searching"
         v-model:checked-row-keys="pointsIdSelectedList"
         :row-key="rowKey"
+        :scrollbar-props="{ trigger: 'none' }"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">

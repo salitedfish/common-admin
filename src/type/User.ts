@@ -47,6 +47,8 @@ export type AdminMerchantListItem = {
   state: number;
   subMchid: string;
   uid: number;
+  childRoleName: string;
+  childRole: number;
 };
 
 export type GetUserAssetsListParams = Partial<{
@@ -111,6 +113,7 @@ export type VipLevelItem = Partial<{
   name: string;
   type: number;
   vipType: number;
+  regionType: number;
 }> & {
   goodsSelectList: { goodsId: string; goodsName: string }[];
 };

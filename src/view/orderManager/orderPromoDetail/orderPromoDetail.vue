@@ -190,7 +190,7 @@ onMounted(() => {
 <template>
   <n-form v-if="!commonStore.pageLoading" label-placement="left" label-width="130px" label-align="left" :disabled="true">
     <n-card title="" style="margin-bottom: 15px">
-      <n-data-table :single-line="false" :columns="createColumns()" :data="orderPromoDetail" :scroll-x="2400"></n-data-table>
+      <n-data-table :single-line="false" :columns="createColumns()" :data="orderPromoDetail" :scroll-x="2400" :scrollbar-props="{ trigger: 'none' }"></n-data-table>
     </n-card>
   </n-form>
 </template>

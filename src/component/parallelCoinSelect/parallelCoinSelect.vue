@@ -15,6 +15,7 @@
         :loading="searching"
         v-model:checked-row-keys="coinIdSelectedList"
         :row-key="rowKey"
+        :scrollbar-props="{ trigger: 'none' }"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">
@@ -92,7 +93,7 @@ const createColumns = () => {
       width: 120,
     },
     {
-      title: "标签",
+      title: "备注",
       key: "fromChainAddress",
       align: "center",
       width: 120,
@@ -127,12 +128,12 @@ const createColumns = () => {
       align: "center",
       width: 120,
     },
-    {
-      title: "冻结数量",
-      key: "freezeNum",
-      align: "center",
-      width: 120,
-    },
+    // {
+    //   title: "冻结数量",
+    //   key: "freezeNum",
+    //   align: "center",
+    //   width: 120,
+    // },
   ];
 
   return list;

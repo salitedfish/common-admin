@@ -90,6 +90,7 @@ export type TimingAirDropDetail = {
     timeDay: number;
     timeHour: number;
     timeType: number;
+    timeMonth: number;
     totalNum: number;
     type: number;
   };
@@ -121,6 +122,7 @@ export type TimingAirDropAddParams = {
     timeHour: number | null;
     timeType: number | null;
     totalNum: number | null;
+    timeMonth: number | null;
     type: number | null;
   };
   rules: {
@@ -369,6 +371,7 @@ export type GoodsActivityListItem = {
   merchantName: string;
   merchantUid: number;
   state: number;
+  timeMonth: number;
   timeDay: number;
   timeHour: number;
   timeType: number;

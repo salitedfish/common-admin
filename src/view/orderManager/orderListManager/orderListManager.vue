@@ -2,7 +2,15 @@
   <n-card>
     <screen-header @submitSearch="submitSearch" :searching="searching"></screen-header>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
@@ -153,15 +161,15 @@ const createColumns = () => {
       width: 100,
       align: "center",
     },
-    {
-      title: "订单类型",
-      key: "orderType",
-      align: "center",
-      width: 100,
-      render(order) {
-        return orderTypeList.getItem(order.orderType)?.label;
-      },
-    },
+    // {
+    //   title: "订单类型",
+    //   key: "orderType",
+    //   align: "center",
+    //   width: 100,
+    //   render(order) {
+    //     return orderTypeList.getItem(order.orderType)?.label;
+    //   },
+    // },
     {
       title: "购买数量",
       key: "orderNum",
@@ -255,6 +263,25 @@ const createColumns = () => {
       fixed: "right",
       render(order) {
         const btnList: VNode[] = [];
+        btnList.push(
+          h(
+            NButton,
+            {
+              type: "success",
+              size: "small",
+              secondary: true,
+              onClick: () => {
+                router.push({
+                  name: "orderPayDetail",
+                  query: {
+                    orderId: order.orderId,
+                  },
+                });
+              },
+            },
+            { default: () => "查看支付信息" }
+          )
+        );
         if (order.orderState === OrderState.IN_PAY) {
           if (order.payChannel === PayChannel.OFF_LINE) {
             btnList.push(
@@ -314,25 +341,6 @@ const createColumns = () => {
               )
             );
           }
-          btnList.push(
-            h(
-              NButton,
-              {
-                type: "success",
-                size: "small",
-                secondary: true,
-                onClick: () => {
-                  router.push({
-                    name: "orderPayDetail",
-                    query: {
-                      orderId: order.orderId,
-                    },
-                  });
-                },
-              },
-              { default: () => "查看支付信息" }
-            )
-          );
         }
         if (order.refundState === OrderRefundState.REFUND_APPLY) {
           btnList.push(

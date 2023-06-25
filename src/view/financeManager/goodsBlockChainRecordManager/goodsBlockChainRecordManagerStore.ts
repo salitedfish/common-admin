@@ -50,6 +50,7 @@ export enum RecordType {
   SECOND_CANCEL,
   REFUND,
   EXCHANGE,
+  COIN_WITHDRAW = 13,
 }
 export const recordTypeList = [
   {
@@ -95,5 +96,10 @@ export const recordTypeList = [
   {
     label: "兑换",
     value: RecordType.EXCHANGE,
+  },
+
+  {
+    label: "提币",
+    value: RecordType.COIN_WITHDRAW,
   },
 ];

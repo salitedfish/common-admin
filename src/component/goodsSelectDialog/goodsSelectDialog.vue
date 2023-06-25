@@ -14,6 +14,7 @@
         :row-key="rowKey"
         :checked-row-keys="goodsIdSelectedList"
         @update:checked-row-keys="changeGoodsSelectList"
+        :scrollbar-props="{ trigger: 'none' }"
       ></n-data-table>
       <n-card>
         <div style="display: flex; justify-content: space-between; align-items: center">
@@ -68,10 +69,10 @@ const emit = defineEmits<{
 
 let inited = false;
 
-// 告诉列表依据哪个数据当作key，这里参照id加name
+// 告诉列表依据哪个数据当作key，这里参照id
 const rowKey = (row: GoodsListItem) => row.goodsId;
 
-// 设置列表选择的key，这里的key用id加name, 以便向外部列表提供id和name
+// 设置列表选择的key，这里的key用id
 const goodsIdSelectedList = ref<DataTableRowKey[]>([]);
 goodsIdSelectedList.value = props.goodsSelectedList.map((item) => item.goodsId);
 

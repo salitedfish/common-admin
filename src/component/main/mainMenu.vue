@@ -31,10 +31,12 @@ import { getAuthRoutes as getAuthRoutesRequest } from "@/request/auth";
 import { routes } from "@/router/index";
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
-import type { RemoteRoute } from "@/type/Common";
+import { useAuthStore } from "@/store/authStore";
+import type { Auths } from "@/type/Auth";
 
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
+const authStore = useAuthStore();
 
 // 展开状态
 const collapsed = ref(false);
@@ -87,11 +89,12 @@ const mapMenuHandler = (routes: RouteRecordRaw[]) => {
 const menuOptions = reactive<MenuOption[]>([...mapMenuHandler(routes)]);
 
 // 根据远程的的路由来判断显示或不显示
-const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[]) => {
+const authRouteHandler = (originRoute: MenuOption[], remoteRoute: Auths) => {
   for (const item of originRoute) {
     for (const i of remoteRoute) {
       if (item.routeId === i.id) {
         item.show = true;
+        // 如果有子路由则递归判断是否显示
         if (item.children && i.menu) {
           authRouteHandler(item.children, i.menu);
         }
@@ -105,7 +108,10 @@ const authRouteHandler = (originRoute: MenuOption[], remoteRoute: RemoteRoute[])
 onMounted(async () => {
   const res = await getAuthRoutesRequest();
   if (res) {
-    authRouteHandler(menuOptions, res.data);
+    const { data } = res;
+    authRouteHandler(menuOptions, data);
+    // 每个账号都有不同的权限，权限依据远程路由里面
+    authStore.setAuthIds(data);
   }
 });
 

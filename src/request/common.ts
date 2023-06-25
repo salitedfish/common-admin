@@ -137,9 +137,11 @@ export const downLoadWhiteListTemplate = () => {
 export const uploadWhiteList = (params: { id: string; file: File }, whiteListType: number) => {
   const data = new FormData();
   data.append("file", params.file);
+  data.append("id", params.id);
+  data.append("goodsId", params.id);
   return ultraFetch.post(
     {
-      URL: `${whiteListUrls.getItem(whiteListType)?.URLS.uploadWhiteListUrl}${params.id}`,
+      URL: `${whiteListUrls.getItem(whiteListType)?.URLS.uploadWhiteListUrl}`,
       body: data,
     },
     {

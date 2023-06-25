@@ -4,7 +4,7 @@ export const whiteListUrls = [
   {
     value: WhiteListType.GOODS,
     URLS: {
-      uploadWhiteListUrl: "/manager/goods/allow/submit/",
+      uploadWhiteListUrl: "/manager/goods/allow/submit",
       downLoadWhiteListUrl: "/manager/goods/allow/excel",
       deleteWhiteListUrl: "/manager/goods/allow/delete",
       getWhiteListUrl: "/manager/goods/allow/page",
@@ -14,7 +14,7 @@ export const whiteListUrls = [
   {
     value: WhiteListType.AIR_DROP,
     URLS: {
-      uploadWhiteListUrl: "/manager/airdrop/allow/submit/",
+      uploadWhiteListUrl: "/manager/airdrop/allow/submit",
       downLoadWhiteListUrl: "/manager/airdrop/allow/excel",
       deleteWhiteListUrl: "/manager/airdrop/allow/delete",
       getWhiteListUrl: "/manager/airdrop/allow/page",
@@ -24,7 +24,7 @@ export const whiteListUrls = [
   {
     value: WhiteListType.DRAW_UPLOAD,
     URLS: {
-      uploadWhiteListUrl: "/manager/lottery/allow/submit/",
+      uploadWhiteListUrl: "/manager/lottery/allow/submit",
       downLoadWhiteListUrl: "/manager/lottery/allow/excel",
       deleteWhiteListUrl: "/manager/lottery/allow/delete",
       getWhiteListUrl: "/manager/lottery/allow/page",

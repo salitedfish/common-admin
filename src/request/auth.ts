@@ -1,5 +1,6 @@
 import { ultraFetch } from "./init";
 import type { Return } from "@/type/Common";
+import type { Auths } from "@/type/Auth";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type * as RequestParam from "@/request/type/RequestParam";
 
@@ -58,8 +59,8 @@ export const register = (data: RequestParam.Register): RequestReturn.Register =>
 };
 
 // 获取有权限的路由
-export const getAuthRoutes = (): RequestReturn.GetAuthRoutes => {
-  return ultraFetch.get({
+export const getAuthRoutes = () => {
+  return ultraFetch.get<Return<Auths>>({
     URL: "/manager/role-menu/detail",
   });
 };
@@ -83,5 +84,49 @@ export const getMerchantApplyResult = (): RequestReturn.GetMerchantApplyResult =
 export const getAllowMicro = () => {
   return ultraFetch.get<Return<boolean>>({
     URL: "/manager/merchant-wechat/apply/micro-allow",
+  });
+};
+
+// 角色权限相关
+// 获取所有的权限角色
+export const getAuthRoles = () => {
+  return ultraFetch.get<Return<{ id: number; name: string }[]>>({
+    URL: "/manager/role-custom/list",
+  });
+};
+
+export const addRole = (data: { name: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/role-custom/submit",
+    body: JSON.stringify(data),
+  });
+};
+
+export const editRole = (data: { id: number; name: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/role-custom/update",
+    body: JSON.stringify(data),
+  });
+};
+
+export const delRole = (data: { id: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/role-custom/delete",
+    body: JSON.stringify(data),
+  });
+};
+
+// 获取指定角色的权限
+export const getRoleAuth = (params: { id: number }) => {
+  return ultraFetch.get<Return<Auths>>({
+    URL: "/manager/role-menu/explicit",
+    params,
+  });
+};
+
+export const updateRoleAuth = (data: { id: number; menuIds: number[] }) => {
+  return ultraFetch.post({
+    URL: "/manager/role-menu/update",
+    body: JSON.stringify(data),
   });
 };

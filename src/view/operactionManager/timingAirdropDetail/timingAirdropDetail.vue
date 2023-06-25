@@ -8,7 +8,12 @@
       <n-form-item label="执行时间类型：" required>
         <n-select :options="airDropTimeTypeList" v-model:value="formData.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
-      <n-form-item label="执行日(每月)：" v-show="formData.info.timeType === AirDropTimeType.MONTH" required>
+
+      <n-form-item label="执行月(每年)：" v-if="formData.info.timeType === AirDropTimeType.YEAR" required>
+        <n-select :options="commonStore.yearMap" v-model:value="formData.info.timeMonth" placeholder="请选择执行月"></n-select>
+      </n-form-item>
+
+      <n-form-item label="执行日(每月)：" v-if="[AirDropTimeType.MONTH, AirDropTimeType.YEAR].includes(Number(formData.info.timeType))" required>
         <n-select :options="commonStore.monthMap" v-model:value="formData.info.timeDay" placeholder="请选择执行日"></n-select>
       </n-form-item>
       <n-form-item label="执行日(每周)：" v-show="formData.info.timeType === AirDropTimeType.WEEK" required>
@@ -89,7 +94,7 @@
             v-model:value="item.holdType"
             @update:value="(value) => ruleHoldTypeChange(value, item)"
             placeholder="请选择持有天数类型"
-            :disabled="isAdmin || submiting || isCheck"
+            :disabled="submiting || isCheck"
             clearable
           ></n-select>
         </n-form-item>
@@ -122,7 +127,7 @@
           v-if="[RuleType.HOLD_GOODS, RuleType.HOLD_CATEGORY].includes(Number(item.itemType)) && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
           required
         >
-          <n-select :options="holdDayTypes" v-model:value="item.holdDayType" placeholder="请选择持有天数计算类型" :disabled="isAdmin || submiting || isCheck" clearable></n-select>
+          <n-select :options="holdDayTypes" v-model:value="item.holdDayType" placeholder="请选择持有天数计算类型" :disabled="submiting || isCheck" clearable></n-select>
         </n-form-item>
 
         <n-form-item
@@ -142,7 +147,7 @@
             :options="holdRepeatTypes"
             v-model:value="item.holdRepeatType"
             placeholder="请选择持有天数周期内是否可重复"
-            :disabled="isAdmin || submiting || isCheck"
+            :disabled="submiting || isCheck"
             clearable
           ></n-select>
         </n-form-item>
@@ -224,6 +229,7 @@ const formData = reactive<TimingAirDropAddParams>({
     timeHour: null,
     timeType: null,
     totalNum: null,
+    timeMonth: null,
     type: AirDropTaskType.COMMON,
   },
   rules: [
@@ -351,6 +357,13 @@ const goRuleWhiteList = (id?: number) => {
 const submiting = ref(false);
 const handleSubmit = async () => {
   submiting.value = true;
+  // 不同的时间类型要赋不同的默认值
+  if (formData.info.timeType === AirDropTimeType.DAY) {
+    formData.info.timeDay = 0;
+  }
+  if (formData.info.timeType !== AirDropTimeType.YEAR) {
+    formData.info.timeMonth = 0;
+  }
 
   for (const item of formData.rules) {
     // 如果是商品

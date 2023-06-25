@@ -1,5 +1,13 @@
 <template>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
 </template>
 
 <script lang="ts" setup>

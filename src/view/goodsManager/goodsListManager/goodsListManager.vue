@@ -2,7 +2,15 @@
   <n-card>
     <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
@@ -82,10 +90,13 @@ import whiteListUploadBtn from "@/component/whiteList/whiteListUploadBtn.vue";
 import {
   getGoodsList as getListRequest,
   goodsDelete as goodsDeleteRequest,
+  updateGoodsApply as updateGoodsApplyRequest,
   updateGoodsState as updateGoodsStateRequest,
   updateGoodsAudit as updateGoodsAuditRequest,
+  updateGoodsStateAdmin as updateGoodsStateAdminRequest,
   updateGoodsCategory as updateGoodsCategoryRequest,
   clearBlindBoxPrize,
+  updateGoodsRecycleState,
 } from "@/request/goods";
 import { deleteWhiteList as deleteWhiteListRequest } from "@/request/common";
 import { goodsTabList } from "../goodsDetailManager/goodsDetailManagerStore";
@@ -96,7 +107,7 @@ import type { CategoryTreeItem } from "@/type/Common";
 import { goodsStateList, goodsTypeList, saleTypeList, GoodsState, GoodsType, SaleType, AuditAction, auditResList, reAuditResList, EditType } from "./goodsListManagerStore";
 import { useAuthStore } from "@/store/authStore";
 import { commonNotify, useListPage } from "@/util/common";
-import { WhiteListType, DetailCheckType } from "@/type/Common";
+import { WhiteListType, DetailCheckType, AntinomyTypes } from "@/type/Common";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "goodsListManager",
@@ -266,6 +277,7 @@ const createColumns = () => {
             }
           )
         );
+
         // 删除
         if ([GoodsState.DRAFT, GoodsState.APPROVIAL_FAILED].includes(goodsState)) {
           list.push(
@@ -334,6 +346,8 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
+
                   auditInfo.auditTitle = "提交审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认将${goods.goodsName}提交审核吗？`;
@@ -357,6 +371,8 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
+
                   auditInfo.auditTitle = "撤销审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认撤销审核${goods.goodsName}吗？`;
@@ -554,6 +570,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "审核";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.goodsState = goods.goodsState === GoodsState.TO_BE_APPROVIAL_NEW ? AuditAction.RE_AUDIT_FAIL : AuditAction.AUDIT_FAIL;
@@ -616,6 +633,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = true;
                   auditInfo.auditTitle = "上架";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认上架${goods.goodsName}吗？`;
@@ -639,6 +657,7 @@ const createColumns = () => {
                 size,
                 secondary: true,
                 onClick: () => {
+                  auditInfo.shelves = true;
                   auditInfo.auditTitle = "下架";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认下架${goods.goodsName}吗？`;
@@ -663,6 +682,7 @@ const createColumns = () => {
                 secondary: true,
 
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "重新发行";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认重新发行${goods.goodsName}吗？`;
@@ -854,6 +874,7 @@ const createColumns = () => {
                 secondary: true,
 
                 onClick: () => {
+                  auditInfo.shelves = false;
                   auditInfo.auditTitle = "重新增发";
                   auditInfo.goodsId = goods.goodsId;
                   auditInfo.auditTip = `确认重新增发${goods.goodsName}吗？`;
@@ -863,6 +884,38 @@ const createColumns = () => {
               },
               {
                 default: () => "重新增发",
+              }
+            )
+          );
+        }
+        // 移入回收站
+        if ([GoodsState.TO_BE_SHELVES, GoodsState.NEED_APPROVIAL, GoodsState.APPROVIAL_FAILED_NEW].includes(goodsState) && !authStore.isAdmin) {
+          list.push(
+            h(
+              NButton,
+              {
+                type: "warning",
+                size,
+                secondary: true,
+                onClick: () => {
+                  const dialogInfo = dialog.warning({
+                    title: "移入回收站",
+                    content: `确认将${goods.goodsName}移入回收站吗？`,
+                    positiveText: "确认",
+                    onPositiveClick: async () => {
+                      dialogInfo.loading = true;
+                      const res = await updateGoodsRecycleState({ goodsId: goods.goodsId, goodsRecycleState: AntinomyTypes.YES });
+                      if (res) {
+                        await getList();
+                        commonNotify("success", "商品回收成功");
+                      }
+                      dialogInfo.loading = false;
+                    },
+                  });
+                },
+              },
+              {
+                default: () => "移入回收站",
               }
             )
           );
@@ -893,7 +946,11 @@ const createColumns = () => {
   }
   return list;
 };
-const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns);
+const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getListRequest, createColumns, {
+  params: {
+    goodsRecycleState: AntinomyTypes.NOT,
+  },
+});
 
 // 更改商品状态modal框的状态和数据
 const showAuditModal = ref(false);
@@ -904,15 +961,21 @@ const auditInfo = reactive({
   goodsId: "",
   auditNote: "",
   goodsState: 0,
+  shelves: false,
 });
 
 // 提交商品状态信息
 const comfirmAudit = async () => {
   auditLoading.value = true;
-  const { auditNote, goodsId, goodsState } = auditInfo;
+  const { auditNote, goodsId, goodsState, shelves } = auditInfo;
   const params = { auditNote, goodsId, goodsState };
   // 管理员和商户用的审核接口不一样
-  const res = authStore.isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsStateRequest(params);
+  let res;
+  if (shelves) {
+    res = authStore.isAdmin ? await updateGoodsStateAdminRequest(params) : await updateGoodsStateRequest(params);
+  } else {
+    res = authStore.isAdmin ? await updateGoodsAuditRequest(params) : await updateGoodsApplyRequest(params);
+  }
   if (res && res.code === 0) {
     await getList();
     commonNotify("success", `${auditInfo.auditTitle}成功`);

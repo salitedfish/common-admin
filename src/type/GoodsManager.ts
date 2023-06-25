@@ -15,6 +15,8 @@ export type SearchParams = Partial<{
   merchantUid: string;
   goodsTabType: number;
   funcType: GetEnumValue<GoodsFuncType>;
+
+  goodsRecycleState: number;
 }>;
 
 export type GoodsListItem = {
@@ -71,6 +73,7 @@ export type GoodsExtend = {
   ruleCalcTime: string | null;
   saleType: number | null;
   traceHash: string | null;
+  tradeAmountType: number | null;
   exchangePointsType: number | null;
   pointsDeductionType: number;
   pointsCouponType: number;

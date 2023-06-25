@@ -79,3 +79,19 @@ export const useViewToApi = (vipLevelList: VipLevelItem[][]): VipLevelItem[] => 
   }
   return vipList;
 };
+
+export enum RegionType {
+  EXCLUDE_MAX,
+  INCLUDE_MAX,
+}
+
+export const regionTypes = [
+  {
+    label: "去除最大分区",
+    value: RegionType.EXCLUDE_MAX,
+  },
+  {
+    label: "包括最大分区",
+    value: RegionType.INCLUDE_MAX,
+  },
+];

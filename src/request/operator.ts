@@ -242,16 +242,29 @@ export const deleteLottery = (params: { id: number }) => {
     body: JSON.stringify(params),
   });
 };
+//
+export const updateLotteryApply = (params: { id: number; state: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/apply",
+    body: JSON.stringify(params),
+  });
+};
 export const updateLotteryState = (params: { id: number; state: number }) => {
   return ultraFetch.post({
     URL: "/manager/lottery/state",
     body: JSON.stringify(params),
   });
 };
-
+//
 export const lotteryApprovial = (params: { id: number; auditNote: string; state: number }) => {
   return ultraFetch.post({
     URL: "/manager/lottery/audit",
+    body: JSON.stringify(params),
+  });
+};
+export const updateLotteryStateAdmin = (params: { id: number; state: number }) => {
+  return ultraFetch.post({
+    URL: "/manager/lottery/state-admin",
     body: JSON.stringify(params),
   });
 };

@@ -2,7 +2,15 @@
   <n-card>
     <screen-header @submitSearch="submitSearch" :searching="searching"></screen-header>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
@@ -20,6 +28,9 @@
         </n-form-item>
         <n-form-item label="手机号:" v-if="userInfo.setType === SetInfoType.PHONE">
           <n-input v-model:value="userInfo.phone" :disabled="updateTabLoading"></n-input>
+        </n-form-item>
+        <n-form-item label="邀请码:" v-if="userInfo.setType === SetInfoType.REGISTERCODE">
+          <n-input v-model:value="userInfo.registerCode" :disabled="updateTabLoading"></n-input>
         </n-form-item>
       </n-form>
 
@@ -74,6 +85,7 @@ import {
   updateUserTab as updateUserTabRequest,
   updateUserPhone as updateUserPhoneRequest,
   getUserRealInfo as getUserRealInfoRequest,
+  updateUserRegisterCode as updateUserRegisterCodeRequest,
 } from "@/request/user";
 // store
 import { useAuthStore } from "@/store/authStore";
@@ -87,6 +99,7 @@ const authStore = useAuthStore();
 enum SetInfoType {
   TAB,
   PHONE,
+  REGISTERCODE,
 }
 const setInfoTypeAction = {
   [SetInfoType.TAB]: {
@@ -94,6 +107,9 @@ const setInfoTypeAction = {
   },
   [SetInfoType.PHONE]: {
     method: updateUserPhoneRequest,
+  },
+  [SetInfoType.REGISTERCODE]: {
+    method: updateUserRegisterCodeRequest,
   },
 };
 
@@ -121,18 +137,6 @@ const createColumns = () => {
           }
         );
       },
-    },
-    {
-      title: "会员等级",
-      key: "memberLevel",
-      align: "center",
-      width: 120,
-    },
-    {
-      title: "节点等级",
-      key: "nodeLevel",
-      align: "center",
-      width: 120,
     },
   ];
   // 管理员
@@ -285,6 +289,26 @@ const createColumns = () => {
                 { default: () => "修改手机号" }
               ),
             ];
+            if (!user.registerCode) {
+              btnList.push(
+                h(
+                  NButton,
+                  {
+                    type: "primary",
+                    size: "small",
+                    secondary: true,
+                    onClick: () => {
+                      userInfo.setType = SetInfoType.REGISTERCODE;
+                      userInfo.registerCode = user.registerCode;
+                      userInfo.title = user.nickName;
+                      userInfo.uid = user.uid;
+                      showUserTabModal.value = true;
+                    },
+                  },
+                  { default: () => "填写注册码" }
+                )
+              );
+            }
             // 用来放按钮的容器
             const btnBox = h(NSpace, {}, { default: () => btnList });
             return btnBox;
@@ -292,26 +316,25 @@ const createColumns = () => {
         },
       ] as DataTableColumns<UserListItem>)
     );
+  } else {
+    // 商户
+    list.push(
+      ...([
+        {
+          title: "会员等级",
+          key: "memberLevel",
+          align: "center",
+          width: 120,
+        },
+        {
+          title: "节点等级",
+          key: "nodeLevel",
+          align: "center",
+          width: 120,
+        },
+      ] as DataTableColumns<UserListItem>)
+    );
   }
-  // else {
-  //   // 商户
-  //   list.push(
-  //     ...([
-  //       {
-  //         title: "会员等级",
-  //         key: "memberLevel",
-  //         align: "center",
-  //         width: 120,
-  //       },
-  //       {
-  //         title: "节点等级",
-  //         key: "nodeLevel",
-  //         align: "center",
-  //         width: 120,
-  //       },
-  //     ] as DataTableColumns<UserListItem>)
-  //   );
-  // }
   return list;
 };
 
@@ -343,13 +366,14 @@ const updateTabLoading = ref(false);
 const userInfo = reactive({
   setType: SetInfoType.TAB,
   title: "",
-  tab: 0,
   uid: 0,
+  tab: 0,
   phone: "",
+  registerCode: "",
 });
 const comfirmUpdateUserTab = async () => {
   updateTabLoading.value = true;
-  const res = await setInfoTypeAction[userInfo.setType].method({ uid: userInfo.uid, tab: userInfo.tab, phone: userInfo.phone });
+  const res = await setInfoTypeAction[userInfo.setType].method({ uid: userInfo.uid, tab: userInfo.tab, phone: userInfo.phone, registerCode: userInfo.registerCode });
   if (res) {
     await getList();
     commonNotify("success", `用户${userInfo.title}设置成功`);

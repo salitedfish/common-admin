@@ -46,6 +46,7 @@ import {
   NGridItem,
   NStatistic,
   NThemeEditor,
+  NTree,
 } from "naive-ui";
 
 export const naiveUIComponent = create({
@@ -96,5 +97,6 @@ export const naiveUIComponent = create({
     NGridItem,
     NStatistic,
     NThemeEditor,
+    NTree,
   ],
 });

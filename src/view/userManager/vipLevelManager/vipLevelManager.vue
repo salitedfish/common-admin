@@ -12,7 +12,7 @@ import { commonNotify } from "@/util/common";
 import { getVipLevelList, updateVipLevelList } from "@/request/user";
 // store
 import { useCommonStore } from "@/store/commonStore";
-import { vipTypes, useApiToView, useViewToApi, vipGetTypes, VipGetType } from "./vipLevelManagerStore";
+import { vipTypes, useApiToView, useViewToApi, vipGetTypes, VipGetType, regionTypes } from "./vipLevelManagerStore";
 import { GoodsState } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 
 // 类型
@@ -86,6 +86,25 @@ const createColumns = (levelList: VipLevelItem[]) => {
           },
           disabled: submiting.value,
         });
+      },
+    },
+    {
+      title: "大区类型",
+      key: "type",
+      align: "center",
+      width: 100,
+      render: (row) => {
+        return row.type === VipGetType.SHARE
+          ? createVNode(NSelect, {
+              placeholder: "请选择",
+              options: regionTypes,
+              value: row.regionType,
+              onUpdateValue: (newValue: number) => {
+                row.regionType = newValue;
+              },
+              disabled: submiting.value,
+            })
+          : "-";
       },
     },
     {
@@ -191,7 +210,14 @@ onMounted(() => {
 <template>
   <n-form label-placement="left" label-width="120px" label-align="left" :disabled="submiting" v-if="!commonStore.pageLoading">
     <n-card :title="vipTitle(key)" style="margin-bottom: 15px" v-for="(item, key) in vipLevelList" :key="key">
-      <n-data-table :single-line="false" :columns="createColumns(item)" :data="item" :loading="commonStore.pageLoading" :scroll-x="800"></n-data-table>
+      <n-data-table
+        :single-line="false"
+        :columns="createColumns(item)"
+        :data="item"
+        :loading="commonStore.pageLoading"
+        :scroll-x="800"
+        :scrollbar-props="{ trigger: 'none' }"
+      ></n-data-table>
 
       <n-button block secondary type="primary" :disabled="submiting" @click="() => addLevel(item)">+添加等级</n-button>
     </n-card>

@@ -78,10 +78,10 @@ export const holdDayTypes = [
 export const holdRepeatTypes = [
   {
     value: AntinomyTypes.NOT,
-    label: "不可重复",
+    label: "每间隔持有天数奖励一次",
   },
   {
     value: AntinomyTypes.YES,
-    label: "可以重复",
+    label: "持有天数后连续奖励",
   },
 ];

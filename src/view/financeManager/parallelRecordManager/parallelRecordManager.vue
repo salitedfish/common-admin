@@ -1,6 +1,6 @@
 <script lang="ts">
 // 框架
-import { defineComponent, createVNode } from "vue";
+import { defineComponent, createVNode, ref } from "vue";
 // 组件库
 import { NSpace, NEllipsis, NButton, useDialog } from "naive-ui";
 // 自定义组件
@@ -13,11 +13,11 @@ import { useListPage, commonNotify } from "@/util/common";
 import { getParallelRecord, syncParallelCoin } from "@/request/finance";
 // store
 import { useAuthStore } from "@/store/authStore";
-import { parallelRecordStateList, recordTypeList, userTypeList, ParallelRecordState } from "./parallelRecordManagerStore";
+import { parallelRecordStateList, recordTypeList, userTypeList, ParallelRecordState, RecordType } from "./parallelRecordManagerStore";
 // 类型
 import type { VNode } from "vue";
 import type { ParallelRecordItem } from "@/type/Finance";
-import type { DataTableColumns } from "naive-ui";
+import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 // 组件名
 export default defineComponent({
   name: "parallelRecordManager",
@@ -31,6 +31,14 @@ const dialog = useDialog();
 // 列表项
 const createColumns = () => {
   const list: DataTableColumns<ParallelRecordItem> = [
+    {
+      fixed: "left",
+      type: "selection",
+      multiple: true,
+      disabled: (item) => {
+        return ParallelRecordState.FAIL !== item.transState || item.recordType === RecordType.FIRST_BUY;
+      },
+    },
     {
       title: "交易编号",
       key: "transferId",
@@ -201,53 +209,6 @@ const createColumns = () => {
       align: "center",
       width: 180,
     },
-
-    {
-      title: "操作",
-      key: "operaction",
-      width: 120,
-      align: "center",
-
-      fixed: "right",
-      render(row) {
-        const list: VNode[] = [];
-        const size = "small";
-
-        if (row.transState === ParallelRecordState.FAIL && isAdmin) {
-          list.push(
-            createVNode(
-              NButton,
-              {
-                type: "warning",
-                size,
-                secondary: true,
-                onClick: () => {
-                  const dialogInfo = dialog.warning({
-                    title: "差错同步确认",
-                    content: "确认差错同步吗",
-                    positiveText: "确认",
-                    onPositiveClick: async () => {
-                      dialogInfo.loading = true;
-                      const res = await syncParallelCoin({ transferId: row.transferId });
-                      if (res) {
-                        await getList();
-                        commonNotify("success", "差错同步成功");
-                      }
-                      dialogInfo.loading = false;
-                    },
-                  });
-                },
-              },
-              { default: () => "差错同步确认" }
-            )
-          );
-        }
-
-        // 用来放按钮的容器
-        const btnBox = createVNode(NSpace, {}, { default: () => list });
-        return btnBox;
-      },
-    },
   ];
   //   if (isAdmin) {
   //     list.splice(0, 0, {
@@ -269,40 +230,49 @@ const createColumns = () => {
   return list;
 };
 
-// 差错同步确认
-// const showDialog = ref(false);
-// const syncing = ref(false);
-// const syncInfo = reactive({
-//   accept: null,
-//   inOrderId: "",
-//   state: null,
-// });
-// const syncComfirm = (row: ProfitShareListItem) => {
-//   syncInfo.inOrderId = row.inOrderId;
-//   showDialog.value = true;
-// };
-// const comfirmSync = async () => {
-//   syncing.value = true;
-//   const res = await syncProfitShare(syncInfo);
-//   if (res) {
-//     await getList();
-//     showDialog.value = false;
-//     commonNotify("success", "差错同步成功");
-//   }
-//   syncing.value = false;
-// };
+const rowClassName = (row: ParallelRecordItem) => {
+  if (ParallelRecordState.FAIL === row.transState && row.recordType !== RecordType.FIRST_BUY) {
+    return "fail";
+  }
+};
+
+const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
+const clearSelected = () => {
+  checkedRowKeysRef.value = [];
+};
+const changeSelectList = (rowKeys: DataTableRowKey[]) => {
+  checkedRowKeysRef.value = rowKeys;
+};
 
 const { totalPage, getList, searchParam, list, listXWidth, listYHeight, searching, submitSearch } = useListPage(getParallelRecord, createColumns);
 </script>
 
 <template>
   <n-card>
-    <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
+    <screen-section @submitSearch="submitSearch" :searching="searching" @clearSelected="clearSelected" :checkedRowKeys="checkedRowKeysRef"></screen-section>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+    @update:checked-row-keys="changeSelectList"
+    :row-key="(item: ParallelRecordItem) => item.transferId"
+    v-model:checked-row-keys="checkedRowKeysRef"
+    :row-class-name="rowClassName"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
 </template>
 
-<style scoped lang="less"></style>
+<style lang="less">
+.fail {
+  td {
+    background: var(--tabel-fail-bg-color) !important;
+  }
+}
+</style>

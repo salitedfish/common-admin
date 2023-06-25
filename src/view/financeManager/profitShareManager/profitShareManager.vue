@@ -2,7 +2,15 @@
   <n-card>
     <screen-section @submitSearch="submitSearch" :searching="searching"></screen-section>
   </n-card>
-  <n-data-table :single-line="false" :columns="createColumns()" :data="list" :scroll-x="listXWidth" :max-height="listYHeight" :loading="searching"></n-data-table>
+  <n-data-table
+    :single-line="false"
+    :columns="createColumns()"
+    :data="list"
+    :scroll-x="listXWidth"
+    :max-height="listYHeight"
+    :loading="searching"
+    :scrollbar-props="{ trigger: 'none' }"
+  ></n-data-table>
   <n-card>
     <n-pagination v-model:page="searchParam.page" :page-count="totalPage" @update:page="getList" />
   </n-card>
@@ -76,16 +84,16 @@ const createColumns = () => {
       width: 180,
       align: "center",
     },
-    {
-      title: "订单类型",
-      key: "orderType",
-      width: 120,
-      align: "center",
+    // {
+    //   title: "订单类型",
+    //   key: "orderType",
+    //   width: 120,
+    //   align: "center",
 
-      render: (row) => {
-        return orderTypeList.getItem(row.orderType)?.label;
-      },
-    },
+    //   render: (row) => {
+    //     return orderTypeList.getItem(row.orderType)?.label;
+    //   },
+    // },
     {
       title: "订单总价",
       key: "orderTotalAmount",
@@ -117,16 +125,16 @@ const createColumns = () => {
       width: 120,
       align: "center",
     },
-    {
-      title: "分账渠道",
-      key: "channelType",
-      width: 100,
-      align: "center",
+    // {
+    //   title: "分账渠道",
+    //   key: "channelType",
+    //   width: 100,
+    //   align: "center",
 
-      render: (row) => {
-        return payChannelList.getItem(row.channelType)?.label;
-      },
-    },
+    //   render: (row) => {
+    //     return payChannelList.getItem(row.channelType)?.label;
+    //   },
+    // },
     {
       title: "第三方分账编号",
       key: "outOrderId",

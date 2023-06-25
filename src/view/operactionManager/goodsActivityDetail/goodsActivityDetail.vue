@@ -3,11 +3,12 @@
 import { defineComponent, ref, onMounted, createVNode } from "vue";
 import { useRoute, useRouter } from "vue-router";
 // 组件库
-import { NButton, NInputNumber, NSelect, NSpace, NInput } from "naive-ui";
+import { NButton, NInputNumber, NSelect, NSpace, NInput, NPopover } from "naive-ui";
 // 自定义组件
 import goodsSelect from "@/component/common/goodsSelect.vue";
 import pointsSelect from "@/component/pointsSelect/pointsSelect.vue";
 import parallelCoinSelect from "@/component/parallelCoinSelect/parallelCoinSelect.vue";
+import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
 import { commonNotify } from "@/util/common";
@@ -16,6 +17,7 @@ import { getGoodsActivityDetail, addGoodsActivityDetail, updateGoodsActivityDeta
 // store
 import { useCommonStore } from "@/store/commonStore";
 import { useRouteStore } from "@/store/routeStore";
+import { useThemeStore } from "@/store/themeStore";
 import {
   // switchToView,
   // switchToAPI,
@@ -53,6 +55,7 @@ const route = useRoute();
 const router = useRouter();
 const commonStore = useCommonStore();
 const routeStore = useRouteStore();
+const themeStore = useThemeStore();
 
 const checkType = route.query.type as DetailCheckType;
 const id = route.query.id as string;
@@ -127,6 +130,7 @@ const createColumns = () => {
           : "-";
       },
     },
+
     {
       title: "vip类型",
       key: "type",
@@ -169,6 +173,7 @@ const createColumns = () => {
         );
       },
     },
+
     {
       title: "交易类型",
       key: "type",
@@ -184,11 +189,15 @@ const createColumns = () => {
             if (newValue === TradeType.NUM) {
               rule.unitType = UnitType.FIXED;
             }
+            // if (newValue === TradeType.MONEY) {
+            //   rule.provideType = ProvideType.COMMON;
+            // }
           },
           disabled: submiting.value || isCheck,
         });
       },
     },
+
     {
       title: "梯度金额/数量",
       key: "type",
@@ -234,6 +243,7 @@ const createColumns = () => {
         });
       },
     },
+
     {
       title: "奖励数量类型",
       key: "type",
@@ -253,7 +263,7 @@ const createColumns = () => {
     },
 
     {
-      title: "总奖励数量",
+      title: "奖励数量",
       key: "type",
       align: "center",
       width: 140,
@@ -276,7 +286,7 @@ const createColumns = () => {
           },
           {
             suffix: () => {
-              return (rule.unitType === UnitType.RADIO ? "%" : "") + `/${rule.tradeType === TradeType.MONEY ? "单" : "个"}`;
+              return (rule.unitType === UnitType.RADIO ? "%" : "个") + `/${rule.tradeType === TradeType.MONEY ? "单" : "token"}`;
             },
           }
         );
@@ -284,7 +294,7 @@ const createColumns = () => {
     },
 
     {
-      title: "释放数量/次",
+      title: "释放数量",
       key: "type",
       align: "center",
       width: 120,
@@ -302,33 +312,72 @@ const createColumns = () => {
             showButton: false,
             disabled: submiting.value || isCheck || rule.provideType === ProvideType.COMMON,
           },
-          { suffix: () => (rule.unitType === UnitType.RADIO ? "%" : "") }
+          {
+            suffix: () => {
+              return (rule.unitType === UnitType.RADIO ? "%" : "个") + `/${rule.tradeType === TradeType.MONEY ? "单/次" : "token/次"}`;
+            },
+          }
         );
       },
     },
+
     {
-      title: "同级育成奖励",
+      title() {
+        return [
+          createVNode(
+            "span",
+            {
+              style: {
+                marginRight: "5px",
+              },
+            },
+            "育成奖励"
+          ),
+          createVNode(
+            NPopover,
+            {
+              trigger: "hover",
+            },
+            {
+              trigger: () =>
+                createVNode(customIcon, {
+                  size: 14,
+                  name: "wenhao-yuankuang",
+                  color: themeStore.themeVar.warningColor,
+                }),
+              default: () => "以奖励数量为基数",
+            }
+          ),
+        ];
+      },
       key: "type",
       align: "center",
       width: 120,
       render: (rule) => {
-        return createVNode(
-          NInputNumber,
-          {
-            placeholder: "请输入",
-            min: 0,
-            value: rule.regionAmount,
-            onUpdateValue: (newValue: number) => {
-              rule.regionAmount = newValue;
-            },
-            max: rule.unitType === UnitType.RADIO ? 100 : null,
-            showButton: false,
-            disabled: submiting.value || isCheck,
-          },
-          { suffix: () => (rule.unitType === UnitType.RADIO ? "%" : "") }
-        );
+        return rule.userType === UserType.LEADER
+          ? createVNode(
+              NInputNumber,
+              {
+                placeholder: "请输入",
+                min: 0,
+                value: rule.regionAmount,
+                onUpdateValue: (newValue: number) => {
+                  rule.regionAmount = newValue;
+                },
+                max: rule.unitType === UnitType.RADIO ? 100 : null,
+                showButton: false,
+                disabled: submiting.value || isCheck,
+              },
+              {
+                suffix: () => {
+                  return (rule.unitType === UnitType.RADIO ? "%" : "个") + `/${rule.tradeType === TradeType.MONEY ? "单" : "token"}`;
+                },
+              }
+            )
+          : "-";
       },
     },
+
     {
       title: "奖励类型",
       key: "type",
@@ -346,6 +395,7 @@ const createColumns = () => {
         });
       },
     },
+
     {
       title: "奖励物品",
       key: "type",
@@ -483,6 +533,13 @@ const submit = async () => {
   const submitRequest = checkType === DetailCheckType.EDIT ? updateGoodsActivityDetail : addGoodsActivityDetail;
   const tip = checkType === DetailCheckType.EDIT ? "编辑" : "新增";
   submiting.value = true;
+  // 不同的时间类型要赋不同的默认值
+  if (goodsActivityDetail.value.info.timeType === GoodsActivityTimeType.DAY) {
+    goodsActivityDetail.value.info.timeDay = 0;
+  }
+  if (goodsActivityDetail.value.info.timeType !== GoodsActivityTimeType.YEAR) {
+    goodsActivityDetail.value.info.timeMonth = 0;
+  }
   goodsActivityDetail.value.info.goodsIds = goodsList.value.map((item) => String(item.goodsId));
   for (const item of goodsActivityDetail.value.rules) {
     const { rewardType } = item;
@@ -591,24 +648,29 @@ onMounted(() => {
       <n-form-item label="执行时间类型：" required>
         <n-select :options="goodsActivityTimeTypeList" v-model:value="goodsActivityDetail.info.timeType" placeholder="请选择执行时间类型"></n-select>
       </n-form-item>
-      <n-form-item label="执行日(每月)：" v-show="goodsActivityDetail.info.timeType === GoodsActivityTimeType.MONTH" required>
+
+      <n-form-item label="执行月(每年)：" v-if="goodsActivityDetail.info.timeType === GoodsActivityTimeType.YEAR" required>
+        <n-select :options="commonStore.yearMap" v-model:value="goodsActivityDetail.info.timeMonth" placeholder="请选择执行月"></n-select>
+      </n-form-item>
+
+      <n-form-item label="执行日(每月)：" v-if="[GoodsActivityTimeType.MONTH, GoodsActivityTimeType.YEAR].includes(Number(goodsActivityDetail.info.timeType))" required>
         <n-select :options="commonStore.monthMap" v-model:value="goodsActivityDetail.info.timeDay" placeholder="请选择执行日"></n-select>
       </n-form-item>
-      <n-form-item label="执行日(每周)：" v-show="goodsActivityDetail.info.timeType === GoodsActivityTimeType.WEEK" required>
+
+      <n-form-item label="执行日(每周)：" v-if="goodsActivityDetail.info.timeType === GoodsActivityTimeType.WEEK" required>
         <n-select :options="commonStore.weekMap" v-model:value="goodsActivityDetail.info.timeDay" placeholder="请选择执行日"></n-select>
       </n-form-item>
+
       <n-form-item label="执行时间：" required>
         <n-select :options="commonStore.hourMap" v-model:value="goodsActivityDetail.info.timeHour" placeholder="请选择执行时间"></n-select>
       </n-form-item>
     </n-card>
 
     <n-card title="规则：" style="margin-bottom: 15px">
-      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400"></n-data-table>
+      <n-data-table :single-line="false" :columns="createColumns()" :data="goodsActivityDetail.rules" :scroll-x="2400" :scrollbar-props="{ trigger: 'none' }"></n-data-table>
 
       <n-button style="margin-top: 15px" block tertiary type="primary" v-if="!isCheck" :disabled="submiting" @click="addRuleMan()">添加</n-button>
     </n-card>
   </n-form>
   <n-button style="margin-top: 15px" block type="primary" @click="submit" :loading="submiting" :disabled="submiting" v-if="!isCheck && !commonStore.pageLoading">确认提交</n-button>
 </template>
-
-<style scoped lang="less"></style>
