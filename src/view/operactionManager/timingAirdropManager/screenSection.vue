@@ -10,8 +10,8 @@
       clearable
     ></n-input>
     <n-input v-model:value="params.name" autosize placeholder="请输入空投任务名称" style="width: 200px" :disabled="searching" clearable></n-input>
-    <n-select v-model:value="params.itemType" :options="airDropItemTypeList" placeholder="请选择空投物品类型" style="width: 200px" :disabled="searching" clearable />
-    <n-input v-model:value="params.itemId" autosize placeholder="请输入商品/积分编号" style="width: 200px" :disabled="searching" clearable></n-input>
+    <!-- <n-select v-model:value="params.itemType" :options="airDropItemTypeList" placeholder="请选择空投物品类型" style="width: 200px" :disabled="searching" clearable />
+    <n-input v-model:value="params.itemId" autosize placeholder="请输入商品/积分编号" style="width: 200px" :disabled="searching" clearable></n-input> -->
     <n-select v-model:value="params.timeType" :options="airDropTimeTypeList" placeholder="请选择空投时间类型" style="width: 200px" :disabled="searching" clearable />
     <n-button type="primary" @click="searchHandler" :disabled="searching" :loading="searching">搜索 / 刷新</n-button>
     <n-button type="primary" @click="gotoAirdrop">添加空投任务</n-button>

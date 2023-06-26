@@ -1,8 +1,8 @@
 import type { CategoryTreeItem, DeepPartial } from "@/type/Common";
 
 export type ManualAirDropListSearchParams = {
-  itemId?: string;
-  itemType?: number;
+  rewardId?: string;
+  rewardType?: number;
   merchantUid?: string;
   name?: string;
   state?: number;
