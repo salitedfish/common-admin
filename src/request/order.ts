@@ -2,7 +2,16 @@ import { ultraFetch } from "./init";
 import type * as RequestParam from "@/request/type/RequestParam";
 import type * as RequestReturn from "@/request/type/RequestReturn";
 import type { Paging, Return, ReturnList } from "@/type/Common";
-import type { OrderListParam, ExpressOrderListParam, InvoiceListParam, InvoiceListItem, ExpressCompanyByCode, OrderPromoDetail, OrderPayDetail } from "@/type/Order";
+import type {
+  OrderListParam,
+  ExpressOrderListParam,
+  InvoiceListParam,
+  InvoiceListItem,
+  ExpressCompanyByCode,
+  OrderPromoDetail,
+  OrderPayDetail,
+  RefundFroceInfo,
+} from "@/type/Order";
 
 export const getOrderList = (params: RequestParam.GetOrderList): RequestReturn.GetOrderList => {
   return ultraFetch.post({
@@ -26,6 +35,12 @@ export const exportOrderList = (params: OrderListParam) => {
 export const orderRefundComfirm = (params: { orderId: string; note: string; state: number | null }) => {
   return ultraFetch.post({
     URL: "/manager/order/refund/confirm",
+    body: JSON.stringify(params),
+  });
+};
+export const orderRefundFroceComfirm = (params: { orderId: string }) => {
+  return ultraFetch.post({
+    URL: "/manager/order/refund/overdue/submit",
     body: JSON.stringify(params),
   });
 };
@@ -110,6 +125,12 @@ export const addInvoice = (params: { electronicImage: string; orderId: string; s
 export const getOrderPromoDetail = (params: { orderId: string | number }) => {
   return ultraFetch.get<Return<OrderPromoDetail[]>>({
     URL: "/manager/order/promo/detail",
+    params,
+  });
+};
+export const getRefundFroceInfo = (params: { orderId: string }) => {
+  return ultraFetch.get<Return<RefundFroceInfo>>({
+    URL: "/manager/order/refund/detail",
     params,
   });
 };

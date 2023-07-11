@@ -5,7 +5,7 @@ import { NSpace, NButton } from "naive-ui";
 // 组件库
 // 自定义组件
 import screenHeader from "./screenHeader.vue";
-
+import customIcon from "@/component/common/customIcon.vue";
 // 工具库
 // 自定义工具
 import { useListPage, commonNotify } from "@/util/common";

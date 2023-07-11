@@ -39,6 +39,7 @@ export type OrderListItem = {
   payTime: string;
   sellerUid: number;
   orderPayAmount: number;
+  refundCountdown: number;
 };
 export type OrderPayDetail = {
   payChannel: number;
@@ -195,4 +196,86 @@ export type OrderPromoDetail = {
   userType: number;
   vipLevel: number;
   vipType: number;
+};
+
+export type RefundFroceInfo = {
+  refundPay: {
+    payChannel: number;
+    wechat: null | {
+      channelType: number;
+      orderPayAmount: string;
+      orderRefundAmount: string;
+    };
+    points: null | {
+      pointsType: number;
+      pointsId: string;
+      pointsName: string;
+      token: string;
+      pointsNum: string;
+    };
+    coupon: null | {
+      pointsType: number;
+      pointsId: string;
+      pointsName: string;
+      token: string;
+      pointsNum: string;
+    };
+    deduction: null | {
+      pointsType: number;
+      pointsId: string;
+      pointsName: string;
+      token: string;
+      pointsNum: string;
+    };
+  };
+  refundTokens: {
+    token: string;
+    needNum: string;
+    holdNum: string;
+  }[];
+  refundPromoTokens: {
+    name: string;
+    rewardType: number;
+    rewardId: string;
+    rewardName: string;
+    needNum: string;
+    holdNum: string;
+    enable: number;
+  }[][];
+  refundPromoOrders: {
+    name: string;
+    rewardType: number;
+    rewardId: string;
+    rewardName: string;
+    needNum: string;
+    holdNum: string;
+    enable: number;
+  }[];
+  refundAirdropOrders: {
+    name: string;
+    rewardType: number;
+    rewardId: string;
+    rewardName: string;
+    needNum: string;
+    holdNum: string;
+    enable: number;
+  }[];
+  refundAirdropTokens: {
+    name: string;
+    rewardType: number;
+    rewardId: string;
+    rewardName: string;
+    needNum: string;
+    holdNum: string;
+    enable: number;
+  }[][];
+  totalTokens: {
+    name: string;
+    rewardType: number;
+    rewardId: string;
+    rewardName: string;
+    needNum: string;
+    holdNum: string;
+    enable: number;
+  }[];
 };

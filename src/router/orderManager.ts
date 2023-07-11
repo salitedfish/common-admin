@@ -55,4 +55,15 @@ export default <RouteRecordRaw[]>[
       id: 3021,
     },
   },
+
+  {
+    path: "refundFroceInfo",
+    name: "refundFroceInfo",
+    component: () => import("@/view/orderManager/refundFroceInfo/refundFroceInfo.vue"),
+    meta: {
+      label: "退款信息",
+      icon: "tihuoshenqing",
+      keepAlive: true,
+    },
+  },
 ];

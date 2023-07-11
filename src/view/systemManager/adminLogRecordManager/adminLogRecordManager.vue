@@ -92,8 +92,8 @@ const createColumns = () => {
       align: "center",
     },
     {
-      title: "访问路径",
-      key: "requestUri",
+      title: "操作名称",
+      key: "requestUriName",
       width: 180,
       align: "center",
       render: (row) => {
@@ -101,7 +101,7 @@ const createColumns = () => {
           NEllipsis,
           {},
           {
-            default: () => row.requestUri,
+            default: () => row.requestUriName,
           }
         );
       },

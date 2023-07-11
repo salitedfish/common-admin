@@ -2,6 +2,7 @@
   <n-space>
     <n-input v-model:value="params.adminUid" autosize placeholder="请输入用户编号" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-input v-model:value="params.clientIp" autosize placeholder="请输入用户IP地址" style="width: 200px" :disabled="searching" clearable></n-input>
+    <n-input v-model:value="params.requestUriName" autosize placeholder="请输入操作名称" style="width: 200px" :disabled="searching" clearable></n-input>
     <n-date-picker
       placeholder="请选择开始时间"
       v-model:formatted-value="params.startTime"

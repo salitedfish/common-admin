@@ -38,6 +38,7 @@ export type AdminLogRecordListParams = Partial<{
   clientIp: string;
   endTime: string;
   startTime: string;
+  requestUriName: string;
 }>;
 
 export type AdminLogRecordListItem = {
@@ -51,6 +52,7 @@ export type AdminLogRecordListItem = {
   requestUri: string;
   responseJson: string;
   userAgent: string;
+  requestUriName: string;
 };
 
 export type AdminLogRecordDetail = {

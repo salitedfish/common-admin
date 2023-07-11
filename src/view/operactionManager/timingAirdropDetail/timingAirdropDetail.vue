@@ -97,6 +97,10 @@
             :disabled="submiting || isCheck"
             clearable
           ></n-select>
+
+          <n-button type="primary" @click="() => goHoldTypeRuleWhiteList(item.id)" v-if="isCheck && [HoldType.BUY_TIME, HoldType.GET_TIME].includes(Number(item.holdType))"
+            >查看白名单</n-button
+          >
         </n-form-item>
 
         <n-form-item label="单位数量:" required v-if="item.itemType !== RuleType.NEW_REAL_NAME">
@@ -348,6 +352,14 @@ const addRule = () => {
 const goRuleWhiteList = (id?: number) => {
   router.push({
     name: "ruleWhiteListManager",
+    query: {
+      id,
+    },
+  });
+};
+const goHoldTypeRuleWhiteList = (id?: number) => {
+  router.push({
+    name: "holdTypeRuleWhiteListManager",
     query: {
       id,
     },

@@ -429,3 +429,12 @@ export type RuleWhiteListItem = {
   unusedNum: number;
   userType: number;
 };
+
+export type HoldTypeRuleWhiteListItem = {
+  id: number;
+  provideNum: number;
+  provideTime: string;
+  provideTotalNum: number;
+  ruleId: number;
+  token: string;
+};

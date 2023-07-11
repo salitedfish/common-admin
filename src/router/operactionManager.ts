@@ -164,6 +164,16 @@ export default <RouteRecordRaw[]>[
     },
   },
   {
+    path: "timingAirdropManager/holdTypeRuleWhiteListManager",
+    name: "holdTypeRuleWhiteListManager",
+    component: () => import("@/view/operactionManager/holdTypeRuleWhiteListManager/holdTypeRuleWhiteListManager.vue"),
+    meta: {
+      label: "持有天数类型规则名单",
+      icon: "kongtou",
+      keepAlive: true,
+    },
+  },
+  {
     path: "searchManager",
     name: "searchManager",
     component: () => import("@/view/operactionManager/searchManager/searchManager.vue"),

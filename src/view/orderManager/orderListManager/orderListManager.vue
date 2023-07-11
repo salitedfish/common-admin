@@ -84,20 +84,11 @@ import {
   orderSyncComfirm as orderSyncComfirmRequest,
   orderRefundSyncComfirm as orderRefundSyncComfirmRequest,
   orderRefundComfirm,
+  orderRefundFroceComfirm,
 } from "@/request/order";
 // store
 import { useAuthStore } from "@/store/authStore";
-import {
-  orderStateList,
-  orderTypeList,
-  payChannelList,
-  OrderState,
-  PayChannel,
-  orderRefundStateList,
-  OrderRefundState,
-  refundExamStateList,
-  OrderType,
-} from "./orderListManagerStore";
+import { orderStateList, payChannelList, OrderState, PayChannel, orderRefundStateList, OrderRefundState, refundExamStateList, OrderType } from "./orderListManagerStore";
 import { goodsTypeList } from "@/view/goodsManager/goodsListManager/goodsListManagerStore";
 // 类型
 import type { VNode } from "vue";
@@ -320,7 +311,7 @@ const createColumns = () => {
           }
         }
         if (order.orderState === OrderState.PAY_SUCCESS) {
-          if (order.orderType === OrderType.FIRST && ![OrderRefundState.REFUND_ING, OrderRefundState.REFUND_SUCCESS].includes(order.refundState)) {
+          if (order.orderType === OrderType.FIRST) {
             btnList.push(
               h(
                 NButton,
@@ -341,7 +332,24 @@ const createColumns = () => {
               )
             );
           }
+          if (order.orderType === OrderType.FIRST) {
+            btnList.push(
+              h(
+                NButton,
+                {
+                  type: "warning",
+                  size: "small",
+                  secondary: true,
+                  onClick: () => {
+                    refundFroce(order);
+                  },
+                },
+                { default: () => "查看退款信息" }
+              )
+            );
+          }
         }
+
         if (order.refundState === OrderRefundState.REFUND_APPLY) {
           btnList.push(
             h(
@@ -361,24 +369,25 @@ const createColumns = () => {
             )
           );
         }
-        if (order.refundState === OrderRefundState.REFUND_ING) {
-          btnList.push(
-            h(
-              NButton,
-              {
-                type: "warning",
-                size: "small",
-                secondary: true,
-                onClick: () => {
-                  orderRefundSyncComfirm(order.orderId);
-                },
-              },
-              {
-                default: () => "退款差错同步确认",
-              }
-            )
-          );
-        }
+        // if (order.refundState === OrderRefundState.REFUND_ING) {
+        //   btnList.push(
+        //     h(
+        //       NButton,
+        //       {
+        //         type: "warning",
+        //         size: "small",
+        //         secondary: true,
+        //         onClick: () => {
+        //           orderRefundSyncComfirm(order.orderId);
+        //         },
+        //       },
+        //       {
+        //         default: () => "退款差错同步确认",
+        //       }
+        //     )
+        //   );
+        // }
+
         // 用来放按钮的容器
         const btnBox = h(NSpace, {}, { default: () => btnList });
         return btnBox;
@@ -455,6 +464,33 @@ const handleRefund = async () => {
     showRefundDialog.value = false;
   }
   refundIng.value = false;
+};
+// 强制退款
+const refundFroce = (order: OrderListItem) => {
+  let refundDisabled = "true";
+  if (
+    order.orderType === OrderType.FIRST &&
+    order.orderState === OrderState.PAY_SUCCESS &&
+    [OrderRefundState.NONE, OrderRefundState.REFUND_REJECT].includes(order.refundState) &&
+    order.refundCountdown <= 0
+  ) {
+    refundDisabled = "false";
+  }
+  router.push({ name: "refundFroceInfo", query: { id: order.orderId, disabled: refundDisabled } });
+  // const dialogInfo = dialog.warning({
+  //   title: "强制退款",
+  //   content: "已不满足退款要求，是否强制退款",
+  //   positiveText: "确认",
+  //   onPositiveClick: async () => {
+  //     dialogInfo.loading = true;
+  //     const res = await orderRefundFroceComfirm({ orderId });
+  //     if (res) {
+  //       commonNotify("success", "强制退款成功");
+  //       await getList();
+  //     }
+  //     dialogInfo.loading = false;
+  //   },
+  // });
 };
 // 线下支付确认
 const offlinePayComfirmDialog = ref(false);

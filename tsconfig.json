@@ -5,7 +5,9 @@
    
     "lib": ["ES2022"],
     "baseUrl": ".",
-    // "importsNotUsedAsValues": "error",
+    "importsNotUsedAsValues": "remove",
+    // "ignoreDeprecations": "5.0",
+    // "verbatimModuleSyntax":true,
     "paths": {
       "@/*": ["./src/*"]
     },
