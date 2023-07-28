@@ -48,12 +48,12 @@ export const getBalanceByToken = (params: { address: string; token: string }) =>
   });
 };
 
-export const syncGoodsChainRecord = (params: { transferId: string }) => {
-  return ultraFetch.post<Return<unknown>>({
-    URL: "/manager/chain-transfer/asset/sync",
-    body: JSON.stringify(params),
-  });
-};
+// export const syncGoodsChainRecord = (params: { transferId: string }) => {
+//   return ultraFetch.post<Return<unknown>>({
+//     URL: "/manager/chain-transfer/asset/sync",
+//     body: JSON.stringify(params),
+//   });
+// };
 
 export const getPointsChainRecord = (params: Paging & ChainRecordParams) => {
   return ultraFetch.post<Return<ReturnList<PointsChainRecordItem>>>({
@@ -65,6 +65,20 @@ export const getPointsChainRecord = (params: Paging & ChainRecordParams) => {
 export const syncPointsChainRecord = (params: { transferIds: (string | number)[] }) => {
   return ultraFetch.post<Return<unknown>>({
     URL: "/manager/chain-transfer/points/sync",
+    body: JSON.stringify(params),
+  });
+};
+
+export const syncGoodsChainRecord = (params: { transferIds: (string | number)[] }) => {
+  return ultraFetch.post<Return<unknown>>({
+    URL: "/manager/chain-transfer/asset/sync",
+    body: JSON.stringify(params),
+  });
+};
+
+export const syncParallelChainRecord = (params: { transferIds: (string | number)[] }) => {
+  return ultraFetch.post<Return<unknown>>({
+    URL: "/manager/chain-transfer/parallel-coin/sync",
     body: JSON.stringify(params),
   });
 };

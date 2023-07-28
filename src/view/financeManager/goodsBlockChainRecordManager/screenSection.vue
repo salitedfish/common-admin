@@ -43,7 +43,7 @@ import customExportBtn from "@/component/common/customExportBtn.vue";
 import { commonNotify } from "@/util/common";
 
 // 网络请求
-import { exportGoodsChainRecord, syncPointsChainRecord } from "@/request/finance";
+import { exportGoodsChainRecord, syncGoodsChainRecord } from "@/request/finance";
 
 // store
 import { userTypeList, transferStateList } from "./goodsBlockChainRecordManagerStore";
@@ -75,7 +75,7 @@ const multipleSync = async () => {
     positiveText: "确认",
     onPositiveClick: async () => {
       dialogInfo.loading = true;
-      const res = await syncPointsChainRecord({ transferIds: props.checkedRowKeys });
+      const res = await syncGoodsChainRecord({ transferIds: props.checkedRowKeys });
       if (res) {
         commonNotify("success", "同步成功");
         emit("clearSelected");

@@ -50,7 +50,7 @@ import customExportBtn from "@/component/common/customExportBtn.vue";
 import { commonNotify } from "@/util/common";
 
 // 网络请求
-import { exportParallelRecord, syncPointsChainRecord } from "@/request/finance";
+import { exportParallelRecord, syncParallelChainRecord } from "@/request/finance";
 // store
 import { useAuthStore } from "@/store/authStore";
 import { userTypeList, parallelRecordStateList } from "./parallelRecordManagerStore";
@@ -84,7 +84,7 @@ const multipleSync = async () => {
     positiveText: "确认",
     onPositiveClick: async () => {
       dialogInfo.loading = true;
-      const res = await syncPointsChainRecord({ transferIds: props.checkedRowKeys });
+      const res = await syncParallelChainRecord({ transferIds: props.checkedRowKeys });
       if (res) {
         commonNotify("success", "同步成功");
         emit("clearSelected");
